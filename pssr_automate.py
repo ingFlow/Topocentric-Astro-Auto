@@ -20,7 +20,7 @@ def get_prenatal_trans_date(radix_datetime, event_datetime):
 def julian_to_gregorian(julian_day):
     return julian.from_jd(julian_day)
 
-def gregorian_to_julian(year, month, day, hour=0, minute=0, second=0):
+def gregorian_to_julian(year, month, day, hour=12, minute=0, second=0):
     dt = datetime(year, month, day, hour, minute, second)
     return julian.to_jd(dt)
 

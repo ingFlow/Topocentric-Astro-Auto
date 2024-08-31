@@ -62,7 +62,7 @@ def get_point_quadrant(ac, mc, long):
     elif (dc <= long):
         quadrant = 4
 
-    print(f"ac {ac}, mc {mc}, long {long}, quadrant {quadrant}")
+    #print(f"ac {ac}, mc {mc}, long {long}, quadrant {quadrant}")
     return quadrant
 
 def calculate_MD(RA, RAMC, quadrant):
@@ -153,8 +153,10 @@ def calc_house_pole(house_no, GEO_LAT):
         tan_phi = (1/3) * math.tan(math.radians(GEO_LAT))
     elif house_no in (2, 8, 6, 12):
         tan_phi = (2/3) * math.tan(math.radians(GEO_LAT))
-    elif house_no == 1:
+    elif house_no == 'ASC':
         tan_phi = math.tan(math.radians(GEO_LAT))
+    elif house_no in ('mdpt1', 'mdpt2'):
+        tan_phi = 0.5 * math.tan(math.radians(GEO_LAT))
     else:
         print(f"House number {house_no} is not handled.")
 
@@ -164,23 +166,38 @@ def calc_house_pole(house_no, GEO_LAT):
 def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):   
     directed_longitudes = []
     E = calculate_obliquity(jd)
-    print(f"RAMC: {RAMC}, E: {E}, GEO_LAT: {GEO_LAT}")
+    #print(f"RAMC: {RAMC}, E: {E}, GEO_LAT: {GEO_LAT}")
     
-    houses = [11, 12, 1, 2, 3]
+    houses = [11, 12, 'ASC', 2, 3]
     count = 1
+
     for house in houses:
         OA = (RAMC + (30*count)) % 360
         phi = calc_house_pole(house, GEO_LAT)
         long = calc_long_from_OA(OA, phi, E, True)
-        print(f"HOUSE: {house}, OA: {OA}, phi: {phi}, long: {long}")
+        #print(f"HOUSE: {house}, OA: {OA}, phi: {phi}, long: {long}")
+        
+        if house == 'ASC':
+            house_name = 'ASC'
+        else:
+            house_name = 'H' + str(house) 
 
-        house_name = 'H' + str(house) 
         directed_longitudes.append((house_name, long, label))
         count +=1
-
+    
     long = calc_long_from_OA(RAMC, 0.0, E, True)
     directed_longitudes.append(('MC',long, label))
-    
+
+    #calculating H1 AND H2
+    phi = calc_house_pole('mdpt1', GEO_LAT)
+    #OA DIFF BETWEEN ASC AND MC IS ALWAYS 90 SO PLUS 45
+    OA = (RAMC + 45) % 360
+    long = calc_long_from_OA(OA,phi, E, True)
+    directed_longitudes.append(('Hmd1', long, label))
+    OA = ((RAMC + 90) + 45) %  360
+    long = calc_long_from_OA(OA,phi, E, True)
+    directed_longitudes.append(('Hmd2', long, label))
+
     return directed_longitudes
 
 def calc_long_from_OA(OA, phi, E, flag_ascen):
@@ -208,7 +225,7 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, flag_dir
 
     OA_OD, FLAG_ASCEN = calculate_OA_OD(RA, ADP, GEO_LAT, quadrant)
 
-
+    '''
     print('planet_data:')
     print('LONG', long)
     print('AC', ac)
@@ -224,14 +241,14 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, flag_dir
     print(f'ADP: {ADP}')
     print(f'OA/OD: {OA_OD}{FLAG_ASCEN}')
     print(f'E: {E}')
-    
+    '''
     arc = calc_arc(jd_radix, jd_event)
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
 
     LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
-    print(f"arc: {arc}")
+    '''print(f"arc: {arc}")
     print(f"directed OA/OD: {dir_OA}")
-    print(f"long directed: {LONG_deg}")
+    print(f"long directed: {LONG_deg}")'''
     
     return LONG_deg
     
@@ -265,7 +282,7 @@ def get_directed_from_date(date_event, date_radix, point_to_direct, flag_direct)
      directed_long = calculate_longitude(e_radix_decimal, phi, None)
      directed_long_sign, directed_long_dec = pssr.convert_dec_degrees_to_zod(directed_long)
      directed_long_deg_min_sec = pssr.convert_dec_degrees_to_deg_min_sec(directed_long_dec)
-     print(f"Longitude: {directed_long_sign} degrees {directed_long_deg_min_sec}")
+     #print(f"Longitude: {directed_long_sign} degrees {directed_long_deg_min_sec}")
 
 radix_date = datetime(2018, 2, 19, 12, 00, 00)
 event_date = datetime(2000, 12, 19, 17, 00, 00)

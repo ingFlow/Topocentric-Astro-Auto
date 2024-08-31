@@ -2,7 +2,8 @@ import aspects_base as aspects
 import astro_seek_read 
 import pssr_automate as pssr
 from datetime import datetime
-import pd_base
+import pd_automate as pd
+import secondary_automate as secondary
 
 ORB_TRANSIT = 1.15
 ORB_PSSR = 0.24
@@ -18,6 +19,7 @@ def transit_for_event_date(radix_date, event_date):
   str_append += aspects.m_aspects_between_two_sets_positions(rad_start_string.split(), check_string.split(), label, ORB_TRANSIT, house_check=True, process_type=aspects.ProcessType.TRANSIT)
 
   return str_append
+
 
 #change timezone and orb here
 def pssr_for_event_rad(radix_date, event_date):
@@ -87,7 +89,8 @@ def process_multiple_events(radix_date, type_process):
     datetime(1974, 6, 13, 22, 46, 40),
     datetime(1974, 6, 13, 23, 3, 20),
     datetime(1974, 6, 13, 23, 46, 24)'''
-def main():
+
+def main_trans_pssr():
   dates = [
     datetime(2000, 3, 11, 12, 14, 32),
     datetime(2000, 3, 11, 13, 28, 48),
@@ -107,5 +110,37 @@ def main():
     #process_multiple_events(date, aspects.ProcessType.TRANSIT)
     #process_multiple_events(date, aspects.ProcessType.PSSR)
 
-  
+def main():
+  dt_radix = datetime(1940, 10, 9, 17, 24, 17)
+  geopos = [53.4, -2.9833333, 70.0]
+  '''dt_radix = datetime(1889, 4, 16, 19, 40, 48)
+  geopos = [51.48333, 0.001, 306]
+  dt_event = datetime(1901, 5, 9, 12, 00, 00)'''
+
+  list_of_events = [
+    datetime(1956, 7, 15, 12, 00, 00),
+    datetime(1962, 8, 23, 12, 00, 00),
+    datetime(1963, 4, 18, 12, 00, 00),
+    datetime(1964, 2, 6, 12, 00, 00),
+    datetime(1965, 6, 12, 12, 00, 00),
+    datetime(1967, 8, 26, 12, 00, 00),
+    datetime(1968, 11, 28, 12, 00, 00),
+    datetime(1969, 3, 20, 12, 00, 00),
+    datetime(1970, 4, 15, 12, 00, 00),
+    datetime(1972, 3, 6, 12, 00, 00),
+    datetime(1974, 7, 18, 12, 00, 00),
+    datetime(1975, 1, 15, 12, 00, 00),
+    datetime(1975, 10, 9, 12, 00, 00),
+    datetime(1976, 7, 27, 12, 00, 00),
+    datetime(1980, 12, 8, 12, 00, 00)
+  ]
+  #for dt_event in list_of_events:
+    #pd.pd_automated(pssr.dt_gregorian_to_julian(dt_radix), pssr.dt_gregorian_to_julian(dt_event), geopos)
+  str = "(MC,55.552,(r)) (Saturn,325.600,(d)) (square,3')\n(AC,176.030,(r)) (Mars,220.994,(d)) (45-semisquare,2')\n(Pluto,124.188,(r)) (Venus,184.231,(d)) (sextile,3')\n(Neptune,190.583,(r)) (DC,325.600,(d)) (135-sesquisquare,1')\n(Uranus,320.168,(r)) (MC,290.150,(d)) (30-semisextile,1')"
+  print(pd.count_all_acceptable_angles(1, str))
+
+  #for dt_event in list_of_events:
+  ''''''
+  #econdary.secondary_auto(pssr.dt_gregorian_to_julian(dt_radix), pssr.dt_gregorian_to_julian(dt_event), geopos[0], geopos[1], 0.534)
+
 main()

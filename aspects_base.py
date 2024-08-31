@@ -5,15 +5,26 @@ class ProcessType(Enum):
     TRANSIT = "TRANSIT"
     
 # Define the constants for aspects and zodiac signs
-ASPECTS = {
+MAJOR_ASPECTS = {
+    "sextile": (60,300),
+    "conjunction": (0,360),
+    "trine": (120,240),
+    "square": (90, 270),
+    "opposition": (180, 180)
+}
+
+ALL_ASPECTS = {
     "sextile": (60,300),
     "conjunction": (0,360),
     "trine": (120,240),
     "square": (90, 270),
     "opposition": (180, 180),
-    "45": (45,315),
-    "135": (135,225)
+    "45-semisquare": (45,315),
+    "135-sesquisquare": (135,225),
+    "30-semisextile": (30,330),
+    "150-quincunx": (150, 210)
 }
+
 
 ZODIAC_START_DEGREES = {
     "Aries": 0,
@@ -37,6 +48,10 @@ RECEPTIVE_POINTS = HOUSES.union({'Moon', 'Sun', 'Fortune'})
 ALL_PLANETS = FAST_PLANETS.union(SLOW_PLANETS)
 ALL_PLANET_TRANS = ALL_PLANETS.union({'Sun'})
 
+SWISS_PLANETS = {'Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node', 'POF'}
+SWISS_HOUSES = {'MC', 'H11', 'H12', 'ASC', 'H2', 'H3', 'Hmd1', 'Hmd2'}
+ALL_SWISS_POINTS = SWISS_PLANETS.union(SWISS_HOUSES)
+
 def zodiac_to_degrees(sign, degrees):
     """Convert zodiac sign and degrees to total degrees."""
     return ZODIAC_START_DEGREES[sign] + degrees
@@ -52,10 +67,15 @@ def split_position(position):
 def calculate_POF(sun, moon, ac):
     return ac + moon - sun
 
-def calculate_aspect(first_degrees, second_degrees, orb):
+def calculate_aspect(first_degrees, second_degrees, orb, flag_major):
     """Determine the aspect between two planetary positions."""
     difference = abs(first_degrees - second_degrees) % 360
-    for aspect, ideal in ASPECTS.items():
+    if flag_major:
+        aspects = MAJOR_ASPECTS
+    else:
+        aspects = ALL_ASPECTS
+
+    for aspect, ideal in aspects.items():
         forward_ideal, backward_ideal = ideal
         
         lower_bound = forward_ideal - orb
@@ -72,23 +92,94 @@ def calculate_aspect(first_degrees, second_degrees, orb):
 def find_trans_aspects(planet_set1, planet_set2, orb):
     aspects_str = ''
     
-    for item in planet_set1:
-        print('I1\t', item)
-        p1, d1, s1 = item
-        for item2 in planet_set2:
-            print('IT2 \t',item2)
-            p2, d2, s2 = item2
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
             if (
                 (p1 in ALL_PLANET_TRANS and p2 in ALL_PLANET_TRANS) or
                 (p1 in HOUSES and p2 in ALL_PLANET_TRANS) or
                 (p1 in ALL_PLANET_TRANS and p2 in HOUSES)
             ):
-                aspect = calculate_aspect(d1, d2, orb)
+                aspect = calculate_aspect(d1, d2, orb, True)
                 if aspect:
                     aspect_name, aspect_orb = aspect
                     aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
                                   f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
                     aspects_str += aspect_str
+    return aspects_str
+
+def find_pd_swiss_aspects(planet_set1, planet_set2):
+    aspects_str = ''
+    
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
+            aspect = calculate_aspect(d1, d2, 0.2, False)
+            
+            if aspect:
+                aspect_name, aspect_orb = aspect
+                if (aspect_name.strip() == 'conjunction') or (aspect_name.strip() == 'opposition'):
+                    if (aspect_orb <= (10.8/60)):
+                        aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
+                                        f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                        aspects_str += aspect_str
+                else:
+                    print("we in other", aspect_name, aspect_orb)
+                    if (aspect_orb <= (5.6/60)):
+                        print("we in acceptable orb")
+                        aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
+                                        f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                        aspects_str += aspect_str
+    return aspects_str
+
+def find_pd_old_swiss_aspects(planet_set1, planet_set2, orb):
+    aspects_str = ''
+    
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
+            aspect = calculate_aspect(d1, d2, orb, False)
+            
+            if aspect:
+                aspect_name, aspect_orb = aspect
+                aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
+                                f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                aspects_str += aspect_str
+    return aspects_str
+
+def find_secondary_swiss_aspects(planet_set1, planet_set2):
+    aspects_str = ''
+
+    sun_to_pof = ('Sun', 'Mercury', 'Venus', 'Mars', 'POF')
+    jup_sat = ('Jupiter', 'Saturn')
+    ura_to_plu = ('Uranus', 'Neptune', 'Pluto', 'Mean_Node')
+    
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
+            orb = None
+            if (s1 == "(r)"):
+                if (p2 in SWISS_HOUSES) or (p2 in sun_to_pof):
+                    orb = 13/60
+                elif (p2 in jup_sat):
+                    orb = 8/60
+                elif (p2 in ura_to_plu):
+                    orb = 3/60
+                elif (p2 == 'Moon'):
+                    orb = 32/60
+            else:
+                if (p1 == 'Moon') or (p2 == 'Moon'):
+                    orb = 32/60
+                elif (p1 in sun_to_pof) or (p2 in sun_to_pof):
+                    orb = 13/60
+                elif (p1 in jup_sat) or (p2 in jup_sat):
+                    orb = 8/60
+                elif (p1 in ura_to_plu) or (p2 in ura_to_plu):
+                    orb = 3/60
+    
+            aspect = calculate_aspect(d1, d2, orb, False)
+            
+            if aspect:
+                aspect_name, aspect_orb = aspect
+                aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
+                                f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                aspects_str += aspect_str
     return aspects_str
 
 
@@ -114,7 +205,7 @@ def find_aspects(planet_set1, planet_set2, orb, house_check, rad_sr_check):
                 (house_check and rad_sr_check and (p1 in RECEPTIVE_POINTS and p2 in ALL_PLANETS))
             ):
 
-                aspect = calculate_aspect(d1, d2, orb)
+                aspect = calculate_aspect(d1, d2, orb, True)
                 if aspect:
                     aspect_name, aspect_orb = aspect
                     aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
@@ -128,7 +219,7 @@ def calc_all_aspects(set1, set2, orb):
 
     for p1, d1 in set1:
         for p2, d2 in set2:
-            aspect = calculate_aspect(d1, d2, orb)
+            aspect = calculate_aspect(d1, d2, orb, True)
             if aspect:
                 aspect_name, aspect_orb = aspect
                 aspect_str = (f'({p1},{d1:.3f}) ({p2},{d2:.3f}) '
