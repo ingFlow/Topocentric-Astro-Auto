@@ -2,6 +2,7 @@ import math
 import pssr_automate as pssr
 import astro_seek_read 
 from datetime import datetime
+import swisseph as swe
 
 '''this obliquity is not the true one that takes into account the nutation and stuff'''
 def calculate_obliquity(JD):
@@ -48,35 +49,74 @@ def calculate_longitude(E, phi, OA):
 
     return LONG_deg
 
-def get_point_quadrant(ac, mc, long):
-    quadrant = 0
-    dc = (ac + 180) % 360
-    ic = (mc - 180) % 360
-    
-    if (mc <= long):
-        quadrant = 1
-    elif (ac <= long < ic):
-        quadrant = 2
-    elif (ic <= long < dc):
-        quadrant = 3
-    elif (dc <= long):
-        quadrant = 4
+def has_wraparound(start, end):
+        return start > end
 
-    #print(f"ac {ac}, mc {mc}, long {long}, quadrant {quadrant}")
-    return quadrant
+def get_quadrant_from_house_pos(house):
+    if house in (1, 2, 3):
+        return 2
+    if house in (4, 5, 6):
+        return 3
+    if house in (7, 8, 9):
+        return 4
+    if house in (10, 11, 12):
+        return 1
+    else:
+        return 'ERROR HOUSE NOT HANDLED!'
+
+def get_housepos_manual(long, cusps):
+    house_pos = None
+    for i in range(12):
+        if cusps[i] <= long < cusps[(i + 1) % 12]:
+            house_pos = i +1      
+        if cusps[(i + 1) % 12] < cusps[i]:
+            if (long < cusps[(i+1)%12]) or (long > cusps[i]):
+                house_pos = ((i+1)%12) 
+                if house_pos == 0:
+                    house_pos = 12
+    return house_pos
+
+def get_point_quadrant(ac, mc, longitude):
+    longitude %= 360
+    mc %= 360
+    ac %= 360
+    ic = swe.degnorm(mc+180)
+    dc = swe.degnorm(ac+180)
+
+    if (has_wraparound(mc, ac) and (longitude >= mc or longitude < ac)) or (not has_wraparound(mc, ac) and mc <= longitude < ac):
+        return 1
+
+    if (has_wraparound(ac, ic) and (longitude >= ac or longitude < ic)) or (not has_wraparound(ac, ic) and ac <= longitude < ic):
+        return 2
+
+    if (has_wraparound(ic, dc) and (longitude >= ic or longitude < dc)) or (not has_wraparound(ic, dc) and ic <= longitude < dc):
+        return 3
+
+    if (has_wraparound(dc, mc) and (longitude >= dc or longitude < mc)) or (not has_wraparound(dc, mc) and dc <= longitude < mc):
+        return 4
+
+    return "Error: Unable to determine quadrant"
 
 def calculate_MD(RA, RAMC, quadrant):
-    #make sure RA is not larger than 360 
-    MD = 0.00
-    RA = RA % 360
-    RAIC = (RAMC-180) % 360
+    RA = swe.degnorm(RA)
+    RAIC = swe.degnorm(RAMC-180)
 
-    if quadrant in (1,4):
-        MD = abs(RAMC - RA)
-    elif quadrant in (2,3):
-        MD = abs(RAIC - RA)
+    '''    dist_ramc = abs(swe.difdeg2n(RAMC,RA))
+    dist_raic = abs(swe.difdeg2n(RAIC,RA))
 
-    return MD
+    print(dist_ramc, dist_raic, RA, RAMC, quadrant)
+    return dist_ramc if (dist_ramc < dist_raic) else dist_raic
+'''
+    if quadrant == 4:
+        return abs(swe.difdeg2n(RAMC,RA))
+    if quadrant == 3:
+        return abs(swe.difdeg2n(RA,RAIC))
+    if quadrant == 2:
+        return abs(swe.difdeg2n(RAIC,RA))
+    if quadrant == 1:
+        return abs(swe.difdeg2n(RA,RAMC))
+    #{CHECK IF THIS IS FINE THAT I PUT ABSOLUTE}
+
 
 '''make sure input lat is negative or positive for N vs S(-ve)'''
 def calculate_AD(GEO_LAT, DECL):
@@ -88,12 +128,12 @@ def calculate_AD(GEO_LAT, DECL):
     return math.degrees(math.asin(sin_AD))
 
 '''GEO_LAT MUST BE DECIMAL FORM, all calculations are in degrees'''
-def calculate_SA(AD, ac, long, GEO_LAT):
+def calculate_SA(AD, ac, long, GEO_LAT, quadrant):
     #FIND OUT IF ABOVE OR BELOW HORIZON IF ABOVE/BELOW AC/DC AXIS
     NS_indicator = 1
-    dc = (ac + 180) % 360
+    dc = swe.degnorm(ac + 180)
     
-    if (ac <= long < dc):
+    if (quadrant in (2, 3)):
         NS_indicator = -1
         
     SA = 90 + AD if (GEO_LAT*NS_indicator > 0) else 90 - AD
@@ -101,16 +141,20 @@ def calculate_SA(AD, ac, long, GEO_LAT):
     return SA
 
 def calculate_Pole_phi(MD, SA, GEO_LAT):
-    tan_phi = (MD/SA) * math.tan(math.radians(GEO_LAT))
+    try:
+        tan_phi = (MD / SA) * math.tan(math.radians(GEO_LAT))
+        return math.degrees(math.atan(tan_phi))
+    except TypeError as e:
+        print(f"An error occurred: {e}")
+        print(f"MD: {MD}, SA: {SA}, GEO_LAT: {GEO_LAT}")                                                                 
+        return
         
-    return math.degrees(math.atan(tan_phi))
-
 def calculate_ADP(phi, DECL):
     sin_ADP  = math.tan(math.radians(phi)) * math.tan(math.radians(DECL))
             
     if (sin_ADP < -1) or (sin_ADP > 1):
-        raise ValueError(f"Value out of domain for arcsin function: must be between -1 and 1 - IN ADP CALCULATION: DECL {DECL} phi {phi}")
-
+        print(f"Value out of domain for arcsin function: must be between -1 and 1 - IN ADP CALCULATION: DECL {DECL} phi {phi}")
+        return 0
     return math.degrees(math.asin(sin_ADP))
 
 def calculate_OA_OD(RA, ADP, GEO_LAT, quadrant):
@@ -148,20 +192,22 @@ def calc_arc(jd_radix, jd_event):
     return arc
 
 def calc_house_pole(house_no, GEO_LAT):
+    """FOR H1/H2 (NOT HOUSES) USE mdpt1 or 2"""
     tan_phi = 0.0
     if house_no in (3, 9, 5, 11):
         tan_phi = (1/3) * math.tan(math.radians(GEO_LAT))
     elif house_no in (2, 8, 6, 12):
         tan_phi = (2/3) * math.tan(math.radians(GEO_LAT))
-    elif house_no == 'ASC':
+    elif house_no in (1, 7):
         tan_phi = math.tan(math.radians(GEO_LAT))
+    elif house_no in (4, 10):
+        tan_phi = 0
     elif house_no in ('mdpt1', 'mdpt2'):
         tan_phi = 0.5 * math.tan(math.radians(GEO_LAT))
     else:
         print(f"House number {house_no} is not handled.")
 
     return math.degrees(math.atan(tan_phi))
-    
 
 def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):   
     directed_longitudes = []
@@ -212,36 +258,69 @@ def calc_long_from_OA(OA, phi, E, flag_ascen):
         LONG_deg += 270
     return LONG_deg % 360
 
-def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, flag_direct, quadrant, ac, long):
-    E = calculate_obliquity(jd_radix)
+def shift_point_to_closest_next_quad(point_angle, left, right, current_quadrant):
+    """will return new shifted quadrant based on which angle it is closer to (left or right of the point)
+    Q1:  left is mc and right is ac
+    Q2: left is ac and right is ic
+    Q3: left is ic and right is dc
+    Q4: left is dc and right is mc"""
 
+    dist_to_left = abs(swe.difdeg2n(point_angle,left))
+    dist_to_right = abs(swe.difdeg2n(point_angle,right))
+    
+    new_quadrant = current_quadrant - 1 if (dist_to_left < dist_to_right) else current_quadrant + 1
+    if (new_quadrant == 0):
+        new_quadrant = 4
+    elif (new_quadrant == 5):
+        new_quadrant = 1
+    return new_quadrant
+
+def calc_left_right_angles(ac, mc, quadrant):
+    """returns tuple (left_angle, right_angle)"""
+    ic = (mc + 180) % 360
+    dc = (ac + 180) % 360
+
+    if (quadrant == 1):
+        return mc, ac
+    if (quadrant == 2):
+        return ac, ic
+    if (quadrant == 3):
+        return ic, dc
+    if (quadrant == 4):
+        return dc, mc
+
+def calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT,DECL, ac, long):
     MD = calculate_MD(RA, RAMC, quadrant)
+    #print(f"MD {MD}, RAMC {RAMC} RA {RA} house {house_pos} quad {quadrant}")
     AD = calculate_AD(GEO_LAT, DECL)
-    SA = calculate_SA(AD, ac, long, GEO_LAT)
-    if (MD > SA):
-        print('\nTHIS HAPPENED MD>SA PAY ATTENTION!!!!!!\n') # see solution in marr
+    SA = calculate_SA(AD, ac, long, GEO_LAT, quadrant)
     phi = calculate_Pole_phi(MD, SA, GEO_LAT)
     ADP = calculate_ADP(phi, DECL)
-
     OA_OD, FLAG_ASCEN = calculate_OA_OD(RA, ADP, GEO_LAT, quadrant)
 
-    '''
-    print('planet_data:')
-    print('LONG', long)
-    print('AC', ac)
-    print(f'RA: {RA}')
-    print(f'RAMC: {RAMC}')
-    print(f'DECL: {DECL}')
-    print(f'GEO_LAT: {GEO_LAT}')
-    print('QUADRANT: ', quadrant)
-    print(f'MD: {MD}')
-    print(f'AD: {AD}')
-    print(f'SA: {SA}')
-    print(f'PHI: {phi}')
-    print(f'ADP: {ADP}')
-    print(f'OA/OD: {OA_OD}{FLAG_ASCEN}')
-    print(f'E: {E}')
-    '''
+    return MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN
+
+def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
+    E = calculate_obliquity(jd_radix)
+    quadrant = get_quadrant_from_house_pos(house_pos)
+    MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
+
+    if (MD > SA):
+        #print('THIS HAPPENED MD>SA PAY ATTENTION!!!!!! we doing again\n') # see solution in marr
+        #print(f"rad: {jd_radix}, eve: {jd_event}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
+        with open("log_md_sa_3SEP24.txt", "a") as file:
+            file.write('THIS HAPPENED MD>SA PAY ATTENTION!!!!!! \n') # see solution in marr
+            file.write(f"rad: {pssr.julian_to_gregorian(jd_radix)}, eve: {pssr.julian_to_gregorian(jd_event)}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
+            file.write(f"we did again and got\n")
+            
+            left_angle, right_angle = calc_left_right_angles(ac, mc, quadrant)
+            new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, quadrant)
+            MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, new_quadrant, GEO_LAT, DECL, ac, long)
+            file.write(f"rad: {jd_radix}, eve: {jd_event}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {new_quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
+            
+            if (MD > SA):
+                file.write("still got error... not okay\n")
+
     arc = calc_arc(jd_radix, jd_event)
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
 
@@ -251,40 +330,3 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, flag_dir
     print(f"long directed: {LONG_deg}")'''
     
     return LONG_deg
-    
-
-'''flag_direct is to know if its dir/conv dir to know whether to add/minus the arc'''
-def get_directed_from_date(date_event, date_radix, point_to_direct, flag_direct):
-     #get arc of direction from event date using Naibod
-     naibod_dec = pssr.get_decimal_degrees(0,59,8.33)
-     jd_event = pssr.dt_gregorian_to_julian(date_event)
-     jd_radix = pssr.dt_gregorian_to_julian(date_radix)
-     jd_diff = abs(jd_event-jd_radix)
-     arc_decimal = jd_diff*naibod_dec
-     arc_degrees = pssr.convert_dec_degrees_to_deg_min_sec(arc_decimal)
-
-     #GETTING LONG OF DIRECTED POINT STARTING FROM NATAL INFO
-     #calculating e at radix date(check that  this is sound) {TODO}
-     e_radix_decimal = calculate_obliquity(jd_radix)
-    
-     #need OA of the point to direct
-     GEO_LAT, DECL, RA, RAMC, LST = get_data_for_planet(date_event, point_to_direct)
-     MD = calculate_MD(RA, RAMC)
-     AD = calculate_AD(GEO_LAT, DECL)
-     SA = calculate_SA(AD, LST, RA, GEO_LAT, DECL)
-     phi = calculate_Pole_phi(MD, SA, GEO_LAT)
-     ADP = calculate_ADP(phi, DECL)
-    
-
-     #OA_OD = calculate_OA_OD(RA, ADP, GEO_LAT)
-
-
-     directed_long = calculate_longitude(e_radix_decimal, phi, None)
-     directed_long_sign, directed_long_dec = pssr.convert_dec_degrees_to_zod(directed_long)
-     directed_long_deg_min_sec = pssr.convert_dec_degrees_to_deg_min_sec(directed_long_dec)
-     #print(f"Longitude: {directed_long_sign} degrees {directed_long_deg_min_sec}")
-
-radix_date = datetime(2018, 2, 19, 12, 00, 00)
-event_date = datetime(2000, 12, 19, 17, 00, 00)
-#pn, ps = astro_seek_read.m_get_astro_chart_positions(event_date.day, event_date.month, event_date.year, event_date.hour, event_date.minute, event_date.second)
-#print(astro_seek_read.m_get_RA_point(event_date, 'Node'))

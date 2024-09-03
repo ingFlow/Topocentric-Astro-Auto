@@ -56,6 +56,21 @@ def zodiac_to_degrees(sign, degrees):
     """Convert zodiac sign and degrees to total degrees."""
     return ZODIAC_START_DEGREES[sign] + degrees
 
+def format_house_list(houses, label):
+    """make list of tuples of house cusps formmat of ('H1',DEG,'LABEL')"""
+    formatted_list = []
+    ihouse = [10, 11, 12, 1, 2, 3]
+    for h in ihouse:
+        house_deg = houses[h-1]
+        if h in (11, 12, 2, 3):
+            house_name = f"H{h}"
+        elif h == 1:
+            house_name = 'ASC'
+        elif h == 10:
+            house_name = 'MC'
+        formatted_list.append((house_name,house_deg,label))
+        
+    return formatted_list
 
 def split_position(position):
     """Parse a position string into a dictionary of planet, sign, and degrees, speed."""
@@ -122,9 +137,7 @@ def find_pd_swiss_aspects(planet_set1, planet_set2):
                                         f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
                         aspects_str += aspect_str
                 else:
-                    print("we in other", aspect_name, aspect_orb)
                     if (aspect_orb <= (5.6/60)):
-                        print("we in acceptable orb")
                         aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
                                         f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
                         aspects_str += aspect_str

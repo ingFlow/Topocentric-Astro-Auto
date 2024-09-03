@@ -4,14 +4,109 @@ import pd_base as pd
 import pssr_automate as pssr
 import math
 import aspects_base as aspects
+from datetime import datetime, timedelta
+
+class EventType:
+    BIRTH_BROTHER = 0
+    BIRTH_SISTER = 1
+    BIRTH_SON = 2
+    BIRTH_DAUGHTER = 3
+    DEATH_FATHER_GRAND = 4
+    DEATH_MOTHER_GRAND = 5
+    SUCCESS = 6
+    FAILURE = 7
+    TRAVEL_POSITIVE = 8
+    TRAVEL_NEGATIVE = 9
+    ARREST = 10
+    LOSSES = 11
+    GRADUATION = 12
+    MOVE_HOME = 13
+    BIRTH_GRANDSON = 14
+    BIRTH_GRANDDAUGHTER = 15
+    MARRIAGE_FOR_MALE = 16
+    MARRIAGE_FOR_FEMALE = 17
+    CHILDS_MARRIAGE = 18
+    DIVORCE_SEPARATION = 19
+    DEATH_SON = 20
+    DEATH_DAUGHTER = 21
+    DEATH_WIFE = 22
+    DEATH_HUSn]BAND = 23
+    DEATH_BROTHER = 24
+    DEATH_SISTER = 25
+    DEATH = 26
+    ASSASINATION_SUICIDE = 27
+    PROMOTION_JOB = 28
+    RESIGN_RETIRE = 29
+    TRAVEL_OVERSEAS_POSITIVE = 30
+    MOBILIZATION = 31
+    DEMOBILIZATION_RELEASE = 32
+    ACCIDENT = 33
+    HOSPITALIZATION_ILLNESS = 34
+    VIOLENCE = 35
+    INTRIGUE = 36
+    GAMBLING_LOSS = 37
+    GAMBLING_GAIN = 38
+    ARMY_PROMOTION = 39
+
+class Planet:
+    SUN = 'Sun'
+    MON = 'Moon'
+    MER = 'Mercury'
+    VEN = 'Venus'
+    MAR = 'Mars'
+    JUP = 'Jupiter'
+    SAT = 'Saturn'
+    URA = 'Uranus'
+    NEP = 'Neptune'
+    PLU = 'Pluto'
+    NNO = 'Mean_Node'
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 
 event_rules = {
-    1: (('MC', 'DC'),('Saturn', 'Uranus', 'Neptune')),
-    2: (('IC', 'DC'),('Sun', 'Moon', 'POF')),
-    3: (('IC', 'AC'),('Mars', 'Mercury', 'Venus')),
+    EventType.BIRTH_BROTHER: (('MC', 'ASC'), (Planet.MER, Planet.JUP)),
+    EventType.BIRTH_SISTER: (('MC', 'ASC'), (Planet.MON, Planet.MER, Planet.VEN)),
+    EventType.BIRTH_SON: (('MC', 'ASC'), (Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
+    EventType.BIRTH_DAUGHTER: (('MC', 'ASC'), (Planet.VEN, Planet.MON, Planet.JUP, Planet.NNO)),
+    EventType.DEATH_FATHER_GRAND: (('MC', 'ASC'), (Planet.SAT, Planet.SUN, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
+    EventType.DEATH_MOTHER_GRAND: (('MC', 'ASC'), (Planet.MON, Planet.VEN, Planet.SAT, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
+    EventType.SUCCESS: (('MC', 'ASC'), (Planet.SUN, Planet.JUP, Planet.MON, Planet.MER, Planet.URA, Planet.VEN)),
+    EventType.FAILURE: (('MC', 'ASC'), (Planet.SAT, Planet.NEP, Planet.NNO, Planet.MAR, Planet.SUN)),
+    EventType.TRAVEL_POSITIVE: (('MC', 'ASC'), (Planet.MON, Planet.MER, Planet.URA, Planet.JUP)),
+    EventType.TRAVEL_NEGATIVE: (('MC', 'ASC'), (Planet.SAT, Planet.MAR, Planet.NEP, Planet.PLU, Planet.MER, Planet.URA)),
+    EventType.ARREST: (('MC', 'ASC'), (Planet.SAT, Planet.URA, Planet.NEP, Planet.MAR, Planet.PLU, Planet.NNO)),
+    EventType.LOSSES: (('MC', 'ASC'), (Planet.NEP, Planet.URA, Planet.MER, Planet.MAR, Planet.SAT)),
+    EventType.GRADUATION: (('MC', 'ASC'), (Planet.MER, Planet.MON, Planet.JUP, Planet.SUN, Planet.URA, Planet.VEN)),
+    EventType.MOVE_HOME: (('MC', 'ASC'), (Planet.MER, Planet.MON, Planet.NNO, Planet.JUP, Planet.SUN, Planet.VEN)),
+    EventType.BIRTH_GRANDSON:(('MC','ASC'),(Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
+    EventType.BIRTH_GRANDDAUGHTER:(('MC','ASC'),(Planet.VEN,Planet.MON, Planet.JUP,Planet.NNO)),
+    EventType.MARRIAGE_FOR_MALE:(('MC','ASC'),(Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP)),
+    EventType.MARRIAGE_FOR_FEMALE:(('MC','ASC'),(Planet.SUN,Planet.JUP,Planet.MAR,Planet.NNO)),
+    EventType.CHILDS_MARRIAGE:(('MC','ASC'),(Planet.MER,Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP,Planet.SUN)),
+    EventType.DIVORCE_SEPARATION:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.NNO,Planet.PLU)),
+    EventType.DEATH_SON:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_DAUGHTER:(('MC','ASC'),(Planet.VEN,Planet.MON,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_WIFE:(('MC','ASC'),(Planet.MON,Planet.VEN,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
+    EventType.DEATH_HUSBAND:(('MC','ASC'),(Planet.SAT,Planet.SUN,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
+    EventType.DEATH_BROTHER:(('MC','ASC'),(Planet.MER,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_SISTER:(('MC','ASC'),(Planet.MON,Planet.MER,Planet.VEN,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH:(('MC','ASC'),(Planet.SAT,Planet.PLU,Planet.NEP,Planet.NNO,Planet.SUN)),
+    EventType.ASSASINATION_SUICIDE:(('MC','ASC'),(Planet.SAT,Planet.PLU,Planet.URA,Planet.NEP,Planet.NNO,Planet.MAR)),
+    EventType.PROMOTION_JOB:(('MC','ASC'),(Planet.SUN,Planet.JUP,Planet.MON,Planet.MER,Planet.URA,Planet.VEN)),
+    EventType.RESIGN_RETIRE:(('MC','ASC'),(Planet.SAT,Planet.NEP,Planet.SUN,Planet.MAR,Planet.NNO)),
+    EventType.TRAVEL_OVERSEAS_POSITIVE:(('MC','ASC'),(Planet.MON,Planet.MER,Planet.URA,Planet.JUP)),
+    EventType.MOBILIZATION:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.PLU)),
+    EventType.DEMOBILIZATION_RELEASE:(('MC','ASC'),(Planet.JUP,Planet.VEN,Planet.URA)),
+    EventType.ACCIDENT:(('MC','ASC'),(Planet.MAR,Planet.URA,Planet.SAT,Planet.MER)),
+    EventType.HOSPITALIZATION_ILLNESS:(('MC','ASC'),(Planet.SAT,Planet.NEP,Planet.MAR)),
+    EventType.VIOLENCE:(('MC','ASC'),(Planet.MAR,Planet.PLU,Planet.SAT,Planet.URA)),
+    EventType.INTRIGUE:(('MC','ASC'),(Planet.NEP,Planet.MER)),
+    EventType.GAMBLING_LOSS:(('MC','ASC'),(Planet.NEP,Planet.SAT,Planet.URA,Planet.MAR)),
+    EventType.GAMBLING_GAIN:(('MC','ASC'),(Planet.JUP,Planet.VEN,Planet.URA)),
+    EventType.ARMY_PROMOTION:(('MC','ASC'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA))
 }
+
+grid_acceptable_aspects = []
 
 def is_acceptable_angular_aspect(event_id, str_aspect):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
@@ -33,8 +128,8 @@ def is_acceptable_angular_aspect(event_id, str_aspect):
     if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p2 in angle_accept) and (p1 in planet_accept)):
         return True
     
-def count_all_acceptable_angles(event_id, str_all_aspects):
-    "returns a string of only acceptable angular direction aspects"
+def count_all_acceptable_angles(event_id, str_all_aspects, count):
+    "returns a couunt string of only acceptable angular direction aspects"
     list_aspects = str_all_aspects.split('\n')
     str_acceptable_aspects = ""
 
@@ -43,20 +138,67 @@ def count_all_acceptable_angles(event_id, str_all_aspects):
             aspect = list_aspects[i]
             if is_acceptable_angular_aspect(event_id, aspect):
                 str_acceptable_aspects += aspect + '\n'
+                count += 1
 
-    return str_acceptable_aspects
+    return count, str_acceptable_aspects.rstrip()
     
+def generate_grid_angular_aspects(start_time, end_time, increment_seconds, list_dt_events, jd_radix : julian, geo_positions: list[3]):
+    global grid_acceptable_aspects
+    temp_list_event = ['Time']
+    for i in range(0,len(list_dt_events)):
+        temp_list_event.append(f"Event{i}")
+    temp_list_event.append('Count')
+    grid_acceptable_aspects.append(temp_list_event)
+
+    current_time = start_time
+    increment = timedelta(seconds=increment_seconds)
+    
+    while current_time <= end_time:
+        append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
+        current_time += increment
+        with open("log_md_sa.txt", "a") as file:
+            file.write(f"{current_time.strftime('%H:%M:%S')}---------------------------")
+
+    # Handle the case where the last increment might exceed the end time
+    if current_time > end_time:
+        append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
+    with open("gridddd.txt", "w") as file:
+        for time in grid_acceptable_aspects:
+            file.write(f"{str(time)}\n")
+    
+def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positions: list[3]):
+    formatted_time = pssr.julian_to_gregorian(jd_radix).strftime('%H:%M:%S')
+    temp_list_event = [formatted_time] 
+    count = 0
+    for dt_event, event_id in list_dt_events:
+        str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, pssr.dt_gregorian_to_julian(dt_event), geo_positions)
+        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+        count, str_acceptable_aspects = count_all_acceptable_angles(event_id, str_all_directed_aspects, count)
+
+        if count > 0:
+            temp_list_event.append(str_acceptable_aspects)
+        else:
+            temp_list_event.append('')
+    temp_list_event.append(count)
+
+    global grid_acceptable_aspects
+    grid_acceptable_aspects.append(temp_list_event)
+    
+    return
+
 
 def calc_all_pd_houses(JD_RADIX, jd_event, geo_latitude, geo_longitude):
-    
+    """returns 3 tuples with house cusps 1 to 12
+    removed functionality for Hmd1 and Hmd2 (H1/H2)"""
     arc = pd.calc_arc(JD_RADIX, jd_event)
-    houses_ret = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')
-    ramc = houses_ret [1][2]
+    radix = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')
+    ramc = radix[1][2]
+    radix = radix[0]
+    e = pd.calculate_obliquity(JD_RADIX)
 
-    radix = pd.calc_houses_with_ramc(ramc, JD_RADIX, geo_latitude, "(r)")
-    directed = pd.calc_houses_with_ramc(ramc+arc, JD_RADIX, geo_latitude, "(d)")
-    converse = pd.calc_houses_with_ramc(ramc-arc, JD_RADIX, geo_latitude, "(c)")
-    
+    directed = swe.houses_armc(ramc+arc, geo_latitude, e, b'T')[0]
+    converse = swe.houses_armc(ramc-arc, geo_latitude, e, b'T')[0]
+
     return radix, directed, converse
  
 def calc_all_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude):
@@ -70,19 +212,22 @@ def calc_all_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude):
         xx, _ = swe.calc_ut(JD_RADIX, planet)
         xx1, _ = swe.calc_ut(JD_RADIX, planet, swe.FLG_EQUATORIAL)
         long = xx[0]
+        lat = xx[1]
         ra = xx1[0]
         decl = xx1[1]
+        
+        cusps = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')[0]
+        p_house = pd.get_housepos_manual(long, cusps)
 
         ac, mc, ramc = calc_radix_ac_mc_ramc(JD_RADIX,geo_latitude, geo_longitude)
-
-        quadrant = pd.get_point_quadrant(ac,mc,long)
+        #quadrant = pd.get_point_quadrant(ac,mc,long)
 
         rad_planets.append((PLANETS[planet], long, "(r)"))    
 
-        long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, True, quadrant, ac, long)
+        long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
         dir_planets.append((PLANETS[planet], long_directed, "(d)"))
         
-        long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, False, quadrant, ac, long)
+        long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
         conv_planets.append((PLANETS[planet], long_conv, "(c)"))
 
     return rad_planets, dir_planets, conv_planets
@@ -101,11 +246,16 @@ def calc_directed_POF(rad_planets, JD_RADIX, jd_event, geo_latitude, geo_longitu
     e = pd.calculate_obliquity(JD_RADIX)
     ra, decl, _ = swe.cotrans((pof_long, 0.0, 1), e)
     
-    long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, True, quadrant, ac, pof_long)
-    long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, False, quadrant, ac, pof_long)
+    long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, True, quadrant, ac, pof_long)
+    long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, False, quadrant, ac, pof_long)
     
 
     return pof_long, long_directed, long_conv
+
+def calc_planet_house_pos(ramc, geo_lat, e, long, lat):
+    hpos = swe.house_pos(ramc, geo_lat, e, (long,lat), b'T')
+    
+    return int(hpos)
 
 def calc_radix_ac_mc_ramc(JD_RADIX, geo_latitude, geo_longitude):
     """returns tuple of radix (ac, mc, ramc)"""
@@ -205,6 +355,9 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3]):
 
     swe.set_ephe_path('ephe')
     rad_houses, dir_houses, conv_houses = calc_all_pd_houses(JD_RADIX,jd_event, geo_latitude, geo_longitude)
+    rad_houses = aspects.format_house_list(rad_houses, '(r)')
+    dir_houses = aspects.format_house_list(dir_houses, '(d)')
+    conv_houses = aspects.format_house_list(conv_houses, '(c)')
     rad_planets, dir_planets, conv_planets = calc_all_pd_planets(JD_RADIX,jd_event, geo_latitude, geo_longitude)
     #add POF DATA
     rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets, JD_RADIX, jd_event, geo_latitude, geo_longitude)
@@ -226,6 +379,6 @@ def pd_for_time_event_write_to_file(jd_radix : julian, jd : julian, geo_position
     str_aspects_rad_dir, str_aspects_rad_conv =  pd_for_time_event(jd_radix, jd, geo_positions)
 
     with open("sweee_ephem_output.txt", "a") as file:
-        #file.write(f"Event Date: {str(julian.from_jd(jd))}, \tARC: {pssr.convert_dec_degrees_to_deg_min_sec(ARC_P)} \nRad Positions: {rad_planets}{rad_houses} \nDir Positions: {dir_planets}{dir_houses} \nCon Positions: {conv_planets}{conv_houses}")
+        file.write(f"Event Date: {str(julian.from_jd(jd))}, \tARC: {pssr.convert_dec_degrees_to_deg_min_sec(ARC_P)} \nRad Positions: {rad_planets}{rad_houses} \nDir Positions: {dir_planets}{dir_houses} \nCon Positions: {conv_planets}{conv_houses}")
         file.write(f"\nRAD-DIR ASPECTS: \n{str_aspects_rad_dir}")
         file.write(f"RAD-CONV ASPECTS: \n{str_aspects_rad_conv}\n")
