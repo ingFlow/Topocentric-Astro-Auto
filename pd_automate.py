@@ -30,7 +30,7 @@ class EventType:
     DEATH_SON = 20
     DEATH_DAUGHTER = 21
     DEATH_WIFE = 22
-    DEATH_HUSn]BAND = 23
+    DEATH_HUSBAND = 23
     DEATH_BROTHER = 24
     DEATH_SISTER = 25
     DEATH = 26
@@ -142,27 +142,28 @@ def count_all_acceptable_angles(event_id, str_all_aspects, count):
 
     return count, str_acceptable_aspects.rstrip()
     
-def generate_grid_angular_aspects(start_time, end_time, increment_seconds, list_dt_events, jd_radix : julian, geo_positions: list[3]):
+def generate_grid_angular_aspects(start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3]):
     global grid_acceptable_aspects
     temp_list_event = ['Time']
+
     for i in range(0,len(list_dt_events)):
-        temp_list_event.append(f"Event{i}")
+        temp_list_event.append(f"{i}: {list_dt_events[i][0].strftime('%Y-%m-%d')}")
     temp_list_event.append('Count')
     grid_acceptable_aspects.append(temp_list_event)
-
+    
     current_time = start_time
     increment = timedelta(seconds=increment_seconds)
     
     while current_time <= end_time:
+        print(f"working on: {current_time}....")
         append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
         current_time += increment
-        with open("log_md_sa.txt", "a") as file:
-            file.write(f"{current_time.strftime('%H:%M:%S')}---------------------------")
 
     # Handle the case where the last increment might exceed the end time
     if current_time > end_time:
         append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
-    with open("gridddd.txt", "w") as file:
+    
+    with open("ver_4SEP2024.txt", "w") as file:
         for time in grid_acceptable_aspects:
             file.write(f"{str(time)}\n")
     
@@ -170,59 +171,51 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     formatted_time = pssr.julian_to_gregorian(jd_radix).strftime('%H:%M:%S')
     temp_list_event = [formatted_time] 
     count = 0
+    
+    rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
+    rad_planets_labelled = calc_natal_planets_labelled(jd_radix)
+    rad_planets_equatorial = calc_rad_planets_equatorial(jd_radix)
+
+    event_index = 0
     for dt_event, event_id in list_dt_events:
-        str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, pssr.dt_gregorian_to_julian(dt_event), geo_positions)
+        str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, pssr.dt_gregorian_to_julian(dt_event), geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
         str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+        #count is incremented in next line 
         count, str_acceptable_aspects = count_all_acceptable_angles(event_id, str_all_directed_aspects, count)
 
         if count > 0:
             temp_list_event.append(str_acceptable_aspects)
         else:
-            temp_list_event.append('')
+            temp_list_event.append(f"{str(event_index)}")
+        event_index += 1
+
     temp_list_event.append(count)
 
     global grid_acceptable_aspects
-    grid_acceptable_aspects.append(temp_list_event)
-    
+    grid_acceptable_aspects.append(temp_list_event)    
     return
 
-
-def calc_all_pd_houses(JD_RADIX, jd_event, geo_latitude, geo_longitude):
-    """returns 3 tuples with house cusps 1 to 12
+def calc_directed_pd_houses(JD_RADIX, jd_event, geo_latitude, rad_houses):
+    """returns 2 tuples with house cusps 1 to 12 dir, conv
     removed functionality for Hmd1 and Hmd2 (H1/H2)"""
     arc = pd.calc_arc(JD_RADIX, jd_event)
-    radix = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')
-    ramc = radix[1][2]
-    radix = radix[0]
+    ramc = rad_houses[1][2]
     e = pd.calculate_obliquity(JD_RADIX)
 
     directed = swe.houses_armc(ramc+arc, geo_latitude, e, b'T')[0]
     converse = swe.houses_armc(ramc-arc, geo_latitude, e, b'T')[0]
 
-    return radix, directed, converse
+    return directed, converse
  
-def calc_all_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude):
+def calc_directed_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude, rad_planets_equatorial):
     dir_planets = []
     conv_planets = []
-    rad_planets = []
 
-    for i in range(0, len(PLANETS)):
-        planet = i
-        #print(f"planet: {PLANETS[planet]}")
-        xx, _ = swe.calc_ut(JD_RADIX, planet)
-        xx1, _ = swe.calc_ut(JD_RADIX, planet, swe.FLG_EQUATORIAL)
-        long = xx[0]
-        lat = xx[1]
-        ra = xx1[0]
-        decl = xx1[1]
-        
+    for planet in range(0, len(PLANETS)):
+        long, ra, decl = rad_planets_equatorial[planet]
         cusps = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')[0]
         p_house = pd.get_housepos_manual(long, cusps)
-
         ac, mc, ramc = calc_radix_ac_mc_ramc(JD_RADIX,geo_latitude, geo_longitude)
-        #quadrant = pd.get_point_quadrant(ac,mc,long)
-
-        rad_planets.append((PLANETS[planet], long, "(r)"))    
 
         long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
         dir_planets.append((PLANETS[planet], long_directed, "(d)"))
@@ -230,7 +223,29 @@ def calc_all_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude):
         long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
         conv_planets.append((PLANETS[planet], long_conv, "(c)"))
 
-    return rad_planets, dir_planets, conv_planets
+    return dir_planets, conv_planets
+
+def calc_natal_planets_labelled(jd_radix):
+    rad_planets = []
+    for planet in range(0, len(PLANETS)):
+        xx, _ = swe.calc_ut(jd_radix, planet)
+        long = xx[0]
+
+        rad_planets.append((PLANETS[planet], long, "(r)"))    
+    return rad_planets
+
+def calc_rad_planets_equatorial(jd_radix):
+    """returns array with (long, ra, decl) for each of PLANETS(list) following PLANETS INDEXING"""
+    planet_info = [] 
+    for planet in range(0, len(PLANETS)):
+        xx, _ = swe.calc_ut(jd_radix, planet)
+        xx1, _ = swe.calc_ut(jd_radix, planet, swe.FLG_EQUATORIAL)
+        long = xx[0]
+        ra = xx1[0]
+        decl = xx1[1]
+        planet_info.append((long, ra, decl))
+
+    return planet_info
 
 def calc_directed_POF(rad_planets, JD_RADIX, jd_event, geo_latitude, geo_longitude):
     """returns tuple (pof_rad, pof_directed, pof_converse)"""
@@ -335,7 +350,7 @@ def calc_lst(jd, longitude):
     
     return lst
 
-def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3]):
+def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], rad_planets_labelled, rad_planets_equatorial, rad_houses_info):
     """
     Calculate the primary directions for all planets and houses
 
@@ -354,18 +369,19 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3]):
     geo_longitude = geo_positions[1]
 
     swe.set_ephe_path('ephe')
-    rad_houses, dir_houses, conv_houses = calc_all_pd_houses(JD_RADIX,jd_event, geo_latitude, geo_longitude)
+    dir_houses, conv_houses = calc_directed_pd_houses(JD_RADIX,jd_event, geo_latitude, rad_houses_info)
+    rad_houses = rad_houses_info[0]
     rad_houses = aspects.format_house_list(rad_houses, '(r)')
     dir_houses = aspects.format_house_list(dir_houses, '(d)')
     conv_houses = aspects.format_house_list(conv_houses, '(c)')
-    rad_planets, dir_planets, conv_planets = calc_all_pd_planets(JD_RADIX,jd_event, geo_latitude, geo_longitude)
-    #add POF DATA
-    rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets, JD_RADIX, jd_event, geo_latitude, geo_longitude)
-    rad_planets.append(('POF', rad_pof, "(r)"))
+    dir_planets, conv_planets = calc_directed_pd_planets(JD_RADIX,jd_event, geo_latitude, geo_longitude, rad_planets_equatorial)
+    #add POF  DATA
+    rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, JD_RADIX, jd_event, geo_latitude, geo_longitude)
+    rad_planets_labelled.append(('POF', rad_pof, "(r)"))
     dir_planets.append(('POF', dir_pof, "(d)"))
     conv_planets.append(('POF',conv_pof, "(c)"))
     #JOIN ARRAYS
-    rad_positions = [*rad_planets, *rad_houses]
+    rad_positions = [*rad_planets_labelled, *rad_houses]
     dir_positions = [*dir_planets, *dir_houses]
     conv_positions = [*conv_planets, *conv_houses]
 
@@ -382,3 +398,38 @@ def pd_for_time_event_write_to_file(jd_radix : julian, jd : julian, geo_position
         file.write(f"Event Date: {str(julian.from_jd(jd))}, \tARC: {pssr.convert_dec_degrees_to_deg_min_sec(ARC_P)} \nRad Positions: {rad_planets}{rad_houses} \nDir Positions: {dir_planets}{dir_houses} \nCon Positions: {conv_planets}{conv_houses}")
         file.write(f"\nRAD-DIR ASPECTS: \n{str_aspects_rad_dir}")
         file.write(f"RAD-CONV ASPECTS: \n{str_aspects_rad_conv}\n")
+
+def count_aspect_groups_txt(filename):
+    opp_conj = ['opposition', 'conjunction']
+    sqr_tri_sext = ['square', 'trine', 'sextile']
+    results = []
+
+    with open(filename, 'r') as infile:
+        for line in infile:
+            parts = eval(line.strip())
+            time = parts[0]
+            aspects = parts[1:-1]
+            count = parts[-1]
+
+            opp_conj_count = 0
+            sqr_tri_sext_count = 0
+            minor_count = 0
+
+            for all_aspect in aspects:
+                if all_aspect:
+                    aspect = all_aspect.split(', ')
+                    for asp in aspect:
+                        if asp[0] == '(':
+                            asp = asp.split(' ')[2]
+                            if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
+                                minor_count += 1
+                            elif ('opposition' in asp) or ('conjunction' in asp):
+                                opp_conj_count += 1
+                            elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
+                                sqr_tri_sext_count += 1
+
+            results.append([f"{time}, {count}, opp/conj: {opp_conj_count}", f"sqr/tri/sext: {sqr_tri_sext_count}", f"major: {sqr_tri_sext_count+opp_conj_count}", f"minor: {minor_count}"])                
+    print(results)
+    with open('ver_4SEP2024_COUNTASCMC.txt', 'w') as outfile:
+        for result in results:
+            outfile.write(str(result) + '\n')

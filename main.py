@@ -113,16 +113,16 @@ def main_trans_pssr():
     #process_multiple_events(date, aspects.ProcessType.PSSR)
 
 def main():
-  dt_radix = datetime(1940, 10, 9, 2, 00, 00)
-  dt_radix2 = datetime(1940, 10, 9, 10, 20, 20)
+  dt_radix_start = datetime(1940, 10, 8, 23, 00, 00)
+  dt_radix_end = datetime(1940, 10, 9, 23, 00, 00)
   geopos = [53.4, -2.9833333, 70.0]
   '''dt_radix = datetime(1889, 4, 16, 19, 40, 48)
   geopos = [51.48333, 0.001, 306]
   dt_event = datetime(1901, 5, 9, 12, 00, 00)'''
 
   list_of_events = [
-    (datetime(1956, 7, 15, 12, 00, 00),pd.EventType.DEATH_MOTHER_GRAND)]
-  '''(datetime(1962, 8, 23, 12, 00, 00),pd.EventType.MARRIAGE_FOR_MALE),
+    (datetime(1956, 7, 15, 12, 00, 00),pd.EventType.DEATH_MOTHER_GRAND),
+    (datetime(1962, 8, 23, 12, 00, 00),pd.EventType.MARRIAGE_FOR_MALE),
     (datetime(1963, 4, 18, 12, 00, 00),pd.EventType.BIRTH_SON),
     (datetime(1964, 2, 6, 12, 00, 00),pd.EventType.SUCCESS),
     (datetime(1965, 6, 12, 12, 00, 00),pd.EventType.SUCCESS),
@@ -136,15 +136,17 @@ def main():
     (datetime(1975, 1, 15, 12, 00, 00),pd.EventType.SUCCESS),
     (datetime(1976, 7, 27, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
     (datetime(1980, 12, 8, 12, 00, 00),pd.EventType.ASSASINATION_SUICIDE)
-  ]'''
-  pd.generate_grid_angular_aspects(dt_radix, dt_radix2, 8, list_of_events, pssr.dt_gregorian_to_julian(dt_radix), geopos)
+  ]
+  pd.generate_grid_angular_aspects(dt_radix_start, dt_radix_end, 8, list_of_events, geopos)
   
   str = "(MC,55.552,(r)) (Saturn,325.600,(d)) (square,3')\n(AC,176.030,(r)) (Mars,220.994,(d)) (45-semisquare,2')\n(Pluto,124.188,(r)) (Venus,184.231,(d)) (sextile,3')\n(Neptune,190.583,(r)) (DC,325.600,(d)) (135-sesquisquare,1')\n(Uranus,320.168,(r)) (MC,290.150,(d)) (30-semisextile,1')"
   #pd.main_count_angles(list_of_events, pssr.dt_gregorian_to_julian(dt_radix), geopos)
 
   #secondary.secondary_auto(pssr.dt_gregorian_to_julian(dt_radix), pssr.dt_gregorian_to_julian(dt_event), geopos[0], geopos[1], 0.534)
 
-main()
+#main()
+pd.count_aspect_groups_txt('ver_4SEP2024.txt')
+
 '''jd = pssr.dt_gregorian_to_julian(datetime(1940, 10, 9, 17, 24, 17))
 dt_radix2 = datetime(1940, 10, 9, 2, 00, 20)
 geopos = [53.4, -2.9833333, 70.0]

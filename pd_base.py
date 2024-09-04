@@ -306,20 +306,13 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag
     MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
     if (MD > SA):
-        #print('THIS HAPPENED MD>SA PAY ATTENTION!!!!!! we doing again\n') # see solution in marr
-        #print(f"rad: {jd_radix}, eve: {jd_event}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
-        with open("log_md_sa_3SEP24.txt", "a") as file:
-            file.write('THIS HAPPENED MD>SA PAY ATTENTION!!!!!! \n') # see solution in marr
-            file.write(f"rad: {pssr.julian_to_gregorian(jd_radix)}, eve: {pssr.julian_to_gregorian(jd_event)}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
-            file.write(f"we did again and got\n")
-            
-            left_angle, right_angle = calc_left_right_angles(ac, mc, quadrant)
-            new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, quadrant)
-            MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, new_quadrant, GEO_LAT, DECL, ac, long)
-            file.write(f"rad: {jd_radix}, eve: {jd_event}, LONG {long} AC {ac} RA {RA} RAMC: {RAMC} MD: {MD} HOUSE {house_pos} QUADRANT {new_quadrant} DECL: {DECL} GEO_LAT: {GEO_LAT} AD: {AD} SA: {SA} PHI: {phi} ADP: {ADP} OA/OD: {OA_OD}{FLAG_ASCEN}\n")
-            
-            if (MD > SA):
-                file.write("still got error... not okay\n")
+        left_angle, right_angle = calc_left_right_angles(ac, mc, quadrant)
+        new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, quadrant)
+        MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, new_quadrant, GEO_LAT, DECL, ac, long)
+        
+        if (MD > SA):
+            with open("log_md_sa_4SEP24.txt", "a") as file:
+                file.write(f"{jd_radix} still got error... not okay \n")
 
     arc = calc_arc(jd_radix, jd_event)
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
