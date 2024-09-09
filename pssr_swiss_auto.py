@@ -69,7 +69,7 @@ def calc_pssr_direct_year(radix_datetime, event_datetime):
     return direct_year
 
 
-def calc_pssr_for_date(dt_radix, dt_event, geo_latitude, geo_longitude):
+def calc_pssr_for_date(dt_radix, dt_event, rad_planets):
     """returns tuple with 2 str of aspects rad to direct and conv pssr (prog/reg)"""
     jd_radix = julian.to_jd(dt_radix)
     jd_event = julian.to_jd(dt_event)
@@ -117,16 +117,6 @@ def calc_pssr_for_date(dt_radix, dt_event, geo_latitude, geo_longitude):
     reg_conv_planets = calc_planets_labelled(jd_reg_pssr_conv, '(cr)', planets_to_exclude)
     direct_planets = [*prog_dir_planets, *reg_dir_planets]
     conv_planets = [*prog_conv_planets, *reg_conv_planets]
-
-    rad_planets = calc_planets_labelled(jd_radix, '(r)', [])
-    houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
-    ac = houses[0][0]
-    sun_long = rad_planets[PLANETS.index('Sun')][1]
-    moon_long = rad_planets[PLANETS.index('Moon')][1]
-    pof_long = swe.degnorm(ac + moon_long - sun_long)
-    rad_planets.append(('POF',pof_long,'(r)'))
-    for house_no in range(0,len(houses[0])):
-        rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
 
     str_rad_direct_aspects = aspects.find_pssr_swiss_aspects(rad_planets,direct_planets)
     str_rad_conv_aspects = aspects.find_pssr_swiss_aspects(rad_planets, conv_planets)

@@ -220,6 +220,21 @@ def find_secondary_swiss_aspects(planet_set1, planet_set2):
     return aspects_str
 
 
+def find_trans_swiss_aspects(planet_set1, planet_set2):
+    aspects_str = ''
+    
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
+            orb = 65/60
+            aspect = calculate_aspect(d1, d2, orb, True)
+            
+            if aspect:
+                aspect_name, aspect_orb = aspect
+                aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                
+                aspects_str += aspect_str
+    return aspects_str
+
 def find_aspects(planet_set1, planet_set2, orb, house_check, rad_sr_check):
     """Find and format aspects between two sets of planets."""
     ''' if the planet is fast set 1 and slow set 2
@@ -250,7 +265,6 @@ def find_aspects(planet_set1, planet_set2, orb, house_check, rad_sr_check):
     return aspects_str
 #needs an array wof planet name str and degrees decimal
 def calc_all_aspects(set1, set2, orb):
-
     aspects_str = ''
 
     for p1, d1 in set1:

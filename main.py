@@ -93,7 +93,7 @@ def process_multiple_events(radix_date, type_process):
 
 def main():
   dt_radix_start = datetime(1940, 10, 8, 23, 00, 00)
-  dt_radix_end = datetime(1940, 10, 8, 23, 00, 8)
+  dt_radix_end = datetime(1940, 10, 9, 23, 00, 00)
   geopos = [53.4, -2.9833333, 70.0]
   '''dt_radix_start = datetime(1889, 4, 16, 19, 40, 40)
   dt_radix_end = datetime(1889, 4, 16, 19, 40, 44)
@@ -119,20 +119,25 @@ def main():
   ]
   level_aspects = pd.AspectType.ANGLE_HOUSE_PRIMARY
   time_increment = 8
+  str_date = f"9_9_"
   
-  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_secondaries"
+  filename = f"{str_date} {dt_radix_end.strftime('%Y-%m-%d')}_secondaries"
   aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.SECONDARY_DIRECT)
   aspects_analysis.count_aspect_groups_txt(filename)
   aspects_analysis.resetvars()
 
-  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_primaries"
+  filename = f"{str_date} {dt_radix_end.strftime('%Y-%m-%d')}_primaries"
   aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.PRIMARY_DIRECT)
   aspects_analysis.count_aspect_groups_txt(filename)
   aspects_analysis.resetvars()
 
-
-  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_pssr"
+  filename = f"{str_date} {dt_radix_end.strftime('%Y-%m-%d')}_pssr"
   aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.PSSR)
+  aspects_analysis.count_aspect_groups_txt(filename)
+  aspects_analysis.resetvars()
+34 
+  filename = f"{str_date} {dt_radix_end.strftime('%Y-%m-%d')}_transit"
+  aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.TRANSIT)
   aspects_analysis.count_aspect_groups_txt(filename)
 
 main()

@@ -5,6 +5,7 @@ import swisseph as swe
 import pd_automate
 import secondary_automate
 import pssr_swiss_auto as pssr_auto
+import transit_swiss_auto as transit_auto
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -12,6 +13,7 @@ class TechniqueType:
     PSSR = 2
     TRANSIT = 3
 
+PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 grid_aspects =[]
 date_technique = -1
 aspect_type = -1
@@ -57,7 +59,8 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
     rad_planets_labelled = pd_automate.calc_natal_planets_labelled(jd_radix)
     rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-    
+    rad_planets_houses_labelled = calc_rad_planet_houses_labelled(jd_radix, geo_positions[0], geo_positions[1])
+
     event_index = 0
     for dt_event, event_id in list_dt_events:
         if date_technique == TechniqueType.PRIMARY_DIRECT:
@@ -67,9 +70,12 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_automate.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_positions[0], geo_positions[1])
             str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
         elif date_technique == TechniqueType.PSSR:
-            str_rad_dir_aspects, str_rad_conv_aspects = pssr_auto.calc_pssr_for_date(julian.from_jd(jd_radix), dt_event, geo_positions[0], geo_positions[1])
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects    
-
+            str_rad_dir_aspects, str_rad_conv_aspects = pssr_auto.calc_pssr_for_date(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
+            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+        elif date_technique == TechniqueType.TRANSIT:
+            str_rad_dir_aspects, str_rad_conv_aspects = transit_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+        
         #count is incremented in next line 
         count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
 
@@ -128,6 +134,18 @@ def count_aspect_groups_txt(filename):
 
             results.append([f"{time}, {count}, opp/conj: {opp_conj_count}", f"sqr/tri/sext: {sqr_tri_sext_count}", f"major: {sqr_tri_sext_count+opp_conj_count}", f"minor: {minor_count}"])                
     print(results)
-    with open(f"{filename}COUNTASCMC.txt", 'w') as outfile:
+    with open(f"{filename}COUNT.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')
+
+def calc_rad_planet_houses_labelled(jd_radix, geo_latitude, geo_longitude):
+    rad_planets = pd_automate.calc_natal_planets_labelled(jd_radix)
+    houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
+    ac = houses[0][0]
+    sun_long = rad_planets[PLANETS.index('Sun')][1]
+    moon_long = rad_planets[PLANETS.index('Moon')][1]
+    pof_long = swe.degnorm(ac + moon_long - sun_long)
+    rad_planets.append(('POF',pof_long,'(r)'))
+    for house_no in range(0,len(houses[0])):
+        rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
+    return  rad_planets
