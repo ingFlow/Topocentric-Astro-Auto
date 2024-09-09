@@ -1,9 +1,19 @@
 import julian
 from datetime import datetime, timedelta
 import astro_seek_read 
+import swisseph as swe
 
-ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", \
+ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", 
                 "scorpio","sagittarius", "capricorn", "aquarius", "pisces"]
+
+def calc_natal_planets_labelled(jd_radix, label):
+    rad_planets = []
+    for planet in range(0, len(PLANETS)):
+        xx, _ = swe.calc_ut(jd_radix, planet)
+        long = xx[0]
+
+        rad_planets.append((PLANETS[planet], long, label))    
+    return rad_planets
 
 def convert_full_dec_degrees_to_zod_min_sec(full_dec_degrees):
     zod, deg = convert_dec_degrees_to_zod(full_dec_degrees)
@@ -226,9 +236,9 @@ def m_auto_pssr(r_day, r_month, r_year, r_hour, r_minute, r_second, e_day, e_mon
     log(f"Progressed pssr converse datetime#{dt_prog_pssr_conv}")
     log("*****************************************************\n\n")
 
-    with open("output_auto_pssr.txt", "a") as f:
+    '''with open("output_auto_pssr.txt", "a") as f:
         f.write("\n".join(output))
-        print("done writing log to file")
+        print("done writing log to file")'''
 
     return (dt_reg_pssr_dir, dt_prog_pssr_dir, dt_reg_pssr_conv, dt_prog_pssr_conv)
     

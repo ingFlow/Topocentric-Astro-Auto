@@ -1,7 +1,4 @@
 import math
-import pssr_automate as pssr
-import astro_seek_read 
-from datetime import datetime
 import swisseph as swe
 
 '''this obliquity is not the true one that takes into account the nutation and stuff'''
@@ -174,15 +171,6 @@ def calculate_OA_OD(RA, ADP, GEO_LAT, quadrant):
         
 def calculate_MDO(MD, SA):
     return MD/SA*90
-
-def get_data_for_planet(date, event_date, planet):
-    '''need to return: GEO_LAT, DECL, RA, RAMC, LST'''
-    GEO_LAT = astro_seek_read.m_get_GEO_LAT(event_date)
-    RAMC, RA, DECL = astro_seek_read.m_get_RAMC_RA_DECL_point(event_date,'Saturn')
-    LST = astro_seek_read.m_get_LST(event_date)
-    
-    data = (GEO_LAT, DECL, RA, RAMC, LST)
-    return data
 
 def calc_arc(jd_radix, jd_event):
     naibod = (0+ 59/60 + 8.33/3600)

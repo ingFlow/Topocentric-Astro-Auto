@@ -1,10 +1,10 @@
 import swisseph as swe
 import julian
 import pd_base as pd
-import pssr_automate as pssr
 import math
 import aspects_base as aspects
-from datetime import datetime, timedelta
+from datetime import timedelta
+import secondary_automate as secondary
 
 class EventType:
     BIRTH_BROTHER = 0
@@ -62,60 +62,106 @@ class Planet:
     NNO = 'Mean_Node'
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+i_level = 0
 
 event_rules = {
-    EventType.BIRTH_BROTHER: (('MC', 'ASC'), (Planet.MER, Planet.JUP)),
-    EventType.BIRTH_SISTER: (('MC', 'ASC'), (Planet.MON, Planet.MER, Planet.VEN)),
-    EventType.BIRTH_SON: (('MC', 'ASC'), (Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
-    EventType.BIRTH_DAUGHTER: (('MC', 'ASC'), (Planet.VEN, Planet.MON, Planet.JUP, Planet.NNO)),
-    EventType.DEATH_FATHER_GRAND: (('MC', 'ASC'), (Planet.SAT, Planet.SUN, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
-    EventType.DEATH_MOTHER_GRAND: (('MC', 'ASC'), (Planet.MON, Planet.VEN, Planet.SAT, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
-    EventType.SUCCESS: (('MC', 'ASC'), (Planet.SUN, Planet.JUP, Planet.MON, Planet.MER, Planet.URA, Planet.VEN)),
-    EventType.FAILURE: (('MC', 'ASC'), (Planet.SAT, Planet.NEP, Planet.NNO, Planet.MAR, Planet.SUN)),
-    EventType.TRAVEL_POSITIVE: (('MC', 'ASC'), (Planet.MON, Planet.MER, Planet.URA, Planet.JUP)),
-    EventType.TRAVEL_NEGATIVE: (('MC', 'ASC'), (Planet.SAT, Planet.MAR, Planet.NEP, Planet.PLU, Planet.MER, Planet.URA)),
-    EventType.ARREST: (('MC', 'ASC'), (Planet.SAT, Planet.URA, Planet.NEP, Planet.MAR, Planet.PLU, Planet.NNO)),
-    EventType.LOSSES: (('MC', 'ASC'), (Planet.NEP, Planet.URA, Planet.MER, Planet.MAR, Planet.SAT)),
-    EventType.GRADUATION: (('MC', 'ASC'), (Planet.MER, Planet.MON, Planet.JUP, Planet.SUN, Planet.URA, Planet.VEN)),
-    EventType.MOVE_HOME: (('MC', 'ASC'), (Planet.MER, Planet.MON, Planet.NNO, Planet.JUP, Planet.SUN, Planet.VEN)),
-    EventType.BIRTH_GRANDSON:(('MC','ASC'),(Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
-    EventType.BIRTH_GRANDDAUGHTER:(('MC','ASC'),(Planet.VEN,Planet.MON, Planet.JUP,Planet.NNO)),
-    EventType.MARRIAGE_FOR_MALE:(('MC','ASC'),(Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP)),
-    EventType.MARRIAGE_FOR_FEMALE:(('MC','ASC'),(Planet.SUN,Planet.JUP,Planet.MAR,Planet.NNO)),
-    EventType.CHILDS_MARRIAGE:(('MC','ASC'),(Planet.MER,Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP,Planet.SUN)),
-    EventType.DIVORCE_SEPARATION:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.NNO,Planet.PLU)),
-    EventType.DEATH_SON:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
-    EventType.DEATH_DAUGHTER:(('MC','ASC'),(Planet.VEN,Planet.MON,Planet.NEP,Planet.PLU,Planet.NNO)),
-    EventType.DEATH_WIFE:(('MC','ASC'),(Planet.MON,Planet.VEN,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
-    EventType.DEATH_HUSBAND:(('MC','ASC'),(Planet.SAT,Planet.SUN,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
-    EventType.DEATH_BROTHER:(('MC','ASC'),(Planet.MER,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
-    EventType.DEATH_SISTER:(('MC','ASC'),(Planet.MON,Planet.MER,Planet.VEN,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
-    EventType.DEATH:(('MC','ASC'),(Planet.SAT,Planet.PLU,Planet.NEP,Planet.NNO,Planet.SUN)),
-    EventType.ASSASINATION_SUICIDE:(('MC','ASC'),(Planet.SAT,Planet.PLU,Planet.URA,Planet.NEP,Planet.NNO,Planet.MAR)),
-    EventType.PROMOTION_JOB:(('MC','ASC'),(Planet.SUN,Planet.JUP,Planet.MON,Planet.MER,Planet.URA,Planet.VEN)),
-    EventType.RESIGN_RETIRE:(('MC','ASC'),(Planet.SAT,Planet.NEP,Planet.SUN,Planet.MAR,Planet.NNO)),
-    EventType.TRAVEL_OVERSEAS_POSITIVE:(('MC','ASC'),(Planet.MON,Planet.MER,Planet.URA,Planet.JUP)),
-    EventType.MOBILIZATION:(('MC','ASC'),(Planet.MAR,Planet.SAT,Planet.PLU)),
-    EventType.DEMOBILIZATION_RELEASE:(('MC','ASC'),(Planet.JUP,Planet.VEN,Planet.URA)),
-    EventType.ACCIDENT:(('MC','ASC'),(Planet.MAR,Planet.URA,Planet.SAT,Planet.MER)),
-    EventType.HOSPITALIZATION_ILLNESS:(('MC','ASC'),(Planet.SAT,Planet.NEP,Planet.MAR)),
-    EventType.VIOLENCE:(('MC','ASC'),(Planet.MAR,Planet.PLU,Planet.SAT,Planet.URA)),
-    EventType.INTRIGUE:(('MC','ASC'),(Planet.NEP,Planet.MER)),
-    EventType.GAMBLING_LOSS:(('MC','ASC'),(Planet.NEP,Planet.SAT,Planet.URA,Planet.MAR)),
-    EventType.GAMBLING_GAIN:(('MC','ASC'),(Planet.JUP,Planet.VEN,Planet.URA)),
-    EventType.ARMY_PROMOTION:(('MC','ASC'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA))
+    EventType.BIRTH_BROTHER: (('H4', 'H7'), (Planet.MER, Planet.JUP)),
+    EventType.BIRTH_SISTER: (('H4', 'H7'), (Planet.MON, Planet.MER, Planet.VEN)),
+    EventType.BIRTH_SON: (('H4', 'H1'), (Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
+    EventType.BIRTH_DAUGHTER: (('H4', 'H1'), (Planet.VEN, Planet.MON, Planet.JUP, Planet.NNO)),
+    EventType.DEATH_FATHER_GRAND: (('H10','H1'), (Planet.SAT, Planet.SUN, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
+    EventType.DEATH_MOTHER_GRAND: (('H4','H1'), (Planet.MON, Planet.VEN, Planet.SAT, Planet.NEP, Planet.PLU, Planet.MAR, Planet.NNO)),
+    EventType.SUCCESS: (('H10','H1'), (Planet.SUN, Planet.JUP, Planet.MON, Planet.MER, Planet.URA, Planet.VEN)),
+    EventType.FAILURE: (('H10','H1'), (Planet.SAT, Planet.NEP, Planet.NNO, Planet.MAR, Planet.SUN)),
+    EventType.TRAVEL_POSITIVE: (('H10','H1'), (Planet.MON, Planet.MER, Planet.URA, Planet.JUP)),
+    EventType.TRAVEL_NEGATIVE: (('H10','H1'), (Planet.SAT, Planet.MAR, Planet.NEP, Planet.PLU, Planet.MER, Planet.URA)),
+    EventType.ARREST: (('H10','H1'), (Planet.SAT, Planet.URA, Planet.NEP, Planet.MAR, Planet.PLU, Planet.NNO)),
+    EventType.LOSSES: (('H10','H1'), (Planet.NEP, Planet.URA, Planet.MER, Planet.MAR, Planet.SAT)),
+    EventType.GRADUATION: (('H10','H1'), (Planet.MER, Planet.MON, Planet.JUP, Planet.SUN, Planet.URA, Planet.VEN)),
+    EventType.MOVE_HOME: (('H4','H1'), (Planet.MER, Planet.MON, Planet.NNO, Planet.JUP, Planet.SUN, Planet.VEN)),
+    EventType.BIRTH_GRANDSON:(('H4','H1'),(Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
+    EventType.BIRTH_GRANDDAUGHTER:(('H4','H1'),(Planet.VEN,Planet.MON, Planet.JUP,Planet.NNO)),
+    EventType.MARRIAGE_FOR_MALE:(('H10','H7'),(Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP)),
+    EventType.MARRIAGE_FOR_FEMALE:(('H10','H7'),(Planet.SUN,Planet.JUP,Planet.MAR,Planet.NNO)),
+    EventType.CHILDS_MARRIAGE:(('H10','H7'),(Planet.MER,Planet.VEN,Planet.MON,Planet.NNO,Planet.JUP,Planet.SUN)),
+    EventType.DIVORCE_SEPARATION:(('H4','H7'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.NNO,Planet.PLU)),
+    EventType.DEATH_SON:(('H4','H7'),(Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_DAUGHTER:(('H4','H7'),(Planet.VEN,Planet.MON,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_WIFE:(('H4','H7'),(Planet.MON,Planet.VEN,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
+    EventType.DEATH_HUSBAND:(('H4','H7'),(Planet.SAT,Planet.SUN,Planet.NEP,Planet.PLU,Planet.NNO,Planet.MAR)),
+    EventType.DEATH_BROTHER:(('H4','H1'),(Planet.MER,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH_SISTER:(('H4','H1'),(Planet.MON,Planet.MER,Planet.VEN,Planet.MAR,Planet.SAT,Planet.NEP,Planet.PLU,Planet.NNO)),
+    EventType.DEATH:(('H10','H1'),(Planet.SAT,Planet.PLU,Planet.NEP,Planet.NNO,Planet.SUN)),
+    EventType.ASSASINATION_SUICIDE:(('H10','H1'),(Planet.SAT,Planet.PLU,Planet.URA,Planet.NEP,Planet.NNO,Planet.MAR)),
+    EventType.PROMOTION_JOB:(('H10','H1'),(Planet.SUN,Planet.JUP,Planet.MON,Planet.MER,Planet.URA,Planet.VEN)),
+    EventType.RESIGN_RETIRE:(('H10','H1'),(Planet.SAT,Planet.NEP,Planet.SUN,Planet.MAR,Planet.NNO)),
+    EventType.TRAVEL_OVERSEAS_POSITIVE:(('H10','H1'),(Planet.MON,Planet.MER,Planet.URA,Planet.JUP)),
+    EventType.MOBILIZATION:(('H10','H1'),(Planet.MAR,Planet.SAT,Planet.PLU)),
+    EventType.DEMOBILIZATION_RELEASE:(('H10','H1'),(Planet.JUP,Planet.VEN,Planet.URA)),
+    EventType.ACCIDENT:(('H10','H1'),(Planet.MAR,Planet.URA,Planet.SAT,Planet.MER)),
+    EventType.HOSPITALIZATION_ILLNESS:(('H10','H1'),(Planet.SAT,Planet.NEP,Planet.MAR)),
+    EventType.VIOLENCE:(('H10','H1'),(Planet.MAR,Planet.PLU,Planet.SAT,Planet.URA)),
+    EventType.INTRIGUE:(('H10','H1'),(Planet.NEP,Planet.MER)),
+    EventType.GAMBLING_LOSS:(('H10','H1'),(Planet.NEP,Planet.SAT,Planet.URA,Planet.MAR)),
+    EventType.GAMBLING_GAIN:(('H10','H1'),(Planet.JUP,Planet.VEN,Planet.URA)),
+    EventType.ARMY_PROMOTION:(('H10','H1'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA))
+}
+
+secondary_and_house_rules = {
+EventType.BIRTH_BROTHER: (('H3'),(Planet.SUN, Planet.MON, Planet.VEN, Planet.NNO, Planet.URA, Planet.PLU)),
+EventType.BIRTH_SISTER: (('H3'), (Planet.SUN, Planet.JUP, Planet.NNO, Planet.URA, Planet.PLU)),
+EventType.BIRTH_SON: (('H5'), (Planet.PLU, Planet.URA, Planet.MON, Planet.VEN, Planet.MER)),
+EventType.BIRTH_DAUGHTER: (('H5'), (Planet.MAR, Planet.URA, Planet.PLU, Planet.SUN, Planet.MER)),
+EventType.DEATH_FATHER_GRAND: (('H8', 'H12'), (Planet.URA, Planet.MON)),
+EventType.DEATH_MOTHER_GRAND: (('H8','H12'), (Planet.SUN, Planet.URA)),
+EventType.SUCCESS: (('H3'), (Planet.NNO)),
+EventType.FAILURE: (('H3', 'H12'), (Planet.URA, Planet.MON, Planet.MER, Planet.PLU)),
+EventType.TRAVEL_POSITIVE: (('H9'), (Planet.VEN, Planet.SUN, Planet.NNO)),
+EventType.TRAVEL_NEGATIVE: (('H9','H12'), ()),
+EventType.ARREST: (('H12','H3'), (Planet.SUN,Planet.MER)),
+EventType.LOSSES: (('H2'), (Planet.PLU, Planet.NNO)),
+EventType.GRADUATION: (('H3'), (Planet.NNO)),
+EventType.MOVE_HOME: (('H3'), (Planet.URA)),
+EventType.BIRTH_GRANDSON:(('H5','H9'), (Planet.PLU, Planet.URA,Planet.MON,Planet.VEN,Planet.MER)),
+EventType.BIRTH_GRANDDAUGHTER:(('H5','H9'), (Planet.MAR,Planet.URA,Planet.PLU,Planet.SUN,Planet.MER)),
+EventType.MARRIAGE_FOR_MALE:(('H5'), (Planet.MER,Planet.URA,Planet.MAR,Planet.SUN)),
+EventType.MARRIAGE_FOR_FEMALE:(('H5'), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
+EventType.CHILDS_MARRIAGE:(('H5'), (Planet.URA,Planet.MAR,Planet.PLU)),
+EventType.DIVORCE_SEPARATION:(('H12'), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
+EventType.DEATH_SON:(('H5','H8','H12'), (Planet.SUN,Planet.MER,Planet.URA)),
+EventType.DEATH_DAUGHTER:(('H5','H8','H12'), (Planet.MAR, Planet.URA,Planet.MER)),
+EventType.DEATH_WIFE:(('H5','H8','H12'), (Planet.URA)),
+EventType.DEATH_HUSBAND:(('H5','H8','H12'), (Planet.URA)),
+EventType.DEATH_BROTHER:(('H3','H8','H12'), (Planet.MON,Planet.SUN)),
+EventType.DEATH_SISTER:(('H3','H8','H12'), ()),
+EventType.DEATH:(('H8','H12'), (Planet.URA,Planet.MAR,Planet.MON)),
+EventType.ASSASINATION_SUICIDE:(('H8','H12'), (Planet.MON)),
+EventType.PROMOTION_JOB:(('H2','H3','H11'), (Planet.PLU,Planet.NNO)),
+EventType.RESIGN_RETIRE:(('H3','H12'), (Planet.URA,Planet.MON,Planet.MER,Planet.PLU)),
+EventType.TRAVEL_OVERSEAS_POSITIVE:(('H9'), (Planet.VEN,Planet.NEP,Planet.SUN,Planet.NNO)),
+EventType.MOBILIZATION:(('H3','H12'), (Planet.MON,Planet.MER)),
+EventType.DEMOBILIZATION_RELEASE:(('H3','H12'), (Planet.MON,Planet.MER,Planet.NNO)),
+EventType.ACCIDENT:(('H3','H12'), (Planet.NEP,Planet.NNO,Planet.PLU,Planet.MON)),
+EventType.HOSPITALIZATION_ILLNESS:(('H12'), (Planet.PLU,Planet.MON)),
+EventType.VIOLENCE:(('H12'), (Planet.MER)),
+EventType.INTRIGUE:(('H12'), (Planet.PLU,Planet.MAR)),
+EventType.GAMBLING_LOSS:(('H2','H5'), (Planet.PLU,Planet.NNO)),
+EventType.GAMBLING_GAIN:(('H2','H5'), (Planet.PLU)),
+EventType.ARMY_PROMOTION:(('H2','H3','H11'), (Planet.VEN,Planet.NNO))
 }
 
 grid_acceptable_aspects = []
+flag_pd_sec = None
 
 def is_acceptable_angular_aspect(event_id, str_aspect):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
     (Uranus,55.5 52,(r)) (Hmd1,325.600,(d)) (square,3')"""
     
     aspect_rules = event_rules[event_id]
+    house_aspect_rules = secondary_and_house_rules[event_id]
     if not aspect_rules:
         return False  
-
+    
     p1_d1_s1, p2_d2_s2, asp_orb = str_aspect.split(' ')
     p1, _, _ = p1_d1_s1.split(',')
     p1 = p1[1:]
@@ -124,12 +170,41 @@ def is_acceptable_angular_aspect(event_id, str_aspect):
 
     angle_accept = aspect_rules[0]
     planet_accept = aspect_rules[1]
-
-    if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p2 in angle_accept) and (p1 in planet_accept)):
-        return True
+    house_accept = house_aspect_rules[0]
+    secondary_planets = house_aspect_rules[1]
     
-def count_all_acceptable_angles(event_id, str_all_aspects, count):
-    "returns a couunt string of only acceptable angular direction aspects"
+    if i_level == 1:
+        #angles to primary planets
+        if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p1 in planet_accept) and (p2 in angle_accept)):
+            return True
+    if i_level == 2:
+        #house/angles to primary planets
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept):
+                return True
+    if i_level == 3:
+        #house/angles to secondary planets
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept) or (p2 in secondary_planets):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept) or (p1 in secondary_planets):
+                return True
+    if i_level == 4:
+        #planets to planets primary
+        if  (p1 in planet_accept) and (p2 in planet_accept):
+            return True
+    if i_level == 5:
+        #planets to planets secondary
+        if  (p1 in planet_accept) or (p1 in secondary_planets):
+            if (p2 in planet_accept) or (p2 in secondary_planets):
+                return True 
+
+def count_event_acceptable_aspects(event_id, str_all_aspects, count):
+    "returns a (count, string) of only acceptable angular direction aspects"
     list_aspects = str_all_aspects.split('\n')
     str_acceptable_aspects = ""
 
@@ -142,8 +217,17 @@ def count_all_acceptable_angles(event_id, str_all_aspects, count):
 
     return count, str_acceptable_aspects.rstrip()
     
-def generate_grid_angular_aspects(start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3]):
-    global grid_acceptable_aspects
+def generate_grid_angular_aspects(filename, start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3], level: int, flag_pd_sec_in):
+    """flag is true for pd false for sec
+    level 1 = angles to prim planets
+    level 2 = angles/houses to prim planets
+    level 3 = angles/houses to prim/second planets
+    level 4 = prim planets to prim planets
+    level 5 = prim/second planets to prim/second planets"""
+
+    global grid_acceptable_aspects, i_level, flag_pd_sec
+    i_level = level
+    flag_pd_sec = flag_pd_sec_in
     temp_list_event = ['Time']
 
     for i in range(0,len(list_dt_events)):
@@ -156,32 +240,37 @@ def generate_grid_angular_aspects(start_time, end_time, increment_seconds, list_
     
     while current_time <= end_time:
         print(f"working on: {current_time}....")
-        append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
+        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
         current_time += increment
 
     # Handle the case where the last increment might exceed the end time
     if current_time > end_time:
-        append_grid_acceptable_angles(list_dt_events, pssr.dt_gregorian_to_julian(current_time),geo_positions)
+        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
     
-    with open("ver_4SEP2024.txt", "w") as file:
+    with open(f"{filename}", "w") as file:
         for time in grid_acceptable_aspects:
             file.write(f"{str(time)}\n")
     
 def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positions: list[3]):
-    formatted_time = pssr.julian_to_gregorian(jd_radix).strftime('%H:%M:%S')
+    formatted_time = julian.from_jd(jd_radix).strftime('%H:%M:%S')
     temp_list_event = [formatted_time] 
     count = 0
     
     rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
     rad_planets_labelled = calc_natal_planets_labelled(jd_radix)
     rad_planets_equatorial = calc_rad_planets_equatorial(jd_radix)
-
+    
     event_index = 0
     for dt_event, event_id in list_dt_events:
-        str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, pssr.dt_gregorian_to_julian(dt_event), geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
-        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+        if flag_pd_sec:
+            str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, julian.to_jd(dt_event), geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
+        else:
+            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_positions[0], geo_positions[1])
+            str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
+
         #count is incremented in next line 
-        count, str_acceptable_aspects = count_all_acceptable_angles(event_id, str_all_directed_aspects, count)
+        count, str_acceptable_aspects = count_event_acceptable_aspects(event_id, str_all_directed_aspects, count)
 
         if count > 0:
             temp_list_event.append(str_acceptable_aspects)
@@ -371,6 +460,7 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], ra
     swe.set_ephe_path('ephe')
     dir_houses, conv_houses = calc_directed_pd_houses(JD_RADIX,jd_event, geo_latitude, rad_houses_info)
     rad_houses = rad_houses_info[0]
+    
     rad_houses = aspects.format_house_list(rad_houses, '(r)')
     dir_houses = aspects.format_house_list(dir_houses, '(d)')
     conv_houses = aspects.format_house_list(conv_houses, '(c)')
@@ -389,15 +479,6 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], ra
     str_aspects_rad_conv = aspects.find_pd_swiss_aspects(rad_positions, conv_positions)
     
     return str_aspects_rad_dir, str_aspects_rad_conv
-
-def pd_for_time_event_write_to_file(jd_radix : julian, jd : julian, geo_positions: list[3]):
-    ARC_P = pd.calc_arc(jd_radix, jd)
-    str_aspects_rad_dir, str_aspects_rad_conv =  pd_for_time_event(jd_radix, jd, geo_positions)
-
-    with open("sweee_ephem_output.txt", "a") as file:
-        file.write(f"Event Date: {str(julian.from_jd(jd))}, \tARC: {pssr.convert_dec_degrees_to_deg_min_sec(ARC_P)} \nRad Positions: {rad_planets}{rad_houses} \nDir Positions: {dir_planets}{dir_houses} \nCon Positions: {conv_planets}{conv_houses}")
-        file.write(f"\nRAD-DIR ASPECTS: \n{str_aspects_rad_dir}")
-        file.write(f"RAD-CONV ASPECTS: \n{str_aspects_rad_conv}\n")
 
 def count_aspect_groups_txt(filename):
     opp_conj = ['opposition', 'conjunction']
@@ -420,16 +501,29 @@ def count_aspect_groups_txt(filename):
                     aspect = all_aspect.split(', ')
                     for asp in aspect:
                         if asp[0] == '(':
-                            asp = asp.split(' ')[2]
-                            if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
-                                minor_count += 1
-                            elif ('opposition' in asp) or ('conjunction' in asp):
-                                opp_conj_count += 1
-                            elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                                sqr_tri_sext_count += 1
+                            if '\n' in asp:
+                                asp_lines = asp.split('\n')
+                                for line in asp_lines:
+                                    asp = line.split(' ')[2]
+
+                                    if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
+                                        minor_count += 1
+                                    elif ('opposition' in asp) or ('conjunction' in asp):
+                                        opp_conj_count += 1
+                                    elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
+                                        sqr_tri_sext_count += 1
+                            else:
+                                asp = asp.split(' ')[2]
+
+                                if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
+                                    minor_count += 1
+                                elif ('opposition' in asp) or ('conjunction' in asp):
+                                    opp_conj_count += 1
+                                elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
+                                    sqr_tri_sext_count += 1
 
             results.append([f"{time}, {count}, opp/conj: {opp_conj_count}", f"sqr/tri/sext: {sqr_tri_sext_count}", f"major: {sqr_tri_sext_count+opp_conj_count}", f"minor: {minor_count}"])                
     print(results)
-    with open('ver_4SEP2024_COUNTASCMC.txt', 'w') as outfile:
+    with open(f"{filename}COUNTASCMC.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')

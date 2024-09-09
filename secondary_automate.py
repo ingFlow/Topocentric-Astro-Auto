@@ -1,4 +1,3 @@
-import julian
 import swisseph as swe
 import math
 import aspects_base as aspects
@@ -10,12 +9,7 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
     days_diff = jd_diff / 365.2422
     jd_prog = jd_radix + days_diff
     jd_reg = jd_radix - days_diff
-    dt_prog = julian.from_jd(jd_prog)
-    dt_reg = julian.from_jd(jd_reg)
-
-    print(f"jd_rad: {jd_radix}\njd_event:{jd_event}\njd_diff:{jd_diff}")
-    print(f"jdprog {jd_prog}\njdreg {jd_reg}")
-    print(f"dtprog {dt_prog}\ndtreg {dt_reg}")
+    #print(f"{julian.from_jd(jd_radix)}, event: {julian.from_jd(jd_event)}, dt_prog: {julian.from_jd(jd_prog)}, dt_reg: {julian.from_jd(jd_reg)}")
 
     #getting prog/reg arc
     xx, _ = swe.calc_ut(jd_radix, swe.SUN, swe.FLG_EQUATORIAL)
@@ -28,15 +22,16 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
     arc_reg = ra_reg - ra_rad
     houses = swe.houses(jd_radix, geo_lat, geo_long, b'T')
     ramc = houses[1][2]
-
-    print(f"rarad {ra_rad} raprog {ra_prog} raregg {ra_reg}")
-    print(f"arcprog {arc_prog} arc reg {arc_reg}")
-    print(f"ramc {ramc}")
+    e = calculate_obliquity(jd_radix)
 
     #directed houses and rad houses
-    houses_rad = calc_houses_with_ramc(ramc, jd_radix, geo_lat, "(r)")
-    houses_prog = calc_houses_with_ramc(ramc+arc_prog, jd_radix, geo_lat, "(r)")
-    houses_reg = calc_houses_with_ramc(ramc+arc_reg, jd_radix, geo_lat, "(r)")
+    houses_rad = houses[0]
+    houses_prog = swe.houses_armc(ramc+arc_prog, geo_lat, e, b'T')[0] 
+    houses_reg = swe.houses_armc(ramc+arc_reg, geo_lat, e, b'T')[0] 
+    houses_rad = aspects.format_house_list(houses_rad, '(r)')
+    houses_prog = aspects.format_house_list(houses_prog, '(p)')
+    houses_reg = aspects.format_house_list(houses_reg, '(c)')
+
     planets_rad = calc_all_planets(jd_radix, "(r)")
     planets_prog = calc_all_planets(jd_prog, "(p)")
     planets_reg = calc_all_planets(jd_reg, "(c)")
@@ -152,23 +147,18 @@ def calc_POF(planets, ac):
     long_moon = planets[moon_index][1]
     return (ac + long_moon - long_sun) % 360
 
-def secondary_auto(jd_radix, jd_event, geo_lat, geo_long, orb):
+def secondary_for_event(jd_radix, jd_event, geo_lat, geo_long):
     swe.set_ephe_path('ephe')
     rad_positions, prog_positions, reg_positions = get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long)
     
-    str_aspects_rad_prog = aspects.find_pd_swiss_aspects(rad_positions, prog_positions, orb)
-    str_aspects_rad_reg = aspects.find_pd_swiss_aspects(rad_positions, reg_positions, orb)
-    str_aspects_prog_prog = aspects.find_pd_swiss_aspects(prog_positions, prog_positions, orb)
-    str_aspects_reg_reg = aspects.find_pd_swiss_aspects(reg_positions, reg_positions, orb)
+    str_aspects_rad_prog = aspects.find_secondary_swiss_aspects(rad_positions, prog_positions)
+    str_aspects_rad_reg = aspects.find_secondary_swiss_aspects(rad_positions, reg_positions)
+    str_aspects_prog_prog = aspects.find_secondary_swiss_aspects(prog_positions, prog_positions)
+    str_aspects_reg_reg = aspects.find_secondary_swiss_aspects(reg_positions, reg_positions)
     str_aspects_prog_prog = aspects.remove_duplicates(str_aspects_prog_prog)
     str_aspects_reg_reg = aspects.remove_duplicates(str_aspects_reg_reg)
 
-    with open(f"secondary_{str(julian.from_jd(jd_radix))}.txt", "a") as file:
-        file.write(f"Event Date: {str(julian.from_jd(jd_event))} \nRad Positions: {rad_positions} \nProg Positions: {prog_positions} \nReg Positions: {reg_positions}")
-        file.write(f"\nRAD-PROG ASPECTS: \n{str_aspects_rad_prog}")
-        file.write(f"RAD-REG ASPECTS: \n{str_aspects_rad_reg}")
-        file.write(f"PROG-PROG ASPECTS: \n{str_aspects_prog_prog}\n")
-        file.write(f"REG-REG ASPECTS: \n{str_aspects_reg_reg}\n")
+    str_rad_n_prog = str_aspects_rad_prog + str_aspects_prog_prog
+    str_rad_n_reg = str_aspects_rad_reg + str_aspects_reg_reg
 
-'''  with open(f"{filename}{str(radix_date)}.txt", "a") as f:
-'''
+    return str_rad_n_prog, str_rad_n_reg

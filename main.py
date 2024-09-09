@@ -4,8 +4,6 @@ import pssr_automate as pssr
 from datetime import datetime
 import pd_automate as pd
 import secondary_automate as secondary
-import swisseph as swe
-import pd_base
 
 ORB_TRANSIT = 1.15
 ORB_PSSR = 0.24
@@ -92,29 +90,9 @@ def process_multiple_events(radix_date, type_process):
     datetime(1974, 6, 13, 23, 3, 20),
     datetime(1974, 6, 13, 23, 46, 24)'''
 
-def main_trans_pssr():
-  dates = [
-    datetime(2000, 3, 11, 12, 14, 32),
-    datetime(2000, 3, 11, 13, 28, 48),
-    datetime(2000, 3, 11, 10, 27, 44),
-    datetime(2000, 3, 11, 15, 4, 0),
-    datetime(2000, 3, 11, 15, 41, 4),
-    datetime(2000, 3, 11, 13, 12, 56),
-    datetime(2000, 3, 11, 11, 45, 28),
-    datetime(2000, 3, 11, 10, 0, 16),
-    datetime(2000, 3, 11, 15, 49, 44),
-    datetime(2000, 3, 11, 10, 46, 16),
-    datetime(2000, 3, 11, 14, 32, 8),
-    datetime(2000, 3, 11, 16, 9, 12),
-    datetime(2000, 3, 11, 16, 26, 56)
-  ]
-  #for date in dates:
-    #process_multiple_events(date, aspects.ProcessType.TRANSIT)
-    #process_multiple_events(date, aspects.ProcessType.PSSR)
-
 def main():
   dt_radix_start = datetime(1940, 10, 8, 23, 00, 00)
-  dt_radix_end = datetime(1940, 10, 9, 23, 00, 00)
+  dt_radix_end = datetime(1940, 10, 8, 23, 00, 8)
   geopos = [53.4, -2.9833333, 70.0]
   '''dt_radix = datetime(1889, 4, 16, 19, 40, 48)
   geopos = [51.48333, 0.001, 306]
@@ -137,31 +115,24 @@ def main():
     (datetime(1976, 7, 27, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
     (datetime(1980, 12, 8, 12, 00, 00),pd.EventType.ASSASINATION_SUICIDE)
   ]
-  pd.generate_grid_angular_aspects(dt_radix_start, dt_radix_end, 8, list_of_events, geopos)
-  
-  str = "(MC,55.552,(r)) (Saturn,325.600,(d)) (square,3')\n(AC,176.030,(r)) (Mars,220.994,(d)) (45-semisquare,2')\n(Pluto,124.188,(r)) (Venus,184.231,(d)) (sextile,3')\n(Neptune,190.583,(r)) (DC,325.600,(d)) (135-sesquisquare,1')\n(Uranus,320.168,(r)) (MC,290.150,(d)) (30-semisextile,1')"
-  #pd.main_count_angles(list_of_events, pssr.dt_gregorian_to_julian(dt_radix), geopos)
+  flag_pd_sec = False
+  level_aspects = 2
+  time_increment = 8
+  if flag_pd_sec:
+    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_primaries.txt"
+  else:
+    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_secondaries.txt"
 
-  #secondary.secondary_auto(pssr.dt_gregorian_to_julian(dt_radix), pssr.dt_gregorian_to_julian(dt_event), geopos[0], geopos[1], 0.534)
+  pd.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, flag_pd_sec)
+  pd.count_aspect_groups_txt(filename)
 
-#main()
-pd.count_aspect_groups_txt('ver_4SEP2024.txt')
+  flag_pd_sec = True
+  if flag_pd_sec:
+    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_primaries.txt"
+  else:
+    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_secondaries.txt"
 
-'''jd = pssr.dt_gregorian_to_julian(datetime(1940, 10, 9, 17, 24, 17))
-dt_radix2 = datetime(1940, 10, 9, 2, 00, 20)
-geopos = [53.4, -2.9833333, 70.0]
-xx, _ = swe.calc_ut(jd, swe.MOON)
-long = xx[0]
-houses = swe.houses(jd, geopos[0], geopos[1], b'T')[0]
-for house in houses:
-  ecl = swe.cotrans((house,0,1),pd_base.calculate_obliquity(jd))
-  print(ecl)
-hpos = pd_base.get_housepos_manual(long, houses)
+  pd.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, flag_pd_sec)
+  pd.count_aspect_groups_txt(filename)
 
-#print(pd_base.shift_point_to_closest_next_quad(303, 276, 14, 1))
-#print(pd_base.get_housepos_manual(18,(54,77,96,116,142,194,234,257,276,296,322,14)))
-input_ = input('input the quadrant degree you want to test: ')
-while not (input_.lower() == 'x'):
-  print(pd_base.get_housepos_manual(int(input_),[96,116,142,194,234,257,276,296,322,14, 54, 77]))
-  input_ = input('input the quadrant degree you want to test (x is exit): ')
-'''
+main()

@@ -41,7 +41,7 @@ ZODIAC_START_DEGREES = {
     "Pisces": 330,
 }
 
-FAST_PLANETS = {'Mars', 'Mercury', 'Venus', 'Moon'}
+FAST_PLANETS = {'Mars', 'Mercury', 'Venus'}
 SLOW_PLANETS = {'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Node'}
 HOUSES = {'ASC', 'H2', 'MC', 'H3', 'H5', 'H6'}
 RECEPTIVE_POINTS = HOUSES.union({'Moon', 'Sun', 'Fortune'})
@@ -49,7 +49,7 @@ ALL_PLANETS = FAST_PLANETS.union(SLOW_PLANETS)
 ALL_PLANET_TRANS = ALL_PLANETS.union({'Sun'})
 
 SWISS_PLANETS = {'Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node', 'POF'}
-SWISS_HOUSES = {'MC', 'H11', 'H12', 'ASC', 'H2', 'H3', 'Hmd1', 'Hmd2'}
+SWISS_HOUSES = {'H12', 'H11', 'H10', 'H9', 'H8', 'H7', 'H6', 'H5', 'H4', 'H3', 'H2', 'H1'}
 ALL_SWISS_POINTS = SWISS_PLANETS.union(SWISS_HOUSES)
 
 def zodiac_to_degrees(sign, degrees):
@@ -57,17 +57,21 @@ def zodiac_to_degrees(sign, degrees):
     return ZODIAC_START_DEGREES[sign] + degrees
 
 def format_house_list(houses, label):
-    """make list of tuples of house cusps formmat of ('H1',DEG,'LABEL')"""
+    """make list of tuples of house cusps format of ('H1',DEG,'LABEL')"""
     formatted_list = []
-    ihouse = [10, 11, 12, 1, 2, 3]
-    for h in ihouse:
-        house_deg = houses[h-1]
-        if h in (11, 12, 2, 3):
-            house_name = f"H{h}"
-        elif h == 1:
+    for i in range(1, len(houses)):
+        house_deg = houses[i-1]
+        '''if i == 1:
             house_name = 'ASC'
-        elif h == 10:
+        elif i == 10:
             house_name = 'MC'
+        elif i == 4:
+            house_name = 'IC'
+        elif i == 7:
+            house_name = 'DSC'
+        else:'''
+        house_name = f"H{i}"
+
         formatted_list.append((house_name,house_deg,label))
         
     return formatted_list
@@ -143,17 +147,35 @@ def find_pd_swiss_aspects(planet_set1, planet_set2):
                         aspects_str += aspect_str
     return aspects_str
 
-def find_pd_old_swiss_aspects(planet_set1, planet_set2, orb):
+def get_str_aspect(p1,p2,d1,d2,s1,s2, aspect_name, aspect_orb):
+    return (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
+            f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+
+def find_pssr_swiss_aspects(planet_set1, planet_set2):
     aspects_str = ''
     
     for p1, d1, s1 in planet_set1:
         for p2, d2, s2 in planet_set2:
-            aspect = calculate_aspect(d1, d2, orb, False)
+            if (p2 == 'Moon'):
+                orb = 32/60
+            else:
+                orb = 14/60
+            aspect = calculate_aspect(d1, d2, orb, True)
             
             if aspect:
                 aspect_name, aspect_orb = aspect
-                aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+
+                if (p2 == 'Moon'):
+                    if (aspect_name == 'conjunction') or (aspect_name == 'opposition'):        
+                        aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                    else:
+                        if aspect_orb <= 18/60:
+                            aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                        else:
+                            aspect_str = ''
+                else:
+                    aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                
                 aspects_str += aspect_str
     return aspects_str
 
@@ -169,7 +191,7 @@ def find_secondary_swiss_aspects(planet_set1, planet_set2):
             orb = None
             if (s1 == "(r)"):
                 if (p2 in SWISS_HOUSES) or (p2 in sun_to_pof):
-                    orb = 13/60
+                    orb = 11/60
                 elif (p2 in jup_sat):
                     orb = 8/60
                 elif (p2 in ura_to_plu):
@@ -180,7 +202,9 @@ def find_secondary_swiss_aspects(planet_set1, planet_set2):
                 if (p1 == 'Moon') or (p2 == 'Moon'):
                     orb = 32/60
                 elif (p1 in sun_to_pof) or (p2 in sun_to_pof):
-                    orb = 13/60
+                    orb = 11/60
+                elif (p1 in SWISS_HOUSES) or (p2 in SWISS_HOUSES):
+                    orb = 11/60
                 elif (p1 in jup_sat) or (p2 in jup_sat):
                     orb = 8/60
                 elif (p1 in ura_to_plu) or (p2 in ura_to_plu):
@@ -205,7 +229,6 @@ def find_aspects(planet_set1, planet_set2, orb, house_check, rad_sr_check):
         if set 1 is house cusp and set 2 is any planet
         rad/sr check is basically so that the aspects from sr to sr are not done for recep. pts
         '''
-        
     
     aspects_str = ''
     
@@ -267,12 +290,17 @@ def remove_duplicates(str_planets_aspects):
     for i in range(0, len(list_aspects)):
         if (list_aspects[i] != ''):
             aspect = list_aspects[i]
-            p1, p2, asp = aspect.split(' ')
-            str_check = f'{p2} {p1} {asp}'
-            if (str_check in list_no_repeats) or (list_aspects[i] in list_no_repeats) or (p1==p2):
+            pds1, pds2, asp = aspect.split(' ')
+            str_check = f'{pds2} {pds1} {asp}'
+            if (str_check in list_no_repeats) or (list_aspects[i] in list_no_repeats) or (pds1==pds2):
                 pass
             else:
-                list_no_repeats.append(list_aspects[i])
+                p1, _, _ = pds1.split(',')
+                p2, _, _ = pds2.split(',')
+                if (p1[1] == 'H') and (p2[1] == 'H'):
+                    pass
+                else:
+                    list_no_repeats.append(list_aspects[i])
 
     return '\n'.join(list_no_repeats)
 
@@ -310,7 +338,3 @@ def m_aspects_between_two_sets_positions(first_set, second_set, str_label_planet
       str_output += str_write_both_sets + '\n'
 
     return str_output
-
-# Example call to main function
-#main('planet_rad_start.txt', None, 'planet_check-pos.txt', 'output.txt', 
-#'20h30m32s insert_date_refactor', orb=0.6, start_time_flag=True)
