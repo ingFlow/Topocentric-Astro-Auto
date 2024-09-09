@@ -132,7 +132,3 @@ def calc_pssr_for_date(dt_radix, dt_event, geo_latitude, geo_longitude):
     str_rad_conv_aspects = aspects.find_pssr_swiss_aspects(rad_planets, conv_planets)
     
     return str_rad_direct_aspects, str_rad_conv_aspects
-
-asp1,asp2 = calc_pssr_for_date(datetime(1889,4,20,17,30,37),datetime(1903,1,3,12,0,0), 48.25, 13.05)
-print(asp1)
-print(asp2)

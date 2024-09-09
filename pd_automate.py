@@ -48,6 +48,14 @@ class EventType:
     GAMBLING_GAIN = 38
     ARMY_PROMOTION = 39
 
+class AspectType:
+    ANGLE_PRIM =0
+    ANGLE_HOUSE_PRIMARY = 1
+    ANGLE_HOUSE_SECONDARY = 2
+    PLANETS_PRIMARY = 3
+    PLANETS_SECONDARY = 4
+    ANGLE_HOUSE_ANY_PLANET = 5
+
 class Planet:
     SUN = 'Sun'
     MON = 'Moon'
@@ -62,7 +70,7 @@ class Planet:
     NNO = 'Mean_Node'
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
-i_level = 0
+HOUSES = ['H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12']
 
 event_rules = {
     EventType.BIRTH_BROTHER: (('H4', 'H7'), (Planet.MER, Planet.JUP)),
@@ -151,9 +159,8 @@ EventType.ARMY_PROMOTION:(('H2','H3','H11'), (Planet.VEN,Planet.NNO))
 }
 
 grid_acceptable_aspects = []
-flag_pd_sec = None
 
-def is_acceptable_angular_aspect(event_id, str_aspect):
+def is_acceptable_angular_aspect(event_id, str_aspect, type):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
     (Uranus,55.5 52,(r)) (Hmd1,325.600,(d)) (square,3')"""
     
@@ -173,11 +180,11 @@ def is_acceptable_angular_aspect(event_id, str_aspect):
     house_accept = house_aspect_rules[0]
     secondary_planets = house_aspect_rules[1]
     
-    if i_level == 1:
+    if type == AspectType.ANGLE_HOUSE_PRIMARY:
         #angles to primary planets
         if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p1 in planet_accept) and (p2 in angle_accept)):
             return True
-    if i_level == 2:
+    if type == AspectType.ANGLE_HOUSE_PRIMARY:
         #house/angles to primary planets
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept):
@@ -185,7 +192,7 @@ def is_acceptable_angular_aspect(event_id, str_aspect):
         if (p2 in angle_accept) or (p2 in house_accept):
             if (p1 in planet_accept):
                 return True
-    if i_level == 3:
+    if type == AspectType.ANGLE_HOUSE_SECONDARY:
         #house/angles to secondary planets
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept) or (p2 in secondary_planets):
@@ -193,17 +200,23 @@ def is_acceptable_angular_aspect(event_id, str_aspect):
         if (p2 in angle_accept) or (p2 in house_accept):
             if (p1 in planet_accept) or (p1 in secondary_planets):
                 return True
-    if i_level == 4:
+    if type == AspectType.PLANETS_PRIMARY:
         #planets to planets primary
         if  (p1 in planet_accept) and (p2 in planet_accept):
             return True
-    if i_level == 5:
+    if type == AspectType.PLANETS_SECONDARY:
         #planets to planets secondary
         if  (p1 in planet_accept) or (p1 in secondary_planets):
             if (p2 in planet_accept) or (p2 in secondary_planets):
                 return True 
-
-def count_event_acceptable_aspects(event_id, str_all_aspects, count):
+    if type == AspectType.ANGLE_HOUSE_ANY_PLANET:
+        #angle/houses to any planet
+        if ((p1 in HOUSES) and (p2 in PLANETS)) or ((p1 in PLANETS) and (p2 in HOUSES)):
+            return True
+        if ((p1 in HOUSES) and (p2 == 'POF')) or ((p1 == 'POF') and (p2 in HOUSES)):
+            return True
+    
+def count_event_acceptable_aspects(event_id, str_all_aspects, count, type):
     "returns a (count, string) of only acceptable angular direction aspects"
     list_aspects = str_all_aspects.split('\n')
     str_acceptable_aspects = ""
@@ -211,79 +224,12 @@ def count_event_acceptable_aspects(event_id, str_all_aspects, count):
     for i in range(0, len(list_aspects)):
         if (list_aspects[i] != ''):
             aspect = list_aspects[i]
-            if is_acceptable_angular_aspect(event_id, aspect):
+            if is_acceptable_angular_aspect(event_id, aspect, type):
                 str_acceptable_aspects += aspect + '\n'
                 count += 1
 
     return count, str_acceptable_aspects.rstrip()
     
-def generate_grid_angular_aspects(filename, start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3], level: int, flag_pd_sec_in):
-    """flag is true for pd false for sec
-    level 1 = angles to prim planets
-    level 2 = angles/houses to prim planets
-    level 3 = angles/houses to prim/second planets
-    level 4 = prim planets to prim planets
-    level 5 = prim/second planets to prim/second planets"""
-
-    global grid_acceptable_aspects, i_level, flag_pd_sec
-    i_level = level
-    flag_pd_sec = flag_pd_sec_in
-    temp_list_event = ['Time']
-
-    for i in range(0,len(list_dt_events)):
-        temp_list_event.append(f"{i}: {list_dt_events[i][0].strftime('%Y-%m-%d')}")
-    temp_list_event.append('Count')
-    grid_acceptable_aspects.append(temp_list_event)
-    
-    current_time = start_time
-    increment = timedelta(seconds=increment_seconds)
-    
-    while current_time <= end_time:
-        print(f"working on: {current_time}....")
-        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
-        current_time += increment
-
-    # Handle the case where the last increment might exceed the end time
-    if current_time > end_time:
-        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
-    
-    with open(f"{filename}", "w") as file:
-        for time in grid_acceptable_aspects:
-            file.write(f"{str(time)}\n")
-    
-def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positions: list[3]):
-    formatted_time = julian.from_jd(jd_radix).strftime('%H:%M:%S')
-    temp_list_event = [formatted_time] 
-    count = 0
-    
-    rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
-    rad_planets_labelled = calc_natal_planets_labelled(jd_radix)
-    rad_planets_equatorial = calc_rad_planets_equatorial(jd_radix)
-    
-    event_index = 0
-    for dt_event, event_id in list_dt_events:
-        if flag_pd_sec:
-            str_rad_dir_aspects, str_rad_conv_aspects = pd_for_time_event(jd_radix, julian.to_jd(dt_event), geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
-        else:
-            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_positions[0], geo_positions[1])
-            str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
-
-        #count is incremented in next line 
-        count, str_acceptable_aspects = count_event_acceptable_aspects(event_id, str_all_directed_aspects, count)
-
-        if count > 0:
-            temp_list_event.append(str_acceptable_aspects)
-        else:
-            temp_list_event.append(f"{str(event_index)}")
-        event_index += 1
-
-    temp_list_event.append(count)
-
-    global grid_acceptable_aspects
-    grid_acceptable_aspects.append(temp_list_event)    
-    return
-
 def calc_directed_pd_houses(JD_RADIX, jd_event, geo_latitude, rad_houses):
     """returns 2 tuples with house cusps 1 to 12 dir, conv
     removed functionality for Hmd1 and Hmd2 (H1/H2)"""
@@ -479,51 +425,3 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], ra
     str_aspects_rad_conv = aspects.find_pd_swiss_aspects(rad_positions, conv_positions)
     
     return str_aspects_rad_dir, str_aspects_rad_conv
-
-def count_aspect_groups_txt(filename):
-    opp_conj = ['opposition', 'conjunction']
-    sqr_tri_sext = ['square', 'trine', 'sextile']
-    results = []
-
-    with open(filename, 'r') as infile:
-        for line in infile:
-            parts = eval(line.strip())
-            time = parts[0]
-            aspects = parts[1:-1]
-            count = parts[-1]
-
-            opp_conj_count = 0
-            sqr_tri_sext_count = 0
-            minor_count = 0
-
-            for all_aspect in aspects:
-                if all_aspect:
-                    aspect = all_aspect.split(', ')
-                    for asp in aspect:
-                        if asp[0] == '(':
-                            if '\n' in asp:
-                                asp_lines = asp.split('\n')
-                                for line in asp_lines:
-                                    asp = line.split(' ')[2]
-
-                                    if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
-                                        minor_count += 1
-                                    elif ('opposition' in asp) or ('conjunction' in asp):
-                                        opp_conj_count += 1
-                                    elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                                        sqr_tri_sext_count += 1
-                            else:
-                                asp = asp.split(' ')[2]
-
-                                if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
-                                    minor_count += 1
-                                elif ('opposition' in asp) or ('conjunction' in asp):
-                                    opp_conj_count += 1
-                                elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                                    sqr_tri_sext_count += 1
-
-            results.append([f"{time}, {count}, opp/conj: {opp_conj_count}", f"sqr/tri/sext: {sqr_tri_sext_count}", f"major: {sqr_tri_sext_count+opp_conj_count}", f"minor: {minor_count}"])                
-    print(results)
-    with open(f"{filename}COUNTASCMC.txt", 'w') as outfile:
-        for result in results:
-            outfile.write(str(result) + '\n')

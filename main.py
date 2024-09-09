@@ -4,6 +4,7 @@ import pssr_automate as pssr
 from datetime import datetime
 import pd_automate as pd
 import secondary_automate as secondary
+import aspects_analysis
 
 ORB_TRANSIT = 1.15
 ORB_PSSR = 0.24
@@ -94,10 +95,11 @@ def main():
   dt_radix_start = datetime(1940, 10, 8, 23, 00, 00)
   dt_radix_end = datetime(1940, 10, 8, 23, 00, 8)
   geopos = [53.4, -2.9833333, 70.0]
-  '''dt_radix = datetime(1889, 4, 16, 19, 40, 48)
+  '''dt_radix_start = datetime(1889, 4, 16, 19, 40, 40)
+  dt_radix_end = datetime(1889, 4, 16, 19, 40, 44)
   geopos = [51.48333, 0.001, 306]
-  dt_event = datetime(1901, 5, 9, 12, 00, 00)'''
-
+  list_of_events = [(datetime(1901, 5, 9, 12, 00, 00),pd.EventType.DEATH_FATHER_GRAND)]
+'''
   list_of_events = [
     (datetime(1956, 7, 15, 12, 00, 00),pd.EventType.DEATH_MOTHER_GRAND),
     (datetime(1962, 8, 23, 12, 00, 00),pd.EventType.MARRIAGE_FOR_MALE),
@@ -115,24 +117,22 @@ def main():
     (datetime(1976, 7, 27, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
     (datetime(1980, 12, 8, 12, 00, 00),pd.EventType.ASSASINATION_SUICIDE)
   ]
-  flag_pd_sec = False
-  level_aspects = 2
+  level_aspects = pd.AspectType.ANGLE_HOUSE_PRIMARY
   time_increment = 8
-  if flag_pd_sec:
-    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_primaries.txt"
-  else:
-    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_secondaries.txt"
+  
+  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_secondaries"
+  aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.SECONDARY_DIRECT)
+  aspects_analysis.count_aspect_groups_txt(filename)
+  aspects_analysis.resetvars()
 
-  pd.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, flag_pd_sec)
-  pd.count_aspect_groups_txt(filename)
+  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_primaries"
+  aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.PRIMARY_DIRECT)
+  aspects_analysis.count_aspect_groups_txt(filename)
+  aspects_analysis.resetvars()
 
-  flag_pd_sec = True
-  if flag_pd_sec:
-    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_primaries.txt"
-  else:
-    filename = f"{dt_radix_end.strftime('%Y-%m-%d')}_secondaries.txt"
 
-  pd.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, flag_pd_sec)
-  pd.count_aspect_groups_txt(filename)
+  filename = f"19{dt_radix_end.strftime('%Y-%m-%d')}_pssr"
+  aspects_analysis.generate_grid_angular_aspects(filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, aspects_analysis.TechniqueType.PSSR)
+  aspects_analysis.count_aspect_groups_txt(filename)
 
 main()
