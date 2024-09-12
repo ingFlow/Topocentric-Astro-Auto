@@ -59,7 +59,7 @@ def zodiac_to_degrees(sign, degrees):
 def format_house_list(houses, label):
     """make list of tuples of house cusps format of ('H1',DEG,'LABEL')"""
     formatted_list = []
-    for i in range(1, len(houses)):
+    for i in range(1, len(houses)+1):
         house_deg = houses[i-1]
         '''if i == 1:
             house_name = 'ASC'

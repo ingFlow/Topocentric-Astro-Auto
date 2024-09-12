@@ -101,7 +101,6 @@ def count_all_major(csv_filename):
     df.to_csv(csv_filename, index=False)
     print(df.head())  # Print the first few rows to verify
 
-
 def count_all_major_opp(csv_filename):
     df = pd.read_csv(csv_filename)
 
@@ -113,14 +112,11 @@ def count_all_major_opp(csv_filename):
     print(df.head())  # Print the first few rows to verify
 
 def main():
-    file_list = ['9_9_ 1940-10-09_primariesCOUNT.txt', '9_9_ 1940-10-09_secondariesCOUNT.txt']  
+    file_list = ['9_11_ver2_1929-07-28_primariesCOUNT.txt', '9_11_ver2_1929-07-28_primariesCOUNT.txt']  
     final_df = load_and_concatenate_files(file_list)
-    final_df_sorted = final_df.sort_values(by=['mja-pd','mja-sc'], ascending=[False,False])
+    final_df_sorted = final_df.sort_values(by=['all-pd_x'], ascending=[False])
    
     final_df_sorted.to_csv('9_9_ver2_sorted_planet_data.csv', index=False)
     #print(final_df.head())  
 
 main()
-count_all_col('9_9_ver2_sorted_planet_data.csv')
-count_all_major_opp('9_9_ver2_sorted_planet_data.csv')
-count_all_major('9_9_ver2_sorted_planet_data.csv')

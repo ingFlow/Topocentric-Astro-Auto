@@ -76,13 +76,17 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
             str_rad_dir_aspects, str_rad_conv_aspects = transit_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         
-        #count is incremented in next line 
-        count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
-
-        if count > 0:
-            temp_list_event.append(str_acceptable_aspects)
+        
+    
+        if date_technique == TechniqueType.PRIMARY_DIRECT:
+            count, str_acceptable_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
         else:
+            count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
+
+        if str_acceptable_aspects == '':
             temp_list_event.append(f"{str(event_index)}")
+        else:
+            temp_list_event.append(str_acceptable_aspects)
     
         event_index += 1
 

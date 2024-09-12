@@ -1,0 +1,15 @@
+{
+    "dt_radix_start": "1940-10-08T23:00:00",
+    "dt_radix_end": "1940-10-09T23:00:00",
+    "geopos": [53.4, -2.9833333, 70.0],
+    "list_of_events": [
+      {"datetime": "1994-07-02T12:00:00", "event_type": "DEATH_FATHER_GRAND"},
+      {"datetime": "1997-08-13T12:00:00", "event_type": "DEATH_MOTHER_GRAND"},
+      {"datetime": "1997-11-16T12:00:00", "event_type": "BIRTH_DAUGHTER"},
+      {"datetime": "2000-03-11T12:00:00", "event_type": "BIRTH_DAUGHTER"},
+      {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND"},
+      {"datetime": "2021-04-06T12:00:00", "event_type": "LOSSES"},
+      {"datetime": "2022-05-25T12:00:00", "event_type": "ARREST"},
+      {"datetime": "2022-01-03T12:00:00", "event_type": "--- AC/DC"}
+    ]
+  }
