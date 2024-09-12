@@ -1,0 +1,23 @@
+{
+    "dt_radix_start": "1940-10-08T23:00:00",
+    "dt_radix_end": "1940-10-09T23:00:00",
+    "geopos": [53.4, -2.9833333, 70.0],
+    "list_of_events": [
+      {"datetime": "1956-07-15T12:00:00", "event_type": "DEATH_MOTHER_GRAND"},
+      {"datetime": "1962-08-23T12:00:00", "event_type": "MARRIAGE_FOR_MALE"},
+      {"datetime": "1963-04-18T12:00:00", "event_type": "BIRTH_SON"},
+      {"datetime": "1964-02-06T12:00:00", "event_type": "SUCCESS"},
+      {"datetime": "1965-06-12T12:00:00", "event_type": "SUCCESS"},
+      {"datetime": "1967-08-26T12:00:00", "event_type": "DEATH"},
+      {"datetime": "1968-11-28T12:00:00", "event_type": "ARREST"},
+      {"datetime": "1969-03-20T12:00:00", "event_type": "MARRIAGE_FOR_MALE"},
+      {"datetime": "1970-04-15T12:00:00", "event_type": "LOSSES"},
+      {"datetime": "1972-03-06T12:00:00", "event_type": "LOSSES"},
+      {"datetime": "1974-07-18T12:00:00", "event_type": "LOSSES"},
+      {"datetime": "1975-10-09T12:00:00", "event_type": "BIRTH_SON"},
+      {"datetime": "1975-01-15T12:00:00", "event_type": "SUCCESS"},
+      {"datetime": "1976-07-27T12:00:00", "event_type": "TRAVEL_POSITIVE"},
+      {"datetime": "1980-12-08T12:00:00", "event_type": "ASSASINATION_SUICIDE"}
+    ]
+  }
+  
