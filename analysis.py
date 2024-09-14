@@ -12,6 +12,7 @@ class TechniqueType:
 
 def extract_data_from_file(filename, technique: TechniqueType):
     str_tf = '?'
+    flag_pssr = False
     match technique:
         case TechniqueType.Primary_Direct:
             str_tf = 'pd'
@@ -19,9 +20,10 @@ def extract_data_from_file(filename, technique: TechniqueType):
             str_tf = 'sc'
         case TechniqueType.PSSR:
             str_tf = 'sr'
+            flag_pssr = True
         case TechniqueType.Transit:
             str_tf = 'tr'
-       
+    
     data = {
         'Time': [],
         f'all-{str_tf}': [],
@@ -30,12 +32,23 @@ def extract_data_from_file(filename, technique: TechniqueType):
         f'mja-{str_tf}': [],
         f'min-{str_tf}': []
     }
-    
+    if flag_pssr:
+        pssr_labels = {
+            f'mon-conj-{str_tf}': [], 
+            f'mon-maj-{str_tf}': []
+        }
+        data.update(pssr_labels)
+    data.update({f'e-{str_tf}': []})
+
+     
     with open(filename, 'r') as file:
         lines = file.readlines()
     
     for line in lines:
-        match = re.match(r"\['(.+), (\d+), opp/conj: (\d+)', 'sqr/tri/sext: (\d+)', 'major: (\d+)', 'minor: (\d+)'\]", line)
+        if flag_pssr:
+            match = re.match(r"\['(.+), (\d+), opp-conj: (\d+), sqr-tri-sext: (\d+), major: (\d+), minor: (\d+), moon-opp-conj: (\d+), moon-sqr-tri-sext: (\d+), empty: (\d+)'\]", line)
+        else:
+            match = re.match(r"\['(.+), (\d+), opp-conj: (\d+), sqr-tri-sext: (\d+), major: (\d+), minor: (\d+), empty: (\d+)'\]", line)
         
         if match:
             time = match.group(1)
@@ -44,6 +57,12 @@ def extract_data_from_file(filename, technique: TechniqueType):
             sqr_tri_sext = int(match.group(4))
             major = int(match.group(5))
             minor = int(match.group(6))
+            if flag_pssr:
+                moon_opp_conj = int(match.group(7))
+                moon_sqr_tri_sext = int(match.group(8))
+                empty = int(match.group(9))
+            else:
+                empty = int(match.group(7))
             
             data['Time'].append(time)
             data[f'all-{str_tf}'].append(count)
@@ -51,6 +70,10 @@ def extract_data_from_file(filename, technique: TechniqueType):
             data[f'mj2-{str_tf}'].append(sqr_tri_sext)
             data[f'mja-{str_tf}'].append(major)
             data[f'min-{str_tf}'].append(minor)
+            if flag_pssr:
+                data[f'mon-conj-{str_tf}'].append(moon_opp_conj)
+                data[f'mon-maj-{str_tf}'].append(moon_sqr_tri_sext)
+            data[f'e-{str_tf}'].append(empty)
     
     df = pd.DataFrame(data)
     
@@ -112,11 +135,11 @@ def count_all_major_opp(csv_filename):
     print(df.head())  # Print the first few rows to verify
 
 def main():
-    file_list = ['9_11_ver2_1929-07-28_primariesCOUNT.txt', '9_11_ver2_1929-07-28_primariesCOUNT.txt']  
+    file_list = ['9_14_ver1_1929-07-28_pssrCOUNT.txt', '9_14_ver1_1929-07-28_transitCOUNT.txt', '9_14_ver1_1929-07-28_secondariesCOUNT.txt']  
     final_df = load_and_concatenate_files(file_list)
-    final_df_sorted = final_df.sort_values(by=['all-pd_x'], ascending=[False])
-   
-    final_df_sorted.to_csv('9_9_ver2_sorted_planet_data.csv', index=False)
+    final_df_sorted = final_df.sort_values(by=['mon-conj-sr','mon-maj-sr'], ascending=[False, False])
+  
+    final_df_sorted.to_csv('9_14_ver1_sorted_planet_data.csv', index=False)
     #print(final_df.head())  
 
 main()

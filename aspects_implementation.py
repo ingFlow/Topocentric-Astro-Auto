@@ -1,11 +1,12 @@
 import pd_automate
-from datetime import timedelta
+from datetime import timedelta, datetime
 import julian
 import swisseph as swe
 import pd_automate
 import secondary_automate
 import pssr_swiss_auto as pssr_auto
 import transit_swiss_auto as transit_auto
+import pandas as pd
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -77,7 +78,6 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         
         
-    
         if date_technique == TechniqueType.PRIMARY_DIRECT:
             count, str_acceptable_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
         else:
@@ -96,7 +96,7 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     grid_aspects.append(temp_list_event)    
     return
 
-def count_aspect_groups_txt(filename):
+def count_aspect_groups_txt(filename, flag_count_pssr_moon):
     results = []
 
     with open(f"{filename}.txt", 'r') as infile:
@@ -109,35 +109,38 @@ def count_aspect_groups_txt(filename):
             opp_conj_count = 0
             sqr_tri_sext_count = 0
             minor_count = 0
+            moon_conj_opp_count = 0
+            moon_sqr_tri_sext_count = 0
+            empty_event_count = 0
 
             for all_aspect in aspects:
                 if all_aspect:
-                    aspect = all_aspect.split(', ')
-                    for asp in aspect:
-                        if asp[0] == '(':
-                            if '\n' in asp:
-                                asp_lines = asp.split('\n')
-                                for line in asp_lines:
-                                    asp = line.split(' ')[2]
+                    if all_aspect[0] != '(':
+                        empty_event_count += 1
 
-                                    if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
-                                        minor_count += 1
-                                    elif ('opposition' in asp) or ('conjunction' in asp):
-                                        opp_conj_count += 1
-                                    elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                                        sqr_tri_sext_count += 1
-                            else:
-                                asp = asp.split(' ')[2]
+                    if '\n' in all_aspect:
+                        individual_aspects_list = all_aspect.split('\n')
+                    else:
+                        individual_aspects_list = [all_aspect]
 
-                                if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
-                                    minor_count += 1
-                                elif ('opposition' in asp) or ('conjunction' in asp):
-                                    opp_conj_count += 1
-                                elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                                    sqr_tri_sext_count += 1
-
-            results.append([f"{time}, {count}, opp/conj: {opp_conj_count}", f"sqr/tri/sext: {sqr_tri_sext_count}", f"major: {sqr_tri_sext_count+opp_conj_count}", f"minor: {minor_count}"])                
+                    for asp in individual_aspects_list:
+                        if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
+                            minor_count += 1
+                        elif ('opposition' in asp) or ('conjunction' in asp):
+                            if (flag_count_pssr_moon and (')) (Moon' in asp)):
+                                moon_conj_opp_count += 1
+                            opp_conj_count += 1
+                        elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
+                            if (flag_count_pssr_moon and (')) (Moon' in asp)):
+                                moon_sqr_tri_sext_count += 1
+                            sqr_tri_sext_count += 1
+                        
+            if flag_count_pssr_moon:
+                results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, moon-opp-conj: {moon_conj_opp_count}, moon-sqr-tri-sext: {moon_sqr_tri_sext_count}, empty: {empty_event_count}"])                
+            else:
+                results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, empty: {empty_event_count}"])                
     print(results)
+
     with open(f"{filename}COUNT.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')
@@ -153,3 +156,43 @@ def calc_rad_planet_houses_labelled(jd_radix, geo_latitude, geo_longitude):
     for house_no in range(0,len(houses[0])):
         rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
     return  rad_planets
+
+def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positions: list[3], type: pd_automate.AspectType, technique: TechniqueType):
+    global grid_aspects, date_technique, aspect_type
+    date_technique = technique
+    aspect_type = type
+    temp_list_event = ['Time']
+
+    for i in range(0,len(list_dt_events)):
+        temp_list_event.append(f"{i}: {list_dt_events[i][0].strftime('%Y-%m-%d')}")
+    temp_list_event.append('Count')
+    grid_aspects.append(temp_list_event)
+    
+    for current_time in list_times:
+        print(f"working on: {current_time}....")
+        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
+    
+    with open(f"{filename}.txt", "w") as file:
+        for time in grid_aspects:
+            file.write(f"{str(time)}\n")
+
+def process_csv(file_path, start_date_str, count_times_wanted, i_timezone):
+    df = pd.read_csv(file_path)
+    times = df['Time'][:count_times_wanted].tolist()
+    
+    start_date = datetime.strptime(start_date_str, '%d %B %Y')
+    
+    datetime_list = []
+    
+    for time_str in times:
+        time_obj = datetime.strptime(time_str, '%H:%M:%S')
+        
+        if time_obj.hour >= (24 + i_timezone):
+            datetime_obj = datetime.combine(start_date, time_obj.time())
+        else:
+            datetime_obj = datetime.combine(start_date + timedelta(days=1), time_obj.time())
+        
+        datetime_list.append(datetime_obj)
+    
+    return datetime_list
+

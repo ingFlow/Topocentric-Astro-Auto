@@ -49,13 +49,17 @@ class EventType:
     ARMY_PROMOTION = 39
 
 class AspectType:
-    ANGLE_PRIM =0
+    ANGLE_PRIMARY = 0
     ANGLE_HOUSE_PRIMARY = 1
     ANGLE_HOUSE_SECONDARY = 2
     PLANETS_PRIMARY = 3
     PLANETS_SECONDARY = 4
     ANGLE_HOUSE_ANY_PLANET = 5
-    MOON_ANY_PLANET = 6
+    MOON_PRIMARY = 6
+    MOON_ANGLE_HOUSE_PRIMARY = 7
+    MOON_ANGLE_HOUSE_SECONDARY = 8
+    MOON_SECONDARY = 9
+    ANGLE_SECONDARY = 10
 
 class Planet:
     SUN = 'Sun'
@@ -161,7 +165,7 @@ EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO))
 
 grid_acceptable_aspects = []
 
-def is_acceptable_angular_aspect(event_id, str_aspect, type):
+def get_accept_lists(event_id):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
     (Uranus,55.5 52,(r)) (Hmd1,325.600,(d)) (square,3')"""
     
@@ -170,12 +174,6 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
     if not aspect_rules:
         return False  
     
-    p1_d1_s1, p2_d2_s2, asp_orb = str_aspect.split(' ')
-    p1, _, _ = p1_d1_s1.split(',')
-    p1 = p1[1:]
-    p2, _, _ = p2_d2_s2.split(',')
-    p2 = p2[1:]
-
     angle_house_accept = aspect_rules[0]
     angle_accept = []
     house_accept = []
@@ -194,10 +192,27 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
             angle_accept.append(angle_house)
         else:
             house_accept.append(angle_house)
+
+    return angle_accept, house_accept, planet_accept, secondary_planets
+
+def is_acceptable_angular_aspect(event_id, str_aspect, type):
+    angle_accept, house_accept, planet_accept, secondary_planets = get_accept_lists(event_id)
     
-    if type == AspectType.ANGLE_HOUSE_PRIMARY:
+    p1_d1_s1, p2_d2_s2, asp_orb = str_aspect.split(' ')
+    p1, _, _ = p1_d1_s1.split(',')
+    p1 = p1[1:]
+    p2, _, _ = p2_d2_s2.split(',')
+    p2 = p2[1:]
+
+    if type == AspectType.ANGLE_PRIMARY:
         #angles to primary planets
         if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p1 in planet_accept) and (p2 in angle_accept)):
+            return True
+    if type == AspectType.ANGLE_SECONDARY:
+        #angles to primary/secondary planets
+        if ((p1 in angle_accept) and (p2 in planet_accept)) or ((p1 in planet_accept) and (p2 in angle_accept)):
+            return True
+        if ((p1 in angle_accept) and (p2 in secondary_planets)) or ((p1 in secondary_planets) and (p2 in angle_accept)):
             return True
     if type == AspectType.ANGLE_HOUSE_PRIMARY:
         #house/angles to primary planets
@@ -216,24 +231,70 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
             if (p1 in planet_accept) or (p1 in secondary_planets):
                 return True
     if type == AspectType.PLANETS_PRIMARY:
-        #planets to planets primary
+        #planets to planets primary or angles/houses to primary
         if  (p1 in planet_accept) and (p2 in planet_accept):
             return True
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept):
+                return True
     if type == AspectType.PLANETS_SECONDARY:
-        #planets to planets secondary
+        #planets to planets secondary or angle/house to secondary
         if  (p1 in planet_accept) or (p1 in secondary_planets):
             if (p2 in planet_accept) or (p2 in secondary_planets):
                 return True 
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept) or (p2 in secondary_planets):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept) or (p1 in secondary_planets):
+                return True
     if type == AspectType.ANGLE_HOUSE_ANY_PLANET:
         #angle/houses to any planet
         if ((p1 in HOUSES) and (p2 in PLANETS)) or ((p1 in PLANETS) and (p2 in HOUSES)):
             return True
         if ((p1 in HOUSES) and (p2 == 'POF')) or ((p1 == 'POF') and (p2 in HOUSES)):
             return True
-    if type == AspectType.MOON_ANY_PLANET:
-        #moon to any planet
-        if ((p1 == 'Moon') and (p2 in PLANETS)) or ((p1 in PLANETS) and (p2 =='Moon')):
+    if type == AspectType.MOON_PRIMARY:
+        #moon to primary planet (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
+        if (p1 in planet_accept) and (p2 =='Moon'):
             return True
+    if type == AspectType.MOON_SECONDARY:
+        #moon to primary/secondary planet (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
+        if (p1 in planet_accept) and (p2 =='Moon'):
+            return True
+        if (p1 in secondary_planets) and (p2 == 'Moon'):
+            return True
+    if type == AspectType.MOON_ANGLE_HOUSE_PRIMARY:
+        #moon to any planet or MOON to angle or angle to primary planet
+        if ((p1 in planet_accept) or (p1 == angle_accept)) and (p2 =='Moon'):
+            return True
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept):
+                return True
+    if type == AspectType.MOON_ANGLE_HOUSE_SECONDARY:
+        #moon to any planet or MOON to angle or angle to primary/secondary planet
+        if ((p1 in planet_accept) or (p1 in secondary_planets) or (p1 == angle_accept)) and (p2 =='Moon'):
+            return True
+        if (p1 in angle_accept) or (p1 in house_accept):
+            if (p2 in planet_accept) or (p2 in secondary_planets):
+                return True
+        if (p2 in angle_accept) or (p2 in house_accept):
+            if (p1 in planet_accept) or (p1 in secondary_planets):
+                return True
+
+def is_aspect_conj_opp(str_aspect):
+    _, _, asp_orb = str_aspect.split(' ')
+    aspect = asp_orb.split(',')[0]
+
+    if aspect in ['conjunction', 'opposition']:
+        return True
+    
     
 def count_event_acceptable_aspects(event_id, str_all_aspects, count, type):
     "returns a (count, string) of only acceptable angular direction aspects"

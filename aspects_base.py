@@ -25,7 +25,6 @@ ALL_ASPECTS = {
     "150-quincunx": (150, 210)
 }
 
-
 ZODIAC_START_DEGREES = {
     "Aries": 0,
     "Taurus": 30,
