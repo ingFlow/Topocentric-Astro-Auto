@@ -1,6 +1,6 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 import pd_automate as pd
-import aspects_analysis
+import aspects_implementation as asp
 import json
 
 ''' 
@@ -41,8 +41,8 @@ list_of_events = [
     (datetime(1994, 5, 20, 12, 00, 00),pd.EventType.DEATH),
   ]
 
-def main(): 
-  with open('data_input/jacquiline onassis.json', 'r') as f:
+def get_json_birth_data(filename):   
+  with open(filename, 'r') as f:
       data = json.load(f)
   dt_radix_start = datetime.fromisoformat(data['dt_radix_start'])
   dt_radix_end = datetime.fromisoformat(data['dt_radix_end'])
@@ -51,6 +51,10 @@ def main():
       (datetime.fromisoformat(event['datetime']), getattr(pd.EventType, event['event_type']))
       for event in data['list_of_events']
   ]
+  return dt_radix_start, dt_radix_end, geopos, list_of_events
+
+def main(): 
+  dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data('data_input/jacquiline onassis.json')
   '''(aspects_analysis.TechniqueType.SECONDARY_DIRECT, "_secondaries"),
       (aspects_analysis.TechniqueType.PSSR, "_pssr"),
       (aspects_analysis.TechniqueType.TRANSIT, "_transit"),'''
@@ -58,15 +62,46 @@ def main():
   time_increment = 8
   str_date = "9_11_ver2_"
   techniques = [
-      (aspects_analysis.TechniqueType.PRIMARY_DIRECT, "_primaries")
+      (asp.TechniqueType.PRIMARY_DIRECT, "_primaries")
   ]
 
   for technique, suffix in techniques:
       filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
-      aspects_analysis.generate_grid_angular_aspects(
+      asp.generate_grid_angular_aspects(
           filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, technique
       )
-      aspects_analysis.count_aspect_groups_txt(filename)
-      aspects_analysis.resetvars()  
+      asp.count_aspect_groups_txt(filename)
+      asp.resetvars()  
 
-main()
+def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data_str, count_times_to_process, i_timezone):
+    dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
+   
+    file_path = csv_filename
+    dt_day_before_rad = dt_radix_end - timedelta(days=1)
+    start_date_str = dt_day_before_rad.strftime('%d %B %Y')
+ 
+    list_times_to_process = asp.process_csv(file_path, start_date_str,count_times_to_process, i_timezone)
+    str_date = prefix_data_str
+
+    techniques = [
+        (asp.TechniqueType.SECONDARY_DIRECT, "_secondaries"),
+        (asp.TechniqueType.PSSR, "_pssr"),
+        (asp.TechniqueType.TRANSIT, "_transit"),
+    ]
+
+    for technique, suffix in techniques:
+        filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
+        flag_pssr_count_moon = False
+        if technique == asp.TechniqueType.PSSR:
+            level_aspects = pd.AspectType.MOON_ANGLE_HOUSE_PRIMARY
+            flag_pssr_count_moon = True
+        elif technique == asp.TechniqueType.TRANSIT:
+            level_aspects = pd.AspectType.ANGLE_PRIMARY
+        elif technique == asp.TechniqueType.SECONDARY_DIRECT:
+            level_aspects = pd.AspectType.ANGLE_HOUSE_PRIMARY
+           
+        asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
+        asp.count_aspect_groups_txt(filename, flag_pssr_count_moon)
+        asp.resetvars()  
+
+#other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
