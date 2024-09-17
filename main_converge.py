@@ -46,15 +46,17 @@ def get_json_birth_data(filename):
       data = json.load(f)
   dt_radix_start = datetime.fromisoformat(data['dt_radix_start'])
   dt_radix_end = datetime.fromisoformat(data['dt_radix_end'])
+  real_dob = datetime.fromisoformat(data['dt_actual_dob'])
+
   geopos = data['geopos']
   list_of_events = [
       (datetime.fromisoformat(event['datetime']), getattr(pd.EventType, event['event_type']))
       for event in data['list_of_events']
   ]
-  return dt_radix_start, dt_radix_end, geopos, list_of_events
+  return real_dob, dt_radix_start, dt_radix_end, geopos, list_of_events
 
 def main(): 
-  dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data('data_input/jacquiline onassis.json')
+  _, dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data('data_input/jacquiline onassis.json')
   '''(aspects_analysis.TechniqueType.SECONDARY_DIRECT, "_secondaries"),
       (aspects_analysis.TechniqueType.PSSR, "_pssr"),
       (aspects_analysis.TechniqueType.TRANSIT, "_transit"),'''
@@ -77,10 +79,9 @@ def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data
     dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
    
     file_path = csv_filename
-    dt_day_before_rad = dt_radix_end - timedelta(days=1)
-    start_date_str = dt_day_before_rad.strftime('%d %B %Y')
+    date_str = dt_radix_end.strftime('%d %B %Y')
  
-    list_times_to_process = asp.process_csv(file_path, start_date_str,count_times_to_process, i_timezone)
+    list_times_to_process = asp.process_csv(file_path, date_str,count_times_to_process, i_timezone)
     str_date = prefix_data_str
 
     techniques = [

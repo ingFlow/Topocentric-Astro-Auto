@@ -176,21 +176,22 @@ def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positio
         for time in grid_aspects:
             file.write(f"{str(time)}\n")
 
-def process_csv(file_path, start_date_str, count_times_wanted, i_timezone):
+def process_csv(file_path, end_date_str, count_times_wanted, i_timezone):
+    """end date is day of birth"""
     df = pd.read_csv(file_path)
     times = df['Time'][:count_times_wanted].tolist()
     
-    start_date = datetime.strptime(start_date_str, '%d %B %Y')
+    end_date = datetime.strptime(end_date_str, '%d %B %Y')
     
     datetime_list = []
     
     for time_str in times:
         time_obj = datetime.strptime(time_str, '%H:%M:%S')
         
-        if time_obj.hour >= (24 + i_timezone):
-            datetime_obj = datetime.combine(start_date, time_obj.time())
+        if time_obj.hour <= (24 + i_timezone):
+            datetime_obj = datetime.combine(end_date, time_obj.time())
         else:
-            datetime_obj = datetime.combine(start_date + timedelta(days=1), time_obj.time())
+            datetime_obj = datetime.combine(end_date - timedelta(days=1), time_obj.time())
         
         datetime_list.append(datetime_obj)
     

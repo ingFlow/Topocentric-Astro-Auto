@@ -3,8 +3,6 @@ import julian
 import pd_base as pd
 import math
 import aspects_base as aspects
-from datetime import timedelta
-import secondary_automate as secondary
 
 class EventType:
     BIRTH_BROTHER = 0
@@ -47,6 +45,14 @@ class EventType:
     GAMBLING_LOSS = 37
     GAMBLING_GAIN = 38
     ARMY_PROMOTION = 39
+
+    @classmethod
+    def get_name(cls, value):
+        """Returns the name of the event type for the given value."""
+        for attr in dir(cls):
+            if not attr.startswith("__") and getattr(cls, attr) == value:
+                return attr
+        return 'Unknown Event Type'
 
 class AspectType:
     ANGLE_PRIMARY = 0
@@ -574,6 +580,16 @@ def calc_lst(jd, longitude):
         lst -= 24
     
     return lst
+
+def pd_for_time_event_norad(jd_radix, jd, geo_positions: list[3]):
+    """returns tuple of str_dir aspects and str_conv aspects"""
+    rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
+    rad_planets_labelled = calc_natal_planets_labelled(jd_radix)
+    rad_planets_equatorial = calc_rad_planets_equatorial(jd_radix)
+
+    str_aspects_rad_dir, str_aspects_rad_conv = pd_for_time_event(jd_radix, jd, geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+
+    return str_aspects_rad_dir, str_aspects_rad_conv
 
 def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], rad_planets_labelled, rad_planets_equatorial, rad_houses_info):
     """

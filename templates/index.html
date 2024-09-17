@@ -3,31 +3,304 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Astrological Program</title>
+    <title>Astrology Program</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Yrsa:wght@400;700&family=Oranienbaum:wght@400&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
     <style>
-        /* Style for the scrollable box */
+        /* General Page Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #e0e0e0; /* Light grey background */
+            color: #1a1f36; /* Dark navy blue for text */
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-family: 'Oranienbaum', sans-serif; /* Header font */
+            font-weight: 600;
+            font-size: 1.5em; /* Smaller size for header */
+            text-align: center;
+            margin-top: 10px;
+            color: #f4c542; /* White text color */
+            background-color: #171d3b; /* Navy blue background */
+            padding: 10px; /* Padding to create space around text */
+            border-radius: 20px; /* Rounded corners */
+            max-width: 25%; /* Restrict the width to 25% of the container */
+            margin-left: auto; /* Center horizontally */
+            margin-right: auto; /* Center horizontally */
+        }
+
+        ul {
+            list-style-type: none; /* Remove bullets */
+            padding-left: 0; /* Remove padding */
+        }
+        li {
+            margin-bottom: 10px; /* Optional: space between items */
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-between;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 5px;
+        }
+
+        /* Column Styling */
+        .column {
+            width: 20%; /* Smaller columns */
+            background-color: #f5f5f5; /* Light grey background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Yrsa', sans-serif; /* Yrsa font for columns */
+        }
+
+        .middle-column {
+            width: 60%; /* Wider middle column */
+            background-color: #ffffff; /* White background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-family: 'Yrsa', sans-serif; /* Yrsa font for middle column */
+        }
+
+        /* Scrollable Box Styling */
         .scroll-box {
-            width: 200px;
-            height: 200px;
-            border: 1px solid black;
+            width: 100%;
+            height: 250px;
+            border: 1px solid #1a1f36;
             overflow-y: scroll;
-            position: absolute;
-            top: 20px;
-            left: 20px;
+            background-color: #ffffff; /* White background */
+            color: #1a1f36;
+            /*padding: 10px;*/
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+
+        .scroll-box ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .scroll-box li {
+            padding: 5px;
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+        }
+
+        /* Radio Group Styling */
+        .radio-group {
+            display: flex;
+            /*flex-direction: column;*/
+            gap: 5px;
+            margin-top: 10px;
+            flex-wrap: wrap; /* Allow wrapping to the next line if necessary */
+        }
+
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            font-family: 'Yrsa', sans-serif; /* Yrsa font for radio labels */
+            font-weight: 400;
+            font-size: 1em;
+            color: #1a1f36;
+            margin-right: 10px; /* Space between radio and label text */
+        }
+
+        input[type="radio"] {
+            accent-color: #1a1f36;
+            margin-right: 5px;
+        }
+
+        /* Middle Column Specific Styling */
+        .text-section {
+            background-color: #f5f5f5; /* Light grey background */
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .text-section li {
+            padding: 1px;
+            cursor: pointer;
+            border-bottom: 1px solid #ccc;
+        }
+
+        li:hover {
+            background-color: #f3cf6c; /* Gold highlight on hover */
+        }
+
+        .active {
+            background-color: #549dc2; /* Background color when item is clicked */
+        }
+
+        .text-section p {
+            margin: 0;
+            font-family: 'Yrsa', sans-serif; /* Yrsa font for middle column text */
+            font-size: 1em;
+            color: #1a1f36;
+        }
+
+        .scroll-text {
+            height: 300px;
+            overflow-y: scroll;
             padding: 10px;
+            background-color: #f5f5f5; /* Light grey background */
+            color: #1a1f36;
+            border-radius: 5px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
-    <h1>Astrological Program</h1>
-    
-    <!-- Scrollable box for datetimes -->
-    <div class="scroll-box">
-        <ul>
-            {% for dt in datetimes %}
-                <li>{{ dt }}</li>
-            {% endfor %}
-        </ul>
+
+    <h1>Astrological Insights</h1>
+
+    <div class="container">
+        <!-- Left Column -->
+        <div class="column">
+            <div class="scroll-box">
+                <ul id="left-list">
+                    {% for item in left_column_items %}
+                        <li onclick="updateMiddleContent(null, '{{ item }}')">{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div style="margin-bottom: 20px;"></div>
+
+            <div class="radio-group" id="left-radio-group">
+                <label>Pick whether to show all/only accepted directions</label>
+                <label><input type="radio" name="left-radio" value="all_directions" onchange="updateMiddleContent()"> All</label>
+                <label><input type="radio" name="left-radio" value="accepted" onchange="updateMiddleContent()"> Accepted</label>
+            </div>
+
+            <div style="margin-bottom: 20px;"></div>
+
+            <div class="radio-group" id="right-radio-group">
+                <label>Techinique to display</label>
+                <label><input type="radio" name="right-radio" value=0 onchange="updateMiddleContent()"> PD</label>
+                <label><input type="radio" name="right-radio" value=1 onchange="updateMiddleContent()"> Secondary</label>
+                <label><input type="radio" name="right-radio" value=2 onchange="updateMiddleContent()"> PSSR</label>
+                <label><input type="radio" name="right-radio" value=3 onchange="updateMiddleContent()"> Transit</label>
+                <label><input type="radio" name="right-radio" value=4 onchange="updateMiddleContent()"> Lunar</label>
+                <label><input type="radio" name="right-radio" value=5 onchange="updateMiddleContent()"> All</label>
+            </div>
+        </div>
+
+        <!-- Middle Column -->
+        <div class="middle-column">
+            <div class="text-section" id="middle-text-1">
+                <p>Row 1: Dynamic content goes here</p>
+                <p>Row 2: Another dynamic line</p>
+            </div>
+            <div class="text-section scroll-text" id="middle-scroll-text">
+                <p>Scrollable content generated here...</p>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="column">
+            <div class="scroll-box" style="height: 400px;">
+                <ul id="right-list">
+                    {% for item in right_column_items %}
+                        <li onclick="updateMiddleContent('{{ item }}', null)">{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            
+        </div>
     </div>
+
+    <!-- Footer -->
+    <footer>
+        © 2024 Your Astrology Program. All Rights Reserved.
+    </footer>
+
+    <script>
+        // Function to get selected radio value from a group
+        function getSelectedRadioValue(name) {
+            const radios = document.getElementsByName(name);
+            for (const radio of radios) {
+                if (radio.checked) {
+                    return radio.value;
+                }
+            }
+            return null;
+        }
+
+        // JavaScript function to update middle column dynamically
+        async function updateMiddleContent(rightItem = null, leftItem = null) {
+            // Get selected values from the radio groups
+            const leftRadioValue = getSelectedRadioValue('left-radio');
+            const rightRadioValue = getSelectedRadioValue('right-radio');
+            
+            // Get the clicked item from column 1 or 3
+            const leftItemText = leftItem || document.querySelector('#left-list .selected')?.textContent || '';
+            const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
+
+            try {
+                // Send the AJAX request to the Flask route
+                let response = await fetch(`/update_content?left_radio=${encodeURIComponent(leftRadioValue)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}`);
+                let data = await response.json();
+                
+                // Update the static and scrollable sections of the middle column with the response data
+                document.getElementById('middle-text-1').innerHTML = `<p>${data.static_message}</p>`;
+                document.getElementById('middle-scroll-text').innerHTML = `<p>${data.scrollable_message}</p>`;
+            } catch (error) {
+                console.error('Error fetching content:', error);
+            }
+        }
+
+        // Add event listeners to handle selection changes in the left and right column lists
+        document.querySelectorAll('#left-list li').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('#left-list li').forEach(li => li.classList.remove('selected'));
+                this.classList.add('selected');
+                updateMiddleContent(null, this.textContent);
+            });
+        });
+
+        document.querySelectorAll('#right-list li').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('#right-list li').forEach(li => li.classList.remove('selected'));
+                this.classList.add('selected');
+                updateMiddleContent(this.textContent, null);
+            });
+        });
+
+        function setupList(id) {
+            const listItems = document.querySelectorAll(`#${id} li`);
+            listItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    // Remove 'active' class from all items in the list
+                    listItems.forEach(li => li.classList.remove('active'));
+                    
+                    // Add 'active' class to the clicked item
+                    this.classList.add('active');
+                });
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Apply the function to both lists
+            setupList('left-list');
+            setupList('right-list');
+            setupList('aspect-list1');
+        });
+    </script>
 </body>
 </html>
