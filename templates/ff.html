@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Astrological Program</title>
+    <style>
+        /* Style for the scrollable box */
+        .scroll-box {
+            width: 200px;
+            height: 200px;
+            border: 1px solid black;
+            overflow-y: scroll;
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Astrological Program</h1>
+    
+    <!-- Scrollable box for datetimes -->
+    <div class="scroll-box">
+        <ul>
+            {% for dt in datetimes %}
+                <li>{{ dt }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
