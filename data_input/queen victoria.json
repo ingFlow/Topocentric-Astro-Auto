@@ -1,0 +1,24 @@
+{
+    "dt_radix_start": "1819-05-24T20:00:00",
+    "dt_radix_end": "1819-05-24T20:00:00",
+    "dt_actual_dob": "1819-05-24T04:02:04",
+    "geopos": [
+        51.5,
+        -0.1833333,
+        8.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1861-12-23T12:00:00",
+            "event_type": "DEATH_HUSBAND"
+        },
+        {
+            "datetime": "1887-05-22T12:00:00",
+            "event_type": "BLANK"
+        },
+        {
+            "datetime": "1901-01-22T12:00:00",
+            "event_type": "DEATH"
+        }
+    ]
+}
