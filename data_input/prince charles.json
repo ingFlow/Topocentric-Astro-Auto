@@ -1,0 +1,32 @@
+{
+    "dt_radix_start": "1948-11-13T20:00:00",
+    "dt_radix_end": "1948-11-14T20:00:00",
+    "dt_actual_dob": "1948-11-14T21:13:47",
+    "geopos": [
+        51.5,
+        -0.133333,
+        6.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1962-02-11T12:00:00",
+            "event_type": "HOSPITALIZATION_ILLNESS"
+        },
+        {
+            "datetime": "1964-03-10T12:00:00",
+            "event_type": "BIRTH_BROTHER"
+        },
+        {
+            "datetime": "1976-07-23T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE"
+        },
+        {
+            "datetime": "1953-06-02T12:00:00",
+            "event_type": "SUCCESS"
+        },
+        {
+            "datetime": "1981-07-29T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE"
+        }
+    ]
+}

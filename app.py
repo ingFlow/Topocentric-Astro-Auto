@@ -24,16 +24,18 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    dt_actual_dob, _, _, geopos, list_of_events = main_converge.get_json_birth_data("data_input/jacquiline onassis.json")
+    dt_actual_dob, _, _, geopos, list_of_events = main_converge.get_json_birth_data("data_input/queen victoria.json")
     global geo_positions
     geo_positions = geopos
     
     list_dt_events = [t[0].isoformat() for t in list_of_events]
     list_type_events = [pd_automate.EventType.get_name(t[1]) for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
-    str_date = dt_actual_dob.strftime('%d %B %Y')
+    #CHANGE HERE FOR LEFT COL TIMES
+    list_times = [dt_actual_dob]
+    '''str_date = dt_actual_dob.strftime('%d %B %Y')
     list_times = aspects_implementation.process_csv('9_14_ver1_sorted_planet_data.csv',str_date,100,-4)
-
+    '''
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}" for dt, ty, i in zip(list_dt_events, list_type_events, list_event_index)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items)

@@ -1,0 +1,40 @@
+{
+    "dt_radix_start": "1932-02-26T20:00:00",
+    "dt_radix_end": "1932-02-27T20:00:00",
+    "dt_actual_dob": "1929-02-27T01:54:24",
+    "geopos": [
+        51.571507,
+        -0.179128,
+        42.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1958-03-23T12:00:00",
+            "event_type": "DEATH_HUSBAND"
+        },
+        {
+            "datetime": "1957-08-06T12:00:00",
+            "event_type": "BIRTH_DAUGHTER"
+        },
+        {
+            "datetime": "1961-04-17T12:00:00",
+            "event_type": "SUCCESS"
+        },
+        {
+            "datetime": "1982-11-07T12:00:00",
+            "event_type": "DIVORCE_SEPARATION"
+        },
+        {
+            "datetime": "2002-12-08T12:00:00",
+            "event_type": "SUCCESS"
+        },
+        {
+            "datetime": "1994-09-11T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND"
+        },
+        {
+            "datetime": "1968-07-21T12:00:00",
+            "event_type": "HOSPITALIZATION_ILLNESS"
+        }
+    ]
+}

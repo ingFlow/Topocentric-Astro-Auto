@@ -18,28 +18,29 @@ import json
     datetime(1974, 6, 13, 23, 3, 20),
     datetime(1974, 6, 13, 23, 46, 24)'''
 
-list_of_events = [
-    (datetime(1949, 8, 15, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
-    (datetime(1952, 1, 21, 12, 00, 00),pd.EventType.MARRIAGE_FOR_FEMALE),
-    (datetime(1953, 4, 18, 12, 00, 00),pd.EventType.MARRIAGE_FOR_FEMALE),
-    (datetime(1953, 6, 25, 12, 00, 00),pd.EventType.MARRIAGE_FOR_FEMALE),
-    (datetime(1953, 9, 12, 12, 00, 00),pd.EventType.MARRIAGE_FOR_FEMALE),
-    (datetime(1956, 8, 23, 12, 00, 00),pd.EventType.DEATH),
-    (datetime(1957, 8, 3, 12, 00, 00),pd.EventType.DEATH_FATHER_GRAND),
-    (datetime(1957, 11, 27, 12, 00, 00),pd.EventType.BIRTH_DAUGHTER),
-    (datetime(1958, 11, 4, 12, 00, 00),pd.EventType.SUCCESS),
-    (datetime(1960, 11, 25, 12, 00, 00),pd.EventType.BIRTH_SON),
-    (datetime(1963, 8, 7, 12, 00, 00),pd.EventType.BIRTH_SON),
-    (datetime(1963, 8, 9, 12, 00, 00),pd.EventType.DEATH_SON),
-    (datetime(1963, 11, 22, 12, 00, 00),pd.EventType.DEATH_HUSBAND),
-    (datetime(1964, 6, 15, 12, 00, 00),pd.EventType.TRAVEL_NEGATIVE),
-    (datetime(1957, 11, 15, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
-    (datetime(1968, 3, 15, 12, 00, 00),pd.EventType.TRAVEL_POSITIVE),
-    (datetime(1968, 6, 5, 12, 00, 00),pd.EventType.DEATH),
-    (datetime(1968, 10, 20, 12, 00, 00),pd.EventType.MARRIAGE_FOR_FEMALE),
-    (datetime(1975, 3, 15, 12, 00, 00),pd.EventType.DEATH_HUSBAND),
-    (datetime(1994, 5, 20, 12, 00, 00),pd.EventType.DEATH),
-  ]
+def convert_birth_data_json(file_to_write_str):
+    dt_radix_start = datetime(1819, 5, 24, 20, 00, 00)
+    dt_radix_end = datetime(1819, 5, 24, 20, 00, 00)
+    dt_actual_dob = datetime(1819, 5, 24, 4, 2, 4)
+    geopos = [51.5, -0.1833333, 8.0]
+    list_of_events = [
+        (datetime(1861, 12, 23, 12, 00, 00),pd.EventType.DEATH_HUSBAND),
+        (datetime(1887, 5, 22, 12, 00, 00),pd.EventType.BLANK),
+        (datetime(1901, 1, 22, 12, 00, 00),pd.EventType.DEATH)
+    ]
+    
+    data = {
+        "dt_radix_start": dt_radix_start.isoformat(),
+        "dt_radix_end": dt_radix_end.isoformat(),
+        "dt_actual_dob": dt_actual_dob.isoformat(),
+        "geopos": geopos,
+        "list_of_events": [
+            {"datetime": event[0].isoformat(), "event_type": pd.EventType.get_name(event[1])} for event in list_of_events
+        ]
+    }
+
+    with open(f"{file_to_write_str}.json", "w") as outfile:
+        json.dump(data, outfile, indent=4)
 
 def get_json_birth_data(filename):   
   with open(filename, 'r') as f:
@@ -55,14 +56,11 @@ def get_json_birth_data(filename):
   ]
   return real_dob, dt_radix_start, dt_radix_end, geopos, list_of_events
 
-def main(): 
-  _, dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data('data_input/jacquiline onassis.json')
-  '''(aspects_analysis.TechniqueType.SECONDARY_DIRECT, "_secondaries"),
-      (aspects_analysis.TechniqueType.PSSR, "_pssr"),
-      (aspects_analysis.TechniqueType.TRANSIT, "_transit"),'''
+def pd_rect_grid_score_create(filename_birth_data, str_output_prefix, time_increment_seconds: int): 
+  _, dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(filename_birth_data)
+  
   level_aspects = pd.AspectType.ANGLE_HOUSE_ANY_PLANET
-  time_increment = 8
-  str_date = "9_11_ver2_"
+  str_date = str_output_prefix
   techniques = [
       (asp.TechniqueType.PRIMARY_DIRECT, "_primaries")
   ]
@@ -70,13 +68,13 @@ def main():
   for technique, suffix in techniques:
       filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
       asp.generate_grid_angular_aspects(
-          filename, dt_radix_start, dt_radix_end, time_increment, list_of_events, geopos, level_aspects, technique
+          filename, dt_radix_start, dt_radix_end, time_increment_seconds, list_of_events, geopos, level_aspects, technique
       )
       asp.count_aspect_groups_txt(filename)
       asp.resetvars()  
 
 def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data_str, count_times_to_process, i_timezone):
-    dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
+    _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
    
     file_path = csv_filename
     date_str = dt_radix_end.strftime('%d %B %Y')
@@ -105,4 +103,6 @@ def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data
         asp.count_aspect_groups_txt(filename, flag_pssr_count_moon)
         asp.resetvars()  
 
+#pd_rect_grid_score_create('data_input/jacquiline onassis.json','9_11_ver2_',8)
 #other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
+#convert_birth_data_json('data_input/queen victoria')

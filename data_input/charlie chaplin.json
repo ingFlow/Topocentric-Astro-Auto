@@ -1,11 +1,28 @@
 {
-    "dt_radix_start": "1889-04-16T19:40:40",
-    "dt_radix_end": "1889-04-16T19:40:44",
-    "geopos": [51.48333, 0.001, 306],
+    "dt_radix_start": "1889-04-15T20:00:00",
+    "dt_radix_end": "1889-04-16T20:00:00",
+    "dt_actual_dob": "1889-04-16T19:40:40",
+    "geopos": [
+        51.516666,
+        -0.1,
+        306.0
+    ],
     "list_of_events": [
-      {
-        "datetime": "1901-05-09T12:00:00", "event_type": "DEATH_FATHER_GRAND"
-      }
+        {
+            "datetime": "1919-07-10T12:00:00",
+            "event_type": "DEATH_SON"
+        },
+        {
+            "datetime": "1928-08-28T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND"
+        },
+        {
+            "datetime": "1901-05-09T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND"
+        },
+        {
+            "datetime": "1962-07-08T12:00:00",
+            "event_type": "BIRTH_SON"
+        }
     ]
-  }
-  
+}

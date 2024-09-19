@@ -45,6 +45,7 @@ class EventType:
     GAMBLING_LOSS = 37
     GAMBLING_GAIN = 38
     ARMY_PROMOTION = 39
+    BLANK = 40
 
     @classmethod
     def get_name(cls, value):
