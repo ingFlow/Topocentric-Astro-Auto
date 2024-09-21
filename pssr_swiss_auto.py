@@ -87,7 +87,7 @@ def pssr_for_date_event_norad(jd_radix, jd_event, geopos):
     for house_no in range(0,len(houses[0])):
         rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
 
-    str_aspects_rad_dir, str_aspects_rad_conv = calc_pssr_for_date(julian.from_jd(jd_radix),julian.from_jd(jd_event),rad)
+    str_aspects_rad_dir, str_aspects_rad_conv = calc_pssr_for_date(julian.from_jd(jd_radix),julian.from_jd(jd_event),rad_planets)
 
     return str_aspects_rad_dir, str_aspects_rad_conv
 

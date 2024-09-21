@@ -19,14 +19,14 @@ import json
     datetime(1974, 6, 13, 23, 46, 24)'''
 
 def convert_birth_data_json(file_to_write_str):
-    dt_radix_start = datetime(1819, 5, 24, 20, 00, 00)
-    dt_radix_end = datetime(1819, 5, 24, 20, 00, 00)
-    dt_actual_dob = datetime(1819, 5, 24, 4, 2, 4)
-    geopos = [51.5, -0.1833333, 8.0]
+    dt_radix_start = datetime(1926, 4, 21, 20, 00, 00)
+    dt_radix_end = datetime(1926, 4, 21, 20, 00, 00)
+    dt_actual_dob = datetime(1926, 4, 21, 1, 12, 50)
+    geopos = [51.526667, -0.008527778, 15.0]
     list_of_events = [
-        (datetime(1861, 12, 23, 12, 00, 00),pd.EventType.DEATH_HUSBAND),
-        (datetime(1887, 5, 22, 12, 00, 00),pd.EventType.BLANK),
-        (datetime(1901, 1, 22, 12, 00, 00),pd.EventType.DEATH)
+        (datetime(1930, 8, 21, 12, 00, 00),pd.EventType.BIRTH_SISTER),
+        (datetime(1948, 11, 14, 12, 00, 00),pd.EventType.BIRTH_SON),
+        (datetime(1950, 8, 15, 12, 00, 00),pd.EventType.DEATH_DAUGHTER)
     ]
     
     data = {
@@ -105,4 +105,4 @@ def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data
 
 #pd_rect_grid_score_create('data_input/jacquiline onassis.json','9_11_ver2_',8)
 #other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
-#convert_birth_data_json('data_input/queen victoria')
+convert_birth_data_json('data_input/queen elizabeth')

@@ -1,0 +1,24 @@
+{
+    "dt_radix_start": "1926-04-21T20:00:00",
+    "dt_radix_end": "1926-04-21T20:00:00",
+    "dt_actual_dob": "1926-04-21T01:12:50",
+    "geopos": [
+        51.526667,
+        -0.008527778,
+        15.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1930-08-21T12:00:00",
+            "event_type": "BIRTH_SISTER"
+        },
+        {
+            "datetime": "1948-11-14T12:00:00",
+            "event_type": "BIRTH_SON"
+        },
+        {
+            "datetime": "1950-08-15T12:00:00",
+            "event_type": "DEATH_DAUGHTER"
+        }
+    ]
+}

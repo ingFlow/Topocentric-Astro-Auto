@@ -610,7 +610,6 @@ def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], ra
     geo_latitude = geo_positions[0]
     geo_longitude = geo_positions[1]
 
-    swe.set_ephe_path('ephe')
     dir_houses, conv_houses = calc_directed_pd_houses(JD_RADIX,jd_event, geo_latitude, rad_houses_info)
     rad_houses = rad_houses_info[0]
     
