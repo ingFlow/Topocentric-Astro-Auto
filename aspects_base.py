@@ -86,7 +86,8 @@ def calculate_POF(sun, moon, ac):
     return ac + moon - sun
 
 def calculate_aspect(first_degrees, second_degrees, orb, flag_major):
-    """Determine the aspect between two planetary positions."""
+    """Determine the aspect between two planetary positions.
+    returns tuple with aspect_name, orb"""
     difference = abs(first_degrees - second_degrees) % 360
     if flag_major:
         aspects = MAJOR_ASPECTS

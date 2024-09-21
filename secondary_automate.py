@@ -3,7 +3,7 @@ import math
 import aspects_base as aspects
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
-    
+        
 def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
     jd_diff = abs(jd_radix-jd_event)
     days_diff = jd_diff / 365.2422
