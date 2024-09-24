@@ -128,6 +128,37 @@ def calc_planets_near_angles(list_planets, orb):
                 planets_near_angle.append(str)
     return planets_near_angle
 
+def get_str_only_aspects_from_data(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarType, orb):
+    all_charts = calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype, orb)
+    aspects_only_list = get_str_only_aspects_from_array(all_charts)
+    return aspects_only_list
+
+def get_str_only_aspects_from_array(all_charts):
+    aspects_only_list = ""
+    for key, aspects in all_charts:
+        processed_aspects = ""
+        for aspect in aspects:
+            # Split by \n and remove empty lines
+            split_aspects = [a.strip() for a in aspect.split('\n') if a.strip()]
+            try:
+                for s in split_aspects:
+                    processed_aspects = processed_aspects + s +'\n'
+            except:
+                processed_aspects += split_aspects
+        
+        if processed_aspects:  # Add only if there's content
+            aspects_only_list = aspects_only_list + processed_aspects + "\n" 
+    aspects_only_list = aspects_only_list.replace('\n\n', '\n')
+    return aspects_only_list
+
+def calc_all_lunars_for_date(dt_radix, dt_event, geopos, geopos_natal, orb):
+    list1 = calc_lunar_for_date(dt_radix,dt_event,geopos,geopos_natal,LunarType.LUNAR,orb)
+    list2 = calc_lunar_for_date(dt_radix,dt_event,geopos,geopos_natal,LunarType.KINETIC,orb)
+    list3 = calc_lunar_for_date(dt_radix,dt_event,geopos,geopos_natal,LunarType.AS_LUNAR,orb)
+    list = [*list1, *list2, *list3]
+
+    return list
+
 def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarType, orb):
     """returns list of (name_cyclic, [list_planets_near_angles])
     list_planets_near_angles format is (planet, aspect, orb)"""
@@ -148,6 +179,8 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     if abs(jd_return_direct - jd_event) > 14:
         point_long_dir = swe.degnorm(point_long_dir + 180)
         jd_demi_return_direct = swe.mooncross_ut(point_long_dir, jd_return_direct)
+        if ltype == LunarType.KINETIC:
+            jd_demi_return_direct = None
     else:
         jd_demi_return_direct = None
     
@@ -162,6 +195,8 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
         point_long_conv = swe.degnorm(point_long_conv + 180)
         jd_search_date = julian.to_jd(julian.from_jd(jd_return_converse) - timedelta(days=16))
         jd_demi_return_conv = swe.mooncross_ut(point_long_conv, jd_search_date)
+        if ltype == LunarType.KINETIC:
+            jd_demi_return_conv = None
     else:
         jd_demi_return_conv = None
 
@@ -179,15 +214,15 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     main_direct_planets = calc_planets_near_angles(main_direct_positions,orb)
     main_conv_planets = calc_planets_near_angles(main_conv_positions,orb)
 
-    print(f"mainD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[3][1])}")
-    print(f"mainC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[3][1])}")
+    #print(f"mainD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[3][1])}")
+    #print(f"mainC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[3][1])}")
 
     all_charts.append((f"{str_label}",main_direct_planets))
     if jd_demi_return_direct:
         demi_direct_positions = calc_planets_ac_mc(jd_demi_return_direct, geopos)
         demi_direct_planets = calc_planets_near_angles(demi_direct_positions,orb)
         all_charts.append((f"D{str_label}",demi_direct_planets))    
-        print(f"demiD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[3][1])}")
+        #print(f"demiD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[3][1])}")
 
 
     all_charts.append((f"{str_label}C",main_conv_planets))
@@ -195,14 +230,43 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
         demi_conv_positions = calc_planets_ac_mc(jd_demi_return_conv, geopos)
         demi_conv_planets = calc_planets_near_angles(demi_conv_positions,orb)
         all_charts.append((f"D{str_label}C",demi_conv_planets))    
-        print(f"demiC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[3][1])}")
+        #print(f"demiC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[3][1])}")
 
 
     dtj = julian.from_jd(jd_demi_return_direct) if jd_demi_return_direct else 'none'
     dtjj = julian.from_jd(jd_demi_return_conv) if jd_demi_return_conv else 'none'
     
-    print(f"mainD {julian.from_jd(jd_return_direct)}\nmainC {julian.from_jd(jd_return_converse)} \ndemiD {dtj} \ndemiC {dtjj}")
+    #print(f"mainD {julian.from_jd(jd_return_direct)}\nmainC {julian.from_jd(jd_return_converse)} \ndemiD {dtj} \ndemiC {dtjj}")
     return all_charts
+
+def count_mal_ben_all_lunars(dt_radix, dt_event, geopos, geopos_natal, orb):
+    """return tuple (mal count, ben count)"""
+    all_aspects_lunar = get_str_only_aspects_from_data(dt_radix,dt_event,geopos,geopos_natal,LunarType.LUNAR,orb)
+    all_aspects_kinetic = get_str_only_aspects_from_data(dt_radix,dt_event,geopos,geopos_natal,LunarType.KINETIC,orb)
+    all_aspects_as_lunar = get_str_only_aspects_from_data(dt_radix,dt_event,geopos,geopos_natal,LunarType.AS_LUNAR,orb)
+
+    all_aspects = all_aspects_lunar + all_aspects_kinetic + all_aspects_as_lunar
+    planet_counts = count_each_planet_lunars(all_aspects)
+    malefic_count = planet_counts[PLANETS.index('Saturn')] + planet_counts[PLANETS.index('Neptune')] + planet_counts[PLANETS.index('Mars')] + planet_counts[PLANETS.index('Pluto')]
+    benefic_count = planet_counts[PLANETS.index('Venus')] + planet_counts[PLANETS.index('Jupiter')] + planet_counts[PLANETS.index('Sun')] + planet_counts[PLANETS.index('Moon')]
+    
+    return malefic_count, benefic_count
+
+def count_each_planet_lunars(all_aspects_str):
+    split_aspects_str = all_aspects_str.split('\n')
+    planet_counts = [0,0,0,0,0,0,0,0,0,0,0]
+    for i in range(0,11):
+        planet = PLANETS[i]
+        for aspect in split_aspects_str:
+            if planet in aspect:
+                planet_counts[i] =  planet_counts[i] + 1
+    return planet_counts    
+
+def get_str_counts(counts):
+    return_str = ""
+    for i in range(0,11):
+        return_str += f"{PLANETS[i]}: {counts[i]},  "
+    return return_str
 
 swe.set_ephe_path('/usr/share/swisseph/ephe')
 '''dt_radix = datetime(1926,4,21,1,12,50)
@@ -217,10 +281,14 @@ geopos = [38.9, -77.0333333, 15.0]
 geopos_natal = [42.25, -71.0833, 10.0]
 
 ltype = LunarType.KINETIC
-orb = 3
-all_charts = calc_lunar_for_date(dt_radix,dt_event,geopos, geopos_natal,ltype,orb)
+orb = 9
+'''all_charts = calc_all_lunars_for_date(dt_radix,dt_event,geopos, geopos_natal,orb)
+all_charts = get_str_only_aspects_from_array(all_charts)
 print(all_charts)
-
+counts = count_each_planet_lunars(all_charts)
+print(get_str_counts(counts))
+'''
+#print(count_mal_ben_all_lunars(dt_radix,dt_event,geopos,geopos_natal,orb))
 '''GETTING MOON AC MC FOR 2 DATES 
 jd1 = julian.to_jd(datetime(1948,11,3,15,3,00))
 xx, _ = swe.calc_ut(jd1, swe.MOON)
