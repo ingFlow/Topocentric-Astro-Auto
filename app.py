@@ -8,7 +8,7 @@ import julian
 import aspects_implementation
 from datetime import datetime
 import swisseph as swe
-import pytz
+import lunar_auto
 
 class aTechniqueType:
     PRIMARY_DIRECT = 0  #diff oorder of technique type specific to index.html
@@ -19,6 +19,7 @@ class aTechniqueType:
     ALL = 5
 
 geo_positions = []
+lunar_orb = 9
 
 app = Flask(__name__)
 
@@ -83,7 +84,13 @@ def update_content():
             str_all_directed_aspects = ''
             for p in rad_planets_houses_labelled:
                 str_all_directed_aspects+= f"{p}\n"
-
+        elif technique == aTechniqueType.LUNAR:
+            all_charts = lunar_auto.calc_all_lunars_for_date(julian.from_jd(jd_radix),dt_event,geo_positions,geo_positions,lunar_orb)
+            str_all_directed_aspects = lunar_auto.get_str_only_aspects_from_array(all_charts)
+            counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
+            str_counts = lunar_auto.get_str_counts(counts)
+            mal_count, ben_count = lunar_auto.count_mal_ben_all_lunars(julian.from_jd(jd_radix),dt_event,geo_positions,geo_positions,lunar_orb)
+            static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
         list_all_asp = str_all_directed_aspects.split('\n')
 
         if flag_show_accepted:
@@ -93,7 +100,7 @@ def update_content():
         list_all_asp = list(filter(lambda s: s.strip(), list_all_asp))
         html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in list_all_asp) + "</ul>"
 
-        static_message = f" Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_positions[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_positions[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
+        static_message = static_message + f" Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_positions[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_positions[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
     except:
         static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"

@@ -7,12 +7,14 @@ import secondary_automate
 import pssr_swiss_auto as pssr_auto
 import transit_swiss_auto as transit_auto
 import pandas as pd
+import lunar_auto as lunar
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
     SECONDARY_DIRECT = 1
     PSSR = 2
     TRANSIT = 3
+    LUNAR = 4
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 grid_aspects =[]
@@ -77,7 +79,6 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
             str_rad_dir_aspects, str_rad_conv_aspects = transit_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         
-        
         if date_technique == TechniqueType.PRIMARY_DIRECT:
             count, str_acceptable_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
         else:
@@ -95,6 +96,9 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     global grid_aspects
     grid_aspects.append(temp_list_event)    
     return
+
+def count_ben_mal_planets_lunar(jd_radix):
+    ca = lunar.get
 
 def count_aspect_groups_txt(filename, flag_count_pssr_moon):
     results = []
