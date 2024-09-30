@@ -1,7 +1,5 @@
 {
-    "name": "My Python Codespace",
-    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12.1",
-    "customizations": {
+   "customizations": {
         "vscode": {
             "extensions": [
                 "ms-python.python",
