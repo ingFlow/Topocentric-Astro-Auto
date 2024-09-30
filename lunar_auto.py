@@ -19,6 +19,46 @@ def calc_bija_days(secondary_days_dec):
     bija_days = bija_seconds / 86400
     return bija_days
 
+def calc_kinetic_demi_dir_conv(jd_radix, jd_event):
+    jd_diff = abs(jd_radix - jd_event)
+    days_diff = jd_diff / 365.2422
+    jd_prog_prelim = jd_radix + days_diff
+    xx, _ = swe.calc_ut(jd_prog_prelim, swe.MOON)
+    prog_moon_prelim = swe.degnorm(xx[0] + 180)
+    jd_search_date = julian.to_jd(julian.from_jd(jd_event) - timedelta(days=30))
+    jd_return_direct = swe.mooncross_ut(prog_moon_prelim, jd_search_date)
+    jd_return_after_first_direct = swe.mooncross_ut(prog_moon_prelim, jd_search_date)
+    #rare case where it reaches degree literally that day or something
+    if jd_return_after_first_direct <= jd_event:
+        jd_return_direct = jd_return_after_first_direct
+    jd_return_direct = int(jd_return_direct) #make it midday of whatever jd
+    
+    sidt_radix = swe.sidtime(int(jd_radix))
+    sidt_event = swe.sidtime(jd_return_direct)
+    st_diff = (sidt_event - sidt_radix)/24
+    days_years_diff = julian.from_jd(jd_event).year - julian.from_jd(jd_radix).year
+    days_years_diff += st_diff
+
+    bija_days = calc_bija_days(days_diff)
+    days_years_diff -= bija_days
+
+    rad_aya = swe.get_ayanamsa_ut(jd_radix)
+    event_aya = swe.get_ayanamsa_ut(jd_event)
+    precession = abs(rad_aya - event_aya)
+    jd_conv_event = jd_radix - (abs(jd_radix-jd_event))
+    event_aya = swe.get_ayanamsa_ut(jd_conv_event)
+    conv_precession = abs(rad_aya - event_aya)
+
+    jd_prog = jd_radix + days_years_diff
+    xx, _ = swe.calc_ut(jd_prog, swe.MOON)
+    prog_moon_long = swe.degnorm(xx[0]+180) + precession
+
+    jd_reg = jd_radix - days_years_diff
+    xx, _ = swe.calc_ut(jd_reg, swe.MOON)
+    reg_moon_long = swe.degnorm(xx[0]+180) - conv_precession
+
+    return prog_moon_long, reg_moon_long
+
 def calc_kinetic_dir_conv(jd_radix, jd_event, precession, conv_precession):
     jd_diff = abs(jd_radix - jd_event)
     days_diff = jd_diff / 365.2422
@@ -52,7 +92,7 @@ def calc_kinetic_dir_conv(jd_radix, jd_event, precession, conv_precession):
 
     return prog_moon_long, reg_moon_long
 
-def get_point_long_dir_conv(ltype: LunarType, jd_radix, jd_event, geopos, geopos_natal):
+def get_point_long_dir_conv(ltype: LunarType, jd_radix, jd_event, geopos_natal):
     jd_conv_event = jd_radix - (abs(jd_radix-jd_event))
     xx, _ = swe.calc_ut(jd_radix, swe.MOON)
     moon_long = xx[0]    
@@ -166,7 +206,7 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     jd_event = julian.to_jd(dt_event)
     
     #lunar computation
-    point_long_dir, point_long_conv = get_point_long_dir_conv(ltype,jd_radix,jd_event,geopos, geopos_natal)
+    point_long_dir, point_long_conv = get_point_long_dir_conv(ltype,jd_radix,jd_event, geopos_natal)
     jd_search_date = julian.to_jd(dt_event - timedelta(days=30))
     
     jd_return_direct = swe.mooncross_ut(point_long_dir, jd_search_date)
@@ -178,9 +218,11 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     #DEMI
     if abs(jd_return_direct - jd_event) > 14:
         point_long_dir = swe.degnorm(point_long_dir + 180)
-        jd_demi_return_direct = swe.mooncross_ut(point_long_dir, jd_return_direct)
+        point_long_dir,_ = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         if ltype == LunarType.KINETIC:
             jd_demi_return_direct = None
+        jd_demi_return_direct = swe.mooncross_ut(point_long_dir, jd_return_direct)
+        
     else:
         jd_demi_return_direct = None
     
@@ -193,10 +235,11 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     #DEMI
     if abs(jd_return_converse - jd_conv_event_exact) > 14:
         point_long_conv = swe.degnorm(point_long_conv + 180)
-        jd_search_date = julian.to_jd(julian.from_jd(jd_return_converse) - timedelta(days=16))
-        jd_demi_return_conv = swe.mooncross_ut(point_long_conv, jd_search_date)
+        _, point_long_conv = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         if ltype == LunarType.KINETIC:
             jd_demi_return_conv = None
+        jd_search_date = julian.to_jd(julian.from_jd(jd_return_converse) - timedelta(days=16))
+        jd_demi_return_conv = swe.mooncross_ut(point_long_conv, jd_search_date)
     else:
         jd_demi_return_conv = None
 
@@ -214,15 +257,15 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     main_direct_planets = calc_planets_near_angles(main_direct_positions,orb)
     main_conv_planets = calc_planets_near_angles(main_conv_positions,orb)
 
-    #print(f"mainD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[3][1])}")
-    #print(f"mainC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[3][1])}")
+    print(f"mainD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_direct_positions[3][1])}")
+    print(f"mainC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(main_conv_positions[3][1])}")
 
     all_charts.append((f"{str_label}",main_direct_planets))
     if jd_demi_return_direct:
         demi_direct_positions = calc_planets_ac_mc(jd_demi_return_direct, geopos)
         demi_direct_planets = calc_planets_near_angles(demi_direct_positions,orb)
         all_charts.append((f"D{str_label}",demi_direct_planets))    
-        #print(f"demiD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[3][1])}")
+        print(f"demiD-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_direct_positions[3][1])}")
 
 
     all_charts.append((f"{str_label}C",main_conv_planets))
@@ -230,13 +273,13 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
         demi_conv_positions = calc_planets_ac_mc(jd_demi_return_conv, geopos)
         demi_conv_planets = calc_planets_near_angles(demi_conv_positions,orb)
         all_charts.append((f"D{str_label}C",demi_conv_planets))    
-        #print(f"demiC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[3][1])}")
+        print(f"demiC-ac {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[0][1])}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[1][1])}  moon {ps.convert_full_dec_degrees_to_zod_min_sec(demi_conv_positions[3][1])}")
 
 
     dtj = julian.from_jd(jd_demi_return_direct) if jd_demi_return_direct else 'none'
     dtjj = julian.from_jd(jd_demi_return_conv) if jd_demi_return_conv else 'none'
     
-    #print(f"mainD {julian.from_jd(jd_return_direct)}\nmainC {julian.from_jd(jd_return_converse)} \ndemiD {dtj} \ndemiC {dtjj}")
+    print(f"mainD {julian.from_jd(jd_return_direct)}\nmainC {julian.from_jd(jd_return_converse)} \ndemiD {dtj} \ndemiC {dtjj}")
     return all_charts
 
 def count_mal_ben_all_lunars(dt_radix, dt_event, geopos, geopos_natal, orb):
@@ -269,7 +312,7 @@ def get_str_counts(counts):
     return return_str
 
 swe.set_ephe_path('/usr/share/swisseph/ephe')
-'''dt_radix = datetime(1926,4,21,1,12,50)
+dt_radix = datetime(1926,4,21,1,12,50)
 dt_event = datetime(1948,11,14,12,00,00)
 geopos = [51.5266667, -0.00852778, 15.0]
 geopos_natal = [51.5266667, -0.00852778, 15.0]
@@ -279,17 +322,17 @@ dt_radix = datetime(1924,6,12,15,31,15)
 dt_event = datetime(1992,11,4,12,00,00)
 geopos = [38.9, -77.0333333, 15.0]
 geopos_natal = [42.25, -71.0833, 10.0]
-
+'''
 ltype = LunarType.KINETIC
 orb = 9
-'''all_charts = calc_all_lunars_for_date(dt_radix,dt_event,geopos, geopos_natal,orb)
+all_charts = calc_all_lunars_for_date(dt_radix,dt_event,geopos, geopos_natal,orb)
 all_charts = get_str_only_aspects_from_array(all_charts)
-print(all_charts)
+#print(all_charts)
 counts = count_each_planet_lunars(all_charts)
-print(get_str_counts(counts))
-'''
+#print(get_str_counts(counts))
+
 #print(count_mal_ben_all_lunars(dt_radix,dt_event,geopos,geopos_natal,orb))
-'''GETTING MOON AC MC FOR 2 DATES 
+'''#GETTING MOON AC MC FOR 2 DATES 
 jd1 = julian.to_jd(datetime(1948,11,3,15,3,00))
 xx, _ = swe.calc_ut(jd1, swe.MOON)
 houses = swe.houses(jd1, geopos[0], geopos[1], b'T')
@@ -301,5 +344,4 @@ xx, _ = swe.calc_ut(jd2, swe.MOON)
 houses = swe.houses(jd2, geopos[0], geopos[1], b'T')
 ac = houses[0][0]
 mc = houses[1][1]
-print(f"moon convNQL {ps.convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {ps.convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(mc)}")
-'''
+print(f"moon convNQL {ps.convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {ps.convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(mc)}")'''

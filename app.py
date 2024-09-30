@@ -48,7 +48,8 @@ def update_content():
     technique = int(request.args.get('right_radio', ''))
     radix_date = request.args.get('left_item', '')
     dt_event = request.args.get('right_item', '')
-    try:
+#    try:
+    if True:
         radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
         jd_radix = julian.to_jd(radix_date)
     
@@ -91,6 +92,7 @@ def update_content():
             str_counts = lunar_auto.get_str_counts(counts)
             mal_count, ben_count = lunar_auto.count_mal_ben_all_lunars(julian.from_jd(jd_radix),dt_event,geo_positions,geo_positions,lunar_orb)
             static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
+        
         list_all_asp = str_all_directed_aspects.split('\n')
 
         if flag_show_accepted:
@@ -102,9 +104,9 @@ def update_content():
 
         static_message = static_message + f" Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_positions[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_positions[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
-    except:
-        static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
-        scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
+#    except:
+#        static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
+#        scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
 
     return jsonify({
         'static_message': static_message,
