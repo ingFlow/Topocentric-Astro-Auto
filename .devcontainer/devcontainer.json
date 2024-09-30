@@ -1,0 +1,19 @@
+{
+    "name": "My Python Codespace",
+    "image": "mcr.microsoft.com/vscode/devcontainers/python:3.12.1",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance"
+            ]
+        }
+    },
+    "postCreateCommand": [
+        "pip install julian pyswisseph flask",
+        "git clone --depth 1 https://github.com/aloistr/swisseph.git /tmp/swisseph",
+        "sudo mkdir -p /usr/share/swisseph/ephe",
+        "sudo cp -r /tmp/swisseph/ephe/* /usr/share/swisseph/ephe/"
+    ],
+    "remoteUser": "vscode"
+}
