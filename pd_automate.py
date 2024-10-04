@@ -124,7 +124,8 @@ primary_rules = {
     EventType.INTRIGUE:(('H10','H1','H12'),(Planet.NEP,Planet.MER)),
     EventType.GAMBLING_LOSS:(('H10','H1','H2','H5'),(Planet.NEP,Planet.SAT,Planet.URA,Planet.MAR)),
     EventType.GAMBLING_GAIN:(('H10','H1','H2','H5'),(Planet.JUP,Planet.VEN,Planet.URA)),
-    EventType.ARMY_PROMOTION:(('H10','H1','H3'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA))
+    EventType.ARMY_PROMOTION:(('H10','H1','H3'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA)),
+    EventType.BLANK:((''),())
 }
 
 secondary_rules = {
@@ -167,7 +168,9 @@ EventType.VIOLENCE:(('H12'), (Planet.MER)),
 EventType.INTRIGUE:((''), (Planet.PLU,Planet.MAR)),
 EventType.GAMBLING_LOSS:((''), (Planet.PLU,Planet.NNO)),
 EventType.GAMBLING_GAIN:((''), (Planet.PLU)),
-EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO))
+EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO)),
+EventType.BLANK:((''),())
+
 }
 
 grid_acceptable_aspects = []
@@ -335,6 +338,9 @@ def count_pd_score_acceptable_aspects(event_id, str_all_aspects, score):
 def is_acceptable_pd_aspect(event_id, str_aspect):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
     (Uranus,55.5 52,(r)) (H1,325.600,(d)) (square,3')"""
+    
+    if event_id == EventType.BLANK:
+        return 0
     
     prim_rules = primary_rules[event_id]
     second_rules = secondary_rules[event_id]

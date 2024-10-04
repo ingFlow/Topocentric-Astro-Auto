@@ -1,0 +1,15 @@
+charlie chaplin 8Jul1962
+converse date   26 Jan 1816 03:21:19
+
+lunar           14 Jun 1962 12:36:24    10sco13
+converse lunar  18 Feb 1816 12:30:50  8sco10
+demi lunar 27 Jun 1962  15:01:35      10tau13
+converse demi lunar 05 Feb 1816 21:10:25  8tau10
+
+kinetic lunar       2 Jul 1962 06:26:39 13can12
+converse kinetic    1 Feb 1816 09:41:21 14pis32
+
+asc lunar           14 Jun 1962 04:56:20    6sco15
+converse as-lun   18 Feb 1816 05:43:11    4sco12
+demi asc          27 Jun 1962 08:14:30    6tau15
+convrse demi asc  5 Feb 1816 13:25:01     4tau12

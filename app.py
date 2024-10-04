@@ -25,7 +25,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def home():
-    dt_actual_dob, _, _, geopos, list_of_events = main_converge.get_json_birth_data("data_input/queen victoria.json")
+    dt_actual_dob, _, _, geopos, list_of_events = main_converge.get_json_birth_data("data_input/charlie chaplin.json")
     global geo_positions
     geo_positions = geopos
     
@@ -48,11 +48,10 @@ def update_content():
     technique = int(request.args.get('right_radio', ''))
     radix_date = request.args.get('left_item', '')
     dt_event = request.args.get('right_item', '')
-#    try:
-    if True:
+    try:
         radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
         jd_radix = julian.to_jd(radix_date)
-    
+        static_message = ''
         event_info = request.args.get('right_item', '').split(', ')
         dt_event = datetime.fromisoformat(event_info[0])
         event_id = int(event_info[2])
@@ -87,26 +86,30 @@ def update_content():
                 str_all_directed_aspects+= f"{p}\n"
         elif technique == aTechniqueType.LUNAR:
             all_charts = lunar_auto.calc_all_lunars_for_date(julian.from_jd(jd_radix),dt_event,geo_positions,geo_positions,lunar_orb)
-            str_all_directed_aspects = lunar_auto.get_str_only_aspects_from_array(all_charts)
+            str_all_directed_aspects = lunar_auto.get_str_labelled_aspects_from_array(all_charts)
             counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
-            str_counts = lunar_auto.get_str_counts(counts)
+            str_counts = lunar_auto.get_str_planet_counts(counts)
             mal_count, ben_count = lunar_auto.count_mal_ben_all_lunars(julian.from_jd(jd_radix),dt_event,geo_positions,geo_positions,lunar_orb)
             static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
         
         list_all_asp = str_all_directed_aspects.split('\n')
 
         if flag_show_accepted:
-            score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
-            list_all_asp = str_accepted_aspects.split('\n')
+            if technique != aTechniqueType.LUNAR:
+                score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
+                list_all_asp = str_accepted_aspects.split('\n')
         
         list_all_asp = list(filter(lambda s: s.strip(), list_all_asp))
         html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in list_all_asp) + "</ul>"
+        
+        if technique == aTechniqueType.LUNAR and flag_show_accepted:
+            html_list = str_counts.replace(",", "\n")
 
         static_message = static_message + f" Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_positions[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_positions[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
-#    except:
-#        static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
-#        scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
+    except:
+        static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
+        scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
 
     return jsonify({
         'static_message': static_message,
