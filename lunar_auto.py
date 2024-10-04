@@ -31,9 +31,9 @@ def calc_kinetic_demi_dir_conv(jd_radix, jd_event):
     #rare case where it reaches degree literally that day or something
     if jd_return_after_first_direct <= jd_event:
         jd_return_direct = jd_return_after_first_direct
-    jd_return_direct = int(jd_return_direct) #make it midday of whatever jd
+    jd_return_direct = int(jd_return_direct)+1 #make it midday of whatever jd
     
-    sidt_radix = swe.sidtime(int(jd_radix))
+    sidt_radix = swe.sidtime(int(jd_radix)+1)
     sidt_event = swe.sidtime(jd_return_direct)
     st_diff = (sidt_event - sidt_radix)/24
     days_years_diff = julian.from_jd(jd_event).year - julian.from_jd(jd_radix).year
@@ -71,9 +71,9 @@ def calc_kinetic_dir_conv(jd_radix, jd_event, precession, conv_precession):
     #rare case where it reaches degree literally that day or something
     if jd_return_after_first_direct <= jd_event:
         jd_return_direct = jd_return_after_first_direct
-    jd_return_direct = int(jd_return_direct) #make it midday of whatever jd
+    jd_return_direct = int(jd_return_direct)+1 #make it midday of whatever jd
     
-    sidt_radix = swe.sidtime(int(jd_radix))
+    sidt_radix = swe.sidtime(int(jd_radix)+1)
     sidt_event = swe.sidtime(jd_return_direct)
     st_diff = (sidt_event - sidt_radix)/24
     days_years_diff = julian.from_jd(jd_event).year - julian.from_jd(jd_radix).year
@@ -173,6 +173,25 @@ def get_str_only_aspects_from_data(dt_radix, dt_event, geopos, geopos_natal, lty
     aspects_only_list = get_str_only_aspects_from_array(all_charts)
     return aspects_only_list
 
+def get_str_labelled_aspects_from_array(all_charts):
+    '''gives the aspects keeping which chart it came from'''
+    aspects_only_list = ""
+    for key, aspects in all_charts:
+        processed_aspects = key + '\n'
+        for aspect in aspects:
+            # Split by \n and remove empty lines
+            split_aspects = [a.strip() for a in aspect.split('\n') if a.strip()]
+            try:
+                for s in split_aspects:
+                    processed_aspects = processed_aspects + s +'\n'
+            except:
+                processed_aspects += split_aspects
+        
+        if processed_aspects != key + '\n':  # Add only if there's content
+            aspects_only_list = aspects_only_list + processed_aspects + "\n" 
+    aspects_only_list = aspects_only_list.replace('\n\n', '\n')
+    return aspects_only_list
+
 def get_str_only_aspects_from_array(all_charts):
     aspects_only_list = ""
     for key, aspects in all_charts:
@@ -218,26 +237,28 @@ def calc_lunar_for_date(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarTy
     #DEMI
     if abs(jd_return_direct - jd_event) > 14:
         point_long_dir = swe.degnorm(point_long_dir + 180)
-        point_long_dir,_ = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         if ltype == LunarType.KINETIC:
-            jd_demi_return_direct = None
+            point_long_dir,_ = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         jd_demi_return_direct = swe.mooncross_ut(point_long_dir, jd_return_direct)
         
     else:
         jd_demi_return_direct = None
     
-    jd_conv_date = jd_radix - abs(jd_return_direct - jd_radix)
-    dt_conv_date = julian.from_jd(jd_conv_date)
-    jd_conv_date = julian.to_jd(datetime(dt_conv_date.year, dt_conv_date.month, dt_conv_date.day, 0, 0 ,0))
+    #kinetics handled different acc too marr/fagan method
+    if ltype == LunarType.KINETIC:
+        jd_conv_date = jd_radix - abs(jd_return_direct - jd_radix)
+    else:
+        jd_conv_date = jd_radix - abs(jd_event - jd_radix)
+
+    jd_conv_date = int(jd_conv_date) + 0.5
     jd_return_converse = swe.mooncross_ut(point_long_conv, jd_conv_date)
 
     jd_conv_event_exact = jd_radix - (abs(jd_radix - jd_event))
     #DEMI
     if abs(jd_return_converse - jd_conv_event_exact) > 14:
         point_long_conv = swe.degnorm(point_long_conv + 180)
-        _, point_long_conv = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         if ltype == LunarType.KINETIC:
-            jd_demi_return_conv = None
+            _, point_long_conv = calc_kinetic_demi_dir_conv(jd_radix, jd_event)
         jd_search_date = julian.to_jd(julian.from_jd(jd_return_converse) - timedelta(days=16))
         jd_demi_return_conv = swe.mooncross_ut(point_long_conv, jd_search_date)
     else:
@@ -305,10 +326,10 @@ def count_each_planet_lunars(all_aspects_str):
                 planet_counts[i] =  planet_counts[i] + 1
     return planet_counts    
 
-def get_str_counts(counts):
+def get_str_planet_counts(counts):
     return_str = ""
     for i in range(0,11):
-        return_str += f"{PLANETS[i]}: {counts[i]},  "
+        return_str += f"{PLANETS[i]}: {counts[i]}, "
     return return_str
 
 swe.set_ephe_path('/usr/share/swisseph/ephe')
@@ -323,13 +344,13 @@ dt_event = datetime(1992,11,4,12,00,00)
 geopos = [38.9, -77.0333333, 15.0]
 geopos_natal = [42.25, -71.0833, 10.0]
 '''
-ltype = LunarType.KINETIC
+'''ltype = LunarType.KINETIC
 orb = 9
 all_charts = calc_all_lunars_for_date(dt_radix,dt_event,geopos, geopos_natal,orb)
 all_charts = get_str_only_aspects_from_array(all_charts)
 #print(all_charts)
 counts = count_each_planet_lunars(all_charts)
-#print(get_str_counts(counts))
+#print(get_str_counts(counts))'''
 
 #print(count_mal_ben_all_lunars(dt_radix,dt_event,geopos,geopos_natal,orb))
 '''#GETTING MOON AC MC FOR 2 DATES 
