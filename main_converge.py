@@ -51,7 +51,7 @@ def get_json_birth_data(filename):
 
   geopos_natal = data['geopos_natal']
   list_of_events = [
-      (datetime.fromisoformat(event['datetime']), getattr(pd.EventType, event['event_type'], event['geopos']))
+      (datetime.fromisoformat(event['datetime']), getattr(pd.EventType, event['event_type']), event['geopos'])
       for event in data['list_of_events']
   ]
   return real_dob, dt_radix_start, dt_radix_end, geopos_natal, list_of_events
