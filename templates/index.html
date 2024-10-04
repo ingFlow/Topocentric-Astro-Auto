@@ -156,6 +156,34 @@
             border-radius: 5px;
         }
 
+        /* Orb Input Styling */
+        #orbInput {
+            width: 100px;
+            padding: 5px;
+            font-family: 'Yrsa', sans-serif;
+            font-size: 1em;
+            color: #1a1f36;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* File Selector Styling */
+        #fileSelector {
+            width: 100%;
+            padding: 10px;
+            font-family: 'Yrsa', sans-serif;
+            font-size: 1em;
+            color: #1a1f36;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            margin-top: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -182,15 +210,13 @@
             <div style="margin-bottom: 20px;"></div>
 
             <div class="radio-group" id="left-radio-group">
-                <label>Pick whether to show all/only accepted directions</label>
-                <label><input type="radio" name="left-radio" value="all_directions" onchange="updateMiddleContent()"> All</label>
+                <label><input type="radio" name="left-radio" value="all_directions" onchange="updateMiddleContent()"> Show All</label>
                 <label><input type="radio" name="left-radio" value="accepted" onchange="updateMiddleContent()"> Accepted</label>
             </div>
 
             <div style="margin-bottom: 20px;"></div>
 
             <div class="radio-group" id="right-radio-group">
-                <label>Techinique to display</label>
                 <label><input type="radio" name="right-radio" value=0 onchange="updateMiddleContent()"> PD</label>
                 <label><input type="radio" name="right-radio" value=1 onchange="updateMiddleContent()"> Secondary</label>
                 <label><input type="radio" name="right-radio" value=2 onchange="updateMiddleContent()"> PSSR</label>
@@ -198,6 +224,17 @@
                 <label><input type="radio" name="right-radio" value=4 onchange="updateMiddleContent()"> Lunar</label>
                 <label><input type="radio" name="right-radio" value=5 onchange="updateMiddleContent()"> Natal</label>
             </div>
+            <div>
+                <label for="orbInput">Orb:</label>
+                <input type="number" id="orbInput" name="orbInput" min="-1" value="-1" onchange="updateMiddleContent()">
+            </div>
+            <form id="fileSelectorForm" method="GET" action="/">
+                <select id="fileSelector" name="filename" onchange="this.form.submit()">
+                    {% for file in files %}
+                        <option value="{{ file }}" {% if file == current_file %} selected {% endif %}>{{ file }}</option>
+                    {% endfor %}
+                </select>
+            </form>
         </div>
 
         <!-- Middle Column -->
@@ -219,11 +256,9 @@
                         <li onclick="updateMiddleContent('{{ item }}', null)">{{ item }}</li>
                     {% endfor %}
                 </ul>
-            </div>
-            
-            
+            </div>          
         </div>
-    </div>
+    </div>    
 
     <!-- Footer -->
     <footer>
@@ -247,16 +282,17 @@
             // Get selected values from the radio groups
             const leftRadioValue = getSelectedRadioValue('left-radio');
             const rightRadioValue = getSelectedRadioValue('right-radio');
-            
+            //get inputted orb 
+            const orbInputValue = document.getElementById('orbInput').value;
             // Get the clicked item from column 1 or 3
             const leftItemText = leftItem || document.querySelector('#left-list .selected')?.textContent || '';
             const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
 
             try {
                 // Send the AJAX request to the Flask route
-                let response = await fetch(`/update_content?left_radio=${encodeURIComponent(leftRadioValue)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}`);
+                let response = await fetch(`/update_content?left_radio=${encodeURIComponent(leftRadioValue)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}&orb_input=${encodeURIComponent(orbInputValue)}`);
                 let data = await response.json();
-                
+
                 // Update the static and scrollable sections of the middle column with the response data
                 document.getElementById('middle-text-1').innerHTML = `<p>${data.static_message}</p>`;
                 document.getElementById('middle-scroll-text').innerHTML = `<p>${data.scrollable_message}</p>`;
@@ -299,8 +335,25 @@
             // Apply the function to both lists
             setupList('left-list');
             setupList('right-list');
-            setupList('aspect-list1');
         });
+/*
+        // When the file selection changes
+        $('#fileSelector').change(function() {
+            var selectedFile = $(this).val();
+            
+            // Send the selected file name to the server
+            $.ajax({
+                url: '/update_file',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ filename: selectedFile }),
+                success: function(response) {
+                    // Reload the page to display updated columns
+                    location.reload();
+                }
+            });
+        });
+*/
     </script>
 </body>
 </html>
