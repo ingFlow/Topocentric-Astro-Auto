@@ -2,7 +2,7 @@
     "dt_radix_start": "1917-05-28T20:00:00",
     "dt_radix_end": "1917-05-29T20:00:00",
     "dt_actual_dob": "1917-05-29T19:51:25",
-    "geopos": [
+    "geopos_natal": [
         42.3311111,
         -71.12166667,
         15.0
@@ -10,7 +10,8 @@
     "list_of_events": [
         {
             "datetime": "1943-08-02T12:00:00",
-            "event_type": "BLANK"
+            "event_type": "BLANK",
+            "geopos": [42.3311111,-71.12166667,15.0]
         }
     ]
 }

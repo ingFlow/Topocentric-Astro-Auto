@@ -2,7 +2,7 @@
     "dt_radix_start": "1932-02-26T20:00:00",
     "dt_radix_end": "1932-02-27T20:00:00",
     "dt_actual_dob": "1929-02-27T01:54:24",
-    "geopos": [
+    "geopos_natal": [
         51.571507,
         -0.179128,
         42.0
@@ -10,31 +10,38 @@
     "list_of_events": [
         {
             "datetime": "1958-03-23T12:00:00",
-            "event_type": "DEATH_HUSBAND"
+            "event_type": "DEATH_HUSBAND",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "1957-08-06T12:00:00",
-            "event_type": "BIRTH_DAUGHTER"
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "1961-04-17T12:00:00",
-            "event_type": "SUCCESS"
+            "event_type": "SUCCESS",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "1982-11-07T12:00:00",
-            "event_type": "DIVORCE_SEPARATION"
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "2002-12-08T12:00:00",
-            "event_type": "SUCCESS"
+            "event_type": "SUCCESS",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "1994-09-11T12:00:00",
-            "event_type": "DEATH_MOTHER_GRAND"
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [51.571507,-0.179128,42.0]
         },
         {
             "datetime": "1968-07-21T12:00:00",
-            "event_type": "HOSPITALIZATION_ILLNESS"
+            "event_type": "HOSPITALIZATION_ILLNESS",
+            "geopos": [51.571507,-0.179128,42.0]
         }
     ]
 }
