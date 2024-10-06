@@ -134,12 +134,12 @@ def count_all_major_opp(csv_filename):
     df.to_csv(csv_filename, index=False)
     print(df.head())  # Print the first few rows to verify
 
-def main():
-    file_list = ['9_14_ver1_1929-07-28_pssrCOUNT.txt', '9_14_ver1_1929-07-28_transitCOUNT.txt', '9_14_ver1_1929-07-28_secondariesCOUNT.txt']  
+def create_csv_count_txt(filename_read, filename_write):
+    """sort by count"""
+    file_list = [filename_read]  
     final_df = load_and_concatenate_files(file_list)
-    final_df_sorted = final_df.sort_values(by=['mon-conj-sr','mon-maj-sr'], ascending=[False, False])
+    final_df_sorted = final_df.sort_values(by=['all-pd'], ascending=[False])
   
-    final_df_sorted.to_csv('9_14_ver1_sorted_planet_data.csv', index=False)
+    final_df_sorted.to_csv(filename_write, index=False)
     #print(final_df.head())  
 
-main()

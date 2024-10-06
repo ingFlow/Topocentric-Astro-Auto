@@ -4,6 +4,7 @@ import pssr_swiss_auto
 import secondary_automate
 import transit_swiss_auto
 import main_converge
+import analysis
 import julian
 import aspects_implementation
 from datetime import datetime
@@ -26,28 +27,6 @@ restrict_orb = 3
 current_file = "elizabeth taylor.json"
 DATA_INPUT_DIR = 'data_input'
 
-"""
-@app.route('/')
-def home():
-
-    # Load the birth data for the selected file
-    dt_actual_dob, _, _, geopos_nat, list_of_events = main_converge.get_json_birth_data(f"data_input/{current_file}")
-    global geo_pos_natal
-    geo_pos_natal = geopos_nat
-    
-    list_dt_events = [t[0].isoformat() for t in list_of_events]
-    list_type_events = [pd_automate.EventType.get_name(t[1]) for t in list_of_events]
-    list_event_locations = [t[2] for t in list_of_events]
-    list_event_index = [t[1] for t in list_of_events]
-
-    # CHANGE HERE FOR LEFT COL TIMES
-    list_times = [dt_actual_dob]
-    left_items = [t.isoformat() for t in list_times]
-    right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index, list_event_locations)]
-
-    # Pass the file list, left and right columns, and current file to the template
-
-"""
 app = Flask(__name__)
 
 @app.route('/')
@@ -67,10 +46,16 @@ def home():
     list_event_locations = [t[2] for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
-    list_times = [dt_actual_dob]
-    '''str_date = dt_actual_dob.strftime('%d %B %Y')
-    list_times = aspects_implementation.process_csv('9_14_ver1_sorted_planet_data.csv',str_date,100,-4)
-    '''
+    '''list_times = [
+        datetime(2000,3,11,9,00,2),
+        datetime(2000,3,11,14,10,24),
+        datetime(2000,3,11,14,12,56),
+        datetime(2000,3,11,12,00,2)
+    ]'''
+    #list_times = [dt_actual_dob]
+    str_date = dt_actual_dob.strftime('%d %B %Y')
+    list_times = aspects_implementation.process_csv('ingtea_ver2_sorted_data.csv',str_date,100,+2)
+    
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -174,5 +159,11 @@ def reset_globals():
     geo_pos_natal = []
 
 if __name__ == '__main__':
+    #main_converge.pd_rect_grid_score_create('data_input/ing tea.json','ingtea_rect_ver2_',8)
+    #main_converge.other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
+    ##DONT USE UNLESS NEEDEDaspects_implementation.count_aspect_groups_txt('ingtea_rect_ver2_2000-03-12_primaries.txt',False)
+    #analysis.create_csv_count_txt('ingtea_rect_ver2_2000-03-12_primariesCOUNT.txt','ingtea_ver2_sorted_data.csv')
+    
     app.run(debug=True)
+
 

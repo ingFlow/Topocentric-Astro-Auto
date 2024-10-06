@@ -65,7 +65,7 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     rad_planets_houses_labelled = calc_rad_planet_houses_labelled(jd_radix, geo_positions[0], geo_positions[1])
 
     event_index = 0
-    for dt_event, event_id in list_dt_events:
+    for dt_event, event_id, _ in list_dt_events:
         if date_technique == TechniqueType.PRIMARY_DIRECT:
             str_rad_dir_aspects, str_rad_conv_aspects = pd_automate.pd_for_time_event(jd_radix, julian.to_jd(dt_event), geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
@@ -103,7 +103,7 @@ def count_ben_mal_planets_lunar(jd_radix):
 def count_aspect_groups_txt(filename, flag_count_pssr_moon):
     results = []
 
-    with open(f"{filename}.txt", 'r') as infile:
+    with open(filename, 'r') as infile:
         for line in infile:
             parts = eval(line.strip())
             time = parts[0]
@@ -145,7 +145,7 @@ def count_aspect_groups_txt(filename, flag_count_pssr_moon):
                 results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, empty: {empty_event_count}"])                
     print(results)
 
-    with open(f"{filename}COUNT.txt", 'w') as outfile:
+    with open(f"{filename[:-4]}COUNT.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')
 
@@ -180,23 +180,39 @@ def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positio
         for time in grid_aspects:
             file.write(f"{str(time)}\n")
 
+from datetime import timedelta
+
+def add_timezone_to_24_hours(timezone):
+    base_time = timedelta(hours=24)
+    adjusted_time = base_time + timedelta(hours=timezone)
+    result_hours = adjusted_time.seconds // 3600 % 24
+    
+    return result_hours
+
 def process_csv(file_path, end_date_str, count_times_wanted, i_timezone):
-    """end date is day of birth"""
+    """end date is day of birth 
+    timezone is whatever you need to add to UT to get the local time"""
     df = pd.read_csv(file_path)
     times = df['Time'][:count_times_wanted].tolist()
     
-    end_date = datetime.strptime(end_date_str, '%d %B %Y')
+    dt_bday = datetime.strptime(end_date_str, '%d %B %Y')
     
     datetime_list = []
     
     for time_str in times:
         time_obj = datetime.strptime(time_str, '%H:%M:%S')
         
-        if time_obj.hour <= (24 + i_timezone):
-            datetime_obj = datetime.combine(end_date, time_obj.time())
+        if time_obj.hour < add_timezone_to_24_hours(i_timezone):
+            if i_timezone <= 0:
+                datetime_obj = datetime.combine(dt_bday, time_obj.time())
+            else: 
+                datetime_obj = datetime.combine(dt_bday + timedelta(days=1), time_obj.time())
         else:
-            datetime_obj = datetime.combine(end_date - timedelta(days=1), time_obj.time())
-        
+            if i_timezone <= 0:
+                datetime_obj = datetime.combine(dt_bday - timedelta(days=1), time_obj.time())
+            else:
+                datetime_obj = datetime.combine(dt_bday, time_obj.time())
+    
         datetime_list.append(datetime_obj)
     
     return datetime_list
