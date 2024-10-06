@@ -121,8 +121,7 @@ def find_trans_aspects(planet_set1, planet_set2, orb):
                 aspect = calculate_aspect(d1, d2, orb, True)
                 if aspect:
                     aspect_name, aspect_orb = aspect
-                    aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                  f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                    aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                     aspects_str += aspect_str
     return aspects_str
 
@@ -137,13 +136,11 @@ def find_pd_swiss_aspects(planet_set1, planet_set2):
                 aspect_name, aspect_orb = aspect
                 if (aspect_name.strip() == 'conjunction') or (aspect_name.strip() == 'opposition'):
                     if (aspect_orb <= (10.8/60)):
-                        aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                        f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                        aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                         aspects_str += aspect_str
                 else:
                     if (aspect_orb <= (5.6/60)):
-                        aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                        f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                        aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                         aspects_str += aspect_str
     return aspects_str
 
@@ -216,8 +213,7 @@ def find_secondary_swiss_aspects(planet_set1, planet_set2):
             
             if aspect:
                 aspect_name, aspect_orb = aspect
-                aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                 aspects_str += aspect_str
     return aspects_str
 
@@ -261,8 +257,7 @@ def find_aspects(planet_set1, planet_set2, orb, house_check, rad_sr_check):
                 aspect = calculate_aspect(d1, d2, orb, True)
                 if aspect:
                     aspect_name, aspect_orb = aspect
-                    aspect_str = (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-                                  f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+                    aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                     aspects_str += aspect_str
     return aspects_str
 #needs an array wof planet name str and degrees decimal
