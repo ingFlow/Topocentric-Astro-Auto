@@ -32,6 +32,11 @@
             "datetime": "1981-07-29T12:00:00",
             "event_type": "MARRIAGE_FOR_MALE",
             "geopos": [51.5,-0.133333,6.0]
+        },
+        {
+            "datetime": "1958-07-26T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [51.5,-0.133333,6.0]
         }
     ]
 }
