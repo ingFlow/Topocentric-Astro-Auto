@@ -52,7 +52,7 @@ def convert_birth_data_json(file_to_write_str):
         ]
     }
 
-    with open(f"{file_to_write_str}.json", "w") as outfile:
+    with open(f"{file_to_write_str}.json", "a") as outfile:
         json.dump(data, outfile, indent=4)
 
 def get_json_birth_data(filename):   
