@@ -54,8 +54,9 @@ def home():
     ]'''
     #list_times = [dt_actual_dob]
     str_date = dt_actual_dob.strftime('%d %B %Y')
-    list_times = aspects_implementation.process_csv('ingtea_ver2_sorted_data.csv',str_date,100,+2)
-    
+    #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
+    list_times = aspects_implementation.process_polaris_times('txt/ingtearect new 7 oct.txt', 50)
+
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -159,10 +160,11 @@ def reset_globals():
     geo_pos_natal = []
 
 if __name__ == '__main__':
-    #main_converge.pd_rect_grid_score_create('data_input/ing tea.json','ingtea_rect_ver2_',8)
+    #main_converge.pd_rect_grid_score_create('data_input/ing tea.json','ingtea_rect_ver3_',8)
     #main_converge.other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
-    ##DONT USE UNLESS NEEDEDaspects_implementation.count_aspect_groups_txt('ingtea_rect_ver2_2000-03-12_primaries.txt',False)
-    #analysis.create_csv_count_txt('ingtea_rect_ver2_2000-03-12_primariesCOUNT.txt','ingtea_ver2_sorted_data.csv')
+    #DONT USE UNLESS NEEDED
+    #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver3_2000-03-12_primaries.txt',False)
+    #analysis.create_csv_count_txt('ingtea_rect_ver3_2000-03-12_primariesCOUNT.txt','ingtea_ver3_sorted_data.csv')
     
     app.run(debug=True)
 

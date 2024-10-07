@@ -8,6 +8,7 @@ import pssr_swiss_auto as pssr_auto
 import transit_swiss_auto as transit_auto
 import pandas as pd
 import lunar_auto as lunar
+import re
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -215,5 +216,32 @@ def process_csv(file_path, end_date_str, count_times_wanted, i_timezone):
     
         datetime_list.append(datetime_obj)
     
+    return datetime_list
+
+def process_polaris_times(file_name, count_times_wanted):
+    """Processes a text file with date and time entries.
+    
+    Args:
+        file_path (str): Path to the text file.
+        count_times_wanted (int): Number of times to process.
+        i_timezone (int): Timezone offset to apply.
+
+    Returns:
+        List[datetime]: A list of datetime objects.
+    """
+    with open(file_name, 'r') as file:
+        lines = file.readlines()
+
+    datetime_list = []
+
+    for i in range(0, count_times_wanted, 2):
+        date_str = lines[i].strip()
+        date_str = re.sub(r'\s+', ' ', date_str).strip()
+        date_str_list = date_str.split(' ')
+        date_time_str = lines[i + 1].strip() + ' ' + date_str_list[0] + ' ' + date_str_list[1] + ' ' + date_str_list[2]
+
+        dt = datetime.strptime(date_time_str, '%Y %d %b %H:%M:%S')
+        datetime_list.append(dt)
+
     return datetime_list
 
