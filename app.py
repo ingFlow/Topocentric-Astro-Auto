@@ -24,7 +24,7 @@ class aTechniqueType:
 geo_pos_natal = []
 lunar_orb = 9
 restrict_orb = 3
-current_file = "elizabeth taylor.json"
+current_file = "ing tea.json"
 DATA_INPUT_DIR = 'data_input'
 
 app = Flask(__name__)
@@ -52,11 +52,11 @@ def home():
         datetime(2000,3,11,14,12,56),
         datetime(2000,3,11,12,00,2)
     ]'''
-    #list_times = [dt_actual_dob]
+    
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = aspects_implementation.process_polaris_times('txt/ingtearect new 7 oct.txt', 50)
-
+    list_times = aspects_implementation.process_polaris_times('txt/ingtea rect ver 2 - 1 date was wrong.txt', 50)
+    list_times = [dt_actual_dob]
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
