@@ -440,8 +440,13 @@ def calc_directed_pd_houses(JD_RADIX, jd_event, geo_latitude, rad_houses):
     ramc = rad_houses[1][2]
     e = pd.calculate_obliquity(JD_RADIX)
 
-    directed = swe.houses_armc(ramc+arc, geo_latitude, e, b'T')[0]
-    converse = swe.houses_armc(ramc-arc, geo_latitude, e, b'T')[0]
+    prog_ramc = swe.degnorm(ramc + arc)
+    reg_ramc = swe.degnorm(ramc - arc)
+    directed = swe.houses_armc(prog_ramc, geo_latitude, e, b'T')
+    directed = directed[0]
+    temp = pd.calc_houses_with_ramc(prog_ramc, JD_RADIX, geo_latitude, '(d)')
+    converse = swe.houses_armc(reg_ramc, geo_latitude, e, b'T')
+    converse = converse[0]
 
     return directed, converse
  
