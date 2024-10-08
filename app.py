@@ -3,13 +3,13 @@ import pd_automate
 import pssr_swiss_auto
 import secondary_automate
 import transit_swiss_auto
+import lunar_auto
+import sra_auto
 import main_converge
-import analysis
 import julian
 import aspects_implementation
 from datetime import datetime
 import swisseph as swe
-import lunar_auto
 import os
 import re
 
@@ -19,7 +19,8 @@ class aTechniqueType:
     PSSR = 2
     TRANSIT = 3
     LUNAR = 4
-    NATAL = 5
+    SRA = 5
+    NATAL = 6
 
 geo_pos_natal = []
 lunar_orb = 9
@@ -50,13 +51,15 @@ def home():
         datetime(2000,3,11,9,00,2),
         datetime(2000,3,11,14,10,24),
         datetime(2000,3,11,14,12,56),
-        datetime(2000,3,11,12,00,2)
+        datetime(2000,3,11,12,00,2),
+        07:49:20
+        15:49:36
     ]'''
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     list_times = aspects_implementation.process_polaris_times('txt/ingtea rect ver 2 - 1 date was wrong.txt', 50)
-    list_times = [dt_actual_dob]
+    list_times = [dt_actual_dob, datetime(2000,3,11,15,49,36)]
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -98,6 +101,9 @@ def update_content():
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.TRANSIT:
             str_rad_dir_aspects, str_rad_conv_aspects = transit_swiss_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+        elif technique == aTechniqueType.SRA:
+            str_rad_dir_aspects, str_rad_conv_aspects = sra_auto.calc_pssr_for_date(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.NATAL:
             str_all_directed_aspects = ''

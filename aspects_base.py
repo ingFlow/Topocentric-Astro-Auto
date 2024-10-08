@@ -1,3 +1,4 @@
+"""ACROSS THE MODULE THE RADICAL POSITIONS ARE ALWAYS P1"""
 from enum import Enum
 
 class ProcessType(Enum):
@@ -217,6 +218,31 @@ def find_secondary_swiss_aspects(planet_set1, planet_set2):
                 aspects_str += aspect_str
     return aspects_str
 
+def find_sra_swiss_aspects(planet_set1, planet_set2):
+    aspects_str = ''
+    
+    for p1, d1, s1 in planet_set1:
+        for p2, d2, s2 in planet_set2:
+            orb = 68/60
+            aspect = calculate_aspect(d1, d2, orb, True)
+            
+            if aspect:
+                #can't allow house to house aspects
+                #if rad to sra
+                aspect_str = ''
+                if '(r)' in p1:
+                    if (p1[1] == 'H') and (p2[1] != 'H'):
+                            aspect_name, aspect_orb = aspect
+                            aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                else:
+                #if sra to sra
+                    if (p1[1] == 'H') and (p2[1] != 'H'): #so only plan to house or vice versa
+                        if p1 in ['H1','H4','H7','H10']:    #many asps will repeat so this should work
+                            aspect_name, aspect_orb = aspect
+                            aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
+                
+                aspects_str += aspect_str
+    return aspects_str
 
 def find_trans_swiss_aspects(planet_set1, planet_set2):
     aspects_str = ''
@@ -295,7 +321,6 @@ def process_list(list_positions):
 
 def remove_duplicates(str_planets_aspects):
     list_aspects = str_planets_aspects.split('\n')
-    str_return = ""
     list_no_repeats = []
 
     for i in range(0, len(list_aspects)):
