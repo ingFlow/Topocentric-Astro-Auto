@@ -3,6 +3,7 @@ import julian
 import pd_base as pd
 import math
 import aspects_base as aspects
+from datetime import datetime
 
 class EventType:
     BIRTH_BROTHER = 0
@@ -81,10 +82,54 @@ class Planet:
     PLU = 'Pluto'
     NNO = 'Mean_Node'
 
+class PD_Automate:
+    def __init__(self,jd_rad : julian, jd : julian, geo_positions: list, rad_planets_labelled=None, rad_planets_equatorial=None, rad_houses_info=None):
+        self.__grid_acceptable_aspects = []
+        self.__dict_planets_extended_info = {}
+        self.pd_for_time_event(jd_rad, jd, geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+
+    def pd_for_time_event(self,jd_rad : julian, jd : julian, geo_positions: list, rad_planets_labelled=None, rad_planets_equatorial=None, rad_houses_info=None):
+        if rad_planets_labelled == None: #ie there is only event info
+            rad_houses_info = swe.houses(jd_rad, geo_positions[0], geo_positions[1], b'T')
+            rad_planets_labelled = calc_natal_planets_labelled(jd_rad)
+            rad_planets_equatorial = calc_rad_planets_equatorial(jd_rad)
+        
+        self.__rad_planets_equatorial = rad_planets_equatorial
+        self.__jd_radix = jd_rad
+        self.__jd_event = jd
+        self.__geopos = geo_positions
+
+        dir_houses, conv_houses = calc_directed_pd_houses(jd_rad,jd, geo_positions[0], rad_houses_info)
+        rad_houses = rad_houses_info[0]
+        
+        rad_houses = aspects.format_house_list(rad_houses, '(r)')
+        dir_houses = aspects.format_house_list(dir_houses, '(d)')
+        conv_houses = aspects.format_house_list(conv_houses, '(c)')
+        dir_planets, conv_planets, self.__dict_planets_extended_info = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
+        #add POF  DATA
+        rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, jd_rad, jd, geo_positions[0], geo_positions[1])
+        rad_planets_labelled.append(('POF', rad_pof, "(r)"))
+        dir_planets.append(('POF', dir_pof, "(d)"))
+        conv_planets.append(('POF',conv_pof, "(c)"))
+        #JOIN ARRAYS
+        self.__rad_positions = [*rad_planets_labelled, *rad_houses]
+        self.__dir_positions = [*dir_planets, *dir_houses]
+        self.__conv_positions = [*conv_planets, *conv_houses]
+
+        self.__str_aspects_rad_dir = aspects.find_pd_swiss_aspects(self.__rad_positions, self.__dir_positions)
+        self.__str_aspects_rad_conv = aspects.find_pd_swiss_aspects(self.__rad_positions, self.__conv_positions)
+        
+    def get_aspects_str(self):
+        return self.__str_aspects_rad_dir, self.__str_aspects_rad_conv
+
+    def get_extended_information(self):
+        return self.__dict_planets_extended_info
+
+
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 HOUSES = ['H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12']
 
-primary_rules = {
+PRIMARY_RULES = {
     EventType.BIRTH_BROTHER: (('H4', 'H7','H3'), (Planet.MER, Planet.JUP)),
     EventType.BIRTH_SISTER: (('H4', 'H7', 'H3'), (Planet.MON, Planet.MER, Planet.VEN)),
     EventType.BIRTH_SON: (('H4', 'H1','H5'), (Planet.MAR, Planet.SUN, Planet.JUP, Planet.NNO)),
@@ -128,7 +173,7 @@ primary_rules = {
     EventType.BLANK:((''),())
 }
 
-secondary_rules = {
+SECONDARY_RULES = {
 EventType.BIRTH_BROTHER: ((''),(Planet.SUN, Planet.MON, Planet.VEN, Planet.NNO, Planet.URA, Planet.PLU)),
 EventType.BIRTH_SISTER: ((''), (Planet.SUN, Planet.JUP, Planet.NNO, Planet.URA, Planet.PLU)),
 EventType.BIRTH_SON: ((''), (Planet.PLU, Planet.URA, Planet.MON, Planet.VEN, Planet.MER)),
@@ -170,17 +215,14 @@ EventType.GAMBLING_LOSS:((''), (Planet.PLU,Planet.NNO)),
 EventType.GAMBLING_GAIN:((''), (Planet.PLU)),
 EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO)),
 EventType.BLANK:((''),())
-
 }
-
-grid_acceptable_aspects = []
 
 def get_accept_lists(event_id):
     """input the event id corresponding to dictionary and string with aspect as printed to textfile like this
     (Uranus,55.5 52,(r)) (Hmd1,325.600,(d)) (square,3')"""
     
-    aspect_rules = primary_rules[event_id]
-    house_aspect_rules = secondary_rules[event_id]
+    aspect_rules = PRIMARY_RULES[event_id]
+    house_aspect_rules = SECONDARY_RULES[event_id]
     if not aspect_rules:
         return False  
     
@@ -208,7 +250,7 @@ def get_accept_lists(event_id):
 def is_acceptable_angular_aspect(event_id, str_aspect, type):
     angle_accept, house_accept, planet_accept, secondary_planets = get_accept_lists(event_id)
     
-    p1_d1_s1, p2_d2_s2, asp_orb = str_aspect.split(' ')
+    p1_d1_s1, p2_d2_s2, _ = str_aspect.split(' ')
     p1, _, _ = p1_d1_s1.split(',')
     p1 = p1[1:]
     p2, _, _ = p2_d2_s2.split(',')
@@ -342,8 +384,8 @@ def is_acceptable_pd_aspect(event_id, str_aspect):
     if event_id == EventType.BLANK:
         return 0
     
-    prim_rules = primary_rules[event_id]
-    second_rules = secondary_rules[event_id]
+    prim_rules = PRIMARY_RULES[event_id]
+    second_rules = SECONDARY_RULES[event_id]
     if not prim_rules or not second_rules:
         return False  
     
@@ -433,35 +475,44 @@ def is_acceptable_pd_aspect(event_id, str_aspect):
 
     return angularity_score * planet_score * aspect_score
     
-def calc_directed_pd_houses(JD_RADIX, jd_event, geo_latitude, rad_houses):
+def calc_directed_pd_houses(jd_radix, jd_event, geo_latitude, rad_houses):
     """returns 2 tuples with house cusps 1 to 12 dir, conv
     removed functionality for Hmd1 and Hmd2 (H1/H2)"""
-    arc = pd.calc_arc(JD_RADIX, jd_event)
+    arc = pd.calc_arc(jd_radix, jd_event)
     ramc = rad_houses[1][2]
-    e = pd.calculate_obliquity(JD_RADIX)
+    e = pd.calculate_obliquity(jd_radix)
 
     directed = swe.houses_armc(ramc+arc, geo_latitude, e, b'T')[0]
     converse = swe.houses_armc(ramc-arc, geo_latitude, e, b'T')[0]
-    print(f"dirHouse ----- {directed} \nconvHouse------- {converse}")
+    #print(f"dirHouse ----- {directed} \nconvHouse------- {converse}")
     return directed, converse
- 
-def calc_directed_pd_planets(JD_RADIX, jd_event, geo_latitude, geo_longitude, rad_planets_equatorial):
+
+def calc_directed_pd_planets(jd_radix, jd_event, geo_latitude, geo_longitude, rad_planets_equatorial):
+    """returns tuple (dir_planets, conv_planets, extended_planet_info)"""
     dir_planets = []
     conv_planets = []
+    dict_extended_info = {}
 
     for planet in range(0, len(PLANETS)):
         long, ra, decl = rad_planets_equatorial[planet]
-        cusps = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')[0]
+        cusps = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')[0]
         p_house = pd.get_housepos_manual(long, cusps)
-        ac, mc, ramc = calc_radix_ac_mc_ramc(JD_RADIX,geo_latitude, geo_longitude)
+        ac, mc, ramc = calc_radix_ac_mc_ramc(jd_radix,geo_latitude, geo_longitude)
 
-        long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
+        direct_pd_obj = pd.PD_Base()
+        direct_pd_obj.set_directed_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
+        long_directed = direct_pd_obj.get_long_directed()
         dir_planets.append((PLANETS[planet], long_directed, "(d)"))
         
-        long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
+        converse_pd_obj = pd.PD_Base()
+        converse_pd_obj.set_directed_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
+        long_conv = converse_pd_obj.get_long_directed()
         conv_planets.append((PLANETS[planet], long_conv, "(c)"))
-    print(f"dir --- {dir_planets} \n conv ---- {conv_planets}")
-    return dir_planets, conv_planets
+
+        #append planets md,sa,adp etc to dict information
+        dict_extended_info[PLANETS[planet]] = direct_pd_obj.get_extended_planet_info()
+
+    return dir_planets, conv_planets, dict_extended_info
 
 def calc_natal_planets_labelled(jd_radix):
     rad_planets = []
@@ -485,22 +536,22 @@ def calc_rad_planets_equatorial(jd_radix):
 
     return planet_info
 
-def calc_directed_POF(rad_planets, JD_RADIX, jd_event, geo_latitude, geo_longitude):
+def calc_directed_POF(rad_planets, jd_radix, jd_event, geo_latitude, geo_longitude):
     """returns tuple (pof_rad, pof_directed, pof_converse)"""
     sun_index = PLANETS.index('Sun')
     moon_index = PLANETS.index('Moon')
     long_sun = rad_planets[sun_index][1]
     long_moon = rad_planets[moon_index][1]
-    ac, mc, ramc = calc_radix_ac_mc_ramc(JD_RADIX, geo_latitude, geo_longitude)
+    ac, mc, ramc = calc_radix_ac_mc_ramc(jd_radix, geo_latitude, geo_longitude)
     
     pof_long = (ac + long_moon - long_sun) % 360
     quadrant = pd.get_point_quadrant(ac, mc, pof_long)
 
-    e = pd.calculate_obliquity(JD_RADIX)
+    e = pd.calculate_obliquity(jd_radix)
     ra, decl, _ = swe.cotrans((pof_long, 0.0, 1), e)
     
-    long_directed = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, True, quadrant, ac, pof_long)
-    long_conv = pd.get_directed_from_data(JD_RADIX, jd_event, geo_latitude, decl, ra, ramc, mc, False, quadrant, ac, pof_long)
+    long_directed = pd.get_directed_from_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, quadrant, ac, pof_long)
+    long_conv = pd.get_directed_from_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, quadrant, ac, pof_long)
     
 
     return pof_long, long_directed, long_conv
@@ -510,9 +561,9 @@ def calc_planet_house_pos(ramc, geo_lat, e, long, lat):
     
     return int(hpos)
 
-def calc_radix_ac_mc_ramc(JD_RADIX, geo_latitude, geo_longitude):
+def calc_radix_ac_mc_ramc(jd_radix, geo_latitude, geo_longitude):
     """returns tuple of radix (ac, mc, ramc)"""
-    houses = swe.houses(JD_RADIX, geo_latitude, geo_longitude, b'T')
+    houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
 
     ac = houses[0][0]
     mc = houses[1][1]
@@ -587,53 +638,3 @@ def calc_lst(jd, longitude):
         lst -= 24
     
     return lst
-
-def pd_for_time_event_norad(jd_radix, jd, geo_positions: list[3]):
-    """returns tuple of str_dir aspects and str_conv aspects"""
-    rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
-    rad_planets_labelled = calc_natal_planets_labelled(jd_radix)
-    rad_planets_equatorial = calc_rad_planets_equatorial(jd_radix)
-
-    str_aspects_rad_dir, str_aspects_rad_conv = pd_for_time_event(jd_radix, jd, geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
-
-    return str_aspects_rad_dir, str_aspects_rad_conv
-
-def pd_for_time_event(jd_radix : julian, jd : julian, geo_positions: list[3], rad_planets_labelled, rad_planets_equatorial, rad_houses_info):
-    """
-    Calculate the primary directions for all planets and houses
-
-    Parameters:
-    jd_radix (Julian): date and time (UT) of birth
-    jd (Julian): date of event
-    geo_positions (list[float]): [geo_lat, geo_long, altitude] of birth place, South/West negative pls
-    orb (float): degrees decimal of orb allowed
-
-    Returns:
-    2 str with rad-dir and rad-conv aspects
-    """
-    JD_RADIX = jd_radix
-    jd_event = jd
-    geo_latitude = geo_positions[0]
-    geo_longitude = geo_positions[1]
-
-    dir_houses, conv_houses = calc_directed_pd_houses(JD_RADIX,jd_event, geo_latitude, rad_houses_info)
-    rad_houses = rad_houses_info[0]
-    
-    rad_houses = aspects.format_house_list(rad_houses, '(r)')
-    dir_houses = aspects.format_house_list(dir_houses, '(d)')
-    conv_houses = aspects.format_house_list(conv_houses, '(c)')
-    dir_planets, conv_planets = calc_directed_pd_planets(JD_RADIX,jd_event, geo_latitude, geo_longitude, rad_planets_equatorial)
-    #add POF  DATA
-    rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, JD_RADIX, jd_event, geo_latitude, geo_longitude)
-    rad_planets_labelled.append(('POF', rad_pof, "(r)"))
-    dir_planets.append(('POF', dir_pof, "(d)"))
-    conv_planets.append(('POF',conv_pof, "(c)"))
-    #JOIN ARRAYS
-    rad_positions = [*rad_planets_labelled, *rad_houses]
-    dir_positions = [*dir_planets, *dir_houses]
-    conv_positions = [*conv_planets, *conv_houses]
-
-    str_aspects_rad_dir = aspects.find_pd_swiss_aspects(rad_positions, dir_positions)
-    str_aspects_rad_conv = aspects.find_pd_swiss_aspects(rad_positions, conv_positions)
-    
-    return str_aspects_rad_dir, str_aspects_rad_conv
