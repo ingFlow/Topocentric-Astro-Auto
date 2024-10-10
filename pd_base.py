@@ -3,6 +3,9 @@ import swisseph as swe
 
 
 class PD_Base:
+    def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
+        self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long)
+
     def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
         E = calculate_obliquity(jd_radix)
         quadrant = get_quadrant_from_house_pos(house_pos)

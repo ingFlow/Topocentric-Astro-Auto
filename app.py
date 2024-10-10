@@ -93,7 +93,7 @@ def update_content():
         if technique == aTechniqueType.PRIMARY_DIRECT:
             pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
             str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
-            pd_planets_info = pd_auto_obj.get_extended_information()
+            pd_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif technique == aTechniqueType.SECONDARY_DIRECT:
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_automate.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
@@ -105,7 +105,9 @@ def update_content():
             str_rad_dir_aspects, str_rad_conv_aspects = transit_swiss_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.SRA:
-            str_rad_dir_aspects, str_rad_conv_aspects = sra_auto.calc_sra_for_date(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled, geo_pos_natal)
+            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_houses_labelled)
+            str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
+            sra_info = sra_auto_obj.get_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.NATAL:
             str_all_directed_aspects = ''
