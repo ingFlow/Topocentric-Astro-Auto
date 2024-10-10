@@ -91,7 +91,9 @@ def update_content():
         rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
         rad_planets_houses_labelled = aspects_implementation.calc_rad_planet_houses_labelled(jd_radix, geo_pos_natal[0], geo_pos_natal[1])
         if technique == aTechniqueType.PRIMARY_DIRECT:
-            str_rad_dir_aspects, str_rad_conv_aspects = pd_automate.pd_for_time_event(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+            str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
+            pd_planets_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif technique == aTechniqueType.SECONDARY_DIRECT:
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_automate.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
