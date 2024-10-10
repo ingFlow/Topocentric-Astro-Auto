@@ -227,20 +227,24 @@ def find_sra_swiss_aspects(planet_set1, planet_set2):
             aspect = calculate_aspect(d1, d2, orb, True)
             
             if aspect:
+                aspect_str = ''
                 #can't allow house to house aspects
                 #if rad to sra
-                aspect_str = ''
-                if '(r)' in p1:
-                    if (p1[1] == 'H') and (p2[1] != 'H'):
-                            aspect_name, aspect_orb = aspect
+                if '(r)' in s1:
+                    aspect_name, aspect_orb = aspect
+
+                    if aspect_name in ['conjunction','opposition']:
+                        if p2 != 'Sun':
                             aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
                 else:
                 #if sra to sra
-                    if (p1[1] == 'H') and (p2[1] != 'H'): #so only plan to house or vice versa
-                        if p1 in ['H1','H4','H7','H10']:    #many asps will repeat so this should work
-                            aspect_name, aspect_orb = aspect
+                    if (p1[0] == 'H') and (p2[0] != 'H'): #so only HOUSE to PLANET
+                        #if p1 in ['H1','H4','H7','H10']:    #many asps will repeat so this should work
+                        aspect_name, aspect_orb = aspect
+
+                        if aspect_name in ['conjunction','opposition']:
                             aspect_str = get_str_aspect(p1,p2,d1,d2,s1,s2,aspect_name,aspect_orb)
-                
+            
                 aspects_str += aspect_str
     return aspects_str
 
