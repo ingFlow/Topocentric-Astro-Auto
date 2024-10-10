@@ -153,15 +153,6 @@
             ]
         },
         {
-            "datetime": "2024-10-07T05:50:00",
-            "event_type": "LOSSES",
-            "geopos": [
-                -26.137999448,
-                28.15166606,
-                1753.0
-            ]
-        },
-        {
             "datetime": "2024-02-28T12:00:00",
             "event_type": "MOVE_HOME",
             "geopos": [
@@ -172,6 +163,15 @@
         },
         {
             "datetime": "2024-03-08T13:50:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                -26.137999448,
+                28.15166606,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2024-10-09T08:00:00",
             "event_type": "SUCCESS",
             "geopos": [
                 -26.137999448,

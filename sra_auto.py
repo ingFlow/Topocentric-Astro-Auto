@@ -21,8 +21,8 @@ def calc_planets_houses_labelled(jd, label, planets_indexes_to_exclude, geopos):
             planets_houses.append((PLANETS[planet], long, label))  
    
     houses = swe.houses(jd, geopos[0], geopos[1], b'T')[0]
-    for i in range(0, len(houses)):
-        planets_houses.append((f"H{i}", houses[i], label))
+    for i in range(0, 6):
+        planets_houses.append((f"H{i+1}", houses[i], label))
       
     return planets_houses
 
@@ -89,7 +89,7 @@ def sra_for_date_event_norad(jd_radix, jd_event, geopos):
     moon_long = rad_planets[PLANETS.index('Moon')][1]
     pof_long = swe.degnorm(ac + moon_long - sun_long)
     rad_planets.append(('POF',pof_long,'(r)'))
-    for house_no in range(0,len(houses[0])):
+    for house_no in range(0,6):
         rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
 
     str_rad_sra_aspects, str_sra_sra_aspects = calc_sra_for_date(julian.from_jd(jd_radix),julian.from_jd(jd_event),rad_planets, geopos)
@@ -133,23 +133,27 @@ def calc_sra_for_date(dt_radix, dt_event, rad_planets, geopos):
     trop_conv_planets = calc_planets_houses_labelled(jd_conv_return, '(tc)', planets_to_exclude, geopos)
     precessed_dir_planets = calc_planets_houses_labelled(jd_dir_return_precessed, '(pd)', planets_to_exclude, geopos)
     precessed_conv_planets = calc_planets_houses_labelled(jd_conv_return_precessed, '(pc)', planets_to_exclude, geopos)
-    sra_planets = [*trop_dir_planets, *trop_conv_planets, *precessed_dir_planets, *precessed_conv_planets]
+    sra_planets = [*trop_dir_planets, *trop_conv_planets] #rad-to-trop more effective than rad to precessed
  
     str_rad_sra_aspects = aspects.find_sra_swiss_aspects(rad_planets,sra_planets) 
     str_td_td_aspects = aspects.find_sra_swiss_aspects(trop_dir_planets, trop_dir_planets)
     str_tc_tc_aspects = aspects.find_sra_swiss_aspects(trop_conv_planets, trop_conv_planets)
     str_pd_pd_aspects = aspects.find_sra_swiss_aspects(precessed_dir_planets, precessed_dir_planets)
     str_pc_pc_aspects = aspects.find_sra_swiss_aspects(precessed_conv_planets, precessed_conv_planets)
-    str_sra_sra_aspects = [*str_td_td_aspects, *str_tc_tc_aspects, *str_pd_pd_aspects, *str_pc_pc_aspects]
+    str_sra_sra_aspects = str_td_td_aspects + '\n' + str_tc_tc_aspects + '\n' + str_pd_pd_aspects + '\n' + str_pc_pc_aspects
     str_rad_sra_aspects = aspects.remove_duplicates(str_rad_sra_aspects)
 
     return str_rad_sra_aspects, str_sra_sra_aspects
 
-jd_radix = julian.to_jd(datetime(1926,4,21,1,38,12))
-jd_event = julian.to_jd(datetime(1953,6,6,12,00,00))
-geopos = [51.5166667, -0.111666667, 15.0]
 
-jd_radix = julian.to_jd(datetime(1940,10,9,17,24,13))
+'''jd_radix = julian.to_jd(datetime(1940,10,9,17,24,13))
 jd_event = julian.to_jd(datetime(1980,12,8,12,00,00))
 geopos = [53.733333, -2.9833333, 15.0]
-print(sra_for_date_event_norad(jd_radix,jd_event,geopos))
+
+jd_radix = julian.to_jd(datetime(1948,11,14,21,13,37))
+jd_event = julian.to_jd(datetime(1958,7,26,12,00,00))
+geopos = [51.5166667, -0.111666667, 15.0]
+
+jd_radix = julian.to_jd(datetime(1926,4,21,1,12,48))
+jd_event = julian.to_jd(datetime(1948,11,14,12,00,00))
+geopos = [51.5166667, -0.111666667, 15.0]'''
