@@ -1,26 +1,80 @@
 import math
 import swisseph as swe
 
-'''this obliquity is not the true one that takes into account the nutation and stuff'''
+
+class PD_Base:
+    def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
+        E = calculate_obliquity(jd_radix)
+        quadrant = get_quadrant_from_house_pos(house_pos)
+        MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
+
+        if (MD > SA):
+            left_angle, right_angle = calc_left_right_angles(ac, mc, quadrant)
+            new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, quadrant)
+            MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, new_quadrant, GEO_LAT, DECL, ac, long)
+            
+            if (MD > SA):
+                with open("log_md_sa_4SEP24.txt", "a") as file:
+                    file.write(f"{jd_radix} still got error... not okay \n")
+
+        arc = calc_arc(jd_radix, jd_event)
+        dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
+
+        LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
+
+        self.QUADRANT = quadrant
+        self.ARC = arc
+        self.MD = MD
+        self.AD = AD
+        self.SA = SA
+        self.phi = phi
+        self.ADP = ADP
+        self.OA_OD = OA_OD 
+        self.FLAG_ASCENSION = FLAG_ASCEN
+        self.LONG = LONG_deg
+        self.MDO = (MD/SA)*90
+
+    def get_long_directed(self):
+        return self.LONG
+
+    def get_extended_planet_info(self):
+        dict_info = {
+            "QUADRANT": self.QUADRANT,
+            "ARC": self.ARC,
+            "MD": self.MD,
+            "AD": self.AD,
+            "SA": self.SA,
+            "phi": self.phi,
+            "ADP": self.ADP,
+            "OA_OD": self.OA_OD,
+            "FLAG_ASCENSION": self.FLAG_ASCENSION,
+            "MDO": self.MDO
+        }
+
+        return dict_info
+
 def calculate_obliquity(JD):
-  t = (JD - 2451545.0) / 3652500
+    '''this obliquity is not the true one that takes into account the nutation and stuff'''
 
-  e = (84381.448 - 
-       4680.93 * t - 
-       1.55 * t**2 + 
-       1999.25 * t**3 - 
-       51.38 * t**4 - 
-       249.67 * t**5 - 
-       39.05 * t**6 + 
-       7.12 * t**7 + 
-       27.87 * t**8 + 
-       5.79 * t**9 + 
-       2.45 * t**10)
+    t = (JD - 2451545.0) / 3652500
 
-  return e/3600
+    e = (84381.448 - 
+        4680.93 * t - 
+        1.55 * t**2 + 
+        1999.25 * t**3 - 
+        51.38 * t**4 - 
+        249.67 * t**5 - 
+        39.05 * t**6 + 
+        7.12 * t**7 + 
+        27.87 * t**8 + 
+        5.79 * t**9 + 
+        2.45 * t**10)
 
-'''based on juan's formula in pred astro p69 pdf'''
+    return e/3600
+
 def calculate_longitude(E, phi, OA):
+    '''based on juan's formula in pred astro p69 pdf'''
+
     E_rad = math.radians(E)
     phi_rad = math.radians(phi)
     OA_rad = math.radians(OA)
