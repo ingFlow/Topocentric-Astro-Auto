@@ -84,7 +84,6 @@ class Planet:
 
 class PD_Automate:
     def __init__(self,jd_rad : julian, jd : julian, geo_positions: list, rad_planets_labelled=None, rad_planets_equatorial=None, rad_houses_info=None):
-        self.__grid_acceptable_aspects = []
         self.__dict_planets_extended_info = {}
         self.pd_for_time_event(jd_rad, jd, geo_positions, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
 
@@ -94,11 +93,6 @@ class PD_Automate:
             rad_planets_labelled = calc_natal_planets_labelled(jd_rad)
             rad_planets_equatorial = calc_rad_planets_equatorial(jd_rad)
         
-        self.__rad_planets_equatorial = rad_planets_equatorial
-        self.__jd_radix = jd_rad
-        self.__jd_event = jd
-        self.__geopos = geo_positions
-
         dir_houses, conv_houses = calc_directed_pd_houses(jd_rad,jd, geo_positions[0], rad_houses_info)
         rad_houses = rad_houses_info[0]
         
@@ -112,13 +106,23 @@ class PD_Automate:
         dir_planets.append(('POF', dir_pof, "(d)"))
         conv_planets.append(('POF',conv_pof, "(c)"))
         #JOIN ARRAYS
-        self.__rad_positions = [*rad_planets_labelled, *rad_houses]
-        self.__dir_positions = [*dir_planets, *dir_houses]
-        self.__conv_positions = [*conv_planets, *conv_houses]
+        rad_positions = [*rad_planets_labelled, *rad_houses]
+        dir_positions = [*dir_planets, *dir_houses]
+        conv_positions = [*conv_planets, *conv_houses]
 
-        self.__str_aspects_rad_dir = aspects.find_pd_swiss_aspects(self.__rad_positions, self.__dir_positions)
-        self.__str_aspects_rad_conv = aspects.find_pd_swiss_aspects(self.__rad_positions, self.__conv_positions)
+        self.__dict_planets_extended_info["base"] = {
+            "jd_radix": jd_rad,
+            "jd_event": jd,
+            "geopos": geo_positions,
+            "rad_positions": rad_positions,
+            "rad_equatorial": rad_planets_equatorial,
+            "directed_positions": dir_positions,
+            "converse_positions": conv_positions
+        }
+        self.__str_aspects_rad_dir = aspects.find_pd_swiss_aspects(rad_positions, dir_positions)
+        self.__str_aspects_rad_conv = aspects.find_pd_swiss_aspects(rad_positions, conv_positions)
         
+
     def get_aspects_str(self):
         return self.__str_aspects_rad_dir, self.__str_aspects_rad_conv
 
@@ -499,13 +503,11 @@ def calc_directed_pd_planets(jd_radix, jd_event, geo_latitude, geo_longitude, ra
         p_house = pd.get_housepos_manual(long, cusps)
         ac, mc, ramc = calc_radix_ac_mc_ramc(jd_radix,geo_latitude, geo_longitude)
 
-        direct_pd_obj = pd.PD_Base()
-        direct_pd_obj.set_directed_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
+        direct_pd_obj = pd.PD_Base(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, long)
         long_directed = direct_pd_obj.get_long_directed()
         dir_planets.append((PLANETS[planet], long_directed, "(d)"))
         
-        converse_pd_obj = pd.PD_Base()
-        converse_pd_obj.set_directed_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
+        converse_pd_obj = pd.PD_Base(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, long)
         long_conv = converse_pd_obj.get_long_directed()
         conv_planets.append((PLANETS[planet], long_conv, "(c)"))
 
