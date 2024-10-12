@@ -14,7 +14,7 @@ import os
 import re
 
 class aTechniqueType:
-    PRIMARY_DIRECT = 0  #diff oorder of technique type specific to index.html
+    PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
     SECONDARY_DIRECT = 1
     PSSR = 2
     TRANSIT = 3
@@ -97,13 +97,19 @@ def update_content():
             pd_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif technique == aTechniqueType.SECONDARY_DIRECT:
-            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_automate.secondary_for_event(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
+            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
+            secondary_info = secondary_obj.get_dict_info()
+            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
         elif technique == aTechniqueType.PSSR:
-            str_rad_dir_aspects, str_rad_conv_aspects = pssr_swiss_auto.calc_pssr_for_date(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
+            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
+            str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
+            pssr_info = pssr_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.TRANSIT:
-            str_rad_dir_aspects, str_rad_conv_aspects = transit_swiss_auto.calc_transits_for_date(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
+            transit_info = transit_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.SRA:
             sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_houses_labelled)
@@ -116,6 +122,7 @@ def update_content():
                 str_all_directed_aspects+= f"{p}\n"
         elif technique == aTechniqueType.LUNAR:
             lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)
+            lunar_info = lunar_obj.get_info()
             all_charts = lunar_obj.get_all_lunars()
             str_all_directed_aspects = lunar_auto.get_str_labelled_aspects_from_array(all_charts)
             counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
