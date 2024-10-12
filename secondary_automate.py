@@ -1,15 +1,42 @@
 import swisseph as swe
 import math
 import aspects_base as aspects
+import julian
 
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
         
+class Secondary_Auto:
+    def __init__(self, jd_radix, jd_event, geo_lat, geo_long):
+        self.__dict_info = {}
+        self.secondary_for_event(jd_radix, jd_event, geo_lat, geo_long)
+
+    def secondary_for_event(self, jd_radix, jd_event, geo_lat, geo_long):
+        swe.set_ephe_path('ephe')
+        rad_positions, prog_positions, reg_positions, self.__dict_info = get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long)
+        
+        str_aspects_rad_prog = aspects.find_secondary_swiss_aspects(rad_positions, prog_positions)
+        str_aspects_rad_reg = aspects.find_secondary_swiss_aspects(rad_positions, reg_positions)
+        str_aspects_prog_prog = aspects.find_secondary_swiss_aspects(prog_positions, prog_positions)
+        str_aspects_reg_reg = aspects.find_secondary_swiss_aspects(reg_positions, reg_positions)
+        str_aspects_prog_prog = aspects.remove_duplicates(str_aspects_prog_prog)
+        str_aspects_reg_reg = aspects.remove_duplicates(str_aspects_reg_reg)
+
+        self.__str_rad_n_prog = str_aspects_rad_prog + str_aspects_prog_prog
+        self.__str_rad_n_reg = str_aspects_rad_reg + str_aspects_reg_reg
+
+    def get_str_aspects(self):
+        return self.__str_rad_n_prog, self.__str_rad_n_reg
+
+    def get_dict_info(self):
+        return self.__dict_info
+
 def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
+    """returns tuple rad_pos, prog_pos, reg_pos, dict_info"""
+    dict_info = {}
     jd_diff = abs(jd_radix-jd_event)
     days_diff = jd_diff / 365.2422
     jd_prog = jd_radix + days_diff
     jd_reg = jd_radix - days_diff
-    #print(f"{julian.from_jd(jd_radix)}, event: {julian.from_jd(jd_event)}, dt_prog: {julian.from_jd(jd_prog)}, dt_reg: {julian.from_jd(jd_reg)}")
 
     #getting prog/reg arc
     xx, _ = swe.calc_ut(jd_radix, swe.SUN, swe.FLG_EQUATORIAL)
@@ -43,7 +70,27 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
     planets_prog.append(('POF', pof_prog,"(p)"))
     planets_reg.append(('POF', pof_reg,"(c)"))
 
-    return  [*planets_rad, *houses_rad], [*planets_prog, *houses_prog], [*planets_reg, * houses_reg]
+    dict_info = {
+        "dt_radix": julian.from_jd(jd_radix),
+        "dt_event": julian.from_jd(jd_event),
+        "geopos": [geo_lat, geo_long],
+        "days_diff_radix_event": days_diff,
+        "dt_progressed": julian.from_jd(jd_prog),
+        "dt_regressed": julian.from_jd(jd_reg),
+        "RA_sun_rad": ra_rad,
+        "RA_sun_prog": ra_prog,
+        "RA_sun_reg": ra_reg,
+        "arc_progressed": arc_prog,
+        "arc_regregressed": arc_reg,
+        "rad_positions": [*planets_rad, *houses_rad],
+        "rad_houses": houses_rad,
+        "RAMC": ramc,
+        "e": e,
+        "progressed_positions": [*planets_prog, *houses_prog],
+        "regressed_positions": [*planets_reg, * houses_reg]
+    }
+
+    return  [*planets_rad, *houses_rad], [*planets_prog, *houses_prog], [*planets_reg, * houses_reg], dict_info
 
 
 def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):   
@@ -147,18 +194,3 @@ def calc_POF(planets, ac):
     long_moon = planets[moon_index][1]
     return (ac + long_moon - long_sun) % 360
 
-def secondary_for_event(jd_radix, jd_event, geo_lat, geo_long):
-    swe.set_ephe_path('ephe')
-    rad_positions, prog_positions, reg_positions = get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long)
-    
-    str_aspects_rad_prog = aspects.find_secondary_swiss_aspects(rad_positions, prog_positions)
-    str_aspects_rad_reg = aspects.find_secondary_swiss_aspects(rad_positions, reg_positions)
-    str_aspects_prog_prog = aspects.find_secondary_swiss_aspects(prog_positions, prog_positions)
-    str_aspects_reg_reg = aspects.find_secondary_swiss_aspects(reg_positions, reg_positions)
-    str_aspects_prog_prog = aspects.remove_duplicates(str_aspects_prog_prog)
-    str_aspects_reg_reg = aspects.remove_duplicates(str_aspects_reg_reg)
-
-    str_rad_n_prog = str_aspects_rad_prog + str_aspects_prog_prog
-    str_rad_n_reg = str_aspects_rad_reg + str_aspects_reg_reg
-
-    return str_rad_n_prog, str_rad_n_reg
