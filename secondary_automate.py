@@ -52,8 +52,8 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
 
     #directed houses and rad houses
     houses_rad = houses[0]
-    houses_prog = swe.houses_armc(ramc+arc_prog, geo_lat, e, b'T')[0] 
-    houses_reg = swe.houses_armc(ramc+arc_reg, geo_lat, e, b'T')[0] 
+    houses_prog = swe.houses_armc(swe.degnorm(ramc+arc_prog), geo_lat, e, b'T')[0] 
+    houses_reg = swe.houses_armc(swe.degnorm(ramc+arc_reg), geo_lat, e, b'T')[0] 
     houses_rad =  format_house_list(houses_rad, '(r)')
     houses_prog =  format_house_list(houses_prog, '(p)')
     houses_reg =  format_house_list(houses_reg, '(c)')
@@ -100,7 +100,7 @@ def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):
     count = 1
 
     for house in houses:
-        OA = (RAMC + (30*count)) % 360
+        OA = swe.degnorm(RAMC + (30*count)) 
         phi = calc_house_pole(house, GEO_LAT)
         long = calc_long_from_OA(OA, phi, E, True)
         #print(f"HOUSE: {house}, OA: {OA}, phi: {phi}, long: {long}")
@@ -119,10 +119,10 @@ def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):
     #calculating H1 AND H2
     phi = calc_house_pole('Hmd1', GEO_LAT)
     #OA DIFF BETWEEN ASC AND MC IS ALWAYS 90 SO PLUS 45
-    OA = (RAMC + 45) % 360
+    OA = swe.degnorm(RAMC + 45) 
     long = calc_long_from_OA(OA,phi, E, True)
     longitudes.append(('Hmd1', long, label))
-    OA = ((RAMC + 90) + 45) %  360
+    OA = swe.degnorm((RAMC + 90) + 45)
     long = calc_long_from_OA(OA,phi, E, True)
     longitudes.append(('Hmd2', long, label))
 
@@ -138,7 +138,7 @@ def calc_long_from_OA(OA, phi, E, flag_ascen):
         LONG_deg += 90
     else:
         LONG_deg += 270
-    return LONG_deg % 360
+    return swe.degnorm(LONG_deg)
 
 
 def calculate_obliquity(JD):
@@ -190,5 +190,5 @@ def calc_POF(planets, ac):
     moon_index = PLANETS.index('Moon')
     long_sun = planets[sun_index][1]
     long_moon = planets[moon_index][1]
-    return (ac + long_moon - long_sun) % 360
+    return swe.degnorm(ac + long_moon - long_sun)
 

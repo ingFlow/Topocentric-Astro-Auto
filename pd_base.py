@@ -22,6 +22,7 @@ class PD_Base:
 
         arc = calc_arc(jd_radix, jd_event)
         dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
+        dir_OA = swe.degnorm(dir_OA) 
 
         LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
 
@@ -98,8 +99,7 @@ def calculate_longitude(E, phi, OA):
     else:
         LONG_deg += 270
 
-    # Ensure the longitude is within the range [0, 360) degrees
-    LONG_deg = LONG_deg % 360
+    LONG_deg = swe.degnorm(LONG_deg)
 
     return LONG_deg
 
@@ -188,7 +188,8 @@ def calculate_SA(AD, ac, long, GEO_LAT, quadrant):
     dc = swe.degnorm(ac + 180)
     
     if (quadrant in (2, 3)):
-        NS_indicator = -1
+        NS_indicator = 1
+        #{CHANGED HERE THE NS INDICATOR TO BE LIKE NORTH HEMISPHERE}
         
     SA = 90 + AD if (GEO_LAT*NS_indicator > 0) else 90 - AD
     
@@ -216,13 +217,16 @@ def calculate_OA_OD(RA, ADP, GEO_LAT, quadrant):
     OA_OD = 0.0
     FLAG_ASCEN = None
     
-    if (GEO_LAT >= 0):
-        OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
-        FLAG_ASCEN = True if (quadrant in (1,2)) else False
-    else:
+    #{CHANGED HERE TO BE LIKE NORTHERN HEMISPHERE}
+    #if (GEO_LAT >= 0):
+    OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
+    OA_OD = swe.degnorm(OA_OD)
+    
+    FLAG_ASCEN = True if (quadrant in (1,2)) else False
+    '''else:
         OA_OD = RA + ADP if (quadrant in (1,2)) else RA - ADP
         FLAG_ASCEN = False if (quadrant in (1,2)) else True
-
+'''
 
     return OA_OD, FLAG_ASCEN
         
@@ -263,7 +267,7 @@ def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):
     count = 1
 
     for house in houses:
-        OA = (RAMC + (30*count)) % 360
+        OA = swe.degnorm(RAMC + (30*count)) 
         phi = calc_house_pole(house, GEO_LAT)
         long = calc_long_from_OA(OA, phi, E, True)
         #print(f"HOUSE: {house}, OA: {OA}, phi: {phi}, long: {long}")
@@ -282,10 +286,10 @@ def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):
     #calculating H1 AND H2
     phi = calc_house_pole('mdpt1', GEO_LAT)
     #OA DIFF BETWEEN ASC AND MC IS ALWAYS 90 SO PLUS 45
-    OA = (RAMC + 45) % 360
+    OA = swe.degnorm(RAMC + 45) 
     long = calc_long_from_OA(OA,phi, E, True)
     directed_longitudes.append(('Hmd1', long, label))
-    OA = ((RAMC + 90) + 45) %  360
+    OA = swe.degnorm((RAMC + 90) + 45) 
     long = calc_long_from_OA(OA,phi, E, True)
     directed_longitudes.append(('Hmd2', long, label))
 
@@ -301,7 +305,7 @@ def calc_long_from_OA(OA, phi, E, flag_ascen):
         LONG_deg += 90
     else:
         LONG_deg += 270
-    return LONG_deg % 360
+    return swe.degnorm(LONG_deg)
 
 def shift_point_to_closest_next_quad(point_angle, left, right, current_quadrant):
     """will return new shifted quadrant based on which angle it is closer to (left or right of the point)
@@ -322,8 +326,8 @@ def shift_point_to_closest_next_quad(point_angle, left, right, current_quadrant)
 
 def calc_left_right_angles(ac, mc, quadrant):
     """returns tuple (left_angle, right_angle)"""
-    ic = (mc + 180) % 360
-    dc = (ac + 180) % 360
+    ic = swe.degnorm(mc + 180)
+    dc = swe.degnorm(ac + 180)
 
     if (quadrant == 1):
         return mc, ac
@@ -361,6 +365,7 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag
 
     arc = calc_arc(jd_radix, jd_event)
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
+    dir_OA = swe.degnorm(dir_OA)
 
     LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
     '''print(f"arc: {arc}")

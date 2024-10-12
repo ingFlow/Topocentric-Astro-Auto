@@ -39,7 +39,7 @@ class SRA_Auto:
         dir_precession = abs(rad_aya - event_aya)
         xx, _ = swe.calc_ut(jd_radix, swe.SUN)
         rad_sun_long = xx[0]
-        dir_sun_long_precessed = rad_sun_long + dir_precession
+        dir_sun_long_precessed = swe.degnorm(rad_sun_long + dir_precession)
         
         #PRENATAL
         jd_conv_event = jd_radix - abs(jd_radix - jd_event)
@@ -52,7 +52,7 @@ class SRA_Auto:
         
         event_aya = swe.get_ayanamsa_ut(jd_conv_event)
         conv_precession = abs(rad_aya - event_aya)
-        conv_sun_long_precessed = rad_sun_long - conv_precession
+        conv_sun_long_precessed = swe.degnorm(rad_sun_long - conv_precession)
         
         jd_dir_return = swe.solcross_ut(rad_sun_long, jd_dir_start)
         jd_dir_return_precessed = swe.solcross_ut(dir_sun_long_precessed, jd_dir_start)

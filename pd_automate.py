@@ -484,8 +484,8 @@ def calc_directed_pd_houses(jd_radix, jd_event, geo_latitude, rad_houses):
     ramc = rad_houses[1][2]
     e = pd.calculate_obliquity(jd_radix)
 
-    directed = swe.houses_armc(ramc+arc, geo_latitude, e, b'T')[0]
-    converse = swe.houses_armc(ramc-arc, geo_latitude, e, b'T')[0]
+    directed = swe.houses_armc(swe.degnorm(ramc+arc), geo_latitude, e, b'T')[0]
+    converse = swe.houses_armc(swe.degnorm(ramc-arc), geo_latitude, e, b'T')[0]
     #print(f"dirHouse ----- {directed} \nconvHouse------- {converse}")
     return directed, converse
 
@@ -544,7 +544,7 @@ def calc_directed_POF(rad_planets, jd_radix, jd_event, geo_latitude, geo_longitu
     long_moon = rad_planets[moon_index][1]
     ac, mc, ramc = calc_radix_ac_mc_ramc(jd_radix, geo_latitude, geo_longitude)
     
-    pof_long = (ac + long_moon - long_sun) % 360
+    pof_long = swe.degnorm(ac + long_moon - long_sun) 
     quadrant = pd.get_point_quadrant(ac, mc, pof_long)
 
     e = pd.calculate_obliquity(jd_radix)

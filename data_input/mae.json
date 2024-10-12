@@ -1,7 +1,7 @@
 {
     "dt_radix_start": "1974-06-13T03:00:00",
     "dt_radix_end": "1974-06-14T03:00:00",
-    "dt_actual_dob": "1974-06-13T17:30:24",
+    "dt_actual_dob": "1974-06-13T17:30:32",
     "geopos_natal": [-4.05466,39.66359,23.0],
     "list_of_events": [
       {"datetime": "1994-07-02T12:00:00", "event_type": "DEATH_FATHER_GRAND","geopos": [53.4, -2.9833333, 70.0]},

@@ -166,11 +166,11 @@ def calc_kinetic_demi_dir_conv(jd_radix, jd_event):
 
     jd_prog = jd_radix + days_years_diff
     xx, _ = swe.calc_ut(jd_prog, swe.MOON)
-    prog_moon_long = swe.degnorm(xx[0]+180) + precession
+    prog_moon_long = swe.degnorm((xx[0]+180) + precession)
 
     jd_reg = jd_radix - days_years_diff
     xx, _ = swe.calc_ut(jd_reg, swe.MOON)
-    reg_moon_long = swe.degnorm(xx[0]+180) - conv_precession
+    reg_moon_long = swe.degnorm((xx[0]+180) - conv_precession)
 
     return prog_moon_long, reg_moon_long
 
@@ -199,11 +199,11 @@ def calc_kinetic_dir_conv(jd_radix, jd_event, precession, conv_precession):
 
     jd_prog = jd_radix + days_years_diff
     xx, _ = swe.calc_ut(jd_prog, swe.MOON)
-    prog_moon_long = xx[0] + precession
+    prog_moon_long = swe.degnorm(xx[0] + precession)
 
     jd_reg = jd_radix - days_years_diff
     xx, _ = swe.calc_ut(jd_reg, swe.MOON)
-    reg_moon_long = xx[0] - conv_precession
+    reg_moon_long = swe.degnorm(xx[0] - conv_precession)
 
     return prog_moon_long, reg_moon_long
 
@@ -214,11 +214,11 @@ def get_point_long_dir_conv(ltype: LunarType, jd_radix, jd_event, geopos_natal):
     rad_aya = swe.get_ayanamsa_ut(jd_radix)
     event_aya = swe.get_ayanamsa_ut(jd_event)
     dir_precession = abs(rad_aya - event_aya)
-    moon_precessed_long = moon_long + dir_precession
+    moon_precessed_long = swe.degnorm(moon_long + dir_precession)
 
     event_aya = swe.get_ayanamsa_ut(jd_conv_event)
     conv_precession = abs(rad_aya - event_aya)
-    moon_conv_precessed_long = moon_long - conv_precession
+    moon_conv_precessed_long = swe.degnorm(moon_long - conv_precession)
 
     dir_long, conv_long = None, None
 
@@ -232,10 +232,10 @@ def get_point_long_dir_conv(ltype: LunarType, jd_radix, jd_event, geopos_natal):
     if ltype == LunarType.AS_LUNAR:
         #radical ac
         houses = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
-        ac_dir = houses[0][0] + dir_precession
+        ac_dir = swe.degnorm(houses[0][0] + dir_precession)
         
         houses = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
-        ac_conv = houses[0][0] - conv_precession
+        ac_conv = swe.degnorm(houses[0][0] - conv_precession)
         dir_long, conv_long = ac_dir, ac_conv
 
     dict_info = {

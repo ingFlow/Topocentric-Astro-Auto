@@ -41,7 +41,7 @@ class PSSR_Auto:
         dir_precession = abs(rad_aya - event_aya)
         xx, _ = swe.calc_ut(jd_radix, swe.SUN)
         sun_long = xx[0]
-        dir_sun_long_precessed = sun_long + dir_precession
+        dir_sun_long_precessed = swe.degnorm(sun_long + dir_precession)
         
         jd_pssr_dir = swe.solcross_ut(dir_sun_long_precessed, jd_pssr_start)
         jd_rad_event_diff = abs(jd_radix - jd_event)
@@ -61,7 +61,7 @@ class PSSR_Auto:
         
         event_aya = swe.get_ayanamsa_ut(jd_conv_event)
         conv_precession = abs(rad_aya - event_aya)
-        conv_sun_long_precessed = sun_long - conv_precession
+        conv_sun_long_precessed = swe.degnorm(sun_long - conv_precession)
         jd_pssr_conv = swe.solcross_ut(conv_sun_long_precessed, jd_pssr_start)
         
         jd_pssr_event_diff_conv = abs(jd_pssr_conv - jd_conv_event)
