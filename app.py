@@ -75,7 +75,8 @@ def update_content():
     restrict_orb = int(request.args.get('orb_input',restrict_orb))
     flag_orb_restrict = True if (restrict_orb != -1) else False
 
-    try:
+    #try:
+    if True:
         radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
         jd_radix = julian.to_jd(radix_date)
         static_message = ''
@@ -83,7 +84,7 @@ def update_content():
         dt_event = datetime.fromisoformat(event_info[0])
         event_id = int(event_info[2])
         event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
-        event_loc = [float(i) for i in event_locstr]
+        event_geopos = [float(i) for i in event_locstr]
         score = 0
 
         rad_houses_info = swe.houses(jd_radix, geo_pos_natal[0], geo_pos_natal[1], b'T')
@@ -114,11 +115,12 @@ def update_content():
             for p in rad_planets_houses_labelled:
                 str_all_directed_aspects+= f"{p}\n"
         elif technique == aTechniqueType.LUNAR:
-            all_charts = lunar_auto.calc_all_lunars_for_date(julian.from_jd(jd_radix),dt_event,event_loc,geo_pos_natal,lunar_orb)
+            lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)
+            all_charts = lunar_obj.get_all_lunars()
             str_all_directed_aspects = lunar_auto.get_str_labelled_aspects_from_array(all_charts)
             counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
             str_counts = lunar_auto.get_str_planet_counts(counts)
-            mal_count, ben_count = lunar_auto.count_mal_ben_all_lunars(julian.from_jd(jd_radix),dt_event,event_loc,geo_pos_natal,lunar_orb)
+            mal_count, ben_count = lunar_auto.count_mal_ben_from_str_aspects(str_all_directed_aspects)
             static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
         
         list_all_asp = str_all_directed_aspects.split('\n')
@@ -148,10 +150,10 @@ def update_content():
 
         static_message = static_message + f"Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_pos_natal[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_pos_natal[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
-    except:
+        '''   except:
         static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
         scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
-
+'''
     return jsonify({
         'static_message': static_message,
         'scrollable_message': scrollable_message
