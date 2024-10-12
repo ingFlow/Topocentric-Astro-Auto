@@ -209,12 +209,13 @@
             </div>
             <div style="margin-bottom: 20px;"></div>
 
-            <div class="radio-group" id="left-radio-group">
-                <label><input type="radio" name="left-radio" value="all_directions" onchange="updateMiddleContent()"> Show All</label>
-                <label><input type="radio" name="left-radio" value="accepted" onchange="updateMiddleContent()"> Accepted</label>
+            <div class="checkbox-group" id="left-checkbox-group">
+                <label>
+                    <input type="checkbox" id="cb-show-accepted" onchange="updateMiddleContent()"> Show Accepted only
+                </label>
             </div>
 
-            <div style="margin-bottom: 20px;"></div>
+            <div style="margin-bottom: 5px;"></div>
 
             <div class="radio-group" id="right-radio-group">
                 <label><input type="radio" name="right-radio" value=0 onchange="updateMiddleContent()"> PD</label>
@@ -257,6 +258,11 @@
                         <li onclick="updateMiddleContent('{{ item }}', null)">{{ item }}</li>
                     {% endfor %}
                 </ul>
+            </div>
+            <div class="checkbox-group" id="right-checkbox-group">
+                <label>
+                    <input type="checkbox" id="cb-show-data" onchange="updateMiddleContent()"> Show Data
+                </label>
             </div>          
         </div>
     </div>    
@@ -278,12 +284,10 @@
             return null;
         }
 
-        // JavaScript function to update middle column dynamically
         async function updateMiddleContent(rightItem = null, leftItem = null) {
-            // Get selected values from the radio groups
-            const leftRadioValue = getSelectedRadioValue('left-radio');
+            const isShowAccept = document.getElementById('cb-show-accepted').checked;
+            const isShowData = document.getElementById('cb-show-data').checked;
             const rightRadioValue = getSelectedRadioValue('right-radio');
-            //get inputted orb 
             const orbInputValue = document.getElementById('orbInput').value;
             // Get the clicked item from column 1 or 3
             const leftItemText = leftItem || document.querySelector('#left-list .selected')?.textContent || '';
@@ -291,7 +295,7 @@
 
             try {
                 // Send the AJAX request to the Flask route
-                let response = await fetch(`/update_content?left_radio=${encodeURIComponent(leftRadioValue)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}&orb_input=${encodeURIComponent(orbInputValue)}`);
+                let response = await fetch(`/update_content?&show_accepted=${encodeURIComponent(isShowAccept)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}&orb_input=${encodeURIComponent(orbInputValue)}&show_data=${encodeURIComponent(isShowData)}`);
                 let data = await response.json();
 
                 // Update the static and scrollable sections of the middle column with the response data
@@ -337,24 +341,6 @@
             setupList('left-list');
             setupList('right-list');
         });
-/*
-        // When the file selection changes
-        $('#fileSelector').change(function() {
-            var selectedFile = $(this).val();
-            
-            // Send the selected file name to the server
-            $.ajax({
-                url: '/update_file',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ filename: selectedFile }),
-                success: function(response) {
-                    // Reload the page to display updated columns
-                    location.reload();
-                }
-            });
-        });
-*/
     </script>
 </body>
 </html>

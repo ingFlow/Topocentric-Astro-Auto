@@ -67,13 +67,13 @@ def home():
 @app.route('/update_content')
 def update_content():
     global restrict_orb
-    left_radio = request.args.get('left_radio', '')
-    flag_show_accepted = True if left_radio == 'accepted' else False
+    flag_show_accepted = request.args.get('show_accepted', default='false') == 'true'
     technique = int(request.args.get('right_radio', ''))
     radix_date = request.args.get('left_item', '')
     dt_event = request.args.get('right_item', '')  
     restrict_orb = int(request.args.get('orb_input',restrict_orb))
     flag_orb_restrict = True if (restrict_orb != -1) else False
+    flag_show_data = request.args.get('show_data', default='false') == 'true'
 
     #try:
     if True:
@@ -129,7 +129,7 @@ def update_content():
             str_counts = lunar_auto.get_str_planet_counts(counts)
             mal_count, ben_count = lunar_auto.count_mal_ben_from_str_aspects(str_all_directed_aspects)
             static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
-        
+
         list_all_asp = str_all_directed_aspects.split('\n')
 
         if flag_show_accepted:
@@ -155,6 +155,32 @@ def update_content():
         if technique == aTechniqueType.LUNAR and flag_show_accepted:
             html_list = str_counts.replace(",", "\n")
 
+        if flag_show_data:
+            technique_data = None
+            if technique == aTechniqueType.PRIMARY_DIRECT:
+                technique_data = pd_info
+            elif technique == aTechniqueType.SECONDARY_DIRECT:
+                technique_data = secondary_info
+            elif technique == aTechniqueType.PSSR:
+                technique_data = pssr_info
+            elif technique == aTechniqueType.TRANSIT:
+                technique_data = transit_info
+            elif technique == aTechniqueType.LUNAR:
+                technique_data = lunar_info
+            elif technique == aTechniqueType.SRA:
+                technique_data = sra_info
+            
+            if technique == aTechniqueType.PRIMARY_DIRECT or technique == aTechniqueType.LUNAR:
+                data_list = []
+                for main_key, sub_dict in technique_data.items():
+                    data_list.append(f"{main_key}:") 
+                    
+                    for sub_key, value in sub_dict.items():
+                        data_list.append(f"  {sub_key}: {value}")
+            else:  
+                data_list = [f"{key}: {value}" for key, value in technique_data.items()]
+            html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in data_list) + "</ul>"
+
         static_message = static_message + f"Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_pos_natal[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_pos_natal[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
         '''   except:
@@ -166,14 +192,6 @@ def update_content():
         'scrollable_message': scrollable_message
     })
 
-'''@app.route('/update_file', methods=['POST'])
-def update_file():
-    global current_file
-    data = request.get_json()
-    current_file = data['filename']  # Update the global file name
-    home()
-    return render_template('index.html', left_column_items=['this'], right_column_items=['that'], files=['no'], current_file=current_file)
-'''
 def reset_globals():
     global geo_pos_natal
     geo_pos_natal = []
