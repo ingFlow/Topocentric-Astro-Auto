@@ -9,6 +9,7 @@ import transit_swiss_auto as transit_auto
 import pandas as pd
 import lunar_auto as lunar
 import re
+from constants import PLANETS
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -17,7 +18,6 @@ class TechniqueType:
     TRANSIT = 3
     LUNAR = 4
 
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 grid_aspects =[]
 date_technique = -1
 aspect_type = -1

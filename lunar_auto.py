@@ -1,17 +1,21 @@
 import swisseph as swe
 import julian
-from datetime import datetime, timedelta
-import aspects_base as aspects
-import pssr_swiss_auto as ps
+from datetime import timedelta
+from aspects_base import calculate_aspect, convert_full_dec_degrees_to_zod_min_sec, convert_dec_degrees_to_deg_min_sec
+from constants import PLANETS
 
 class LunarType:
     LUNAR = 0
     KINETIC = 1
     AS_LUNAR = 2
 
-ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", 
-                "scorpio","sagittarius", "capricorn", "aquarius", "pisces"]
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+    @classmethod
+    def get_name(cls, value):
+        """Returns the name of the lunar type for the given value."""
+        for attr in dir(cls):
+            if not attr.startswith("__") and getattr(cls, attr) == value:
+                return attr
+        return 'Unknown Lunar Type'
 
 class Lunar_Auto:
     def __init__(self, dt_radix, dt_event, geopos, geopos_natal, orb):
@@ -31,7 +35,7 @@ class Lunar_Auto:
         jd_event = julian.to_jd(dt_event)
         
         #lunar computation
-        point_long_dir, point_long_conv = get_point_long_dir_conv(ltype,jd_radix,jd_event, geopos_natal)
+        point_long_dir, point_long_conv, dict_calc_info = get_point_long_dir_conv(ltype,jd_radix,jd_event, geopos_natal)
         jd_search_date = julian.to_jd(dt_event - timedelta(days=30))
         
         jd_return_direct = swe.mooncross_ut(point_long_dir, jd_search_date)
@@ -96,19 +100,25 @@ class Lunar_Auto:
             demi_conv_planets = calc_planets_near_angles(demi_conv_positions,orb)
             all_charts.append((f"D{str_label}C",demi_conv_planets))    
 
-        self.__dict_info[f"{ltype}_info"] = {
-            "dt_radix": dt_radix,
-            "dt_event": dt_event,
-            "point_long_direct": ps.convert_full_dec_degrees_to_zod_min_sec(point_long_dir),
-            "point_long_converse": ps.convert_full_dec_degrees_to_zod_min_sec(point_long_conv),
-            #"point_long_direct_demi": safe_get('point_long_dir_demi', ps.convert_full_dec_degrees_to_zod_min_sec),
-            #"point_long_converse_demi": safe_get('point_long_conv_demi', ps.convert_full_dec_degrees_to_zod_min_sec),
-            "dt_return_direct": julian.from_jd(jd_return_direct),
-            "dt_return_converse": julian.from_jd(jd_return_converse),
-            #"dt_return_demi_direct": safe_get('jd_demi_return_direct', julian.from_jd),
-            #"dt_return_demi_converse": safe_get('jd_demi_return_conv', julian.from_jd),
-            "dt_converse_event": julian.from_jd(jd_conv_event_exact)
+        key_str = LunarType.get_name(ltype)
+        self.__dict_info[key_str] = dict_calc_info
+        self.__dict_info[key_str].update({"dt_return_direct": julian.from_jd(jd_return_direct)})
+        self.__dict_info[key_str].update({"dt_return_converse": julian.from_jd(jd_return_converse)})
+        if jd_demi_return_direct is not None:
+            self.__dict_info[key_str].update({"point_long_direct_demi": convert_full_dec_degrees_to_zod_min_sec(point_long_dir_demi)})
+            self.__dict_info[key_str].update({"dt_return_demi_direct": julian.from_jd(jd_demi_return_direct)})
+        if jd_demi_return_conv is not None:
+            self.__dict_info[key_str].update({"point_long_converse_demi": convert_full_dec_degrees_to_zod_min_sec(point_long_conv_demi)})
+            self.__dict_info[key_str].update({"dt_return_demi_converse": julian.from_jd(jd_demi_return_conv)})
+        temp_dict = {
+            "direct_positions": main_direct_positions,
+            "converse_positions": main_conv_positions,
         }
+        if jd_demi_return_direct != None:
+            temp_dict.update({"direct_demi_positions": demi_direct_positions})
+        if jd_demi_return_conv != None:
+            temp_dict.update({"converse_demi_positions": demi_conv_positions})
+        self.__dict_info[key_str].update(temp_dict)
 
         return all_charts
 
@@ -203,32 +213,43 @@ def get_point_long_dir_conv(ltype: LunarType, jd_radix, jd_event, geopos_natal):
     moon_long = xx[0]    
     rad_aya = swe.get_ayanamsa_ut(jd_radix)
     event_aya = swe.get_ayanamsa_ut(jd_event)
-    precession = abs(rad_aya - event_aya)
-    moon_precessed_long = moon_long + precession
+    dir_precession = abs(rad_aya - event_aya)
+    moon_precessed_long = moon_long + dir_precession
 
     event_aya = swe.get_ayanamsa_ut(jd_conv_event)
     conv_precession = abs(rad_aya - event_aya)
     moon_conv_precessed_long = moon_long - conv_precession
 
-    #jd_new_rad_dir = swe.mooncross_ut(moon_precessed_long, jd_radix)
-    #jd_shifted_rad_dir = julian.to_jd(julian.from_jd(jd_radix) - timedelta(days=10))
-    #jd_new_rad_conv = swe.mooncross_ut(moon_conv_precessed_long, jd_shifted_rad_dir)
+    dir_long, conv_long = None, None
 
     if ltype == LunarType.LUNAR:
         #radical moon
-        return moon_precessed_long, moon_conv_precessed_long
+        dir_long, conv_long = moon_precessed_long, moon_conv_precessed_long
     if ltype == LunarType.KINETIC:
         #radical progressed moon
-        return calc_kinetic_dir_conv(jd_radix,jd_event,precession,conv_precession)
+        dir_long, conv_long = calc_kinetic_dir_conv(jd_radix,jd_event,dir_precession,conv_precession)
 
     if ltype == LunarType.AS_LUNAR:
         #radical ac
         houses = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
-        ac_dir = houses[0][0] + precession
+        ac_dir = houses[0][0] + dir_precession
         
         houses = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
-        ac_conv = houses[0][0] - precession
-        return ac_dir, ac_conv
+        ac_conv = houses[0][0] - conv_precession
+        dir_long, conv_long = ac_dir, ac_conv
+
+    dict_info = {
+        "dt_radix": julian.from_jd(jd_radix),
+        "dt_event": julian.from_jd(jd_event),
+        "dt_converse_event": julian.from_jd(jd_conv_event),
+        "rad_moon": convert_full_dec_degrees_to_zod_min_sec(moon_long),
+        "direct_precession": convert_dec_degrees_to_deg_min_sec(dir_precession),
+        "converse_precession": convert_dec_degrees_to_deg_min_sec(conv_precession),
+        "point_long_direct": convert_full_dec_degrees_to_zod_min_sec(dir_long),
+        "point_long_converse": convert_full_dec_degrees_to_zod_min_sec(conv_long),
+    }
+
+    return dir_long, conv_long, dict_info
         
 def calc_planets_ac_mc(jd_radix, geopos):
     """returns list starting with ac them mc then rest of planets"""
@@ -258,14 +279,14 @@ def calc_planets_near_angles(list_planets, orb):
     planets = list_planets[2:]
 
     for p, d in planets:
-        aspect = aspects.calculate_aspect(ac, d, orb, True)
+        aspect = calculate_aspect(ac, d, orb, True)
         if aspect:
             asp, asp_orb = aspect
             if asp == 'conjunction' or asp == 'opposition':
                 str = (f'(ac,{ac:.2f}) ({p},{d:.2f}) ({asp},{asp_orb * 60:.0f}\')\n')
                 planets_near_angle.append(str)
     for p, d in planets:
-        aspect = aspects.calculate_aspect(mc, d, orb, True)
+        aspect = calculate_aspect(mc, d, orb, True)
         if aspect:
             asp, asp_orb = aspect
             if asp == 'conjunction' or asp == 'opposition':
@@ -382,10 +403,10 @@ xx, _ = swe.calc_ut(jd1, swe.MOON)
 houses = swe.houses(jd1, geopos[0], geopos[1], b'T')
 ac = houses[0][0]
 mc = houses[1][1]
-print(f"moon dirNQL {ps.convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {ps.convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(mc)}")
+print(f"moon dirNQL {convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {convert_full_dec_degrees_to_zod_min_sec(mc)}")
 jd2 = julian.to_jd(datetime(1903,10,6,10,22,00))
 xx, _ = swe.calc_ut(jd2, swe.MOON)
 houses = swe.houses(jd2, geopos[0], geopos[1], b'T')
 ac = houses[0][0]
 mc = houses[1][1]
-print(f"moon convNQL {ps.convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {ps.convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {ps.convert_full_dec_degrees_to_zod_min_sec(mc)}")'''
+print(f"moon convNQL {convert_full_dec_degrees_to_zod_min_sec(xx[0])}  ac {convert_full_dec_degrees_to_zod_min_sec(ac)}  mc {convert_full_dec_degrees_to_zod_min_sec(mc)}")'''

@@ -1,6 +1,6 @@
 import math
 import swisseph as swe
-
+from aspects_base import convert_dec_degrees_to_deg_min_sec
 
 class PD_Base:
     def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
@@ -43,15 +43,15 @@ class PD_Base:
     def get_extended_planet_info(self):
         dict_info = {
             "QUADRANT": self.QUADRANT,
-            "ARC": self.ARC,
-            "MD": self.MD,
-            "AD": self.AD,
-            "SA": self.SA,
-            "phi": self.phi,
-            "ADP": self.ADP,
-            "OA_OD": self.OA_OD,
+            "ARC": (convert_dec_degrees_to_deg_min_sec(self.ARC),self.ARC),
+            "MD": (convert_dec_degrees_to_deg_min_sec(self.MD),self.MD),
+            "AD": (convert_dec_degrees_to_deg_min_sec(self.AD),self.AD),
+            "SA": (convert_dec_degrees_to_deg_min_sec(self.SA),self.SA),
+            "phi": (convert_dec_degrees_to_deg_min_sec(self.phi),self.phi),
+            "ADP": (convert_dec_degrees_to_deg_min_sec(self.ADP),self.ADP),
+            "OA_OD": (convert_dec_degrees_to_deg_min_sec(self.OA_OD),self.OA_OD),
             "FLAG_ASCENSION": self.FLAG_ASCENSION,
-            "MDO": self.MDO
+            "MDO": (convert_dec_degrees_to_deg_min_sec(self.MDO),self.MDO)
         }
 
         return dict_info
