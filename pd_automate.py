@@ -2,8 +2,8 @@ import swisseph as swe
 import julian
 import pd_base as pd
 import math
-import aspects_base as aspects
-from datetime import datetime
+from aspects_base import find_pd_swiss_aspects, format_house_list
+from constants import PLANETS, HOUSES
 
 class EventType:
     BIRTH_BROTHER = 0
@@ -96,10 +96,10 @@ class PD_Automate:
         dir_houses, conv_houses = calc_directed_pd_houses(jd_rad,jd, geo_positions[0], rad_houses_info)
         rad_houses = rad_houses_info[0]
         
-        rad_houses = aspects.format_house_list(rad_houses, '(r)')
-        dir_houses = aspects.format_house_list(dir_houses, '(d)')
-        conv_houses = aspects.format_house_list(conv_houses, '(c)')
-        dir_planets, conv_planets, self.__dict_planets_extended_info["planets_extended"] = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
+        rad_houses = format_house_list(rad_houses, '(r)')
+        dir_houses = format_house_list(dir_houses, '(d)')
+        conv_houses = format_house_list(conv_houses, '(c)')
+        dir_planets, conv_planets, dict_extended = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
         #add POF  DATA
         rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, jd_rad, jd, geo_positions[0], geo_positions[1])
         rad_planets_labelled.append(('POF', rad_pof, "(r)"))
@@ -111,16 +111,18 @@ class PD_Automate:
         conv_positions = [*conv_planets, *conv_houses]
 
         self.__dict_planets_extended_info["base"] = {
-            "jd_radix": jd_rad,
-            "jd_event": jd,
+            "dt_radix": julian.from_jd(jd_rad),
+            "dt_event": julian.from_jd(jd),
             "geopos": geo_positions,
             "rad_positions": rad_positions,
             "rad_equatorial": rad_planets_equatorial,
             "directed_positions": dir_positions,
             "converse_positions": conv_positions
         }
-        self.__str_aspects_rad_dir = aspects.find_pd_swiss_aspects(rad_positions, dir_positions)
-        self.__str_aspects_rad_conv = aspects.find_pd_swiss_aspects(rad_positions, conv_positions)
+        self.__dict_planets_extended_info["planets_extended"] = dict_extended
+
+        self.__str_aspects_rad_dir = find_pd_swiss_aspects(rad_positions, dir_positions)
+        self.__str_aspects_rad_conv = find_pd_swiss_aspects(rad_positions, conv_positions)
         
 
     def get_aspects_str(self):
@@ -128,10 +130,6 @@ class PD_Automate:
 
     def get_extended_information(self):
         return self.__dict_planets_extended_info
-
-
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
-HOUSES = ['H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12']
 
 PRIMARY_RULES = {
     EventType.BIRTH_BROTHER: (('H4', 'H7','H3'), (Planet.MER, Planet.JUP)),

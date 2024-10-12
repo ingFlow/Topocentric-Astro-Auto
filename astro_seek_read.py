@@ -6,8 +6,6 @@ from datetime import datetime, timedelta
 
 ORDER_PLANETS = ['ASC', 'MC', 'Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Node', 'Lilith', 'Chiron', 'Fortune', 'Vertex']
 
-
-
 def construct_birthchart_url(params):
     day, month, year, hour, minute, second = params
     '''base_url = "https://horoscopes.astro-seek.com/calculate-birth-chart-horoscope-online/"

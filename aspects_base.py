@@ -1,11 +1,11 @@
-"""ACROSS THE MODULE THE RADICAL POSITIONS ARE ALWAYS P1"""
+"""ACROSS THE MODULE THE RADICAL POSITIONS ARE ALWAYS P1 first planet set"""
 from enum import Enum
+from constants import ZODIAC_SIGNS
 
 class ProcessType(Enum):
     PSSR = "PSSR"
     TRANSIT = "TRANSIT"
     
-# Define the constants for aspects and zodiac signs
 MAJOR_ASPECTS = {
     "sextile": (60,300),
     "conjunction": (0,360),
@@ -51,6 +51,28 @@ ALL_PLANET_TRANS = ALL_PLANETS.union({'Sun'})
 SWISS_PLANETS = {'Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node', 'POF'}
 SWISS_HOUSES = {'H12', 'H11', 'H10', 'H9', 'H8', 'H7', 'H6', 'H5', 'H4', 'H3', 'H2', 'H1'}
 ALL_SWISS_POINTS = SWISS_PLANETS.union(SWISS_HOUSES)
+
+def convert_full_dec_degrees_to_zod_min_sec(full_dec_degrees):
+    zod, deg = convert_dec_degrees_to_zod(full_dec_degrees)
+    deg = convert_dec_degrees_to_deg_min_sec(deg)
+    return (zod,deg)
+
+def get_decimal_degrees(degrees, minutes, seconds):
+    return int(degrees) + int(minutes) / 60 + int(seconds) / 3600
+
+def convert_dec_degrees_to_zod(decimal_degrees):
+    segment_size = 30
+    index = int(decimal_degrees // segment_size)
+    zodiac_degree = decimal_degrees - index * segment_size
+    return ZODIAC_SIGNS[index], zodiac_degree
+
+def convert_dec_degrees_to_deg_min_sec(decimal_degrees):
+    degrees = int(decimal_degrees)
+    fractional_degrees = abs(decimal_degrees - degrees)
+    minutes = int(fractional_degrees * 60)
+    seconds = int(round((fractional_degrees * 60 - minutes) * 60, 2))
+
+    return degrees, minutes, seconds
 
 def zodiac_to_degrees(sign, degrees):
     """Convert zodiac sign and degrees to total degrees."""

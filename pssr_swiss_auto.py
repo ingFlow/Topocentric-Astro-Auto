@@ -1,11 +1,8 @@
 import swisseph as swe
 import julian
 from datetime import datetime, timedelta
-import aspects_base as aspects
-
-ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", 
-                "scorpio","sagittarius", "capricorn", "aquarius", "pisces"]
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+from aspects_base import convert_dec_degrees_to_deg_min_sec, find_pssr_swiss_aspects, convert_full_dec_degrees_to_zod_min_sec
+from constants import PLANETS 
 
 class PSSR_Auto:
     def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None):
@@ -84,28 +81,28 @@ class PSSR_Auto:
         self.__dict_info = {
             "dt_radix": dt_radix,
             "dt_event": dt_event,
-            "rad_positions": rad_planets,
             "direct_year": pssr_direct_year,
-            "direct_precession": dir_precession,
-            "rad_sun": sun_long,
-            "sun_direct_precessed": dir_sun_long_precessed,
+            "direct_precession": convert_dec_degrees_to_deg_min_sec(dir_precession),
+            "rad_sun": convert_full_dec_degrees_to_zod_min_sec(sun_long),
+            "sun_direct_precessed": convert_full_dec_degrees_to_zod_min_sec(dir_sun_long_precessed),
             "dt_direct_return": julian.from_jd(jd_pssr_dir),
             "jd_diff_pssr_event": jd_pssr_event_diff_dir,
             "dt_prog_pssr_direct": julian.from_jd(jd_prog_pssr_dir),
             "dt_reg_pssr_direct": julian.from_jd(jd_reg_pssr_dir),
             "converse_year": pssr_converse_year,
-            "converse_precession": conv_precession,
-            "converse_sun_precessed": conv_sun_long_precessed,
+            "converse_precession": convert_dec_degrees_to_deg_min_sec(conv_precession),
+            "converse_sun_precessed": convert_full_dec_degrees_to_zod_min_sec(conv_sun_long_precessed),
             "dt_converse_return": julian.from_jd(jd_pssr_conv),
             "jd_diff_pssr_event_converse": jd_pssr_event_diff_conv,
             "dt_prog_pssr_converse": julian.from_jd(jd_prog_pssr_conv),
             "dt_reg_pssr_converse": julian.from_jd(jd_reg_pssr_conv),
+            "rad_positions": rad_planets,
             "direct_planets": direct_planets,
             "converse_planets": conv_planets
         }
 
-        self.__str_rad_direct_aspects = aspects.find_pssr_swiss_aspects(rad_planets,direct_planets)
-        self.__str_rad_conv_aspects = aspects.find_pssr_swiss_aspects(rad_planets, conv_planets)
+        self.__str_rad_direct_aspects =  find_pssr_swiss_aspects(rad_planets,direct_planets)
+        self.__str_rad_conv_aspects =  find_pssr_swiss_aspects(rad_planets, conv_planets)
         
     def get_str_aspects(self):
         return self.__str_rad_direct_aspects, self.__str_rad_conv_aspects
@@ -126,42 +123,13 @@ def calc_planets_labelled(jd_radix, label, planets_indexes_to_exclude):
             planets.append((PLANETS[planet], long, label))    
     return planets
 
-
-def convert_full_dec_degrees_to_zod_min_sec(full_dec_degrees):
-    zod, deg = convert_dec_degrees_to_zod(full_dec_degrees)
-    deg = convert_dec_degrees_to_deg_min_sec(deg)
-    return (zod,deg)
-
-def julian_to_gregorian(julian_day):
-    return julian.from_jd(julian_day)
-
 def gregorian_to_julian(year, month, day, hour=12, minute=0, second=0):
     dt = datetime(year, month, day, hour, minute, second)
     return julian.to_jd(dt)
 
-def dt_gregorian_to_julian(dt):
-    return julian.to_jd(dt)
-
 def decimal_to_time(decimal_time):
-    hours, minutes, seconds = convert_dec_degrees_to_deg_min_sec(decimal_time)
+    hours, minutes, seconds =  convert_dec_degrees_to_deg_min_sec(decimal_time)
     return timedelta(hours=hours, minutes=minutes, seconds=seconds)
-
-def get_decimal_degrees(degrees, minutes, seconds):
-    return int(degrees) + int(minutes) / 60 + int(seconds) / 3600
-
-def convert_dec_degrees_to_zod(decimal_degrees):
-    segment_size = 30
-    index = int(decimal_degrees // segment_size)
-    zodiac_degree = decimal_degrees - index * segment_size
-    return ZODIAC_SIGNS[index], zodiac_degree
-
-def convert_dec_degrees_to_deg_min_sec(decimal_degrees):
-    degrees = int(decimal_degrees)
-    fractional_degrees = abs(decimal_degrees - degrees)
-    minutes = int(fractional_degrees * 60)
-    seconds = int(round((fractional_degrees * 60 - minutes) * 60, 2))
-
-    return degrees, minutes, seconds
 
 def calc_pssr_direct_year(radix_datetime, event_datetime):
     """give the year for the solar return corresponding to an event """

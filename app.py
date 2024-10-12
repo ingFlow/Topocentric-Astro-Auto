@@ -116,6 +116,7 @@ def update_content():
             str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
             sra_info = sra_auto_obj.get_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+            str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
         elif technique == aTechniqueType.NATAL:
             str_all_directed_aspects = ''
             for p in rad_planets_houses_labelled:

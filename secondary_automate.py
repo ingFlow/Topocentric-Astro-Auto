@@ -1,9 +1,8 @@
 import swisseph as swe
 import math
-import aspects_base as aspects
+from aspects_base import find_secondary_swiss_aspects, remove_duplicates, format_house_list, convert_dec_degrees_to_deg_min_sec
 import julian
-
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+from constants import PLANETS 
         
 class Secondary_Auto:
     def __init__(self, jd_radix, jd_event, geo_lat, geo_long):
@@ -14,12 +13,12 @@ class Secondary_Auto:
         swe.set_ephe_path('ephe')
         rad_positions, prog_positions, reg_positions, self.__dict_info = get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long)
         
-        str_aspects_rad_prog = aspects.find_secondary_swiss_aspects(rad_positions, prog_positions)
-        str_aspects_rad_reg = aspects.find_secondary_swiss_aspects(rad_positions, reg_positions)
-        str_aspects_prog_prog = aspects.find_secondary_swiss_aspects(prog_positions, prog_positions)
-        str_aspects_reg_reg = aspects.find_secondary_swiss_aspects(reg_positions, reg_positions)
-        str_aspects_prog_prog = aspects.remove_duplicates(str_aspects_prog_prog)
-        str_aspects_reg_reg = aspects.remove_duplicates(str_aspects_reg_reg)
+        str_aspects_rad_prog =  find_secondary_swiss_aspects(rad_positions, prog_positions)
+        str_aspects_rad_reg =  find_secondary_swiss_aspects(rad_positions, reg_positions)
+        str_aspects_prog_prog =  find_secondary_swiss_aspects(prog_positions, prog_positions)
+        str_aspects_reg_reg =  find_secondary_swiss_aspects(reg_positions, reg_positions)
+        str_aspects_prog_prog =  remove_duplicates(str_aspects_prog_prog)
+        str_aspects_reg_reg =  remove_duplicates(str_aspects_reg_reg)
 
         self.__str_rad_n_prog = str_aspects_rad_prog + str_aspects_prog_prog
         self.__str_rad_n_reg = str_aspects_rad_reg + str_aspects_reg_reg
@@ -55,9 +54,9 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
     houses_rad = houses[0]
     houses_prog = swe.houses_armc(ramc+arc_prog, geo_lat, e, b'T')[0] 
     houses_reg = swe.houses_armc(ramc+arc_reg, geo_lat, e, b'T')[0] 
-    houses_rad = aspects.format_house_list(houses_rad, '(r)')
-    houses_prog = aspects.format_house_list(houses_prog, '(p)')
-    houses_reg = aspects.format_house_list(houses_reg, '(c)')
+    houses_rad =  format_house_list(houses_rad, '(r)')
+    houses_prog =  format_house_list(houses_prog, '(p)')
+    houses_reg =  format_house_list(houses_reg, '(c)')
 
     planets_rad = calc_all_planets(jd_radix, "(r)")
     planets_prog = calc_all_planets(jd_prog, "(p)")
@@ -77,15 +76,14 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long):
         "days_diff_radix_event": days_diff,
         "dt_progressed": julian.from_jd(jd_prog),
         "dt_regressed": julian.from_jd(jd_reg),
-        "RA_sun_rad": ra_rad,
-        "RA_sun_prog": ra_prog,
-        "RA_sun_reg": ra_reg,
-        "arc_progressed": arc_prog,
-        "arc_regregressed": arc_reg,
+        "RA_sun_rad": convert_dec_degrees_to_deg_min_sec(ra_rad),
+        "RA_sun_prog": convert_dec_degrees_to_deg_min_sec(ra_prog),
+        "RA_sun_reg": convert_dec_degrees_to_deg_min_sec(ra_reg),
+        "arc_progressed": convert_dec_degrees_to_deg_min_sec(arc_prog),
+        "arc_regregressed": convert_dec_degrees_to_deg_min_sec(arc_reg),
+        "RAMC": convert_dec_degrees_to_deg_min_sec(ramc),
+        "e": convert_dec_degrees_to_deg_min_sec(e),
         "rad_positions": [*planets_rad, *houses_rad],
-        "rad_houses": houses_rad,
-        "RAMC": ramc,
-        "e": e,
         "progressed_positions": [*planets_prog, *houses_prog],
         "regressed_positions": [*planets_reg, * houses_reg]
     }

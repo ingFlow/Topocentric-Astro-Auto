@@ -1,11 +1,8 @@
 import swisseph as swe
 import julian
 from datetime import datetime, timedelta
-import aspects_base as aspects
-
-ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra", 
-                "scorpio","sagittarius", "capricorn", "aquarius", "pisces"]
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+from aspects_base import find_sra_swiss_aspects, remove_duplicates
+from constants import ZODIAC_SIGNS, PLANETS 
 
 class SRA_Auto:
     def __init__(self, dt_radix, dt_event, geopos, rad_planets=None):
@@ -69,13 +66,13 @@ class SRA_Auto:
         precessed_conv_planets = calc_planets_houses_labelled(jd_conv_return_precessed, '(pc)', planets_to_exclude, geopos)
         sra_planets = [*trop_dir_planets, *trop_conv_planets] #rad-to-trop more effective than rad to precessed
     
-        str_rad_sra_aspects = aspects.find_sra_swiss_aspects(rad_planets,sra_planets) 
-        str_td_td_aspects = aspects.find_sra_swiss_aspects(trop_dir_planets, trop_dir_planets)
-        str_tc_tc_aspects = aspects.find_sra_swiss_aspects(trop_conv_planets, trop_conv_planets)
-        str_pd_pd_aspects = aspects.find_sra_swiss_aspects(precessed_dir_planets, precessed_dir_planets)
-        str_pc_pc_aspects = aspects.find_sra_swiss_aspects(precessed_conv_planets, precessed_conv_planets)
+        str_rad_sra_aspects = find_sra_swiss_aspects(rad_planets,sra_planets) 
+        str_td_td_aspects = find_sra_swiss_aspects(trop_dir_planets, trop_dir_planets)
+        str_tc_tc_aspects = find_sra_swiss_aspects(trop_conv_planets, trop_conv_planets)
+        str_pd_pd_aspects = find_sra_swiss_aspects(precessed_dir_planets, precessed_dir_planets)
+        str_pc_pc_aspects = find_sra_swiss_aspects(precessed_conv_planets, precessed_conv_planets)
         str_sra_sra_aspects = str_td_td_aspects + '\n' + str_tc_tc_aspects + '\n' + str_pd_pd_aspects + '\n' + str_pc_pc_aspects
-        str_rad_sra_aspects = aspects.remove_duplicates(str_rad_sra_aspects)
+        str_rad_sra_aspects = remove_duplicates(str_rad_sra_aspects)
 
         self.__dict_info = {
             "dt_radix": julian.from_jd(jd_radix),

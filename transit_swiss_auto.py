@@ -1,9 +1,7 @@
 import swisseph as swe
 import julian
-from datetime import datetime, timedelta
-import aspects_base as aspects
-
-PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
+from aspects_base import find_trans_swiss_aspects
+from constants import PLANETS 
 
 class Transit_Auto:
     def __init__(self, jd_radix, jd_event, rad_planets):
@@ -21,15 +19,15 @@ class Transit_Auto:
         self.__dict_info = {
             "dt_radix": julian.from_jd(jd_radix),
             "dt_event": julian.from_jd(jd_event),
-            "rad_positions": rad_planets,
             "dt_converse_event": julian.from_jd(jd_conv_event),
+            "rad_positions": rad_planets,
             "direct_planets": dir_planets,
             "converse_planets": conv_planets
         }
 
 
-        self.__str_rad_direct_aspects = aspects.find_trans_swiss_aspects(rad_planets,dir_planets)
-        self.__str_rad_conv_aspects = aspects.find_trans_swiss_aspects(rad_planets, conv_planets)
+        self.__str_rad_direct_aspects = find_trans_swiss_aspects(rad_planets,dir_planets)
+        self.__str_rad_conv_aspects = find_trans_swiss_aspects(rad_planets, conv_planets)
         
     def get_str_aspects(self):
         return self.__str_rad_direct_aspects, self.__str_rad_conv_aspects
