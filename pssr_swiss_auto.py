@@ -7,7 +7,112 @@ ZODIAC_SIGNS = ["aries", "taurus", "gemini", "cancer", "leo", "virgo", "libra",
                 "scorpio","sagittarius", "capricorn", "aquarius", "pisces"]
 PLANETS = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Mean_Node']
 
+class PSSR_Auto:
+    def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None):
+        self.__dict_info = {}
+        self.calc_pssr_for_date(dt_radix, dt_event, rad_planets, geopos)
 
+
+    def calc_pssr_for_date(self, dt_radix, dt_event, rad_planets=None, geopos=None):
+        """returns tuple with 2 str of aspects rad to direct and conv pssr (prog/reg)
+        if no radplanetsyou need to also give geopos natal"""
+        jd_radix = julian.to_jd(dt_radix)
+        jd_event = julian.to_jd(dt_event)
+
+        if rad_planets == None:
+            rad_planets = []
+            geo_latitude = geopos[0]
+            geo_longitude = geopos[1]
+            for planet in range(0, len(PLANETS)):
+                xx, _ = swe.calc_ut(jd_radix, planet)
+                long = xx[0]
+
+                rad_planets.append((PLANETS[planet], long, "(r)")) 
+            houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
+            ac = houses[0][0]
+            sun_long = rad_planets[PLANETS.index('Sun')][1]
+            moon_long = rad_planets[PLANETS.index('Moon')][1]
+            pof_long = swe.degnorm(ac + moon_long - sun_long)
+            rad_planets.append(('POF',pof_long,'(r)'))
+            for house_no in range(0,len(houses[0])):
+                rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
+
+        pssr_direct_year = calc_pssr_direct_year(dt_radix, dt_event)
+        jd_pssr_start = julian.to_jd(datetime(pssr_direct_year,1,1,0,0,0))
+        rad_aya = swe.get_ayanamsa_ut(jd_radix)
+        event_aya = swe.get_ayanamsa_ut(jd_event)
+        dir_precession = abs(rad_aya - event_aya)
+        xx, _ = swe.calc_ut(jd_radix, swe.SUN)
+        sun_long = xx[0]
+        dir_sun_long_precessed = sun_long + dir_precession
+        
+        jd_pssr_dir = swe.solcross_ut(dir_sun_long_precessed, jd_pssr_start)
+        jd_rad_event_diff = abs(jd_radix - jd_event)
+        jd_pssr_event_diff_dir = abs(jd_pssr_dir - jd_event)
+        jd_conv_event = jd_radix - jd_rad_event_diff
+
+        timelapse = timedelta(hours=jd_pssr_event_diff_dir / 15.218425)
+        jd_prog_pssr_dir = julian.to_jd(julian.from_jd(jd_pssr_dir) + timelapse)
+        jd_reg_pssr_dir = julian.to_jd(julian.from_jd(jd_pssr_dir) - timelapse)
+
+        year_diff = abs(dt_radix.year - dt_event.year)
+        if (pssr_direct_year == dt_event.year):
+            pssr_converse_year = dt_radix.year - year_diff
+        else:
+            pssr_converse_year = (dt_radix.year - year_diff) + 1
+        jd_pssr_start = julian.to_jd(datetime(pssr_converse_year,1,1,0,0,0))
+        
+        event_aya = swe.get_ayanamsa_ut(jd_conv_event)
+        conv_precession = abs(rad_aya - event_aya)
+        conv_sun_long_precessed = sun_long - conv_precession
+        jd_pssr_conv = swe.solcross_ut(conv_sun_long_precessed, jd_pssr_start)
+        
+        jd_pssr_event_diff_conv = abs(jd_pssr_conv - jd_conv_event)
+        
+        timelapse = timedelta(hours=jd_pssr_event_diff_conv / 15.218425)
+        jd_prog_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) + timelapse)
+        jd_reg_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) - timelapse)
+        
+        planets_to_exclude = [PLANETS.index('Sun')]
+        prog_dir_planets = calc_planets_labelled(jd_prog_pssr_dir, '(dp)', planets_to_exclude)
+        prog_conv_planets = calc_planets_labelled(jd_prog_pssr_conv, '(cp)', planets_to_exclude)
+        reg_dir_planets = calc_planets_labelled(jd_reg_pssr_dir, '(dr)', planets_to_exclude)
+        reg_conv_planets = calc_planets_labelled(jd_reg_pssr_conv, '(cr)', planets_to_exclude)
+        direct_planets = [*prog_dir_planets, *reg_dir_planets]
+        conv_planets = [*prog_conv_planets, *reg_conv_planets]
+
+        self.__dict_info = {
+            "dt_radix": dt_radix,
+            "dt_event": dt_event,
+            "rad_positions": rad_planets,
+            "direct_year": pssr_direct_year,
+            "direct_precession": dir_precession,
+            "rad_sun": sun_long,
+            "sun_direct_precessed": dir_sun_long_precessed,
+            "dt_direct_return": julian.from_jd(jd_pssr_dir),
+            "jd_diff_pssr_event": jd_pssr_event_diff_dir,
+            "dt_prog_pssr_direct": julian.from_jd(jd_prog_pssr_dir),
+            "dt_reg_pssr_direct": julian.from_jd(jd_reg_pssr_dir),
+            "converse_year": pssr_converse_year,
+            "converse_precession": conv_precession,
+            "converse_sun_precessed": conv_sun_long_precessed,
+            "dt_converse_return": julian.from_jd(jd_pssr_conv),
+            "jd_diff_pssr_event_converse": jd_pssr_event_diff_conv,
+            "dt_prog_pssr_converse": julian.from_jd(jd_prog_pssr_conv),
+            "dt_reg_pssr_converse": julian.from_jd(jd_reg_pssr_conv),
+            "direct_planets": direct_planets,
+            "converse_planets": conv_planets
+        }
+
+        self.__str_rad_direct_aspects = aspects.find_pssr_swiss_aspects(rad_planets,direct_planets)
+        self.__str_rad_conv_aspects = aspects.find_pssr_swiss_aspects(rad_planets, conv_planets)
+        
+    def get_str_aspects(self):
+        return self.__str_rad_direct_aspects, self.__str_rad_conv_aspects
+
+    def get_dict_info(self):
+        return self.__dict_info
+    
 def calc_planets_labelled(jd_radix, label, planets_indexes_to_exclude):
     planets = []
     
@@ -68,79 +173,4 @@ def calc_pssr_direct_year(radix_datetime, event_datetime):
         direct_year = event_datetime.year
     return direct_year
 
-def pssr_for_date_event_norad(jd_radix, jd_event, geopos):
-    """returns tuple of str_dir aspects and str_conv aspects"""
-    rad_planets = []
-    geo_latitude = geopos[0]
-    geo_longitude = geopos[1]
-    for planet in range(0, len(PLANETS)):
-        xx, _ = swe.calc_ut(jd_radix, planet)
-        long = xx[0]
 
-        rad_planets.append((PLANETS[planet], long, "(r)")) 
-    houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
-    ac = houses[0][0]
-    sun_long = rad_planets[PLANETS.index('Sun')][1]
-    moon_long = rad_planets[PLANETS.index('Moon')][1]
-    pof_long = swe.degnorm(ac + moon_long - sun_long)
-    rad_planets.append(('POF',pof_long,'(r)'))
-    for house_no in range(0,len(houses[0])):
-        rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
-
-    str_aspects_rad_dir, str_aspects_rad_conv = calc_pssr_for_date(julian.from_jd(jd_radix),julian.from_jd(jd_event),rad_planets)
-
-    return str_aspects_rad_dir, str_aspects_rad_conv
-
-def calc_pssr_for_date(dt_radix, dt_event, rad_planets):
-    """returns tuple with 2 str of aspects rad to direct and conv pssr (prog/reg)"""
-    jd_radix = julian.to_jd(dt_radix)
-    jd_event = julian.to_jd(dt_event)
-
-    pssr_direct_year = calc_pssr_direct_year(dt_radix, dt_event)
-    jd_pssr_start = julian.to_jd(datetime(pssr_direct_year,1,1,0,0,0))
-    rad_aya = swe.get_ayanamsa_ut(jd_radix)
-    event_aya = swe.get_ayanamsa_ut(jd_event)
-    precession = abs(rad_aya - event_aya)
-    xx, _ = swe.calc_ut(jd_radix, swe.SUN)
-    sun_long = xx[0]
-    sun_long_precessed = sun_long + precession
-    
-    jd_pssr = swe.solcross_ut(sun_long_precessed, jd_pssr_start)
-    jd_rad_event_diff = abs(jd_radix - jd_event)
-    jd_pssr_event_diff = abs(jd_pssr - jd_event)
-    jd_conv_event = jd_radix - jd_rad_event_diff
-
-    timelapse = timedelta(hours=jd_pssr_event_diff / 15.218425)
-    jd_prog_pssr_dir = julian.to_jd(julian.from_jd(jd_pssr) + timelapse)
-    jd_reg_pssr_dir = julian.to_jd(julian.from_jd(jd_pssr) - timelapse)
-
-    year_diff = abs(dt_radix.year - dt_event.year)
-    if (pssr_direct_year == dt_event.year):
-        pssr_converse_year = dt_radix.year - year_diff
-    else:
-        pssr_converse_year = (dt_radix.year - year_diff) + 1
-    jd_pssr_start = julian.to_jd(datetime(pssr_converse_year,1,1,0,0,0))
-    
-    event_aya = swe.get_ayanamsa_ut(jd_conv_event)
-    precession = abs(rad_aya - event_aya)
-    sun_long_precessed = sun_long - precession
-    jd_pssr = swe.solcross_ut(sun_long_precessed, jd_pssr_start)
-    
-    jd_pssr_event_diff = abs(jd_pssr - jd_conv_event)
-    
-    timelapse = timedelta(hours=jd_pssr_event_diff / 15.218425)
-    jd_prog_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr) + timelapse)
-    jd_reg_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr) - timelapse)
-    
-    planets_to_exclude = [PLANETS.index('Sun')]
-    prog_dir_planets = calc_planets_labelled(jd_prog_pssr_dir, '(dp)', planets_to_exclude)
-    prog_conv_planets = calc_planets_labelled(jd_prog_pssr_conv, '(cp)', planets_to_exclude)
-    reg_dir_planets = calc_planets_labelled(jd_reg_pssr_dir, '(dr)', planets_to_exclude)
-    reg_conv_planets = calc_planets_labelled(jd_reg_pssr_conv, '(cr)', planets_to_exclude)
-    direct_planets = [*prog_dir_planets, *reg_dir_planets]
-    conv_planets = [*prog_conv_planets, *reg_conv_planets]
-
-    str_rad_direct_aspects = aspects.find_pssr_swiss_aspects(rad_planets,direct_planets)
-    str_rad_conv_aspects = aspects.find_pssr_swiss_aspects(rad_planets, conv_planets)
-    
-    return str_rad_direct_aspects, str_rad_conv_aspects

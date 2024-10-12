@@ -99,7 +99,7 @@ class PD_Automate:
         rad_houses = aspects.format_house_list(rad_houses, '(r)')
         dir_houses = aspects.format_house_list(dir_houses, '(d)')
         conv_houses = aspects.format_house_list(conv_houses, '(c)')
-        dir_planets, conv_planets, self.__dict_planets_extended_info = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
+        dir_planets, conv_planets, self.__dict_planets_extended_info["planets_extended"] = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
         #add POF  DATA
         rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, jd_rad, jd, geo_positions[0], geo_positions[1])
         rad_planets_labelled.append(('POF', rad_pof, "(r)"))
