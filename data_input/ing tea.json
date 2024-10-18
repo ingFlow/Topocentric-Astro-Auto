@@ -19,7 +19,7 @@
         },
         {
             "datetime": "2008-09-05T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -28,7 +28,7 @@
         },
         {
             "datetime": "2008-12-11T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -37,7 +37,7 @@
         },
         {
             "datetime": "2009-01-14T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -64,7 +64,7 @@
         },
         {
             "datetime": "2013-12-12T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -82,7 +82,7 @@
         },
         {
             "datetime": "2015-05-27T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -118,7 +118,7 @@
         },
         {
             "datetime": "2019-05-22T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -127,7 +127,7 @@
         },
         {
             "datetime": "2019-08-13T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -136,7 +136,7 @@
         },
         {
             "datetime": "2021-04-06T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -154,7 +154,7 @@
         },
         {
             "datetime": "2021-08-15T12:00:00",
-            "event_type": "LOSSES",
+            "event_type": "FAILURE",
             "geopos": [
                 -4.05466,
                 39.66359,

@@ -101,7 +101,7 @@ class PD_Automate:
         conv_houses = format_house_list(conv_houses, '(c)')
         dir_planets, conv_planets, dict_extended = calc_directed_pd_planets(jd_rad,jd, geo_positions[0], geo_positions[1], rad_planets_equatorial)
         #add POF  DATA
-        rad_pof, dir_pof, conv_pof = calc_directed_POF(rad_planets_labelled, jd_rad, jd, geo_positions[0], geo_positions[1])
+        rad_pof, dir_pof, conv_pof, dict_pof_info = calc_directed_POF(rad_planets_labelled, jd_rad, jd, geo_positions[0], geo_positions[1])
         rad_planets_labelled.append(('POF', rad_pof, "(r)"))
         dir_planets.append(('POF', dir_pof, "(d)"))
         conv_planets.append(('POF',conv_pof, "(c)"))
@@ -119,6 +119,7 @@ class PD_Automate:
             "directed_positions": dir_positions,
             "converse_positions": conv_positions
         }
+        dict_extended.update(dict_pof_info)
         self.__dict_planets_extended_info["planets_extended"] = dict_extended
 
         self.__str_aspects_rad_dir = find_pd_swiss_aspects(rad_positions, dir_positions)
@@ -543,18 +544,25 @@ def calc_directed_POF(rad_planets, jd_radix, jd_event, geo_latitude, geo_longitu
     long_sun = rad_planets[sun_index][1]
     long_moon = rad_planets[moon_index][1]
     ac, mc, ramc = calc_radix_ac_mc_ramc(jd_radix, geo_latitude, geo_longitude)
-    
+    cusps = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')[0]
     pof_long = swe.degnorm(ac + long_moon - long_sun) 
     quadrant = pd.get_point_quadrant(ac, mc, pof_long)
-
+    p_house = pd.get_housepos_manual(pof_long, cusps)
+    
     e = pd.calculate_obliquity(jd_radix)
     ra, decl, _ = swe.cotrans((pof_long, 0.0, 1), e)
+    decl = -decl
     
-    long_directed = pd.get_directed_from_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, quadrant, ac, pof_long)
-    long_conv = pd.get_directed_from_data(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, quadrant, ac, pof_long)
-    
+    direct_pof_obj = pd.PD_Base(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, True, p_house, ac, pof_long)
+    long_directed = direct_pof_obj.get_long_directed()
 
-    return pof_long, long_directed, long_conv
+    converse_pof_obj = pd.PD_Base(jd_radix, jd_event, geo_latitude, decl, ra, ramc, mc, False, p_house, ac, pof_long)
+    long_conv = converse_pof_obj.get_long_directed()
+
+    dict_info = {}
+    dict_info["POF"] = direct_pof_obj.get_extended_planet_info()
+    
+    return pof_long, long_directed, long_conv, dict_info
 
 def calc_planet_house_pos(ramc, geo_lat, e, long, lat):
     hpos = swe.house_pos(ramc, geo_lat, e, (long,lat), b'T')

@@ -1,3 +1,6 @@
+"""there is no difference between calculating the north and south md to oa data other than
+when calculating with southern geo latitudes I make the geolat its absolute value and these
+results are giving the values corresponding to POLARIS"""
 import math
 import swisseph as swe
 from aspects_base import convert_dec_degrees_to_deg_min_sec
@@ -192,11 +195,12 @@ def calculate_AD(GEO_LAT, DECL):
 '''GEO_LAT MUST BE DECIMAL FORM, all calculations are in degrees'''
 def calculate_SA(AD, ac, long, GEO_LAT, quadrant):
     #FIND OUT IF ABOVE OR BELOW HORIZON IF ABOVE/BELOW AC/DC AXIS
+    GEO_LAT = abs(GEO_LAT)
     NS_indicator = 1
     dc = swe.degnorm(ac + 180)
     
     if (quadrant in (2, 3)):
-        NS_indicator = 1
+        NS_indicator = -1
         
     SA = 90 + AD if (GEO_LAT*NS_indicator > 0) else 90 - AD
     
