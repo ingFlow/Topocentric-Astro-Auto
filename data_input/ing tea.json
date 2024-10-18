@@ -9,8 +9,35 @@
     ],
     "list_of_events": [
         {
-            "datetime": "2004-12-15T12:00:00",
+            "datetime": "2004-12-01T12:00:00",
             "event_type": "MOVE_HOME",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2008-09-05T12:00:00",
+            "event_type": "LOSSES",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2008-12-11T12:00:00",
+            "event_type": "LOSSES",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2009-01-14T12:00:00",
+            "event_type": "LOSSES",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -36,7 +63,7 @@
             ]
         },
         {
-            "datetime": "2013-12-11T12:00:00",
+            "datetime": "2013-12-12T12:00:00",
             "event_type": "LOSSES",
             "geopos": [
                 -26.075,

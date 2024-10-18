@@ -39,7 +39,7 @@ def convert_birth_data_json(file_to_write_str):
         (datetime(2021, 7, 10, 12, 00, 00) ,EventType.TRAVEL_NEGATIVE,[26.17678333, 28.04259444, 1753.0]),
         #(datetime(2021, 8, 15, 12, 00, 00) ,EventType.LOSSES,[-4.05466, 39.66359, 23.0]),
         (datetime(2022, 1, 3, 12, 00, 00) ,EventType.INTRIGUE,[-4.05466, 39.66359, 23.0]),
-        (datetime(2022, 5, 25, 12, 00, 00) ,EventType.TRAVEL_NEGATIVE,[-4.05466, 39.66359, 23.0]),
+        (datetime(2022, 5, 25, 12, 00, 00) ,EventType.ARREST,[-4.05466, 39.66359, 23.0]),
     ]
     
     data = {

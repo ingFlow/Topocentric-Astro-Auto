@@ -26,6 +26,10 @@ class PD_Base:
 
         LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
 
+        self.DECL = DECL
+        self.RA = RA
+        self.RAMC = RAMC
+        self.HOUSE_POS = house_pos
         self.QUADRANT = quadrant
         self.ARC = arc
         self.MD = MD
@@ -45,6 +49,10 @@ class PD_Base:
         dict_info = {
             "QUADRANT": self.QUADRANT,
             "ARC": (convert_dec_degrees_to_deg_min_sec(self.ARC),self.ARC),
+            "DECL": (convert_dec_degrees_to_deg_min_sec(self.DECL),self.DECL),
+            "RA": (convert_dec_degrees_to_deg_min_sec(self.RA),self.RA),
+            "RAMC": (convert_dec_degrees_to_deg_min_sec(self.RAMC),self.RAMC),
+            "HOUSE_POS": (convert_dec_degrees_to_deg_min_sec(self.HOUSE_POS),self.HOUSE_POS),
             "MD": (convert_dec_degrees_to_deg_min_sec(self.MD),self.MD),
             "AD": (convert_dec_degrees_to_deg_min_sec(self.AD),self.AD),
             "SA": (convert_dec_degrees_to_deg_min_sec(self.SA),self.SA),
@@ -189,7 +197,6 @@ def calculate_SA(AD, ac, long, GEO_LAT, quadrant):
     
     if (quadrant in (2, 3)):
         NS_indicator = 1
-        #{CHANGED HERE THE NS INDICATOR TO BE LIKE NORTH HEMISPHERE}
         
     SA = 90 + AD if (GEO_LAT*NS_indicator > 0) else 90 - AD
     
@@ -216,14 +223,21 @@ def calculate_OA_OD(RA, ADP, GEO_LAT, quadrant):
     # if north/south calculation changes
     OA_OD = 0.0
     FLAG_ASCEN = None
-    
+
+    #if (GEO_LAT >= 0):
+    OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
+    FLAG_ASCEN = True if (quadrant in (1,2)) else False
+    '''else:
+        OA_OD = RA + ADP if (quadrant in (1,2)) else RA - ADP
+        FLAG_ASCEN = False if (quadrant in (1,2)) else True
+
     #{CHANGED HERE TO BE LIKE NORTHERN HEMISPHERE}
     #if (GEO_LAT >= 0):
     OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
     OA_OD = swe.degnorm(OA_OD)
     
     FLAG_ASCEN = True if (quadrant in (1,2)) else False
-    '''else:
+    else:
         OA_OD = RA + ADP if (quadrant in (1,2)) else RA - ADP
         FLAG_ASCEN = False if (quadrant in (1,2)) else True
 '''
