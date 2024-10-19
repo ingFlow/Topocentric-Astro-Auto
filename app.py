@@ -8,6 +8,7 @@ import sra_auto
 import main_converge
 import julian
 import aspects_implementation
+import analysis
 from datetime import datetime
 import swisseph as swe
 import os
@@ -60,8 +61,8 @@ def home():
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = aspects_implementation.process_polaris_times('txt/ingtea rect ver 2 - 1 date was wrong.txt', 50)
-    list_times = [dt_actual_dob, datetime(2000,3,11,15,49,36)]
+    list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
+    #list_times = [dt_actual_dob, datetime(2000,3,11,15,49,36)]
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -77,8 +78,7 @@ def update_content():
     flag_orb_restrict = True if (restrict_orb != -1) else False
     flag_show_data = request.args.get('show_data', default='false') == 'true'
 
-    #try:
-    if True:
+    try:
         radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
         jd_radix = julian.to_jd(radix_date)
         static_message = ''
@@ -187,10 +187,10 @@ def update_content():
 
         static_message = static_message + f"Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_pos_natal[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_pos_natal[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
-        '''   except:
+    except:
         static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
         scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
-'''
+
     return jsonify({
         'static_message': static_message,
         'scrollable_message': scrollable_message
@@ -201,11 +201,11 @@ def reset_globals():
     geo_pos_natal = []
 
 if __name__ == '__main__':
-    #main_converge.pd_rect_grid_score_create('data_input/ing tea.json','ingtea_rect_ver3_',8)
-    #main_converge.other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
+    #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
+    #main_converge.other_techniques_from_pd_rect('txt/ingbtea ver4_sorted_planet_data.csv', 'data_input/ing tea prim.json', 'ver4_', 100, 2)
     #DONT USE UNLESS NEEDED
-    #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver3_2000-03-12_primaries.txt',False)
-    #analysis.create_csv_count_txt('ingtea_rect_ver3_2000-03-12_primariesCOUNT.txt','ingtea_ver3_sorted_data.csv')
+    #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
+    #analysis.create_csv_count_txt('ingtea_rect_ver4_2000-03-12_primariesCOUNT.txt','ingtea_ver4_sorted_data.csv')
     
     app.run(debug=True)
 
