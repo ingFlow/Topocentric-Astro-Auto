@@ -6,11 +6,10 @@ import swisseph as swe
 from aspects_base import convert_dec_degrees_to_deg_min_sec
 
 class PD_Base:
-    def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-        self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long)
+    def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
+        self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e)
 
-    def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-        E = calculate_obliquity(jd_radix)
+    def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
         quadrant = get_quadrant_from_house_pos(house_pos)
         MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
@@ -27,7 +26,7 @@ class PD_Base:
         dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
         dir_OA = swe.degnorm(dir_OA) 
 
-        LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
+        LONG_deg = calc_long_from_OA(dir_OA, phi, e, FLAG_ASCEN)
 
         self.DECL = DECL
         self.RA = RA
@@ -67,25 +66,6 @@ class PD_Base:
         }
 
         return dict_info
-
-def calculate_obliquity(JD):
-    '''this obliquity is not the true one that takes into account the nutation and stuff'''
-
-    t = (JD - 2451545.0) / 3652500
-
-    e = (84381.448 - 
-        4680.93 * t - 
-        1.55 * t**2 + 
-        1999.25 * t**3 - 
-        51.38 * t**4 - 
-        249.67 * t**5 - 
-        39.05 * t**6 + 
-        7.12 * t**7 + 
-        27.87 * t**8 + 
-        5.79 * t**9 + 
-        2.45 * t**10)
-
-    return e/3600
 
 def calculate_longitude(E, phi, OA):
     '''based on juan's formula in pred astro p69 pdf'''
@@ -276,11 +256,9 @@ def calc_house_pole(house_no, GEO_LAT):
 
     return math.degrees(math.atan(tan_phi))
 
-def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):   
+def calc_houses_with_ramc(RAMC, GEO_LAT, label, E):   
     directed_longitudes = []
-    E = calculate_obliquity(jd)
-    #print(f"RAMC: {RAMC}, E: {E}, GEO_LAT: {GEO_LAT}")
-    
+
     houses = [11, 12, 'ASC', 2, 3]
     count = 1
 
@@ -367,8 +345,7 @@ def calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT,DECL, ac, long):
 
     return MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN
 
-def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-    E = calculate_obliquity(jd_radix)
+def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
     quadrant = get_quadrant_from_house_pos(house_pos)
     MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
@@ -385,7 +362,7 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
     dir_OA = swe.degnorm(dir_OA)
 
-    LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
+    LONG_deg = calc_long_from_OA(dir_OA, phi, e, FLAG_ASCEN)
     '''print(f"arc: {arc}")
     print(f"directed OA/OD: {dir_OA}")
     print(f"long directed: {LONG_deg}")'''

@@ -198,15 +198,6 @@
             ]
         },
         {
-            "datetime": "2024-10-09T08:00:00",
-            "event_type": "SUCCESS",
-            "geopos": [
-                -26.137999448,
-                28.15166606,
-                1753.0
-            ]
-        },
-        {
             "datetime": "2024-02-09T20:00:00",
             "event_type": "ACCIDENT",
             "geopos": [

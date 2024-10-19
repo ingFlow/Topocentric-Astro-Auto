@@ -12,6 +12,8 @@ from datetime import datetime
 import swisseph as swe
 import os
 import re
+from constants import calc_planets_pof_houses_labelled
+from aspects_base import calculate_obliquity
 
 class aTechniqueType:
     PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
@@ -88,38 +90,39 @@ def update_content():
         score = 0
 
         rad_houses_info = swe.houses(jd_radix, geo_pos_natal[0], geo_pos_natal[1], b'T')
-        rad_planets_labelled = pd_automate.calc_natal_planets_labelled(jd_radix)
         rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-        rad_planets_houses_labelled = aspects_implementation.calc_rad_planet_houses_labelled(jd_radix, geo_pos_natal[0], geo_pos_natal[1])
+        rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_pos_natal)
         if technique == aTechniqueType.PRIMARY_DIRECT:
-            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+            e = calculate_obliquity(jd_radix)
+            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
             str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
             pd_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif technique == aTechniqueType.SECONDARY_DIRECT:
-            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
+            e = calculate_obliquity(jd_radix)
+            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
             secondary_info = secondary_obj.get_dict_info()
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
         elif technique == aTechniqueType.PSSR:
-            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
+            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
             pssr_info = pssr_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.TRANSIT:
-            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
             transit_info = transit_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.SRA:
-            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_houses_labelled)
+            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
             sra_info = sra_auto_obj.get_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
             str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
         elif technique == aTechniqueType.NATAL:
             str_all_directed_aspects = ''
-            for p in rad_planets_houses_labelled:
+            for p in rad_planets_pof_houses_labelled:
                 str_all_directed_aspects+= f"{p}\n"
         elif technique == aTechniqueType.LUNAR:
             lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)

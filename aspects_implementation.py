@@ -9,7 +9,7 @@ import transit_swiss_auto as transit_auto
 import pandas as pd
 import lunar_auto as lunar
 import re
-from constants import PLANETS
+from constants import PLANETS, calc_planets_pof_houses_labelled
  
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -63,7 +63,7 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
     rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
     rad_planets_labelled = pd_automate.calc_natal_planets_labelled(jd_radix)
     rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-    rad_planets_houses_labelled = calc_rad_planet_houses_labelled(jd_radix, geo_positions[0], geo_positions[1])
+    rad_planets_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_positions)
 
     event_index = 0
     for dt_event, event_id, _ in list_dt_events:
@@ -149,18 +149,6 @@ def count_aspect_groups_txt(filename, flag_count_pssr_moon):
     with open(f"{filename[:-4]}COUNT.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')
-
-def calc_rad_planet_houses_labelled(jd_radix, geo_latitude, geo_longitude):
-    rad_planets = pd_automate.calc_natal_planets_labelled(jd_radix)
-    houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
-    ac = houses[0][0]
-    sun_long = rad_planets[PLANETS.index('Sun')][1]
-    moon_long = rad_planets[PLANETS.index('Moon')][1]
-    pof_long = swe.degnorm(ac + moon_long - sun_long)
-    rad_planets.append(('POF',pof_long,'(r)'))
-    for house_no in range(0,len(houses[0])):
-        rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
-    return  rad_planets
 
 def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positions: list[3], type: pd_automate.AspectType, technique: TechniqueType):
     global grid_aspects, date_technique, aspect_type

@@ -1,8 +1,8 @@
 import swisseph as swe
 import julian
 from datetime import datetime, timedelta
-from aspects_base import find_sra_swiss_aspects, remove_duplicates
-from constants import ZODIAC_SIGNS, PLANETS 
+from aspects_base import find_sra_swiss_aspects, remove_duplicates, convert_dec_degrees_to_deg_min_sec, convert_full_dec_degrees_to_zod_min_sec
+from constants import calc_planets_houses_labelled, calc_planets_pof_houses_labelled, PLANETS 
 
 class SRA_Auto:
     def __init__(self, dt_radix, dt_event, geopos, rad_planets=None):
@@ -15,30 +15,14 @@ class SRA_Auto:
         jd_event = julian.to_jd(dt_event)
 
         if rad_planets == None:
-            rad_planets = []
-            geo_latitude = geopos[0]
-            geo_longitude = geopos[1]
-            for planet in range(0, len(PLANETS)):
-                xx, _ = swe.calc_ut(jd_radix, planet)
-                long = xx[0]
-
-                rad_planets.append((PLANETS[planet], long, "(r)")) 
-            houses = swe.houses(jd_radix, geo_latitude, geo_longitude, b'T')
-            ac = houses[0][0]
-            sun_long = rad_planets[PLANETS.index('Sun')][1]
-            moon_long = rad_planets[PLANETS.index('Moon')][1]
-            pof_long = swe.degnorm(ac + moon_long - sun_long)
-            rad_planets.append(('POF',pof_long,'(r)'))
-            for house_no in range(0,6):
-                rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
+            rad_planets = calc_planets_pof_houses_labelled(jd_radix, geopos)
 
         direct_year = calc_direct_year(dt_radix, dt_event)
         jd_dir_start = julian.to_jd(datetime(direct_year,1,1,0,0,0))
         rad_aya = swe.get_ayanamsa_ut(jd_radix)
         event_aya = swe.get_ayanamsa_ut(jd_event)
         dir_precession = abs(rad_aya - event_aya)
-        xx, _ = swe.calc_ut(jd_radix, swe.SUN)
-        rad_sun_long = xx[0]
+        rad_sun_long = rad_planets[0][1]
         dir_sun_long_precessed = swe.degnorm(rad_sun_long + dir_precession)
         
         #PRENATAL
@@ -103,62 +87,6 @@ class SRA_Auto:
 
     def get_info(self):
         return self.__dict_info
-
-
-def calc_planets_houses_labelled(jd, label, planets_indexes_to_exclude, geopos):
-    planets_houses = []
-    
-    for planet in range(0, len(PLANETS)):
-        if (planet in planets_indexes_to_exclude):
-            pass
-        else:
-            xx, _ = swe.calc_ut(jd, planet)
-            long = xx[0]
-
-            planets_houses.append((PLANETS[planet], long, label))  
-   
-    houses = swe.houses(jd, geopos[0], geopos[1], b'T')[0]
-    for i in range(0, 6):
-        planets_houses.append((f"H{i+1}", houses[i], label))
-      
-    return planets_houses
-
-
-def convert_full_dec_degrees_to_zod_min_sec(full_dec_degrees):
-    zod, deg = convert_dec_degrees_to_zod(full_dec_degrees)
-    deg = convert_dec_degrees_to_deg_min_sec(deg)
-    return (zod,deg)
-
-def julian_to_gregorian(julian_day):
-    return julian.from_jd(julian_day)
-
-def gregorian_to_julian(year, month, day, hour=12, minute=0, second=0):
-    dt = datetime(year, month, day, hour, minute, second)
-    return julian.to_jd(dt)
-
-def dt_gregorian_to_julian(dt):
-    return julian.to_jd(dt)
-
-def decimal_to_time(decimal_time):
-    hours, minutes, seconds = convert_dec_degrees_to_deg_min_sec(decimal_time)
-    return timedelta(hours=hours, minutes=minutes, seconds=seconds)
-
-def get_decimal_degrees(degrees, minutes, seconds):
-    return int(degrees) + int(minutes) / 60 + int(seconds) / 3600
-
-def convert_dec_degrees_to_zod(decimal_degrees):
-    segment_size = 30
-    index = int(decimal_degrees // segment_size)
-    zodiac_degree = decimal_degrees - index * segment_size
-    return ZODIAC_SIGNS[index], zodiac_degree
-
-def convert_dec_degrees_to_deg_min_sec(decimal_degrees):
-    degrees = int(decimal_degrees)
-    fractional_degrees = abs(decimal_degrees - degrees)
-    minutes = int(fractional_degrees * 60)
-    seconds = int(round((fractional_degrees * 60 - minutes) * 60, 2))
-
-    return degrees, minutes, seconds
 
 def calc_direct_year(radix_datetime, event_datetime):
     """give the year for the solar return corresponding to an event """
