@@ -1,0 +1,25 @@
+{
+    "dt_radix_start": "1974-06-13T03:00:00",
+    "dt_radix_end": "1974-06-14T03:00:00",
+    "dt_actual_dob": "1974-06-13T17:30:32",
+    "geopos_natal": [-4.05466,39.66359,23.0],
+    "list_of_events": [
+      {"datetime": "1994-07-02T12:00:00", "event_type": "DEATH_FATHER_GRAND","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "1997-08-13T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "1997-11-16T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2000-03-11T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2021-04-06T12:00:00", "event_type": "LOSSES","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2022-05-25T12:00:00", "event_type": "ARREST","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2022-01-03T12:00:00", "event_type": "INTRIGUE","geopos": [53.4, -2.9833333, 70.0]},
+      {
+        "datetime": "2024-10-09T08:00:00",
+        "event_type": "SUCCESS",
+        "geopos": [
+            -26.137999448,
+            28.15166606,
+            1753.0
+        ]
+    }
+    ]
+  }

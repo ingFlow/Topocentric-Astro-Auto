@@ -78,6 +78,25 @@ def zodiac_to_degrees(sign, degrees):
     """Convert zodiac sign and degrees to total degrees."""
     return ZODIAC_START_DEGREES[sign] + degrees
 
+def calculate_obliquity(JD):
+    '''this obliquity is not the true one that takes into account the nutation and stuff'''
+
+    t = (JD - 2451545.0) / 3652500
+
+    e = (84381.448 - 
+        4680.93 * t - 
+        1.55 * t**2 + 
+        1999.25 * t**3 - 
+        51.38 * t**4 - 
+        249.67 * t**5 - 
+        39.05 * t**6 + 
+        7.12 * t**7 + 
+        27.87 * t**8 + 
+        5.79 * t**9 + 
+        2.45 * t**10)
+
+    return e/3600
+
 def format_house_list(houses, label):
     """make list of tuples of house cusps format of ('H1',DEG,'LABEL')"""
     formatted_list = []
@@ -180,8 +199,7 @@ def find_pssr_swiss_aspects(planet_set1, planet_set2):
                 orb = 32/60
             else:
                 orb = 14/60
-            if (p1 == 'Venus') and (p2 == 'Neptune'):
-                print('yes')
+
             aspect = calculate_aspect(d1, d2, orb, True)
             
             if aspect:

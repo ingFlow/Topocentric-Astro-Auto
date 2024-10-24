@@ -1,14 +1,16 @@
+"""there is no difference between calculating the north and south md to oa data other than
+when calculating with southern geo latitudes I make the geolat its absolute value and these
+results are giving the values corresponding to POLARIS"""
 import math
 import swisseph as swe
 from aspects_base import convert_dec_degrees_to_deg_min_sec
 from julian import from_jd
 
 class PD_Base:
-    def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-        self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long)
+    def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
+        self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e)
 
-    def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-        E = calculate_obliquity(jd_radix)
+    def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
         quadrant = get_quadrant_from_house_pos(house_pos)
         MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
@@ -36,8 +38,12 @@ class PD_Base:
         dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
         dir_OA = swe.degnorm(dir_OA) 
 
-        LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
+        LONG_deg = calc_long_from_OA(dir_OA, phi, e, FLAG_ASCEN)
 
+        self.DECL = DECL
+        self.RA = RA
+        self.RAMC = RAMC
+        self.HOUSE_POS = house_pos
         self.QUADRANT = quadrant
         self.ARC = arc
         self.MD = MD
@@ -57,6 +63,10 @@ class PD_Base:
         dict_info = {
             "QUADRANT": self.QUADRANT,
             "ARC": (convert_dec_degrees_to_deg_min_sec(self.ARC),self.ARC),
+            "DECL": (convert_dec_degrees_to_deg_min_sec(self.DECL),self.DECL),
+            "RA": (convert_dec_degrees_to_deg_min_sec(self.RA),self.RA),
+            "RAMC": (convert_dec_degrees_to_deg_min_sec(self.RAMC),self.RAMC),
+            "HOUSE_POS": (convert_dec_degrees_to_deg_min_sec(self.HOUSE_POS),self.HOUSE_POS),
             "MD": (convert_dec_degrees_to_deg_min_sec(self.MD),self.MD),
             "AD": (convert_dec_degrees_to_deg_min_sec(self.AD),self.AD),
             "SA": (convert_dec_degrees_to_deg_min_sec(self.SA),self.SA),
@@ -68,25 +78,6 @@ class PD_Base:
         }
 
         return dict_info
-
-def calculate_obliquity(JD):
-    '''this obliquity is not the true one that takes into account the nutation and stuff'''
-
-    t = (JD - 2451545.0) / 3652500
-
-    e = (84381.448 - 
-        4680.93 * t - 
-        1.55 * t**2 + 
-        1999.25 * t**3 - 
-        51.38 * t**4 - 
-        249.67 * t**5 - 
-        39.05 * t**6 + 
-        7.12 * t**7 + 
-        27.87 * t**8 + 
-        5.79 * t**9 + 
-        2.45 * t**10)
-
-    return e/3600
 
 def calculate_longitude(E, phi, OA):
     '''based on juan's formula in pred astro p69 pdf'''
@@ -196,12 +187,12 @@ def calculate_AD(GEO_LAT, DECL):
 '''GEO_LAT MUST BE DECIMAL FORM, all calculations are in degrees'''
 def calculate_SA(AD, ac, long, GEO_LAT, quadrant):
     #FIND OUT IF ABOVE OR BELOW HORIZON IF ABOVE/BELOW AC/DC AXIS
+    GEO_LAT = abs(GEO_LAT)
     NS_indicator = 1
     dc = swe.degnorm(ac + 180)
     
     if (quadrant in (2, 3)):
-        NS_indicator = 1
-        #{CHANGED HERE THE NS INDICATOR TO BE LIKE NORTH HEMISPHERE}
+        NS_indicator = -1
         
     SA = 90 + AD if (GEO_LAT*NS_indicator > 0) else 90 - AD
     
@@ -228,14 +219,21 @@ def calculate_OA_OD(RA, ADP, GEO_LAT, quadrant):
     # if north/south calculation changes
     OA_OD = 0.0
     FLAG_ASCEN = None
-    
+
+    #if (GEO_LAT >= 0):
+    OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
+    FLAG_ASCEN = True if (quadrant in (1,2)) else False
+    '''else:
+        OA_OD = RA + ADP if (quadrant in (1,2)) else RA - ADP
+        FLAG_ASCEN = False if (quadrant in (1,2)) else True
+
     #{CHANGED HERE TO BE LIKE NORTHERN HEMISPHERE}
     #if (GEO_LAT >= 0):
     OA_OD = RA - ADP if (quadrant in (1,2)) else RA + ADP
     OA_OD = swe.degnorm(OA_OD)
     
     FLAG_ASCEN = True if (quadrant in (1,2)) else False
-    '''else:
+    else:
         OA_OD = RA + ADP if (quadrant in (1,2)) else RA - ADP
         FLAG_ASCEN = False if (quadrant in (1,2)) else True
 '''
@@ -270,11 +268,9 @@ def calc_house_pole(house_no, GEO_LAT):
 
     return math.degrees(math.atan(tan_phi))
 
-def calc_houses_with_ramc(RAMC, jd, GEO_LAT, label):   
+def calc_houses_with_ramc(RAMC, GEO_LAT, label, E):   
     directed_longitudes = []
-    E = calculate_obliquity(jd)
-    #print(f"RAMC: {RAMC}, E: {E}, GEO_LAT: {GEO_LAT}")
-    
+
     houses = [11, 12, 'ASC', 2, 3]
     count = 1
 
@@ -361,8 +357,7 @@ def calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT,DECL, ac, long):
 
     return MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN
 
-def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long):
-    E = calculate_obliquity(jd_radix)
+def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
     quadrant = get_quadrant_from_house_pos(house_pos)
     MD, _, SA, phi, _, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
@@ -389,6 +384,9 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag
     dir_OA = OA_OD + arc if flag_direct else OA_OD - arc
     dir_OA = swe.degnorm(dir_OA)
 
-    LONG_deg = calc_long_from_OA(dir_OA, phi, E, FLAG_ASCEN)
+    LONG_deg = calc_long_from_OA(dir_OA, phi, e, FLAG_ASCEN)
+    '''print(f"arc: {arc}")
+    print(f"directed OA/OD: {dir_OA}")
+    print(f"long directed: {LONG_deg}")'''
     
     return LONG_deg

@@ -1,15 +1,19 @@
 import swisseph as swe
 import julian
 from aspects_base import find_trans_swiss_aspects
-from constants import PLANETS 
+from constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
 
 class Transit_Auto:
-    def __init__(self, jd_radix, jd_event, rad_planets):
+    def __init__(self, jd_radix, jd_event, geopos, rad_planets=None):
         self.__dict_info = {}
-        self.calc_transits_for_date(jd_radix, jd_event, rad_planets)
+        self.calc_transits_for_date(jd_radix, jd_event, geopos, rad_planets)
     
-    def calc_transits_for_date(self, jd_radix, jd_event, rad_planets):
-        """returns tuple with 2 str of aspects rad to direct and conv trans"""
+    def calc_transits_for_date(self, jd_radix, jd_event, geopos, rad_planets=None):
+        """If noradixplanets then make rad_planets=None and give geopos
+        returns tuple with 2 str of aspects rad to direct and conv trans"""
+        if rad_planets is None:
+            rad_planets = calc_planets_pof_houses_labelled(jd_radix, geopos)
+        
         jd_rad_event_diff = abs(jd_radix - jd_event)
         jd_conv_event = jd_radix - jd_rad_event_diff
         
@@ -25,7 +29,6 @@ class Transit_Auto:
             "converse_planets": conv_planets
         }
 
-
         self.__str_rad_direct_aspects = find_trans_swiss_aspects(rad_planets,dir_planets)
         self.__str_rad_conv_aspects = find_trans_swiss_aspects(rad_planets, conv_planets)
         
@@ -36,13 +39,4 @@ class Transit_Auto:
         return self.__dict_info
 
 
-def calc_planets_labelled(jd_radix, label):
-    planets = []
-    
-    for planet in range(0, len(PLANETS)):
-        xx, _ = swe.calc_ut(jd_radix, planet)
-        long = xx[0]
 
-        planets.append((PLANETS[planet], long, label))    
-
-    return planets

@@ -8,10 +8,13 @@ import sra_auto
 import main_converge
 import julian
 import aspects_implementation
+import analysis
 from datetime import datetime
 import swisseph as swe
 import os
 import re
+from constants import calc_planets_pof_houses_labelled
+from aspects_base import calculate_obliquity
 
 class aTechniqueType:
     PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
@@ -47,19 +50,20 @@ def home():
     list_event_locations = [t[2] for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
-    '''list_times = [
-        datetime(2000,3,11,9,00,2),
-        datetime(2000,3,11,14,10,24),
-        datetime(2000,3,11,14,12,56),
-        datetime(2000,3,11,12,00,2),
-        07:49:20
-        15:49:36
-    ]'''
+    list_times = [
+        datetime(1929,7,27,21,17,36),
+        datetime(1929,7,28,18,30,4),
+        datetime(1929,7,27,21,41,20),
+        datetime(1929,7,27,22,14,24)
+        #07:49:20
+        #15:49:36
+    ]
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
-    #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = aspects_implementation.process_polaris_times('txt/ingtea rect ver 2 - 1 date was wrong.txt', 50)
-    list_times = [dt_actual_dob, datetime(2000,3,11,15,49,36)]
+    #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
+    #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
+    #list_times = aspects_implementation.process_time_count_csv('20_10_ver1_sorted_planet_data.csv',dt_actual_dob,geo_pos_natal)
+    #list_times = [dt_actual_dob]
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -75,8 +79,7 @@ def update_content():
     flag_orb_restrict = True if (restrict_orb != -1) else False
     flag_show_data = request.args.get('show_data', default='false') == 'true'
 
-    #try:
-    if True:
+    try:
         radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
         jd_radix = julian.to_jd(radix_date)
         static_message = ''
@@ -88,38 +91,39 @@ def update_content():
         score = 0
 
         rad_houses_info = swe.houses(jd_radix, geo_pos_natal[0], geo_pos_natal[1], b'T')
-        rad_planets_labelled = pd_automate.calc_natal_planets_labelled(jd_radix)
         rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-        rad_planets_houses_labelled = aspects_implementation.calc_rad_planet_houses_labelled(jd_radix, geo_pos_natal[0], geo_pos_natal[1])
+        rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_pos_natal)
         if technique == aTechniqueType.PRIMARY_DIRECT:
-            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_labelled, rad_planets_equatorial, rad_houses_info)
+            e = calculate_obliquity(jd_radix)
+            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
             str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
             pd_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif technique == aTechniqueType.SECONDARY_DIRECT:
-            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1])
+            e = calculate_obliquity(jd_radix)
+            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
             secondary_info = secondary_obj.get_dict_info()
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
         elif technique == aTechniqueType.PSSR:
-            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_houses_labelled)
+            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
             pssr_info = pssr_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.TRANSIT:
-            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), rad_planets_houses_labelled)
+            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), event_geopos, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
             transit_info = transit_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.SRA:
-            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_houses_labelled)
+            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
             sra_info = sra_auto_obj.get_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
             str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
         elif technique == aTechniqueType.NATAL:
             str_all_directed_aspects = ''
-            for p in rad_planets_houses_labelled:
+            for p in rad_planets_pof_houses_labelled:
                 str_all_directed_aspects+= f"{p}\n"
         elif technique == aTechniqueType.LUNAR:
             lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)
@@ -184,10 +188,10 @@ def update_content():
 
         static_message = static_message + f"Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_pos_natal[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_pos_natal[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
         scrollable_message = f"{html_list}"
-        '''   except:
+    except:
         static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
         scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
-'''
+
     return jsonify({
         'static_message': static_message,
         'scrollable_message': scrollable_message
@@ -198,11 +202,11 @@ def reset_globals():
     geo_pos_natal = []
 
 if __name__ == '__main__':
-    #main_converge.pd_rect_grid_score_create('data_input/ing tea.json','ingtea_rect_ver3_',8)
-    #main_converge.other_techniques_from_pd_rect('txt/9_9_ver3_sorted_planet_data.csv', 'data_input/jacquiline onassis.json', '9_14_ver1_', 100, -4)
+    #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
+    #main_converge.other_techniques_from_pd_rect('txt/ingbtea ver4_sorted_planet_data.csv', 'data_input/ing tea prim.json', 'ver4_', 100, 2)
     #DONT USE UNLESS NEEDED
-    #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver3_2000-03-12_primaries.txt',False)
-    #analysis.create_csv_count_txt('ingtea_rect_ver3_2000-03-12_primariesCOUNT.txt','ingtea_ver3_sorted_data.csv')
+    #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
+    #analysis.create_csv_count_txt('ingtea_rect_ver4_2000-03-12_primariesCOUNT.txt','ingtea_ver4_sorted_data.csv')
     
     app.run(debug=True)
 
