@@ -1,8 +1,7 @@
 import pd_automate
-from datetime import timedelta, datetime
+import datetime 
 import julian
 import swisseph as swe
-import pd_automate
 import secondary_automate
 import pssr_swiss_auto as pssr_auto
 import transit_swiss_auto as transit_auto
@@ -10,8 +9,12 @@ import sra_auto
 import pandas as pd
 import lunar_auto as lunar
 import re
+import csv
+from timezonefinder import TimezoneFinder
+import pytz
 from constants import calc_planets_pof_houses_labelled
 from aspects_base import calculate_obliquity
+
 
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -57,24 +60,24 @@ def generate_grid_angular_aspects(filename, start_time, end_time, increment_seco
         for time in grid_aspects:
             file.write(f"{str(time)}\n")
     
-def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positions: list[3]):
+def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_natal: list[3]):
     formatted_time = julian.from_jd(jd_radix).strftime('%H:%M:%S')
     temp_list_event = [formatted_time] 
     count = 0
     
-    rad_houses_info = swe.houses(jd_radix, geo_positions[0], geo_positions[1], b'T')
+    rad_houses_info = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
     rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-    rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_positions)
+    rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geopos_natal)
     e = calculate_obliquity(jd_radix)
 
     event_index = 0
-    for dt_event, event_id, _ in list_dt_events:
+    for dt_event, event_id, geopos in list_dt_events:
         if date_technique == TechniqueType.PRIMARY_DIRECT:
-            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_positions, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
+            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geopos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
             str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
         elif date_technique == TechniqueType.SECONDARY_DIRECT:
-            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_positions[0], geo_positions[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
+            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geopos_natal[0], geopos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
             str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
         elif date_technique == TechniqueType.PSSR:
@@ -82,11 +85,11 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geo_positio
             str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif date_technique == TechniqueType.TRANSIT:
-            transit_obj = transit_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), geo_positions, rad_planets_pof_houses_labelled)
+            transit_obj = transit_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), geopos, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif date_technique == TechniqueType.SRA:
-            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_positions,rad_planets_pof_houses_labelled)
+            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geopos_natal,rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
             str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
@@ -116,7 +119,7 @@ def count_ben_mal_planets_lunar(jd_radix):
 def count_aspect_groups_txt(filename, flag_count_pssr_moon):
     results = []
 
-    with open(filename, 'r') as infile:
+    with open(f"{filename}.txt", 'r') as infile:
         for line in infile:
             parts = eval(line.strip())
             time = parts[0]
@@ -158,7 +161,7 @@ def count_aspect_groups_txt(filename, flag_count_pssr_moon):
                 results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, empty: {empty_event_count}"])                
     print(results)
 
-    with open(f"{filename[:-4]}COUNT.txt", 'w') as outfile:
+    with open(f"{filename}COUNT.txt", 'w') as outfile:
         for result in results:
             outfile.write(str(result) + '\n')
 
@@ -190,29 +193,33 @@ def add_timezone_to_24_hours(timezone):
     
     return result_hours
 
-def process_csv(file_path, end_date_str, count_times_wanted, i_timezone):
+def process_manual_rect_csv(file_path, dt_bday, count_times_wanted, geopos):
     """end date is day of birth 
     timezone is whatever you need to add to UT to get the local time"""
+    i_timezone = get_timezone(geopos)
     df = pd.read_csv(file_path)
     times = df['Time'][:count_times_wanted].tolist()
     
-    dt_bday = datetime.strptime(end_date_str, '%d %B %Y')
+    datetime_list = get_list_datetime_from_times(times, dt_bday, i_timezone)
     
+    return datetime_list
+
+def get_list_datetime_from_times(str_times, dt_bday, i_timezone):
     datetime_list = []
-    
-    for time_str in times:
-        time_obj = datetime.strptime(time_str, '%H:%M:%S')
+
+    for time_str in str_times:
+        time_obj = datetime.datetime.strptime(time_str, '%H:%M:%S')
         
         if time_obj.hour < add_timezone_to_24_hours(i_timezone):
             if i_timezone <= 0:
-                datetime_obj = datetime.combine(dt_bday, time_obj.time())
+                datetime_obj = datetime.datetime.combine(dt_bday, time_obj.time())
             else: 
-                datetime_obj = datetime.combine(dt_bday + timedelta(days=1), time_obj.time())
+                datetime_obj = datetime.datetime.combine(dt_bday + timedelta(days=1), time_obj.time())
         else:
             if i_timezone <= 0:
-                datetime_obj = datetime.combine(dt_bday - timedelta(days=1), time_obj.time())
+                datetime_obj = datetime.datetime.combine(dt_bday - timedelta(days=1), time_obj.time())
             else:
-                datetime_obj = datetime.combine(dt_bday, time_obj.time())
+                datetime_obj = datetime.datetime.combine(dt_bday, time_obj.time())
     
         datetime_list.append(datetime_obj)
     
@@ -229,19 +236,96 @@ def process_polaris_times(file_name, count_times_wanted):
     Returns:
         List[datetime]: A list of datetime objects.
     """
+    line_count = 0
+    with open(file_name, 'r') as file:
+        for line in file:
+            line_count += 1
+    if count_times_wanted > (line_count/2):
+        print('Not enough times for that count...')
+        return 
+
     with open(file_name, 'r') as file:
         lines = file.readlines()
 
     datetime_list = []
 
-    for i in range(0, count_times_wanted, 2):
+    for i in range(0, count_times_wanted*2, 2):
         date_str = lines[i].strip()
         date_str = re.sub(r'\s+', ' ', date_str).strip()
         date_str_list = date_str.split(' ')
         date_time_str = lines[i + 1].strip() + ' ' + date_str_list[0] + ' ' + date_str_list[1] + ' ' + date_str_list[2]
 
-        dt = datetime.strptime(date_time_str, '%Y %d %b %H:%M:%S')
+        dt = datetime.datetime.strptime(date_time_str, '%Y %d %b %H:%M:%S')
         datetime_list.append(dt)
 
     return datetime_list
 
+def count_pssr_moon_from_times_events(filename_write, list_datetimes: list, events_list :list, geopos):
+    count_array = [('DateTime','count')]
+    aspect_type = pd_automate.AspectType.MOON_PRIMARY
+
+    for dtime in list_datetimes:
+        count_moon_conj_opp = 0
+        for dt_event, event_id, _ in events_list:
+            pssr_obj = pssr_auto.PSSR_Auto(dtime, dt_event, None, geopos)
+            str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
+            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+            _, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, 0, aspect_type)
+            list_aspects = str_acceptable_aspects.split('\n')
+            temp_arr = []
+            for str_aspect in list_aspects:
+                try:
+                    if pd_automate.is_aspect_conj_opp(str_aspect):
+                        temp_arr.append(str_aspect)
+                except:
+                    pass
+            list_aspects = temp_arr
+            count_moon_conj_opp += len(list_aspects)
+        count_array.append((dtime,count_moon_conj_opp))
+
+    count_array = [count_array[0]] + sorted(count_array[1:], key=lambda x: x[1], reverse=True)
+
+    with open(filename_write, mode='w', newline='') as file:
+        writer_csv = csv.writer(file)
+        for item in count_array:
+            writer_csv.writerow([item[0].strftime('%Y-%m-%d %H:%M:%S') if isinstance(item[0], datetime.datetime) else item[0], item[1]])
+
+def process_datetime_count_csv(filename_read):
+    datetime_list = []
+
+    with open(filename_read, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader)
+        
+        for row in reader:
+            dt = datetime.datetime.strptime(row[0], '%Y-%m-%d %H:%M:%S')
+            datetime_list.append(row[0])
+
+    return datetime_list
+
+def process_time_count_csv(filename_read, dt_bday, geopos):
+    time_list = []
+
+    i_timezone = get_timezone(geopos)
+
+    with open(filename_read, mode='r', newline='') as file:
+        reader = csv.reader(file)
+        next(reader)
+        
+        for row in reader:
+            time_list.append(row[0])
+
+    datetime_list = get_list_datetime_from_times(time_list, dt_bday, i_timezone)
+
+    return datetime_list
+
+def get_timezone(geopos):
+    tf = TimezoneFinder()
+    geo_lat = geopos[0]
+    geo_long = geopos[1]
+    timezone_name = tf.timezone_at(lat=geo_lat, lng=geo_long)
+    timezone = pytz.timezone(timezone_name)
+    now = datetime.datetime.now(timezone)
+    utc_offset = now.utcoffset().total_seconds() / 3600
+
+    return utc_offset

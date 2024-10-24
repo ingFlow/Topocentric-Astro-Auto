@@ -199,8 +199,7 @@ def find_pssr_swiss_aspects(planet_set1, planet_set2):
                 orb = 32/60
             else:
                 orb = 14/60
-            if (p1 == 'Venus') and (p2 == 'Neptune'):
-                print('yes')
+
             aspect = calculate_aspect(d1, d2, orb, True)
             
             if aspect:

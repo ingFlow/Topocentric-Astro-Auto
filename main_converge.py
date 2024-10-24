@@ -86,13 +86,12 @@ def pd_rect_grid_score_create(filename_birth_data, str_output_prefix, time_incre
       asp.count_aspect_groups_txt(filename,False)
       asp.resetvars()  
 
-def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data_str, count_times_to_process, i_timezone):
-    _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
-   
-    file_path = csv_filename
+def other_techniques_from_times(times_filename, birth_data_filename, prefix_data_str, count_times_to_process):
+    real_dob, _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
     date_str = dt_radix_end.strftime('%d %B %Y')
  
-    list_times_to_process = asp.process_csv(file_path, date_str,count_times_to_process, i_timezone)
+    #list_times_to_process = asp.process_manual_rect_csv(times_filename, real_dob,count_times_to_process, i_timezone)
+    list_times_to_process = asp.process_datetime_count_csv(times_filename)
     str_date = prefix_data_str
 
     techniques = [
@@ -102,7 +101,7 @@ def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data
     ]
 
     for technique, suffix in techniques:
-        filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
+        filename = f"{str_date}{real_dob.strftime('%Y-%m-%d')}{suffix}"
         flag_pssr_count_moon = False
         if technique == asp.TechniqueType.PSSR:
             level_aspects = AspectType.MOON_ANGLE_HOUSE_PRIMARY
@@ -116,4 +115,13 @@ def other_techniques_from_pd_rect(csv_filename, birth_data_filename, prefix_data
         asp.count_aspect_groups_txt(filename, flag_pssr_count_moon)
         asp.resetvars()  
 
+def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_times):
+    _, _, _, geopos, list_of_events = get_json_birth_data(filename_json)
+    list_times = asp.process_polaris_times(filename_polaris, no_times)
+    asp.count_pssr_moon_from_times_events(filename_write,list_times,list_of_events,geopos)
+
+
 #convert_birth_data_json('data_input/ing tea')
+#other_techniques_from_times('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','20_10_24_',50,2)
+#count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
+#count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)

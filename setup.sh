@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install required Python packages
-pip install julian pyswisseph flask
+pip install julian pyswisseph flask timezonefinder
 
 # Clone the swisseph repository
 git clone --depth 1 https://github.com/aloistr/swisseph.git /tmp/swisseph

@@ -311,18 +311,18 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
         if ((p1 in HOUSES) and (p2 == 'POF')) or ((p1 == 'POF') and (p2 in HOUSES)):
             return True
     if type == AspectType.MOON_PRIMARY:
-        #moon to primary planet (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
-        if (p1 in planet_accept) and (p2 =='Moon'):
+        #moon to primary planet/house (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
+        if ((p1 in angle_accept) or (p1 in house_accept)) and (p2 =='Moon'):
             return True
     if type == AspectType.MOON_SECONDARY:
-        #moon to primary/secondary planet (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
-        if (p1 in planet_accept) and (p2 =='Moon'):
+        #moon to primary/secondary planet/house (p2 only cause p2 is always the directed factor and we don't care when Moon is radical)
+        if ((p1 in angle_accept) or (p1 in house_accept)) and (p2 =='Moon'):
             return True
-        if (p1 in secondary_planets) and (p2 == 'Moon'):
+        if ((p1 in planet_accept) or (p1 in secondary_planets)) and (p2 == 'Moon'):
             return True
     if type == AspectType.MOON_ANGLE_HOUSE_PRIMARY:
         #moon to any planet or MOON to angle or angle to primary planet
-        if ((p1 in planet_accept) or (p1 == angle_accept)) and (p2 =='Moon'):
+        if ((p1 in planet_accept) or (p1 in angle_accept)) and (p2 =='Moon'):
             return True
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept):
@@ -332,7 +332,7 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
                 return True
     if type == AspectType.MOON_ANGLE_HOUSE_SECONDARY:
         #moon to any planet or MOON to angle or angle to primary/secondary planet
-        if ((p1 in planet_accept) or (p1 in secondary_planets) or (p1 == angle_accept)) and (p2 =='Moon'):
+        if ((p1 in planet_accept) or (p1 in secondary_planets) or (p1 in angle_accept)) and (p2 =='Moon'):
             return True
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept) or (p2 in secondary_planets):
@@ -343,7 +343,7 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
 
 def is_aspect_conj_opp(str_aspect):
     _, _, asp_orb = str_aspect.split(' ')
-    aspect = asp_orb.split(',')[0]
+    aspect = asp_orb.split(',')[0][1:]
 
     if aspect in ['conjunction', 'opposition']:
         return True

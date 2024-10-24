@@ -18,24 +18,6 @@
             ]
         },
         {
-            "datetime": "2008-12-11T12:00:00",
-            "event_type": "FAILURE",
-            "geopos": [
-                -26.075,
-                28.09472,
-                1753.0
-            ]
-        },
-        {
-            "datetime": "2009-01-14T12:00:00",
-            "event_type": "FAILURE",
-            "geopos": [
-                -26.075,
-                28.09472,
-                1753.0
-            ]
-        },
-        {
             "datetime": "2009-03-19T12:00:00",
             "event_type": "BIRTH_BROTHER",
             "geopos": [
@@ -126,17 +108,8 @@
             ]
         },
         {
-            "datetime": "2021-08-15T12:00:00",
-            "event_type": "FAILURE",
-            "geopos": [
-                -4.05466,
-                39.66359,
-                23.0
-            ]
-        },
-        {
             "datetime": "2022-01-03T12:00:00",
-            "event_type": "INTRIGUE",
+            "event_type": "SUCCESS",
             "geopos": [
                 -1.28411,
                 37.09745,
@@ -169,6 +142,11 @@
                 28.15166606,
                 1753.0
             ]
-        }
+        },
+        {"datetime": "1994-07-02T12:00:00", "event_type": "DEATH_FATHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]},
+        {"datetime": "1997-08-13T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]},
+        {"datetime": "1997-11-16T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [-26.17678333,28.04259444,1753.0]},
+        {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]}
+      
     ]
 }

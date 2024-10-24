@@ -50,19 +50,20 @@ def home():
     list_event_locations = [t[2] for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
-    '''list_times = [
-        datetime(2000,3,11,9,00,2),
-        datetime(2000,3,11,14,10,24),
-        datetime(2000,3,11,14,12,56),
-        datetime(2000,3,11,12,00,2),
-        07:49:20
-        15:49:36
-    ]'''
+    list_times = [
+        datetime(1929,7,27,21,17,36),
+        datetime(1929,7,28,18,30,4),
+        datetime(1929,7,27,21,41,20),
+        datetime(1929,7,27,22,14,24)
+        #07:49:20
+        #15:49:36
+    ]
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
-    #list_times = aspects_implementation.process_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
-    #list_times = [dt_actual_dob, datetime(2000,3,11,15,49,36)]
+    #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
+    #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
+    #list_times = aspects_implementation.process_time_count_csv('20_10_ver1_sorted_planet_data.csv',dt_actual_dob,geo_pos_natal)
+    #list_times = [dt_actual_dob]
     left_items = [t.isoformat() for t in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
@@ -110,7 +111,7 @@ def update_content():
             pssr_info = pssr_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
         elif technique == aTechniqueType.TRANSIT:
-            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled)
+            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), event_geopos, rad_planets_pof_houses_labelled)
             str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
             transit_info = transit_obj.get_dict_info()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 

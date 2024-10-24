@@ -143,3 +143,11 @@ def create_csv_count_txt(filename_read, filename_write):
     final_df_sorted.to_csv(filename_write, index=False)
     #print(final_df.head())  
 
+def main():
+    file_list = ['20_10_24_2000-03-11_pssrCOUNT.txt', '20_10_24_2000-03-11_secondariesCOUNT.txt', '20_10_24_2000-03-11_transitCOUNT.txt']  
+    final_df = load_and_concatenate_files(file_list)
+    final_df_sorted = final_df.sort_values(by=['mon-conj-sr','mon-maj-sr'], ascending=[False, False])
+  
+    final_df_sorted.to_csv('20_10_ver1_sorted_planet_data.csv', index=False)
+    #print(final_df.head())  
+
