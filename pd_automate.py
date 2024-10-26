@@ -225,6 +225,7 @@ def get_accept_lists(event_id):
     aspect_rules = PRIMARY_RULES[event_id]
     house_aspect_rules = SECONDARY_RULES[event_id]
     if not aspect_rules:
+        #if event_id doesn't exist
         return False  
     
     angle_house_accept = aspect_rules[0]
@@ -322,7 +323,7 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
             return True
     if type == AspectType.MOON_ANGLE_HOUSE_PRIMARY:
         #moon to any planet or MOON to angle or angle to primary planet
-        if ((p1 in planet_accept) or (p1 in angle_accept)) and (p2 =='Moon'):
+        if ((p1 in planet_accept)) and (p2 =='Moon'):
             return True
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept):
@@ -332,7 +333,7 @@ def is_acceptable_angular_aspect(event_id, str_aspect, type):
                 return True
     if type == AspectType.MOON_ANGLE_HOUSE_SECONDARY:
         #moon to any planet or MOON to angle or angle to primary/secondary planet
-        if ((p1 in planet_accept) or (p1 in secondary_planets) or (p1 in angle_accept)) and (p2 =='Moon'):
+        if ((p1 in planet_accept) or (p1 in secondary_planets)) and (p2 =='Moon'):
             return True
         if (p1 in angle_accept) or (p1 in house_accept):
             if (p2 in planet_accept) or (p2 in secondary_planets):

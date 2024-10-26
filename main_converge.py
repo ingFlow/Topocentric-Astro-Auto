@@ -3,6 +3,12 @@ from pd_automate import EventType, AspectType
 import aspects_implementation as asp
 import json
 
+class timesFileType:
+    POLARIS = 0
+    DATE_N_TIME = 1
+    TIMES_ONLY = 2
+    MANUAL_RECT = 3
+
 ''' 
   {"datetime": "2013-12-11T12:00:00", "event_type": "---"},
       {"datetime": "2018-02-19T12:00:00", "event_type": "--"},
@@ -86,7 +92,47 @@ def pd_rect_grid_score_create(filename_birth_data, str_output_prefix, time_incre
       asp.count_aspect_groups_txt(filename,False)
       asp.resetvars()  
 
-def other_techniques_from_times(times_filename, birth_data_filename, prefix_data_str, count_times_to_process):
+def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_filename, prefix_data_str, count_times_wanted_pola_man=None):
+    real_dob, _, _, geopos, list_of_events = get_json_birth_data(birth_data_filename)
+ 
+    if times_type == timesFileType.POLARIS:
+        list_times_to_process = asp.process_polaris_times(times_filename,count_times_wanted_pola_man)
+    elif times_type == timesFileType.DATE_N_TIME:
+        list_times_to_process = asp.process_datetime_count_csv(times_filename)
+        list_times_to_process = [datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S') for date_str in list_times_to_process]    
+    elif times_type == timesFileType.TIMES_ONLY:
+        list_times_to_process = asp.process_time_count_csv(times_filename,real_dob,geopos)
+    elif times_type == timesFileType.MANUAL_RECT:
+        list_times_to_process = asp.process_manual_rect_csv(times_filename,real_dob,count_times_wanted_pola_man,geopos)
+    
+    str_date = prefix_data_str
+
+    techniques = [
+        (asp.TechniqueType.SECONDARY_DIRECT, "_second"),
+        (asp.TechniqueType.PSSR, "_pssr"),
+        (asp.TechniqueType.TRANSIT, "_trans"),
+        (asp.TechniqueType.PRIMARY_DIRECT, "_primdir")
+    ]
+
+    for technique, suffix in techniques:
+        filename = f"{str_date}{real_dob.strftime('%Y-%m-%d')}{suffix}"
+        flag_count_moon = False
+        if technique == asp.TechniqueType.PSSR:
+            flag_count_moon = True
+            level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
+        elif technique == asp.TechniqueType.TRANSIT:
+            level_aspects = AspectType.ANGLE_SECONDARY
+        elif technique == asp.TechniqueType.SECONDARY_DIRECT:
+            flag_count_moon = True
+            level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
+        elif technique == asp.TechniqueType.PRIMARY_DIRECT:
+            level_aspects = AspectType.ANGLE_HOUSE_SECONDARY
+           
+        asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
+        asp.count_extended_aspect_groups_txt(filename, technique)
+        asp.resetvars()  
+
+def other_techniques_from_times(times_filename, birth_data_filename, prefix_data_str, count_times_to_process=None):
     real_dob, _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
     date_str = dt_radix_end.strftime('%d %B %Y')
  
@@ -122,6 +168,6 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 
 
 #convert_birth_data_json('data_input/ing tea')
-#other_techniques_from_times('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','20_10_24_',50,2)
+#rect_ver_data_create('txt/26_10_24_IngTea/ing_tea_ver1_times_pssr_elimination.csv', timesFileType.DATE_N_TIME,'data_input/ing tea prim.json','txt/26_10_24_IngTea_v2/26_10_24_')
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)

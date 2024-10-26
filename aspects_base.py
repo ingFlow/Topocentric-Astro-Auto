@@ -200,7 +200,7 @@ def find_pssr_swiss_aspects(planet_set1, planet_set2):
             else:
                 orb = 14/60
 
-            aspect = calculate_aspect(d1, d2, orb, True)
+            aspect = calculate_aspect(d1, d2, orb, False)
             
             if aspect:
                 aspect_name, aspect_orb = aspect
@@ -294,7 +294,7 @@ def find_trans_swiss_aspects(planet_set1, planet_set2):
     for p1, d1, s1 in planet_set1:
         for p2, d2, s2 in planet_set2:
             orb = 65/60
-            aspect = calculate_aspect(d1, d2, orb, True)
+            aspect = calculate_aspect(d1, d2, orb, False)
             
             if aspect:
                 aspect_name, aspect_orb = aspect

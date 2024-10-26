@@ -1,0 +1,6 @@
+Row 3: {'time': '2000-03-11 15:49:34', 'p_a_conj': 8, 'p_a_maj': 23, 'p_a_min': 24, 'a_p_conj': 0, 'e': 1, 'total_count': 55}
+Row 4: {'time': '2000-03-11 15:00:30', 'p_a_conj': 8, 'p_a_maj': 16, 'p_a_min': 35, 'a_p_conj': 0, 'e': 1, 'total_count': 59}
+Row 6: {'time': '2000-03-11 16:08:46', 'p_a_conj': 11, 'p_a_maj': 25, 'p_a_min': 30, 'a_p_conj': 0, 'e': 1, 'total_count': 66}
+Row 11: {'time': '2000-03-11 06:31:28', 'p_a_conj': 8, 'p_a_maj': 28, 'p_a_min': 29, 'a_p_conj': 0, 'e': 1, 'total_count': 65}
+Row 12: {'time': '2000-03-11 17:53:52', 'p_a_conj': 10, 'p_a_maj': 22, 'p_a_min': 31, 'a_p_conj': 0, 'e': 0, 'total_count': 63}
+Row 14: {'time': '2000-03-11 12:09:04', 'p_a_conj': 6, 'p_a_maj': 24, 'p_a_min': 30, 'a_p_conj': 0, 'e': 2, 'total_count': 60}

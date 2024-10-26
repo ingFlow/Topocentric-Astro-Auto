@@ -9,10 +9,11 @@ import sra_auto
 import pandas as pd
 import lunar_auto as lunar
 import re
+import os
 import csv
 from timezonefinder import TimezoneFinder
 import pytz
-from constants import calc_planets_pof_houses_labelled
+from constants import calc_planets_pof_houses_labelled, PLANETS
 from aspects_base import calculate_obliquity
 
 
@@ -61,8 +62,8 @@ def generate_grid_angular_aspects(filename, start_time, end_time, increment_seco
             file.write(f"{str(time)}\n")
     
 def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_natal: list[3]):
-    formatted_time = julian.from_jd(jd_radix).strftime('%H:%M:%S')
-    temp_list_event = [formatted_time] 
+    formatted_datetime = julian.from_jd(jd_radix).strftime("%Y-%m-%d %H:%M:%S")
+    temp_list_event = [formatted_datetime] 
     count = 0
     
     rad_houses_info = swe.houses(jd_radix, geopos_natal[0], geopos_natal[1], b'T')
@@ -113,10 +114,117 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_nata
     grid_aspects.append(temp_list_event)    
     return
 
-def count_ben_mal_planets_lunar(jd_radix):
-    ca = lunar.get
+def categorize_aspect(first, second, aspect):
+    conj_asp = ['conjunction', 'opposition']
+    maj_asp = ['trine', 'sextile', 'square']
+    ANGLES = ['H1', 'H4', 'H7', 'H10']
 
-def count_aspect_groups_txt(filename, flag_count_pssr_moon):
+    if first in ANGLES and second in PLANETS :
+        if aspect in conj_asp:
+            return 'p_a_conj'
+        elif aspect in maj_asp:
+            return 'p_a_maj'
+        else:
+            return 'p_a_min'
+    elif second in ANGLES and first in PLANETS:
+        if aspect in conj_asp:
+            return 'a_p_conj'
+        elif aspect in maj_asp:
+            return 'a_p_maj'
+        else:
+            return 'a_p_min'
+    elif first.startswith('H') and second in PLANETS: #the other angle to house already evaluated so if its still H its not an angle
+        if aspect in conj_asp:
+            return 'p_h_conj'
+        elif aspect in maj_asp:
+            return 'p_h_maj'
+        else:
+            return 'p_h_min'
+    elif second.startswith('H') and first in PLANETS: 
+        if aspect in conj_asp:
+            return 'h_p_conj'
+        elif aspect in maj_asp:
+            return 'h_p_maj'
+        else:
+            return 'h_p_min'
+    elif first in PLANETS and second == 'Moon':
+        if aspect in conj_asp:
+            return 'mon_p_conj'
+        elif aspect in maj_asp:
+            return 'mon_p_maj'
+        else:
+            return 'mon_p_min'
+    else:
+        return None
+
+def count_extended_aspect_groups_txt(filename, technique):
+    aspect_categories = {
+        'p_a_conj': 0,
+        'p_a_maj': 0,
+        'p_a_min': 0,
+        'a_p_conj': 0,
+        'a_p_maj': 0,
+        'a_p_min': 0,
+        'p_h_conj': 0,
+        'p_h_maj': 0,
+        'p_h_min': 0,
+        'h_p_conj': 0,
+        'h_p_maj': 0,
+        'h_p_min': 0,
+        'mon_p_conj': 0,
+        'mon_p_maj': 0,
+        'mon_p_min': 0,
+        'e': 0,
+    }
+    results = []
+    flag_1st_row = True
+
+    with open(f"{filename}.txt", 'r') as infile:
+        for row in infile:
+            if flag_1st_row:
+                flag_1st_row = False
+            else:
+                parts = eval(row.strip())
+                time = parts[0]
+                aspects = parts[1:-1]
+                count_total = parts[-1]
+                counts = {
+                    'time': time
+                }
+                counts.update(aspect_categories.copy())  #Reset counts
+
+                for aspect in aspects: 
+                    if aspect.isdigit():
+                        counts['e'] += 1
+                    else:
+                        aspects = aspect.split('\n')  # Split multiple aspects
+                        for a in aspects:
+                            parts = a.strip().strip('()').split(') (')
+                            if len(parts) == 3:
+                                first = parts[0].split(',')[0]  # Get the first planet info
+                                second = parts[1].split(',')[0]  # Get the second planet info
+                                asp_type = parts[2].split(',')[0] #Is it conjunction or quincunx etc.
+                                category = categorize_aspect(first, second, asp_type)
+                                if category:
+                                    counts[category] += 1
+                counts.update({'total_count':count_total})
+                results.append(counts) 
+
+    with open(f"{filename}COUNT.txt", 'w') as f:
+        for index, count in enumerate(results):
+            if technique == TechniqueType.PRIMARY_DIRECT:
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_min', 'e', 'total_count']
+            elif technique == TechniqueType.SECONDARY_DIRECT:
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_min', 'e', 'total_count']
+            elif technique == TechniqueType.PSSR:
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_min', 'e', 'total_count']
+            elif technique == TechniqueType.TRANSIT:
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'e', 'total_count']
+
+            filtered_counts = {key: count[key] for key in selected_categories if key in count}
+            f.write(f"Row {index + 1}: {filtered_counts}\n")
+
+def count_aspect_groups_txt(filename, flag_count_moon):
     results = []
 
     with open(f"{filename}.txt", 'r') as infile:
@@ -147,15 +255,15 @@ def count_aspect_groups_txt(filename, flag_count_pssr_moon):
                         if ('sesquisquare' in asp) or ('semisquare' in asp) or ('semisextile' in asp) or ('quincunx' in asp):
                             minor_count += 1
                         elif ('opposition' in asp) or ('conjunction' in asp):
-                            if (flag_count_pssr_moon and (')) (Moon' in asp)):
+                            if (flag_count_moon and (')) (Moon' in asp)):
                                 moon_conj_opp_count += 1
                             opp_conj_count += 1
                         elif ('square' in asp) or ('sextile' in asp) or ('trine' in asp):
-                            if (flag_count_pssr_moon and (')) (Moon' in asp)):
+                            if (flag_count_moon and (')) (Moon' in asp)):
                                 moon_sqr_tri_sext_count += 1
                             sqr_tri_sext_count += 1
                         
-            if flag_count_pssr_moon:
+            if flag_count_moon:
                 results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, moon-opp-conj: {moon_conj_opp_count}, moon-sqr-tri-sext: {moon_sqr_tri_sext_count}, empty: {empty_event_count}"])                
             else:
                 results.append([f"{time}, {count}, opp-conj: {opp_conj_count}, sqr-tri-sext: {sqr_tri_sext_count}, major: {sqr_tri_sext_count+opp_conj_count}, minor: {minor_count}, empty: {empty_event_count}"])                
@@ -180,6 +288,9 @@ def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positio
         print(f"working on: {current_time}....")
         append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
     
+    directory = os.path.dirname(filename)
+    os.makedirs(directory, exist_ok=True)
+
     with open(f"{filename}.txt", "w") as file:
         for time in grid_aspects:
             file.write(f"{str(time)}\n")

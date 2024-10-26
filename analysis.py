@@ -18,6 +18,7 @@ def extract_data_from_file(filename, technique: TechniqueType):
             str_tf = 'pd'
         case TechniqueType.Secondary_Direct:
             str_tf = 'sc'
+            flag_pssr = True
         case TechniqueType.PSSR:
             str_tf = 'sr'
             flag_pssr = True
@@ -87,11 +88,11 @@ def load_and_concatenate_files(file_list):
         technique = -1
         if 'pssr' in filename:
             technique = TechniqueType.PSSR
-        elif 'primar' in filename:
+        elif 'prim' in filename:
             technique = TechniqueType.Primary_Direct
-        elif 'second' in filename:
+        elif 'sec' in filename:
             technique = TechniqueType.Secondary_Direct
-        elif 'trans' in filename:
+        elif 'tran' in filename:
             technique = TechniqueType.Transit 
 
         df = extract_data_from_file(filename, technique)
@@ -134,13 +135,13 @@ def count_all_major_opp(csv_filename):
     df.to_csv(csv_filename, index=False)
     print(df.head())  # Print the first few rows to verify
 
-def create_csv_count_txt(filename_read, filename_write):
+def create_csv_count_txt(filename_read_list, filename_write):
     """sort by count"""
-    file_list = [filename_read]  
+    file_list = filename_read_list 
     final_df = load_and_concatenate_files(file_list)
     final_df_sorted = final_df.sort_values(by=['all-pd'], ascending=[False])
   
-    final_df_sorted.to_csv(filename_write, index=False)
+    final_df.to_csv(filename_write, index=False)
     #print(final_df.head())  
 
 def main():

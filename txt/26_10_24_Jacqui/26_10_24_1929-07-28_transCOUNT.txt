@@ -1,0 +1,4 @@
+Row 1: {'time': '21:17:36', 'p_a_conj': 3, 'p_a_maj': 25, 'p_a_min': 27, 'a_p_conj': 0, 'e': 0, 'total_count': 55}
+Row 2: {'time': '18:30:04', 'p_a_conj': 8, 'p_a_maj': 24, 'p_a_min': 23, 'a_p_conj': 0, 'e': 1, 'total_count': 55}
+Row 3: {'time': '21:41:20', 'p_a_conj': 9, 'p_a_maj': 22, 'p_a_min': 42, 'a_p_conj': 0, 'e': 0, 'total_count': 73}
+Row 4: {'time': '22:14:23', 'p_a_conj': 8, 'p_a_maj': 17, 'p_a_min': 35, 'a_p_conj': 0, 'e': 0, 'total_count': 60}

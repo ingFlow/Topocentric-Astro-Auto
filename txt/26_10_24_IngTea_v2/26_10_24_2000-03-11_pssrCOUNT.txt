@@ -1,0 +1,17 @@
+Row 1: {'time': '2000-03-11 16:46:22', 'p_a_conj': 5, 'p_a_maj': 13, 'p_a_min': 13, 'p_h_conj': 8, 'p_h_maj': 5, 'p_h_min': 0, 'mon_p_conj': 4, 'mon_p_maj': 7, 'mon_p_min': 4, 'e': 1, 'total_count': 59}
+Row 2: {'time': '2000-03-11 12:58:30', 'p_a_conj': 5, 'p_a_maj': 9, 'p_a_min': 9, 'p_h_conj': 1, 'p_h_maj': 8, 'p_h_min': 11, 'mon_p_conj': 4, 'mon_p_maj': 8, 'mon_p_min': 12, 'e': 0, 'total_count': 67}
+Row 3: {'time': '2000-03-11 15:49:34', 'p_a_conj': 7, 'p_a_maj': 9, 'p_a_min': 14, 'p_h_conj': 0, 'p_h_maj': 5, 'p_h_min': 7, 'mon_p_conj': 3, 'mon_p_maj': 9, 'mon_p_min': 4, 'e': 1, 'total_count': 58}
+Row 4: {'time': '2000-03-11 15:00:30', 'p_a_conj': 8, 'p_a_maj': 7, 'p_a_min': 3, 'p_h_conj': 3, 'p_h_maj': 5, 'p_h_min': 16, 'mon_p_conj': 4, 'mon_p_maj': 7, 'mon_p_min': 8, 'e': 0, 'total_count': 61}
+Row 5: {'time': '2000-03-11 09:23:36', 'p_a_conj': 8, 'p_a_maj': 14, 'p_a_min': 23, 'p_h_conj': 0, 'p_h_maj': 2, 'p_h_min': 12, 'mon_p_conj': 6, 'mon_p_maj': 5, 'mon_p_min': 5, 'e': 1, 'total_count': 75}
+Row 6: {'time': '2000-03-11 16:08:46', 'p_a_conj': 8, 'p_a_maj': 13, 'p_a_min': 12, 'p_h_conj': 2, 'p_h_maj': 8, 'p_h_min': 5, 'mon_p_conj': 3, 'mon_p_maj': 7, 'mon_p_min': 4, 'e': 1, 'total_count': 62}
+Row 7: {'time': '2000-03-11 09:44:22', 'p_a_conj': 5, 'p_a_maj': 9, 'p_a_min': 8, 'p_h_conj': 0, 'p_h_maj': 15, 'p_h_min': 7, 'mon_p_conj': 6, 'mon_p_maj': 4, 'mon_p_min': 6, 'e': 2, 'total_count': 60}
+Row 8: {'time': '2000-03-11 15:24:56', 'p_a_conj': 4, 'p_a_maj': 1, 'p_a_min': 9, 'p_h_conj': 1, 'p_h_maj': 2, 'p_h_min': 1, 'mon_p_conj': 3, 'mon_p_maj': 6, 'mon_p_min': 7, 'e': 8, 'total_count': 34}
+Row 9: {'time': '2000-03-11 13:18:56', 'p_a_conj': 5, 'p_a_maj': 14, 'p_a_min': 9, 'p_h_conj': 5, 'p_h_maj': 1, 'p_h_min': 3, 'mon_p_conj': 4, 'mon_p_maj': 5, 'mon_p_min': 11, 'e': 1, 'total_count': 57}
+Row 10: {'time': '2000-03-11 13:49:50', 'p_a_conj': 4, 'p_a_maj': 10, 'p_a_min': 14, 'p_h_conj': 0, 'p_h_maj': 2, 'p_h_min': 13, 'mon_p_conj': 3, 'mon_p_maj': 6, 'mon_p_min': 7, 'e': 2, 'total_count': 59}
+Row 11: {'time': '2000-03-11 06:31:28', 'p_a_conj': 4, 'p_a_maj': 9, 'p_a_min': 9, 'p_h_conj': 0, 'p_h_maj': 2, 'p_h_min': 3, 'mon_p_conj': 4, 'mon_p_maj': 4, 'mon_p_min': 8, 'e': 4, 'total_count': 43}
+Row 12: {'time': '2000-03-11 17:53:52', 'p_a_conj': 4, 'p_aj_maj': 10, 'p_a_min': 15, 'p_h_conj': 4, 'p_h_maj': 1, 'p_h_min': 7, 'mon_p_conj': 5, 'mon_p_maj': 1, 'mon_p_min': 9, 'e': 3, 'total_count': 56}
+Row 13: {'time': '2000-03-11 15:44:38', 'p_a_conj': 9, 'p_a_maj': 21, 'p_a_min': 30, 'p_h_conj': 0, 'p_h_maj': 6, 'p_h_min': 1, 'mon_p_conj': 3, 'mon_p_maj': 9, 'mon_p_min': 4, 'e': 0, 'total_count': 83}
+Row 14: {'time': '2000-03-11 12:09:04', 'p_a_conj': 6, 'p_a_maj': 6, 'p_a_min': 13, 'p_h_conj': 0, 'p_h_maj': 2, 'p_h_min': 2, 'mon_p_conj': 4, 'mon_p_maj': 7, 'mon_p_min': 6, 'e': 2, 'total_count': 46}
+Row 15: {'time': '2000-03-11 06:30:16', 'p_a_conj': 6, 'p_a_maj': 9, 'p_a_min': 13, 'p_h_conj': 0, 'p_h_maj': 8, 'p_h_min': 9, 'mon_p_conj': 4, 'mon_p_maj': 4, 'mon_p_min': 8, 'e': 1, 'total_count': 61}
+Row 16: {'time': '2000-03-11 10:03:42', 'p_a_conj': 4, 'p_a_maj': 12, 'p_a_min': 14, 'p_h_conj': 1, 'p_h_maj': 2, 'p_h_min': 3, 'mon_p_conj': 7, 'mon_p_maj': 5, 'mon_p_min': 5, 'e': 2, 'total_count': 53}
+Row 17: {'time': '2000-03-11 08:37:44', 'p_a_conj': 6, 'p_a_maj': 5, 'p_a_min': 5, 'p_h_conj': 0, 'p_h_maj': 8, 'p_h_min': 3, 'mon_p_conj': 5, 'mon_p_maj': 6, 'mon_p_min': 11, 'e': 1, 'total_count': 49}

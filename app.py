@@ -62,9 +62,10 @@ def home():
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
-    #list_times = aspects_implementation.process_time_count_csv('20_10_ver1_sorted_planet_data.csv',dt_actual_dob,geo_pos_natal)
+    list_times = aspects_implementation.process_datetime_count_csv('txt/26_10_24_IngTea_v2/ing_tea_ver2_times_pssr_pd_elimination.csv')
     #list_times = [dt_actual_dob]
-    left_items = [t.isoformat() for t in list_times]
+    #left_items = [t.isoformat() for t in list_times]
+    left_items = list_times
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
 
@@ -206,7 +207,8 @@ if __name__ == '__main__':
     #main_converge.other_techniques_from_pd_rect('txt/ingbtea ver4_sorted_planet_data.csv', 'data_input/ing tea prim.json', 'ver4_', 100, 2)
     #DONT USE UNLESS NEEDED
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
-    #analysis.create_csv_count_txt('ingtea_rect_ver4_2000-03-12_primariesCOUNT.txt','ingtea_ver4_sorted_data.csv')
+    #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
+    #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
     
     app.run(debug=True)
 
