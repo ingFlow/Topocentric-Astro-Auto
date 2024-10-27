@@ -142,11 +142,6 @@
                 28.15166606,
                 1753.0
             ]
-        },
-        {"datetime": "1994-07-02T12:00:00", "event_type": "DEATH_FATHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]},
-        {"datetime": "1997-08-13T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]},
-        {"datetime": "1997-11-16T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [-26.17678333,28.04259444,1753.0]},
-        {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]}
-      
+        }      
     ]
 }
