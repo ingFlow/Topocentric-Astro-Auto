@@ -63,7 +63,7 @@ def home():
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
     list_times = aspects_implementation.process_datetime_count_csv('txt/26_10_24_IngTea_v3/ing_tea_ver3_times_pssr_pd_elimination.csv')
-    list_times = [dt_actual_dob]
+    #list_times = [dt_actual_dob]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
@@ -100,6 +100,8 @@ def update_content():
             str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
             pd_info = pd_auto_obj.get_extended_information()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
+            mdos_list = pd_auto_obj.get_mdos_natal()
+            print(mdos_list)
         elif technique == aTechniqueType.SECONDARY_DIRECT:
             e = calculate_obliquity(jd_radix)
             secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
@@ -181,8 +183,11 @@ def update_content():
                 for main_key, sub_dict in technique_data.items():
                     data_list.append(f"{main_key}:") 
                     
-                    for sub_key, value in sub_dict.items():
-                        data_list.append(f"  {sub_key}: {value}")
+                    if main_key == "MDOs":
+                        data_list.append(sub_dict)
+                    else:
+                        for sub_key, value in sub_dict.items():
+                            data_list.append(f"  {sub_key}: {value}")
             else:  
                 data_list = [f"{key}: {value}" for key, value in technique_data.items()]
             html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in data_list) + "</ul>"

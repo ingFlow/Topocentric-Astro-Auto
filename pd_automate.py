@@ -119,7 +119,7 @@ class PD_Automate:
         }
         dict_extended.update(dict_pof_info)
         self.__dict_planets_extended_info["planets_extended"] = dict_extended
-
+        self.__dict_planets_extended_info["MDOs"] = self.get_mdos_natal()
         self.__str_aspects_rad_dir = find_pd_swiss_aspects(rad_positions, dir_positions)
         self.__str_aspects_rad_conv = find_pd_swiss_aspects(rad_positions, conv_positions)
         
@@ -129,7 +129,15 @@ class PD_Automate:
 
     def get_extended_information(self):
         return self.__dict_planets_extended_info
-
+    
+    def get_mdos_natal(self):
+        mdo_list = []
+        extended_planets = self.__dict_planets_extended_info["planets_extended"]
+        for key, value in extended_planets.items():
+            mdo = value['MDO']
+            mdo_list.append((key,mdo[0]))
+        return mdo_list
+    
 PRIMARY_RULES = {
     EventType.BIRTH_BROTHER: (('H4', 'H7','H3'), (Planet.MER, Planet.JUP)),
     EventType.BIRTH_SISTER: (('H4', 'H7', 'H3'), (Planet.MON, Planet.MER, Planet.VEN)),

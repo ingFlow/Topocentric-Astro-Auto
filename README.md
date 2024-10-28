@@ -11,9 +11,8 @@
 - Automated Cyclic Lunar calculations.
 - Automated Solar Return Aspects (tropical and precessed solar returns)
 - Utilizes Swiss Ephemeris for high-precision astronomical data.
-- Previous versions of the code used Astro Seek data for calculations.
 
 ## Environment Setup
-- The file setup.sh should be run to allow importing of Julian and pyswisseph libararies.
+- The file setup.sh should be run to allow importing of Julian, Flask, Timezone and Pyswisseph libararies.
 - The main interface is through app.py webpage.
 - Alternatively one can interact with main_converge, analysis or aspects_implementation as needed. 
