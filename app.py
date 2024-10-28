@@ -62,8 +62,8 @@ def home():
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
-    list_times = aspects_implementation.process_datetime_count_csv('txt/26_10_24_IngTea_v2/ing_tea_ver2_times_pssr_pd_elimination.csv')
-    #list_times = [dt_actual_dob]
+    list_times = aspects_implementation.process_datetime_count_csv('txt/26_10_24_IngTea_v3/ing_tea_ver3_times_pssr_pd_elimination.csv')
+    list_times = [dt_actual_dob]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
