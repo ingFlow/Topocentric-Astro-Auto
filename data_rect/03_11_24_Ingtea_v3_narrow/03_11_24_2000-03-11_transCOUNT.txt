@@ -1,0 +1,5 @@
+Row 2: {'time': '2000-03-11 15:00:30', 'p_a_conj': 6, 'p_a_maj': 11, 'p_a_allm': 17, 'p_a_min': 28, 'e': 0, 'all_conj': 6}
+Row 3: {'time': '2000-03-11 09:23:36', 'p_a_conj': 3, 'p_a_maj': 19, 'p_a_allm': 22, 'p_a_min': 17, 'e': 1, 'all_conj': 3}
+Row 4: {'time': '2000-03-11 02:21:28', 'p_a_conj': 5, 'p_a_maj': 15, 'p_a_allm': 20, 'p_a_min': 29, 'e': 1, 'all_conj': 5}
+Row 12: {'time': '2000-03-11 07:56:46', 'p_a_conj': 4, 'p_a_maj': 17, 'p_a_allm': 21, 'p_a_min': 25, 'e': 1, 'all_conj': 4}
+Row 14: {'time': '2000-03-11 17:58:46', 'p_a_conj': 6, 'p_a_maj': 11, 'p_a_allm': 17, 'p_a_min': 24, 'e': 0, 'all_conj': 6}

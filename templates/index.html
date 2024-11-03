@@ -184,6 +184,31 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
+        .inline-form {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Yrsa', sans-serif;
+            font-size: 1em;
+            color: #1a1f36;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+
+        .inline-form input[type="text"],
+        .inline-form button {
+            width: 100px;
+            padding: 5px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .inline-form button {
+            cursor: pointer;
+        }
+
         /* Footer */
         footer {
             text-align: center;
@@ -208,7 +233,7 @@
                 </ul>
             </div>
             <div style="margin-bottom: 20px;"></div>
-
+            
             <div class="checkbox-group" id="left-checkbox-group">
                 <label>
                     <input type="checkbox" id="cb-show-accepted" onchange="updateMiddleContent()"> Show Accepted only
@@ -252,6 +277,13 @@
 
         <!-- Right Column -->
         <div class="column">
+            <div style = "display: flexbox;">
+                <label for="chartdatetime">Datetime:</label>
+                <input type="text" id="chartdatetime" name="chartdatetime" placeholder="yyyy-mm-dd hh:mm:ss">
+                <label for="chartpos">Coords:</label>
+                <input type="text" id="chartpos" name="chartpos" placeholder="[+lat,-long]">                
+                <button type="button" onclick="generateChart()">Hi</button>                
+            </div>
             <div class="scroll-box" style="height: 400px;">
                 <ul id="right-list">
                     {% for item in right_column_items %}
@@ -282,6 +314,31 @@
                 }
             }
             return null;
+        }
+
+        async function generateChart(rightItem = null) {
+            // Get values from input fields
+            const chartDatetime = document.getElementById("chartdatetime").value;
+            const chartPos = document.getElementById("chartpos").value;
+            const rightRadioValue = getSelectedRadioValue('right-radio');
+            const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
+
+            try {
+                // Send the AJAX request to the Flask route
+                let response = await fetch(`/generate_chart?&chart_datetime=${encodeURIComponent(chartDatetime)}&chart_pos=${encodeURIComponent(chartPos)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`);
+                let data = await response.json();
+
+                if (response.ok) {
+                    // Get the SVG as a Blob
+                    const svgBlob = await response.blob();
+                    
+                    // Create a URL for the Blob and open it in a new tab
+                    const svgUrl = URL.createObjectURL(svgBlob);
+                    window.open(svgUrl, '_blank');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
         }
 
         async function updateMiddleContent(rightItem = null, leftItem = null) {
@@ -341,6 +398,7 @@
             setupList('left-list');
             setupList('right-list');
         });
+
     </script>
 </body>
 </html>

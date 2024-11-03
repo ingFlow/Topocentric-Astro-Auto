@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+html code for creating a menu is displayed in this image. the text is written in a basic font and is black in color. the html code appears to be for a website or application, as it includes a heading, an item label, and a menubar. the text is centered and takes up a large portion of the image. this code is likely used by developers to create a menu for their applications or websites.
+<style>
+  /* Custom menu styling */
+  #contextMenu {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 0px 12px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    padding: 8px;
+  }
+
+  #contextMenu ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  #contextMenu ul li {
+    padding: 8px;
+    cursor: pointer;
+  }
+
+  #contextMenu ul li:hover {
+    background-color: #eee;
+  }
+</style>
+</head>
+<body>
+
+<p>Select this text and right-click to see the custom menu.</p>
+
+<!-- Custom context menu -->
+<div id="contextMenu">
+  <ul>
+    <li onclick="customAction()">Custom Action</li>
+  </ul>
+</div>
+
+<script>
+  // Show custom context menu
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    var menu = document.getElementById('contextMenu');
+    menu.style.display = 'block';
+    menu.style.left = e.pageX + 'px';
+    menu.style.top = e.pageY + 'px';
+  });
+
+  // Hide custom context menu
+  document.addEventListener('click', function() {
+    var menu = document.getElementById('contextMenu');
+    menu.style.display = 'none';
+  });
+
+  // Custom action
+  function customAction() {
+    // Call your Flask app function here
+    alert('Custom action triggered');
+  }
+</script>
+
+</body>
+</html>

@@ -161,18 +161,23 @@ def count_extended_aspect_groups_txt(filename, technique):
     aspect_categories = {
         'p_a_conj': 0,
         'p_a_maj': 0,
+        'p_a_allm': 0,
         'p_a_min': 0,
         'a_p_conj': 0,
         'a_p_maj': 0,
+        'a_p_allm': 0,
         'a_p_min': 0,
         'p_h_conj': 0,
         'p_h_maj': 0,
+        'p_h_allm': 0,
         'p_h_min': 0,
         'h_p_conj': 0,
         'h_p_maj': 0,
+        'h_p_allm': 0,
         'h_p_min': 0,
         'mon_p_conj': 0,
         'mon_p_maj': 0,
+        'mon_p_allm': 0,
         'mon_p_min': 0,
         'e': 0,
     }
@@ -208,18 +213,25 @@ def count_extended_aspect_groups_txt(filename, technique):
                                 if category:
                                     counts[category] += 1
                 counts.update({'total_count':count_total})
+                counts['p_a_allm'] = counts['p_a_conj'] + counts['p_a_maj']
+                counts['a_p_allm'] = counts['a_p_conj'] + counts['a_p_maj']
+                counts['p_h_allm'] = counts['p_h_conj'] + counts['p_h_maj']
+                counts['h_p_allm'] = counts['h_p_conj'] + counts['h_p_maj']
+                counts['mon_p_allm'] = counts['mon_p_conj'] + counts['mon_p_maj']
+                counts['all_conj'] = counts['p_a_conj'] + counts['a_p_conj'] + counts['p_h_conj'] + counts['h_p_conj'] + counts['mon_p_conj']
+
                 results.append(counts) 
 
     with open(f"{filename}COUNT.txt", 'w') as f:
         for index, count in enumerate(results):
             if technique == TechniqueType.PRIMARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_min', 'e', 'total_count']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'e', 'all_conj']
             elif technique == TechniqueType.SECONDARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_min', 'e', 'total_count']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj']
             elif technique == TechniqueType.PSSR:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_min', 'e', 'total_count']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj']
             elif technique == TechniqueType.TRANSIT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_min', 'a_p_conj', 'e', 'total_count']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'e', 'all_conj']
 
             filtered_counts = {key: count[key] for key in selected_categories if key in count}
             f.write(f"Row {index + 1}: {filtered_counts}\n")
@@ -307,7 +319,7 @@ def add_timezone_to_24_hours(timezone):
 def process_manual_rect_csv(file_path, dt_bday, count_times_wanted, geopos):
     """end date is day of birth 
     timezone is whatever you need to add to UT to get the local time"""
-    i_timezone = get_timezone(geopos)
+    i_timezone = get_timezone_from_pos(geopos)
     df = pd.read_csv(file_path)
     times = df['Time'][:count_times_wanted].tolist()
     
@@ -417,7 +429,7 @@ def process_datetime_count_csv(filename_read):
 def process_time_count_csv(filename_read, dt_bday, geopos):
     time_list = []
 
-    i_timezone = get_timezone(geopos)
+    i_timezone = get_timezone_from_pos(geopos)
 
     with open(filename_read, mode='r', newline='') as file:
         reader = csv.reader(file)
@@ -430,7 +442,7 @@ def process_time_count_csv(filename_read, dt_bday, geopos):
 
     return datetime_list
 
-def get_timezone(geopos):
+def get_timezone_from_pos(geopos):
     tf = TimezoneFinder()
     geo_lat = geopos[0]
     geo_long = geopos[1]

@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "2008-09-05T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "DIVORCE_SEPARATION",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -28,7 +28,7 @@
         },
         {
             "datetime": "2013-12-12T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "MOBILIZATION",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -46,7 +46,7 @@
         },
         {
             "datetime": "2015-05-27T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "DEATH_MOTHER_GRAND",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -73,7 +73,7 @@
         },
         {
             "datetime": "2019-05-22T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "TRAVEL_NEGATIVE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -82,7 +82,7 @@
         },
         {
             "datetime": "2019-08-13T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "TRAVEL_NEGATIVE",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -91,7 +91,7 @@
         },
         {
             "datetime": "2021-04-06T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "DIVORCE_SEPARATION",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -109,7 +109,7 @@
         },
         {
             "datetime": "2022-01-03T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "POSITIVE_3_9",
             "geopos": [
                 -1.28411,
                 37.09745,
@@ -118,7 +118,7 @@
         },
         {
             "datetime": "2022-05-25T12:00:00",
-            "event_type": "TRAVEL_NEGATIVE",
+            "event_type": "TRAVEL_POSITIVE",
             "geopos": [
                 -1.28411,
                 37.09745,
@@ -136,7 +136,7 @@
         },
         {
             "datetime": "2024-03-08T13:50:00",
-            "event_type": "SUCCESS",
+            "event_type": "POSITIVE_6_12",
             "geopos": [
                 -26.137999448,
                 28.15166606,

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, send_file
 import pd_automate 
 import pssr_swiss_auto
 import secondary_automate
@@ -8,11 +8,13 @@ import sra_auto
 import main_converge
 import julian
 import aspects_implementation
-import analysis
+from kerykeion import AstrologicalSubject, KerykeionChartSVG
 from datetime import datetime
 import swisseph as swe
+from timezonefinder import TimezoneFinder
 import os
 import re
+import shutil
 from constants import calc_planets_pof_houses_labelled
 from aspects_base import calculate_obliquity
 
@@ -26,6 +28,7 @@ class aTechniqueType:
     NATAL = 6
 
 geo_pos_natal = []
+dt_radix = None
 lunar_orb = 9
 restrict_orb = 3
 current_file = "ing tea.json"
@@ -42,8 +45,9 @@ def home():
         current_file = files[0]
 
     dt_actual_dob, _, _, geopos_nat, list_of_events = main_converge.get_json_birth_data(f"data_input/{current_file}")
-    global geo_pos_natal
+    global geo_pos_natal, dt_radix
     geo_pos_natal = geopos_nat
+    dt_radix = dt_actual_dob
     
     list_dt_events = [t[0].isoformat() for t in list_of_events]
     list_type_events = [pd_automate.EventType.get_name(t[1]) for t in list_of_events]
@@ -62,7 +66,7 @@ def home():
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
-    list_times = aspects_implementation.process_datetime_count_csv('txt/26_10_24_IngTea_v3/ing_tea_ver3_times_pssr_pd_elimination.csv')
+    list_times = aspects_implementation.process_datetime_count_csv('data_times/2_11_24_ingtea times narrower.csv')
     #list_times = [dt_actual_dob]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
@@ -203,13 +207,96 @@ def update_content():
         'scrollable_message': scrollable_message
     })
 
-def reset_globals():
+@app.route('/custom_action', methods=['POST'])
+def custom_action():
+    data = request.get_json()
+    selected_text = data.get('selected_text')
+    left_item = data.get('left_item')
+    right_item = data.get('right_item')
+    right_radio = data.get('right_radio')
+
+    # Process received data as needed
+    message = f"Received text: {selected_text}, Left Item: {left_item}, Right Item: {right_item}, Radio Value: {right_radio}"
+    return jsonify({"message": message})
+
+def clear_directory(directory_path):
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        shutil.rmtree(directory_path)
+        os.makedirs(directory_path)  # Recreate the empty directory
+    else:
+        print("Directory does not exist or is not a directory.")
+
+def get_timezone_name_from_pos(geopos):
+    tf = TimezoneFinder()
+    geo_lat = geopos[0]
+    geo_long = geopos[1]
+    
+    return tf.timezone_at(lat=geo_lat, lng=geo_long)
+
+
+@app.route('/generate_chart')
+def generate_chart():
     global geo_pos_natal
+
+    chart_datetime = request.args.get('chart_datetime', default=dt_radix) 
+    chart_pos = request.args.get('chart_pos', default=geo_pos_natal)
+    technique = int(request.args.get('right_radio', ''))
+    event_info = request.args.get('right_item', '').split(', ')
+
+    event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
+    event_geopos = [float(i) for i in event_locstr]
+    if chart_datetime != dt_radix:
+        try:
+            chart_datetime = datetime.fromisoformat(chart_datetime)
+        except ValueError:
+            try:
+                chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S.%f")
+            except ValueError:
+                try:
+                    chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    return None # 
+
+    if technique in [aTechniqueType.SRA, aTechniqueType.LUNAR, aTechniqueType.TRANSIT]:
+        geopos = [event_geopos[0],event_geopos[1]]
+    else:
+        geopos = geo_pos_natal
+    
+    chart_datetime = datetime.fromisoformat('2008-09-05T12:00:00')
+
+    timezone_name = get_timezone_name_from_pos(geopos)
+    filename = f"{chart_datetime.strftime("%Y-%m-%d %H:%M:%S")} {geopos}"    
+    filename = "yes2"
+    svg_path = f"static/charts/{filename} - Natal Chart.svg"
+    
+    chart_subject = AstrologicalSubject(
+        filename,
+        chart_datetime.year,
+        chart_datetime.month,
+        chart_datetime.day,
+        chart_datetime.hour,
+        chart_datetime.minute,
+        chart_datetime.second,  
+        lng=geopos[0],
+        lat=geopos[1],
+        tz_str=timezone_name,
+        houses_system_identifier="T"
+    )
+    
+    date_natal_chart = KerykeionChartSVG(chart_subject, theme="dark-high-contrast", new_output_directory="static/charts")
+    date_natal_chart.makeSVG()
+
+    return send_file(svg_path, mimetype='image/svg+xml')
+
+
+def reset_globals():
+    global geo_pos_natal, dt_radix
     geo_pos_natal = []
+    dt_radix = None
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
-    #main_converge.other_techniques_from_pd_rect('txt/ingbtea ver4_sorted_planet_data.csv', 'data_input/ing tea prim.json', 'ver4_', 100, 2)
+    #main_converge.rect_ver_data_create('data_times/2_11_24_ingtea times narrower.csv', main_converge.timesFileType.DATE_N_TIME, 'data_input/ing tea.json', 'data_rect/03_11_24_Ingtea_v4_alldir/03_11_24_')
     #DONT USE UNLESS NEEDED
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')

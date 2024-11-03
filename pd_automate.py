@@ -46,7 +46,10 @@ class EventType:
     GAMBLING_LOSS = 37
     GAMBLING_GAIN = 38
     ARMY_PROMOTION = 39
-    BLANK = 40
+    POSITIVE_3_9 = 40
+    POSITIVE_6_12 = 41
+    POSITIVE_2_8 = 42
+    BLANK = 43
 
     @classmethod
     def get_name(cls, value):
@@ -179,51 +182,57 @@ PRIMARY_RULES = {
     EventType.GAMBLING_LOSS:(('H10','H1','H2','H5'),(Planet.NEP,Planet.SAT,Planet.URA,Planet.MAR)),
     EventType.GAMBLING_GAIN:(('H10','H1','H2','H5'),(Planet.JUP,Planet.VEN,Planet.URA)),
     EventType.ARMY_PROMOTION:(('H10','H1','H3'),(Planet.SUN,Planet.MAR,Planet.PLU,Planet.JUP,Planet.MON,Planet.MER,Planet.URA)),
+    EventType.POSITIVE_3_9:(('H10', 'H1', 'H3'),(Planet.JUP, Planet.MON, Planet.VEN)),
+    EventType.POSITIVE_6_12:(('H10', 'H1', 'H6'),(Planet.JUP, Planet.MON, Planet.VEN)),
+    EventType.POSITIVE_2_8:(('H10', 'H1', 'H2'),(Planet.JUP, Planet.MON, Planet.VEN)),
     EventType.BLANK:((''),())
 }
 
 SECONDARY_RULES = {
-EventType.BIRTH_BROTHER: ((''),(Planet.SUN, Planet.MON, Planet.VEN, Planet.NNO, Planet.URA, Planet.PLU)),
-EventType.BIRTH_SISTER: ((''), (Planet.SUN, Planet.JUP, Planet.NNO, Planet.URA, Planet.PLU)),
-EventType.BIRTH_SON: ((''), (Planet.PLU, Planet.URA, Planet.MON, Planet.VEN, Planet.MER)),
-EventType.BIRTH_DAUGHTER: ((''), (Planet.MAR, Planet.URA, Planet.PLU, Planet.SUN, Planet.MER)),
-EventType.DEATH_FATHER_GRAND: (('H12'), (Planet.URA, Planet.MON)),
-EventType.DEATH_MOTHER_GRAND: (('H12'), (Planet.SUN, Planet.URA)),
-EventType.SUCCESS: ((''), (Planet.NNO)),
-EventType.FAILURE: (('H12'), (Planet.URA, Planet.MON, Planet.MER, Planet.PLU)),
-EventType.TRAVEL_POSITIVE: ((''), (Planet.VEN, Planet.SUN, Planet.NNO)),
-EventType.TRAVEL_NEGATIVE: (('H12'), ()),
-EventType.ARREST: (('H3'), (Planet.SUN,Planet.MER)),
-EventType.LOSSES: ((''), (Planet.PLU, Planet.NNO)),
-EventType.GRADUATION: ((''), (Planet.NNO)),
-EventType.MOVE_HOME: ((''), (Planet.URA)),
-EventType.BIRTH_GRANDSON:(('H9'), (Planet.PLU, Planet.URA,Planet.MON,Planet.VEN,Planet.MER)),
-EventType.BIRTH_GRANDDAUGHTER:(('H9'), (Planet.MAR,Planet.URA,Planet.PLU,Planet.SUN,Planet.MER)),
-EventType.MARRIAGE_FOR_MALE:((''), (Planet.MER,Planet.URA,Planet.MAR,Planet.SUN)),
-EventType.MARRIAGE_FOR_FEMALE:((''), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
-EventType.CHILDS_MARRIAGE:((''), (Planet.URA,Planet.MAR,Planet.PLU)),
-EventType.DIVORCE_SEPARATION:(('H12'), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
-EventType.DEATH_SON:(('H5','H12'), (Planet.SUN,Planet.MER,Planet.URA)),
-EventType.DEATH_DAUGHTER:(('H5','H12'), (Planet.MAR, Planet.URA,Planet.MER)),
-EventType.DEATH_WIFE:(('H5','H12'), (Planet.URA)),
-EventType.DEATH_HUSBAND:(('H5','H12'), (Planet.URA)),
-EventType.DEATH_BROTHER:(('H3','H12'), (Planet.MON,Planet.SUN)),
-EventType.DEATH_SISTER:(('H3','H12'), ()),
-EventType.DEATH:(('H12'), (Planet.URA,Planet.MAR,Planet.MON)),
-EventType.ASSASINATION_SUICIDE:(('H12'), (Planet.MON)),
-EventType.PROMOTION_JOB:(('H2','H11'), (Planet.PLU,Planet.NNO)),
-EventType.RESIGN_RETIRE:(('H12'), (Planet.URA,Planet.MON,Planet.MER,Planet.PLU)),
-EventType.TRAVEL_OVERSEAS_POSITIVE:(('H9'), (Planet.VEN,Planet.NEP,Planet.SUN,Planet.NNO)),
-EventType.MOBILIZATION:(('H3'), (Planet.MON,Planet.MER)),
-EventType.DEMOBILIZATION_RELEASE:(('H3'), (Planet.MON,Planet.MER,Planet.NNO)),
-EventType.ACCIDENT:(('H12'), (Planet.NEP,Planet.NNO,Planet.PLU,Planet.MON)),
-EventType.HOSPITALIZATION_ILLNESS:((''), (Planet.PLU,Planet.MON)),
-EventType.VIOLENCE:(('H12'), (Planet.MER)),
-EventType.INTRIGUE:((''), (Planet.PLU,Planet.MAR)),
-EventType.GAMBLING_LOSS:((''), (Planet.PLU,Planet.NNO)),
-EventType.GAMBLING_GAIN:((''), (Planet.PLU)),
-EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO)),
-EventType.BLANK:((''),())
+    EventType.BIRTH_BROTHER: ((''),(Planet.SUN, Planet.MON, Planet.VEN, Planet.NNO, Planet.URA, Planet.PLU)),
+    EventType.BIRTH_SISTER: ((''), (Planet.SUN, Planet.JUP, Planet.NNO, Planet.URA, Planet.PLU)),
+    EventType.BIRTH_SON: ((''), (Planet.PLU, Planet.URA, Planet.MON, Planet.VEN, Planet.MER)),
+    EventType.BIRTH_DAUGHTER: ((''), (Planet.MAR, Planet.URA, Planet.PLU, Planet.SUN, Planet.MER)),
+    EventType.DEATH_FATHER_GRAND: (('H12'), (Planet.URA, Planet.MON)),
+    EventType.DEATH_MOTHER_GRAND: (('H12'), (Planet.SUN, Planet.URA)),
+    EventType.SUCCESS: ((''), (Planet.NNO)),
+    EventType.FAILURE: (('H12'), (Planet.URA, Planet.MON, Planet.MER, Planet.PLU)),
+    EventType.TRAVEL_POSITIVE: ((''), (Planet.VEN, Planet.SUN, Planet.NNO)),
+    EventType.TRAVEL_NEGATIVE: (('H12'), ()),
+    EventType.ARREST: (('H3'), (Planet.SUN,Planet.MER)),
+    EventType.LOSSES: ((''), (Planet.PLU, Planet.NNO)),
+    EventType.GRADUATION: ((''), (Planet.NNO)),
+    EventType.MOVE_HOME: ((''), (Planet.URA)),
+    EventType.BIRTH_GRANDSON:(('H9'), (Planet.PLU, Planet.URA,Planet.MON,Planet.VEN,Planet.MER)),
+    EventType.BIRTH_GRANDDAUGHTER:(('H9'), (Planet.MAR,Planet.URA,Planet.PLU,Planet.SUN,Planet.MER)),
+    EventType.MARRIAGE_FOR_MALE:((''), (Planet.MER,Planet.URA,Planet.MAR,Planet.SUN)),
+    EventType.MARRIAGE_FOR_FEMALE:((''), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
+    EventType.CHILDS_MARRIAGE:((''), (Planet.URA,Planet.MAR,Planet.PLU)),
+    EventType.DIVORCE_SEPARATION:(('H12'), (Planet.MER,Planet.URA,Planet.VEN,Planet.MON,Planet.PLU)),
+    EventType.DEATH_SON:(('H5','H12'), (Planet.SUN,Planet.MER,Planet.URA)),
+    EventType.DEATH_DAUGHTER:(('H5','H12'), (Planet.MAR, Planet.URA,Planet.MER)),
+    EventType.DEATH_WIFE:(('H5','H12'), (Planet.URA)),
+    EventType.DEATH_HUSBAND:(('H5','H12'), (Planet.URA)),
+    EventType.DEATH_BROTHER:(('H3','H12'), (Planet.MON,Planet.SUN)),
+    EventType.DEATH_SISTER:(('H3','H12'), ()),
+    EventType.DEATH:(('H12'), (Planet.URA,Planet.MAR,Planet.MON)),
+    EventType.ASSASINATION_SUICIDE:(('H12'), (Planet.MON)),
+    EventType.PROMOTION_JOB:(('H2','H11'), (Planet.PLU,Planet.NNO)),
+    EventType.RESIGN_RETIRE:(('H12'), (Planet.URA,Planet.MON,Planet.MER,Planet.PLU)),
+    EventType.TRAVEL_OVERSEAS_POSITIVE:(('H9'), (Planet.VEN,Planet.NEP,Planet.SUN,Planet.NNO)),
+    EventType.MOBILIZATION:(('H3'), (Planet.MON,Planet.MER)),
+    EventType.DEMOBILIZATION_RELEASE:(('H3'), (Planet.MON,Planet.MER,Planet.NNO)),
+    EventType.ACCIDENT:(('H12'), (Planet.NEP,Planet.NNO,Planet.PLU,Planet.MON)),
+    EventType.HOSPITALIZATION_ILLNESS:((''), (Planet.PLU,Planet.MON)),
+    EventType.VIOLENCE:(('H12'), (Planet.MER)),
+    EventType.INTRIGUE:((''), (Planet.PLU,Planet.MAR)),
+    EventType.GAMBLING_LOSS:((''), (Planet.PLU,Planet.NNO)),
+    EventType.GAMBLING_GAIN:((''), (Planet.PLU)),
+    EventType.ARMY_PROMOTION:(('H2','H11'), (Planet.VEN,Planet.NNO)),
+    EventType.POSITIVE_3_9:((''),(Planet.SUN, Planet.URA, Planet.MER)),
+    EventType.POSITIVE_6_12:((''),(Planet.SUN, Planet.MER, Planet.URA)),
+    EventType.POSITIVE_2_8:((''),(Planet.SUN, Planet.MER, Planet.URA)),
+    EventType.BLANK:((''),())
 }
 
 def get_accept_lists(event_id):

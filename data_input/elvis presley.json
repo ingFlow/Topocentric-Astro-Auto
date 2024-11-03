@@ -1,0 +1,138 @@
+{
+    "dt_radix_start": "1935-01-08T02:00:00",
+    "dt_radix_end": "1935-01-08T02:00:00",
+    "dt_actual_dob": "1935-01-08T09:21:20",
+    "geopos_natal": [
+        34.25,
+        -88.716666667,
+        85.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1954-07-30T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1955-05-01T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1956-01-28T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1956-09-09T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1958-03-24T12:00:00",
+            "event_type": "MOBILIZATION",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1958-08-14T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1958-10-01T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1959-06-01T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1960-03-05T12:00:00",
+            "event_type": "DEMOBILIZATION_RELEASE",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1967-05-01T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1968-02-01T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1972-08-15T12:00:00",
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1977-08-16T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        },
+        {
+            "datetime": "1979-06-26T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                34.25,
+                -88.716666667,
+                85.0
+            ]
+        }
+    ]
+}

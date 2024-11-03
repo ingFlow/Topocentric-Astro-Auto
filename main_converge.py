@@ -25,27 +25,25 @@ class timesFileType:
     datetime(1974, 6, 13, 23, 46, 24)'''
 
 def convert_birth_data_json(file_to_write_str):
-    dt_radix_start = datetime(2000, 3, 11, 2, 00, 00)
-    dt_radix_end = datetime(2000, 3, 12, 2, 00, 00)
-    dt_actual_dob = datetime(2000, 3, 11, 9, 00, 2)
-    geopos = [26.17678333, 28.04259444, 1753.0]
+    dt_radix_start = datetime(1935,1,8, 2, 00, 00)
+    dt_radix_end = datetime(1935,1,8, 2, 00, 00)
+    dt_actual_dob = datetime(1935,1,8, 9, 21, 20)
+    geopos = [34.25, -88.716666667, 85.0]
     list_of_events = [
-        #(datetime(2004, 12, 15, 12, 00, 00) ,EventType.MOVE_HOME,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2009, 3, 19, 12, 00, 00) ,EventType.BIRTH_BROTHER,[26.17678333, 28.04259444, 1753.0]),
-        #(datetime(2011, 1, 20, 12, 00, 00) ,EventType.SUCCESS,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2013, 12, 11, 12, 00, 00) ,EventType.LOSSES,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2014, 3, 24, 12, 00, 00) ,EventType.BIRTH_BROTHER,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2015, 5, 27, 12, 00, 00) ,EventType.LOSSES,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2017, 9, 15, 12, 00, 00) ,EventType.SUCCESS,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2018, 2, 19, 12, 00, 00) ,EventType.BIRTH_SISTER,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2019, 1, 8, 12, 00, 00) ,EventType.SUCCESS,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2019, 5, 22, 12, 00, 00) ,EventType.LOSSES,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2019, 8, 13, 12, 00, 00) ,EventType.LOSSES,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2021, 4, 6, 12, 00, 00) ,EventType.LOSSES,[26.17678333, 28.04259444, 1753.0]),
-        (datetime(2021, 7, 10, 12, 00, 00) ,EventType.TRAVEL_NEGATIVE,[26.17678333, 28.04259444, 1753.0]),
-        #(datetime(2021, 8, 15, 12, 00, 00) ,EventType.LOSSES,[-4.05466, 39.66359, 23.0]),
-        (datetime(2022, 1, 3, 12, 00, 00) ,EventType.INTRIGUE,[-4.05466, 39.66359, 23.0]),
-        (datetime(2022, 5, 25, 12, 00, 00) ,EventType.ARREST,[-4.05466, 39.66359, 23.0]),
+        (datetime(1954,7,30, 12, 00, 00) ,EventType.SUCCESS,[34.25, -88.716666667, 85.0]),
+        (datetime(1955,5,1, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[34.25, -88.716666667, 85.0]),
+        (datetime(1956,1,28, 12, 00, 00) ,EventType.SUCCESS,[34.25, -88.716666667, 85.0]),
+        (datetime(1956,9,9, 12, 00, 00) ,EventType.SUCCESS,[34.25, -88.716666667, 85.0]),
+        (datetime(1958,3,24, 12, 00, 00) ,EventType.MOBILIZATION,[34.25, -88.716666667, 85.0]),
+        (datetime(1958,8,14, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[34.25, -88.716666667, 85.0]),
+        (datetime(1958,10,1, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[34.25, -88.716666667, 85.0]),
+        (datetime(1959,6,1, 12, 00, 00) ,EventType.SUCCESS,[34.25, -88.716666667, 85.0]),
+        (datetime(1960,3,5, 12, 00, 00) ,EventType.DEMOBILIZATION_RELEASE,[34.25, -88.716666667, 85.0]),
+        (datetime(1967,5,1, 12, 00, 00) ,EventType.MARRIAGE_FOR_MALE,[34.25, -88.716666667, 85.0]),
+        (datetime(1968,2,1, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[34.25, -88.716666667, 85.0]),
+        (datetime(1972,8,15, 12, 00, 00) ,EventType.DIVORCE_SEPARATION,[34.25, -88.716666667, 85.0]),
+        (datetime(1977,8,16, 12, 00, 00) ,EventType.DEATH,[34.25, -88.716666667, 85.0]),
+        (datetime(1979,6,26, 12, 00, 00) ,EventType.DEATH_FATHER_GRAND,[34.25, -88.716666667, 85.0])    
     ]
     
     data = {
@@ -62,39 +60,40 @@ def convert_birth_data_json(file_to_write_str):
         json.dump(data, outfile, indent=4)
 
 def get_json_birth_data(filename):   
-  with open(filename, 'r') as f:
-      data = json.load(f)
-  dt_radix_start = datetime.fromisoformat(data['dt_radix_start'])
-  dt_radix_end = datetime.fromisoformat(data['dt_radix_end'])
-  real_dob = datetime.fromisoformat(data['dt_actual_dob'])
+    with open(filename, 'r') as f:
+        data = json.load(f)
+    dt_radix_start = datetime.fromisoformat(data['dt_radix_start'])
+    dt_radix_end = datetime.fromisoformat(data['dt_radix_end'])
+    real_dob = datetime.fromisoformat(data['dt_actual_dob'])
 
-  geopos_natal = data['geopos_natal']
-  list_of_events = [
-      (datetime.fromisoformat(event['datetime']), getattr(EventType, event['event_type']), event['geopos'])
-      for event in data['list_of_events']
-  ]
-  return real_dob, dt_radix_start, dt_radix_end, geopos_natal, list_of_events
+    geopos_natal = data['geopos_natal']
+    list_of_events = [
+        (datetime.fromisoformat(event['datetime']), getattr(EventType, event['event_type']), event['geopos'])
+        for event in data['list_of_events']
+    ]
+    return real_dob, dt_radix_start, dt_radix_end, geopos_natal, list_of_events
 
 def pd_rect_grid_score_create(filename_birth_data, str_output_prefix, time_increment_seconds: int): 
-  _, dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(filename_birth_data)
-  
-  level_aspects = AspectType.ANGLE_HOUSE_ANY_PLANET
-  str_date = str_output_prefix
-  techniques = [
-      (asp.TechniqueType.PRIMARY_DIRECT, "_primaries")
-  ]
+    _, dt_radix_start, dt_radix_end, geopos, list_of_events = get_json_birth_data(filename_birth_data)
 
-  for technique, suffix in techniques:
-      filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
-      asp.generate_grid_angular_aspects(
-          filename, dt_radix_start, dt_radix_end, time_increment_seconds, list_of_events, geopos, level_aspects, technique
-      )
-      asp.count_aspect_groups_txt(filename,False)
-      asp.resetvars()  
+    level_aspects = AspectType.ANGLE_HOUSE_ANY_PLANET
+    str_date = str_output_prefix
+    techniques = [
+    (asp.TechniqueType.PRIMARY_DIRECT, "_primaries")
+    ]
+
+    for technique, suffix in techniques:
+        filename = f"{str_date}{dt_radix_end.strftime('%Y-%m-%d')}{suffix}"
+        asp.generate_grid_angular_aspects(
+            filename, dt_radix_start, dt_radix_end, time_increment_seconds, list_of_events, geopos, level_aspects, technique
+        )
+        asp.count_aspect_groups_txt(filename,False)
+        asp.resetvars()  
 
 def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_filename, prefix_data_str, count_times_wanted_pola_man=None):
+    """prefix data str must be like: txt/26_10_24_IngTea_v3/26_10_24_"""
     real_dob, _, _, geopos, list_of_events = get_json_birth_data(birth_data_filename)
- 
+
     if times_type == timesFileType.POLARIS:
         list_times_to_process = asp.process_polaris_times(times_filename,count_times_wanted_pola_man)
     elif times_type == timesFileType.DATE_N_TIME:
@@ -127,7 +126,7 @@ def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_
             level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
         elif technique == asp.TechniqueType.PRIMARY_DIRECT:
             level_aspects = AspectType.ANGLE_HOUSE_SECONDARY
-           
+        
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         asp.count_extended_aspect_groups_txt(filename, technique)
         asp.resetvars()  
@@ -135,7 +134,7 @@ def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_
 def other_techniques_from_times(times_filename, birth_data_filename, prefix_data_str, count_times_to_process=None):
     real_dob, _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
     date_str = dt_radix_end.strftime('%d %B %Y')
- 
+
     #list_times_to_process = asp.process_manual_rect_csv(times_filename, real_dob,count_times_to_process, i_timezone)
     list_times_to_process = asp.process_datetime_count_csv(times_filename)
     str_date = prefix_data_str
@@ -167,7 +166,7 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
     asp.count_pssr_moon_from_times_events(filename_write,list_times,list_of_events,geopos)
 
 
-#convert_birth_data_json('data_input/ing tea')
+#convert_birth_data_json('data_input/elvis presley')
 #rect_ver_data_create('txt/19_10_24 IngTea rect.txt', timesFileType.POLARIS,'data_input/ing tea prim.json','txt/26_10_24_IngTea_v3/26_10_24_',70)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)

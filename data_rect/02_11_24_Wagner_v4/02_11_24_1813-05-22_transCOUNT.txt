@@ -1,0 +1,13 @@
+Row 1: {'time': '1813-05-22 10:10:06', 'p_a_conj': 7, 'p_a_maj': 8, 'p_a_allm': 15, 'p_a_min': 15, 'e': 0, 'all_conj': 7}
+Row 2: {'time': '1813-05-21 23:51:44', 'p_a_conj': 1, 'p_a_maj': 15, 'p_a_allm': 16, 'p_a_min': 16, 'e': 2, 'all_conj': 1}
+Row 3: {'time': '1813-05-22 02:35:28', 'p_a_conj': 6, 'p_a_maj': 9, 'p_a_allm': 15, 'p_a_min': 18, 'e': 0, 'all_conj': 6}
+Row 4: {'time': '1813-05-22 00:57:28', 'p_a_conj': 2, 'p_a_maj': 14, 'p_a_allm': 16, 'p_a_min': 22, 'e': 0, 'all_conj': 2}
+Row 5: {'time': '1813-05-22 19:08:46', 'p_a_conj': 7, 'p_a_maj': 13, 'p_a_allm': 20, 'p_a_min': 12, 'e': 1, 'all_conj': 7}
+Row 6: {'time': '1813-05-21 23:18:24', 'p_a_conj': 3, 'p_a_maj': 10, 'p_a_allm': 13, 'p_a_min': 7, 'e': 0, 'all_conj': 3}
+Row 7: {'time': '1813-05-21 23:32:24', 'p_a_conj': 3, 'p_a_maj': 9, 'p_a_allm': 12, 'p_a_min': 20, 'e': 0, 'all_conj': 3}
+Row 8: {'time': '1813-05-22 02:19:44', 'p_a_conj': 5, 'p_a_maj': 12, 'p_a_allm': 17, 'p_a_min': 16, 'e': 0, 'all_conj': 5}
+Row 9: {'time': '1813-05-22 20:33:28', 'p_a_conj': 3, 'p_a_maj': 9, 'p_a_allm': 12, 'p_a_min': 14, 'e': 1, 'all_conj': 3}
+Row 10: {'time': '1813-05-22 20:42:08', 'p_a_conj': 2, 'p_a_maj': 16, 'p_a_allm': 18, 'p_a_min': 17, 'e': 0, 'all_conj': 2}
+Row 11: {'time': '1813-05-22 01:04:06', 'p_a_conj': 5, 'p_a_maj': 13, 'p_a_allm': 18, 'p_a_min': 23, 'e': 0, 'all_conj': 5}
+Row 12: {'time': '1813-05-22 08:11:44', 'p_a_conj': 5, 'p_a_maj': 13, 'p_a_allm': 18, 'p_a_min': 18, 'e': 0, 'all_conj': 5}
+Row 13: {'time': '1813-05-22 20:52:48', 'p_a_conj': 3, 'p_a_maj': 8, 'p_a_allm': 11, 'p_a_min': 21, 'e': 0, 'all_conj': 3}
