@@ -5,6 +5,7 @@ import secondary_automate
 import transit_swiss_auto
 import lunar_auto
 import sra_auto
+import harmonics_auto
 import main_converge
 import julian
 import aspects_implementation
@@ -25,7 +26,8 @@ class aTechniqueType:
     TRANSIT = 3
     LUNAR = 4
     SRA = 5
-    NATAL = 6
+    HARMONICS = 6
+    NATAL = 7
 
 geo_pos_natal = []
 dt_radix = None
@@ -66,8 +68,8 @@ def home():
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = aspects_implementation.process_polaris_times('txt/19_10_24 IngTea rect.txt', 100)
-    list_times = aspects_implementation.process_datetime_count_csv('data_times/2_11_24_ingtea times narrower.csv')
-    #list_times = [dt_actual_dob]
+    list_times = aspects_implementation.process_datetime_count_csv('data_times/3_11_24_lillyallen times narrower.csv')
+    list_times = [dt_actual_dob]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
@@ -141,6 +143,11 @@ def update_content():
             str_counts = lunar_auto.get_str_planet_counts(counts)
             mal_count, ben_count = lunar_auto.count_mal_ben_from_str_aspects(str_all_directed_aspects)
             static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
+        elif technique == aTechniqueType.HARMONICS:
+            harmonics_obj = harmonics_auto.Harmonics_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled)
+            str_rad_harm_aspects = harmonics_obj.get_str_aspects()
+            harmonics_info = harmonics_obj.get_dict_info()
+            str_all_directed_aspects = str_rad_harm_aspects
 
         list_all_asp = str_all_directed_aspects.split('\n')
 
@@ -181,6 +188,8 @@ def update_content():
                 technique_data = lunar_info
             elif technique == aTechniqueType.SRA:
                 technique_data = sra_info
+            elif technique == aTechniqueType.HARMONICS:
+                technique_data = harmonics_info
             
             if technique == aTechniqueType.PRIMARY_DIRECT or technique == aTechniqueType.LUNAR:
                 data_list = []
@@ -296,7 +305,7 @@ def reset_globals():
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
-    #main_converge.rect_ver_data_create('data_times/2_11_24_ingtea times narrower.csv', main_converge.timesFileType.DATE_N_TIME, 'data_input/ing tea.json', 'data_rect/03_11_24_Ingtea_v4_alldir/03_11_24_')
+    #main_converge.rect_ver_data_create('data_times/3_11_24_lillyallen times.csv', main_converge.timesFileType.DATE_N_TIME, 'data_input/lilly allen.json', 'data_rect/03_11_24_LillyAllen_v2/03_11_24_')
     #DONT USE UNLESS NEEDED
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')

@@ -49,7 +49,10 @@ class EventType:
     POSITIVE_3_9 = 40
     POSITIVE_6_12 = 41
     POSITIVE_2_8 = 42
-    BLANK = 43
+    POSITIVE_AC_MC = 43
+    NEGATIVE_AC_MC = 44
+    NEGATIVE_6_12 = 45
+    BLANK = 46
 
     @classmethod
     def get_name(cls, value):
@@ -185,6 +188,9 @@ PRIMARY_RULES = {
     EventType.POSITIVE_3_9:(('H10', 'H1', 'H3'),(Planet.JUP, Planet.MON, Planet.VEN)),
     EventType.POSITIVE_6_12:(('H10', 'H1', 'H6'),(Planet.JUP, Planet.MON, Planet.VEN)),
     EventType.POSITIVE_2_8:(('H10', 'H1', 'H2'),(Planet.JUP, Planet.MON, Planet.VEN)),
+    EventType.POSITIVE_AC_MC:(('H10', 'H1'),(Planet.JUP, Planet.MON, Planet.VEN)),
+    EventType.NEGATIVE_6_12:(('H10', 'H1', 'H6'),(Planet.SAT, Planet.NEP, Planet.NNO, Planet.MAR, Planet.PLU)),
+    EventType.NEGATIVE_AC_MC:(('H10', 'H1'),(Planet.SAT, Planet.NEP, Planet.NNO, Planet.MAR, Planet.PLU)),
     EventType.BLANK:((''),())
 }
 
@@ -232,6 +238,9 @@ SECONDARY_RULES = {
     EventType.POSITIVE_3_9:((''),(Planet.SUN, Planet.URA, Planet.MER)),
     EventType.POSITIVE_6_12:((''),(Planet.SUN, Planet.MER, Planet.URA)),
     EventType.POSITIVE_2_8:((''),(Planet.SUN, Planet.MER, Planet.URA)),
+    EventType.POSITIVE_AC_MC:((''),(Planet.SUN, Planet.MER, Planet.URA)),
+    EventType.NEGATIVE_6_12:((''),(Planet.SUN, Planet.MER)),
+    EventType.NEGATIVE_AC_MC:((''),(Planet.SUN, Planet.MER)),
     EventType.BLANK:((''),())
 }
 

@@ -2,7 +2,7 @@ import swisseph as swe
 import julian
 from datetime import datetime, timedelta
 from aspects_base import find_sra_swiss_aspects, remove_duplicates, convert_dec_degrees_to_deg_min_sec, convert_full_dec_degrees_to_zod_min_sec
-from constants import calc_planets_houses_labelled, calc_planets_pof_houses_labelled, PLANETS 
+from constants import get_precession, calc_planets_houses_labelled, calc_planets_pof_houses_labelled, PLANETS 
 
 class SRA_Auto:
     def __init__(self, dt_radix, dt_event, geopos, rad_planets=None):
@@ -19,9 +19,8 @@ class SRA_Auto:
 
         direct_year = calc_direct_year(dt_radix, dt_event)
         jd_dir_start = julian.to_jd(datetime(direct_year,1,1,0,0,0))
-        rad_aya = swe.get_ayanamsa_ut(jd_radix)
-        event_aya = swe.get_ayanamsa_ut(jd_event)
-        dir_precession = abs(rad_aya - event_aya)
+        dir_precession = get_precession(jd_radix, julian.to_jd(datetime(direct_year, dt_radix.month, dt_radix.day, 12, 00, 00)))
+        dir_precession = get_precession(jd_radix, jd_event)
         rad_sun_long = rad_planets[0][1]
         dir_sun_long_precessed = swe.degnorm(rad_sun_long + dir_precession)
         
@@ -34,8 +33,8 @@ class SRA_Auto:
             converse_year = (dt_radix.year - year_diff) + 1
         jd_conv_start = julian.to_jd(datetime(converse_year,1,1,0,0,0))
         
-        event_aya = swe.get_ayanamsa_ut(jd_conv_event)
-        conv_precession = abs(rad_aya - event_aya)
+        conv_precession = get_precession(jd_radix, julian.to_jd(datetime(converse_year, dt_radix.month, dt_radix.day, 12, 00, 00)))
+        conv_precession = get_precession(jd_radix, jd_event)
         conv_sun_long_precessed = swe.degnorm(rad_sun_long - conv_precession)
         
         jd_dir_return = swe.solcross_ut(rad_sun_long, jd_dir_start)

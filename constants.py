@@ -37,7 +37,7 @@ def calc_planets_houses_labelled(jd, label, planets_indexes_to_exclude, geopos):
             planets_houses.append((PLANETS[planet], long, label))  
    
     houses = swe.houses(jd, geopos[0], geopos[1], b'T')[0]
-    for i in range(0, 6):
+    for i in range(0, 12):
         planets_houses.append((f"H{i+1}", houses[i], label))
       
     return planets_houses
@@ -64,3 +64,9 @@ def calc_planets_pof_houses_labelled(jd_radix, geopos):
 
     return rad_planets
 
+def get_precession(jd1, jd2):
+    """Give the jd of the 2 dates you want the precession between"""
+    aya1 = swe.get_ayanamsa_ut(jd1)
+    aya2 = swe.get_ayanamsa_ut(jd2)
+    
+    return abs(aya1 - aya2)

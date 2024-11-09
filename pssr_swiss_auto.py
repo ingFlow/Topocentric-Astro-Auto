@@ -2,7 +2,7 @@ import swisseph as swe
 import julian
 from datetime import datetime, timedelta
 from aspects_base import convert_dec_degrees_to_deg_min_sec, find_pssr_swiss_aspects, convert_full_dec_degrees_to_zod_min_sec
-from constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
+from constants import PLANETS, get_precession, calc_planets_labelled, calc_planets_pof_houses_labelled
 
 class PSSR_Auto:
     def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None):
@@ -21,9 +21,7 @@ class PSSR_Auto:
         
         pssr_direct_year = calc_pssr_direct_year(dt_radix, dt_event)
         jd_pssr_start = julian.to_jd(datetime(pssr_direct_year,1,1,0,0,0))
-        rad_aya = swe.get_ayanamsa_ut(jd_radix)
-        event_aya = swe.get_ayanamsa_ut(jd_event)
-        dir_precession = abs(rad_aya - event_aya)
+        dir_precession = get_precession(jd_radix, jd_event)
         sun_long = rad_planets[0][1]
         dir_sun_long_precessed = swe.degnorm(sun_long + dir_precession)
         
@@ -43,8 +41,7 @@ class PSSR_Auto:
             pssr_converse_year = (dt_radix.year - year_diff) + 1
         jd_pssr_start = julian.to_jd(datetime(pssr_converse_year,1,1,0,0,0))
         
-        event_aya = swe.get_ayanamsa_ut(jd_conv_event)
-        conv_precession = abs(rad_aya - event_aya)
+        conv_precession = get_precession(jd_radix, jd_conv_event)
         conv_sun_long_precessed = swe.degnorm(sun_long - conv_precession)
         jd_pssr_conv = swe.solcross_ut(conv_sun_long_precessed, jd_pssr_start)
         

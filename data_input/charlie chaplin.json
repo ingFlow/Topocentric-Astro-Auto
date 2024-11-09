@@ -27,6 +27,11 @@
             "datetime": "1962-07-08T12:00:00",
             "event_type": "BIRTH_SON",
             "geopos": [51.516666,-0.1,306.0]
+        },
+        {
+            "datetime": "1977-12-25T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [51.516666,-0.1,306.0]
         }
     ]
 }

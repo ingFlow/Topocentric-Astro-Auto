@@ -1,0 +1,147 @@
+{
+    "dt_radix_start": "1997-11-16T21:00:00",
+    "dt_radix_end": "1997-11-16T21:00:00",
+    "dt_actual_dob": "1997-11-16T11:55:52",
+    "geopos_natal": [
+        -4.043055556,
+        39.658333333,
+        23.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "2008-09-05T12:00:00",
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2008-12-11T12:00:00",
+            "event_type": "FAILURE",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2009-01-14T12:00:00",
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2009-03-19T12:00:00",
+            "event_type": "BIRTH_BROTHER",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2013-12-12T12:00:00",
+            "event_type": "MOBILIZATION",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2014-03-24T12:00:00",
+            "event_type": "BIRTH_BROTHER",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2015-05-27T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2018-02-19T12:00:00",
+            "event_type": "BIRTH_SISTER",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2021-04-06T12:00:00",
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2022-01-01T12:00:00",
+            "event_type": "NEGATIVE_6_12",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2022-01-03T12:00:00",
+            "event_type": "POSITIVE_AC_MC",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2000-03-11T12:00:00",
+            "event_type": "BIRTH_SISTER",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2023-10-04T12:00:00",
+            "event_type": "LOSSES",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2018-12-04T12:00:00",
+            "event_type": "NEGATIVE_AC_MC",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        },
+        {
+            "datetime": "2016-12-29T12:00:00",
+            "event_type": "GRADUATION",
+            "geopos": [
+                -4.043055556,
+                39.658333333,
+                23.0
+            ]
+        }
+    ]
+}
