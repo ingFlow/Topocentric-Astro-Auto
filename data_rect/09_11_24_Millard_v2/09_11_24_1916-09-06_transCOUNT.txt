@@ -1,0 +1,5 @@
+Row 1: {'time': '1916-09-06 21:26:38', 'p_a_conj': 10, 'p_a_maj': 21, 'p_a_allm': 31, 'p_a_min': 28, 'e': 0, 'all_conj': 10}
+Row 5: {'time': '1916-09-06 10:55:58', 'p_a_conj': 10, 'p_a_maj': 30, 'p_a_allm': 40, 'p_a_min': 32, 'e': 1, 'all_conj': 10}
+Row 6: {'time': '1916-09-06 08:56:00', 'p_a_conj': 8, 'p_a_maj': 23, 'p_a_allm': 31, 'p_a_min': 26, 'e': 1, 'all_conj': 8}
+Row 10: {'time': '1916-09-06 07:23:42', 'p_a_conj': 8, 'p_a_maj': 32, 'p_a_allm': 40, 'p_a_min': 40, 'e': 0, 'all_conj': 8}
+Row 12: {'time': '1916-09-06 23:40:08', 'p_a_conj': 6, 'p_a_maj': 16, 'p_a_allm': 22, 'p_a_min': 27, 'e': 0, 'all_conj': 6}

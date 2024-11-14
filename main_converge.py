@@ -25,26 +25,28 @@ class timesFileType:
     datetime(1974, 6, 13, 23, 46, 24)'''
 
 def convert_birth_data_json(file_to_write_str):
-    dt_radix_start = datetime(1997,11,16, 21, 00, 00)
-    dt_radix_end = datetime(1997,11,16, 21, 00, 00)
-    dt_actual_dob = datetime(1997,11,16, 00, 00, 00)
-    geopos = [-4.043055556, 39.658333333, 23.0]
+    dt_radix_start = datetime(1916,9,6, 5, 00, 00)
+    dt_radix_end = datetime(1916,9,7, 5, 00, 00)
+    dt_actual_dob = datetime(1916,9,6, 20, 46, 00)
+    geopos = [13.1666667, -61.2333333333, 3087.0]
     list_of_events = [
-        (datetime(2008,9,5, 12, 00, 00) ,EventType.DIVORCE_SEPARATION,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2008,12,11, 12, 00, 00) ,EventType.FAILURE,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2009,1,14, 12, 00, 00) ,EventType.DIVORCE_SEPARATION,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2009,3,19, 12, 00, 00) ,EventType.BIRTH_BROTHER,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2013,12,12, 12, 00, 00) ,EventType.MOBILIZATION,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2014,3,24, 12, 00, 00) ,EventType.BIRTH_BROTHER,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2015,5,27, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2018,2,19, 12, 00, 00) ,EventType.BIRTH_SISTER,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2021,4,6, 12, 00, 00) ,EventType.DIVORCE_SEPARATION,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2022,1,1, 12, 00, 00) ,EventType.NEGATIVE_6_12,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2022,1,3, 12, 00, 00) ,EventType.POSITIVE_AC_MC,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2000,3,11, 12, 00, 00) ,EventType.BIRTH_SISTER,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2023,10,4, 12, 00, 00) ,EventType.LOSSES,[-4.043055556, 39.658333333, 23.0]),
-        (datetime(2018,12,4, 12, 00, 00) ,EventType.NEGATIVE_AC_MC,[-4.043055556, 39.658333333, 23.0]),    
-        (datetime(2016,12,29, 12, 00, 00) ,EventType.GRADUATION,[-4.043055556, 39.658333333, 23.0])    
+        (datetime(1917,11,30, 12, 00, 00) ,EventType.BIRTH_SISTER,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1927,6,30, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1927,6,30, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1930,7,20, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1940,1,1, 12, 00, 00) ,EventType.ARREST,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1941,12,7, 12, 00, 00) ,EventType.GRADUATION,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1942,3,20, 12, 00, 00) ,EventType.RESIGN_RETIRE,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1943,6,25, 12, 00, 00) ,EventType.MARRIAGE_FOR_FEMALE,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1944,4,20, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1948,2,7, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1949,1,15, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1949,12,4, 12, 00, 00) ,EventType.BIRTH_SON,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1952,4,22, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
+        (datetime(1954,1,18, 12, 00, 00) ,EventType.BIRTH_SON,[13.1666667, -61.2333333333, 3087.0]),    
+        (datetime(1963,4,29, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),    
+        (datetime(1974,8,21, 12, 00, 00) ,EventType.DEATH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),    
+        (datetime(1978,9,21, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[13.1666667, -61.2333333333, 3087.0])   
     ]
     
     data = {
@@ -61,6 +63,7 @@ def convert_birth_data_json(file_to_write_str):
         json.dump(data, outfile, indent=4)
 
 def get_json_birth_data(filename):   
+    """return real_dob, dt_radix_start, dt_radix_end, geopos_natal, list_of_events"""
     with open(filename, 'r') as f:
         data = json.load(f)
     dt_radix_start = datetime.fromisoformat(data['dt_radix_start'])
@@ -167,7 +170,7 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
     asp.count_pssr_moon_from_times_events(filename_write,list_times,list_of_events,geopos)
 
 
-#convert_birth_data_json('data_input/lilly allen')
+#convert_birth_data_json('data_input/margaret millard')
 #rect_ver_data_create('txt/19_10_24 IngTea rect.txt', timesFileType.POLARIS,'data_input/ing tea prim.json','txt/26_10_24_IngTea_v3/26_10_24_',70)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)

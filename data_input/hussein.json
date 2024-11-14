@@ -1,0 +1,156 @@
+{
+    "dt_radix_start": "1935-11-13T21:00:00",
+    "dt_radix_end": "1935-11-14T21:00:00",
+    "dt_actual_dob": "1935-11-14T01:46:00",
+    "geopos_natal": [
+        31.95,
+        35.9333333,
+        776.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1953-05-02T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1955-02-27T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1955-04-19T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1955-05-05T12:00:00",
+            "event_type": "BIRTH_GRANDSON",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1956-02-13T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1961-05-25T12:00:00",
+            "event_type": "BIRTH_BROTHER",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1962-01-30T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1967-06-09T12:00:00",
+            "event_type": "FAILURE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1972-07-08T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1972-12-24T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1977-02-09T12:00:00",
+            "event_type": "DEATH_WIFE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1978-06-15T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1980-03-14T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1992-08-20T12:00:00",
+            "event_type": "HOSPITALIZATION_ILLNESS",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1994-04-26T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        },
+        {
+            "datetime": "1995-11-04T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [
+                31.95,
+                35.9333333,
+                776.0
+            ]
+        }
+    ]
+}
