@@ -63,6 +63,33 @@
             ]
         },
         {
+            "datetime": "2012-03-06T12:00:00",
+            "event_type": "TRAVEL_POSITIVE",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2012-11-14T12:00:00",
+            "event_type": "TRAVEL_POSITIVE",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2012-12-12T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
             "datetime": "2013-12-12T12:00:00",
             "event_type": "MOBILIZATION",
             "geopos": [
@@ -90,11 +117,29 @@
             ]
         },
         {
+            "datetime": "2016-05-26T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                -26.075,
+                28.09472,
+                1753.0
+            ]
+        },
+        {
             "datetime": "2017-09-15T12:00:00",
             "event_type": "SUCCESS",
             "geopos": [
                 -26.137999448,
                 28.15166606,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2017-09-22T12:00:00",
+            "event_type": "VIOLENCE",
+            "geopos": [
+                -26.075,
+                28.09472,
                 1753.0
             ]
         },
@@ -218,6 +263,24 @@
         {
             "datetime": "2024-03-08T13:50:00",
             "event_type": "POSITIVE_6_12",
+            "geopos": [
+                -26.137999448,
+                28.15166606,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2024-11-25T12:00:00",
+            "event_type": "SUCCESS",
+            "geopos": [
+                -26.137999448,
+                28.15166606,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2024-12-25T12:00:00",
+            "event_type": "SUCCESS",
             "geopos": [
                 -26.137999448,
                 28.15166606,

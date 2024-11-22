@@ -25,12 +25,12 @@ class timesFileType:
     datetime(1974, 6, 13, 23, 46, 24)'''
 
 def convert_birth_data_json(file_to_write_str):
-    dt_radix_start = datetime(1916,9,6, 5, 00, 00)
-    dt_radix_end = datetime(1916,9,7, 5, 00, 00)
-    dt_actual_dob = datetime(1916,9,6, 20, 46, 00)
-    geopos = [13.1666667, -61.2333333333, 3087.0]
+    dt_radix_start = datetime(2014,3,24, 5, 00, 00)
+    dt_radix_end = datetime(2014,3,24, 5, 00, 00)
+    dt_actual_dob = datetime(2014,3,24, 1, 4, 00)
+    geopos = [-26.17678333,28.04259444,1753.0]
     list_of_events = [
-        (datetime(1917,11,30, 12, 00, 00) ,EventType.BIRTH_SISTER,[13.1666667, -61.2333333333, 3087.0]),
+        '''(datetime(1917,11,30, 12, 00, 00) ,EventType.BIRTH_SISTER,[13.1666667, -61.2333333333, 3087.0]),
         (datetime(1927,6,30, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
         (datetime(1927,6,30, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[13.1666667, -61.2333333333, 3087.0]),
         (datetime(1930,7,20, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
@@ -40,13 +40,13 @@ def convert_birth_data_json(file_to_write_str):
         (datetime(1943,6,25, 12, 00, 00) ,EventType.MARRIAGE_FOR_FEMALE,[13.1666667, -61.2333333333, 3087.0]),
         (datetime(1944,4,20, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
         (datetime(1948,2,7, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
-        (datetime(1949,1,15, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),
-        (datetime(1949,12,4, 12, 00, 00) ,EventType.BIRTH_SON,[13.1666667, -61.2333333333, 3087.0]),
-        (datetime(1952,4,22, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),
-        (datetime(1954,1,18, 12, 00, 00) ,EventType.BIRTH_SON,[13.1666667, -61.2333333333, 3087.0]),    
-        (datetime(1963,4,29, 12, 00, 00) ,EventType.BIRTH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),    
-        (datetime(1974,8,21, 12, 00, 00) ,EventType.DEATH_DAUGHTER,[13.1666667, -61.2333333333, 3087.0]),    
-        (datetime(1978,9,21, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[13.1666667, -61.2333333333, 3087.0])   
+        (datetime(1949,1,15, 12, 00, 00) ,EventType.TRAVEL_OVERSEAS_POSITIVE,[13.1666667, -61.2333333333, 3087.0]),'''
+        (datetime(2017,9,22, 12, 00, 00) ,EventType.VIOLENCE,[-26.17678333,28.04259444,1753.0]),
+        (datetime(2024,10,25, 12, 00, 00) ,EventType.SUCCESS,[-26.17678333,28.04259444,1753.0]),
+        (datetime(2018,2,19, 12, 00, 00) ,EventType.BIRTH_SISTER,[-26.17678333,28.04259444,1753.0]),    
+        (datetime(2021,4,6, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[-26.17678333,28.04259444,1753.0]),    
+        (datetime(2016,5,26, 12, 00, 00) ,EventType.DEATH_FATHER_GRAND,[-26.17678333,28.04259444,1753.0]),    
+        (datetime(2022,1,1, 12, 00, 00) ,EventType.NEGATIVE_6_12,[-26.17678333,28.04259444,1753.0])   
     ]
     
     data = {
@@ -170,7 +170,7 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
     asp.count_pssr_moon_from_times_events(filename_write,list_times,list_of_events,geopos)
 
 
-#convert_birth_data_json('data_input/margaret millard')
+#convert_birth_data_json('data_input/bin k')
 #rect_ver_data_create('txt/19_10_24 IngTea rect.txt', timesFileType.POLARIS,'data_input/ing tea prim.json','txt/26_10_24_IngTea_v3/26_10_24_',70)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
