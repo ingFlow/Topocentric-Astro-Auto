@@ -1,4 +1,0 @@
-Row 1: {'time': '1929-07-28 18:18:32', 'p_a_conj': 9, 'p_a_maj': 14, 'p_a_allm': 23, 'p_a_min': 32, 'e': 0, 'all_conj': 9}
-Row 2: {'time': '1929-07-28 18:48:46', 'p_a_conj': 7, 'p_a_maj': 23, 'p_a_allm': 30, 'p_a_min': 35, 'e': 1, 'all_conj': 7}
-Row 3: {'time': '1929-07-28 18:08:08', 'p_a_conj': 10, 'p_a_maj': 21, 'p_a_allm': 31, 'p_a_min': 31, 'e': 0, 'all_conj': 10}
-Row 4: {'time': '1929-07-28 18:30:46', 'p_a_conj': 8, 'p_a_maj': 26, 'p_a_allm': 34, 'p_a_min': 21, 'e': 0, 'all_conj': 8}

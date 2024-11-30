@@ -1,5 +1,0 @@
-Row 1: {'time': '1935-11-14 11:01:36', 'p_a_conj': 8, 'p_a_maj': 13, 'p_a_allm': 21, 'p_a_min': 27, 'e': 1, 'all_conj': 8}
-Row 4: {'time': '1935-11-14 01:42:22', 'p_a_conj': 7, 'p_a_maj': 22, 'p_a_allm': 29, 'p_a_min': 19, 'e': 0, 'all_conj': 7}
-Row 5: {'time': '1935-11-14 02:16:56', 'p_a_conj': 10, 'p_a_maj': 27, 'p_a_allm': 37, 'p_a_min': 24, 'e': 0, 'all_conj': 10}
-Row 11: {'time': '1935-11-14 16:46:38', 'p_a_conj': 8, 'p_a_maj': 12, 'p_a_allm': 20, 'p_a_min': 33, 'e': 1, 'all_conj': 8}
-Row 14: {'time': '1935-11-14 15:49:42', 'p_a_conj': 7, 'p_a_maj': 15, 'p_a_allm': 22, 'p_a_min': 33, 'e': 1, 'all_conj': 7}

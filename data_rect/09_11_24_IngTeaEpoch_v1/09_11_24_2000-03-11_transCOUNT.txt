@@ -1,2 +1,0 @@
-Row 6: {'time': '1999-06-18 00:33:12', 'p_a_conj': 4, 'p_a_maj': 9, 'p_a_allm': 13, 'p_a_min': 13, 'e': 1, 'all_conj': 4}
-Row 17: {'time': '1999-06-18 00:37:04', 'p_a_conj': 4, 'p_a_maj': 9, 'p_a_allm': 13, 'p_a_min': 16, 'e': 3, 'all_conj': 4}

@@ -1,4 +1,0 @@
-Row 1: {'time': '21:17:36', 'p_a_conj': 5, 'p_a_maj': 3, 'p_a_min': 5, 'a_p_conj': 1, 'a_p_maj': 3, 'a_p_min': 0, 'p_h_conj': 3, 'p_h_maj': 0, 'p_h_min': 0, 'h_p_conj': 2, 'h_p_maj': 0, 'h_p_min': 2, 'e': 6, 'total_count': 389}
-Row 2: {'time': '18:30:04', 'p_a_conj': 3, 'p_a_maj': 2, 'p_a_min': 2, 'a_p_conj': 4, 'a_p_maj': 5, 'a_p_min': 1, 'p_h_conj': 2, 'p_h_maj': 2, 'p_h_min': 1, 'h_p_conj': 1, 'h_p_maj': 1, 'h_p_min': 0, 'e': 5, 'total_count': 469}
-Row 3: {'time': '21:41:20', 'p_a_conj': 2, 'p_a_maj': 5, 'p_a_min': 2, 'a_p_conj': 2, 'a_p_maj': 3, 'a_p_min': 5, 'p_h_conj': 1, 'p_h_maj': 4, 'p_h_min': 1, 'h_p_conj': 0, 'h_p_maj': 6, 'h_p_min': 1, 'e': 7, 'total_count': 512}
-Row 4: {'time': '22:14:23', 'p_a_conj': 4, 'p_a_maj': 2, 'p_a_min': 4, 'a_p_conj': 2, 'a_p_maj': 3, 'a_p_min': 3, 'p_h_conj': 1, 'p_h_maj': 0, 'p_h_min': 0, 'h_p_conj': 1, 'h_p_maj': 4, 'h_p_min': 4, 'e': 3, 'total_count': 386}
