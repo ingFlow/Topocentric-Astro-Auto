@@ -69,7 +69,7 @@ def home():
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
     #list_times = aspects_implementation.process_datetime_count_csv('data_times/14_11_24_ingtea times narrower.csv')
-    #list_times = [dt_actual_dob, dt_epoch]
+    list_times = [dt_actual_dob, dt_epoch]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
@@ -305,7 +305,7 @@ def reset_globals():
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
-    main_techniques.rect_ver_data_create('data_times/jacqui sorted max a 4 rect.txt', main_techniques.timesFileType.POLARIS, 'data_input/jacqui onassis.json', 'data_rect/27_11_24_Jacqui_v1/27_11_24_', 141)
+    main_techniques.rect_ver_data_create('data_times/14 11 ingtea sorted max a 2 rect.txt', main_techniques.timesFileType.POLARIS, 'data_input/ing tea prim.json', 'data_rect/30_11_24_Ingtea_v1/30_11_24_', 146)
     #DONT USE UNLESS NEEDED
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')

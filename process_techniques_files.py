@@ -221,19 +221,20 @@ def count_extended_aspect_groups_txt(filename, technique):
                 counts['all_conj'] = counts['p_a_conj'] + counts['a_p_conj'] + counts['p_h_conj'] + counts['h_p_conj'] + counts['mon_p_conj']
                 counts['p_a_mon_conj'] = counts['p_a_conj'] + counts['mon_p_conj']
                 counts['a_p_p_a_conj'] = counts['a_p_conj'] + counts['p_a_conj']    
+                counts['all_maj'] = counts['p_h_maj'] + counts['p_a_maj'] + counts['mon_p_maj'] + counts['a_p_maj'] + counts['h_p_maj']
 
                 results.append(counts) 
 
     with open(f"{filename}COUNT.txt", 'w') as f:
         for index, count in enumerate(results):
             if technique == TechniqueType.PRIMARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'e', 'all_conj', 'a_p_p_a_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'e', 'all_conj', 'all_maj', 'a_p_p_a_conj']
             elif technique == TechniqueType.SECONDARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_maj', 'all_conj']
             elif technique == TechniqueType.PSSR:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj', 'p_a_mon_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj', 'all_maj', 'p_a_mon_conj']
             elif technique == TechniqueType.TRANSIT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'e', 'all_conj']
+                selected_categories = ['time', 'p_a_allm', 'p_a_min', 'e', 'p_a_maj', 'p_a_conj']
 
             filtered_counts = {key: count[key] for key in selected_categories if key in count}
             f.write(f"Row {index + 1}: {filtered_counts}\n")
@@ -492,4 +493,28 @@ def get_timezone_from_pos(geopos):
 
     return utc_offset
 
-sort_polaris_times('data_times/brahms rect.txt', 'data_times/brahms sorted a rect.txt',150, 0)
+def delete_rows_below_threshold_counttxt(threshold, file_name): 
+    with open(file_name, 'r') as file:
+        rows = file.readlines()
+
+    filtered_rows = []
+    for row in rows:
+        start_index = row.find('{')
+        end_index = row.rfind('}')
+        if start_index != -1 and end_index != -1:
+            row_dict = eval(row[start_index:end_index + 1])
+            last_value = list(row_dict.values())[-1]
+            
+            if isinstance(last_value, (int, float)) and last_value >= threshold:
+                filtered_rows.append((last_value, row))
+
+    filtered_rows.sort(reverse=True, key=lambda x: x[0])
+    sorted_rows = [row[1] for row in filtered_rows]
+
+    with open(file_name, 'w') as file:
+        file.writelines(sorted_rows)
+
+    
+
+#sort_polaris_times('data_times/bin k rect.txt', 'data_times/bin k sorted max a 1 rect.txt',49, 1)
+delete_rows_below_threshold_counttxt(8,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')

@@ -1,0 +1,2 @@
+Row 4: {'time': '1929-07-28 18:30:47', 'p_a_conj': 18, 'p_a_maj': 1, 'p_a_allm': 19, 'p_a_min': 8, 'p_h_conj': 7, 'p_h_maj': 7, 'p_h_allm': 14, 'p_h_min': 10, 'mon_p_conj': 9, 'mon_p_maj': 8, 'mon_p_allm': 17, 'mon_p_min': 8, 'e': 0, 'all_conj': 34, 'all_maj': 16, 'p_a_mon_conj': 27}
+Row 101: {'time': '1929-07-28 18:48:47', 'p_a_conj': 12, 'p_a_maj': 9, 'p_a_allm': 21, 'p_a_min': 4, 'p_h_conj': 5, 'p_h_maj': 8, 'p_h_allm': 13, 'p_h_min': 12, 'mon_p_conj': 5, 'mon_p_maj': 10, 'mon_p_allm': 15, 'mon_p_min': 8, 'e': 0, 'all_conj': 22, 'all_maj': 27, 'p_a_mon_conj': 17}

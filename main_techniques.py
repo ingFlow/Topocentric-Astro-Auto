@@ -9,14 +9,14 @@ class timesFileType:
     TIMES_ONLY = 2
     MANUAL_RECT = 3
 
-''' 
-  {"datetime": "2013-12-11T12:00:00", "event_type": "---"},
-      {"datetime": "2018-02-19T12:00:00", "event_type": "--"},
-      {"datetime": "2017-09-15T12:00:00", "event_type": "---"},
-      {"datetime": "2021-07-10T12:00:00", "event_type": "---"},
-  '''
+    ''' 
+    {"datetime": "2013-12-11T12:00:00", "event_type": "---"},
+    {"datetime": "2018-02-19T12:00:00", "event_type": "--"},
+    {"datetime": "2017-09-15T12:00:00", "event_type": "---"},
+    {"datetime": "2021-07-10T12:00:00", "event_type": "---"},
+    '''
 
-'''datetime(1974, 6, 13, 22, 16, 16),
+    '''datetime(1974, 6, 13, 22, 16, 16),
     datetime(1974, 6, 13, 20, 30, 32),
     datetime(1974, 6, 13, 22, 26, 8),
     datetime(1974, 6, 13, 22, 28, 8),
