@@ -9,7 +9,7 @@ import harmonics_auto
 import main_techniques
 import julian
 import process_techniques_files
-from kerykeion import AstrologicalSubject, KerykeionChartSVG
+#from kerykeion import AstrologicalSubject, KerykeionChartSVG
 from datetime import datetime
 import swisseph as swe
 from timezonefinder import TimezoneFinder
@@ -63,15 +63,27 @@ def home():
         datetime(1929,7,27,22,14,24)
         #07:49:20
         #15:49:36
+        
     ]
+
+    time_strings = [
+        "1:51:36", "7:46:40", "13:49:20", "10:38:48", "13:41:12", "15:26:56",
+        "12:58:24", "11:27:52", "10:15:36", "12:29:28", "15:24:56",
+        "11:39:44", "15:29:20", "7:49:12", "9:23:28", "14:26:56",
+        "5:37:36", "13:08:40", "13:46:32", "6:06:56", "9:21:28",
+        "8:28:16", "15:44:56", "12:09:04", "9:44:00", "14:09:12"
+    ]
+
+    #list_times = [datetime.strptime(f"1874-11-30 {time}", "%Y-%m-%d %H:%M:%S") for time in time_strings]
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
-    #list_times = aspects_implementation.process_datetime_count_csv('data_times/14_11_24_ingtea times narrower.csv')
-    list_times = [dt_actual_dob, dt_epoch]
+    #list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
+    list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
+    #list_times = [dt_actual_dob, dt_epoch]
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
+    print(list_times)
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
 
@@ -148,6 +160,11 @@ def update_content():
             str_rad_harm_aspects = harmonics_obj.get_str_aspects()
             harmonics_info = harmonics_obj.get_dict_info()
             str_all_directed_aspects = str_rad_harm_aspects
+        
+        str_all_directed_aspects = re.sub(r"H10,","MC,", str_all_directed_aspects)
+        str_all_directed_aspects = re.sub(r"H1,","AS,", str_all_directed_aspects)
+        str_all_directed_aspects = re.sub(r"H7,","DS,", str_all_directed_aspects)
+        str_all_directed_aspects = re.sub(r"H4,","IC,", str_all_directed_aspects)
 
         list_all_asp = str_all_directed_aspects.split('\n')
 
@@ -305,12 +322,12 @@ def reset_globals():
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
-    main_techniques.rect_ver_data_create('data_times/14 11 ingtea sorted max a 2 rect.txt', main_techniques.timesFileType.POLARIS, 'data_input/ing tea prim.json', 'data_rect/30_11_24_Ingtea_v1/30_11_24_', 146)
+    #main_techniques.rect_ver_data_create('data_times/winston narrow.csv', main_techniques.timesFileType.DATE_N_TIME, 'data_input/winston.json', 'data_rect/02_12_24_Winston_v1/02_12_24_')
     #DONT USE UNLESS NEEDED
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
     
-    #app.run(debug=True)
+    app.run(debug=True)
 
 

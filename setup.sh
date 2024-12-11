@@ -15,6 +15,9 @@ sudo cp -r /tmp/swisseph/ephe/* /usr/share/swisseph/ephe/
 # Delete the temporary folder
 rm -rf /tmp/swisseph
 
+#check port is lsof -i :5000
+#kill port is kill -9 <pid>
+
 # RUN THESE IN TERMINAL
 # chmod +x setup.sh
 # sudo ./setup.sh

@@ -517,4 +517,4 @@ def delete_rows_below_threshold_counttxt(threshold, file_name):
     
 
 #sort_polaris_times('data_times/bin k rect.txt', 'data_times/bin k sorted max a 1 rect.txt',49, 1)
-delete_rows_below_threshold_counttxt(8,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
+#delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
