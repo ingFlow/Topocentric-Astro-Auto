@@ -9,7 +9,6 @@ import harmonics_auto
 import main_techniques
 import julian
 import process_techniques_files
-#from kerykeion import AstrologicalSubject, KerykeionChartSVG
 from datetime import datetime
 import swisseph as swe
 from timezonefinder import TimezoneFinder
@@ -258,62 +257,6 @@ def get_timezone_name_from_pos(geopos):
     geo_long = geopos[1]
     
     return tf.timezone_at(lat=geo_lat, lng=geo_long)
-
-
-@app.route('/generate_chart')
-def generate_chart():
-    global geo_pos_natal
-
-    chart_datetime = request.args.get('chart_datetime', default=dt_radix) 
-    chart_pos = request.args.get('chart_pos', default=geo_pos_natal)
-    technique = int(request.args.get('right_radio', ''))
-    event_info = request.args.get('right_item', '').split(', ')
-
-    event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
-    event_geopos = [float(i) for i in event_locstr]
-    if chart_datetime != dt_radix:
-        try:
-            chart_datetime = datetime.fromisoformat(chart_datetime)
-        except ValueError:
-            try:
-                chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S.%f")
-            except ValueError:
-                try:
-                    chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S")
-                except ValueError:
-                    return None # 
-
-    if technique in [aTechniqueType.SRA, aTechniqueType.LUNAR, aTechniqueType.TRANSIT]:
-        geopos = [event_geopos[0],event_geopos[1]]
-    else:
-        geopos = geo_pos_natal
-    
-    chart_datetime = datetime.fromisoformat('2008-09-05T12:00:00')
-
-    timezone_name = get_timezone_name_from_pos(geopos)
-    filename = f"{chart_datetime.strftime("%Y-%m-%d %H:%M:%S")} {geopos}"    
-    filename = "yes2"
-    svg_path = f"static/charts/{filename} - Natal Chart.svg"
-    
-    chart_subject = AstrologicalSubject(
-        filename,
-        chart_datetime.year,
-        chart_datetime.month,
-        chart_datetime.day,
-        chart_datetime.hour,
-        chart_datetime.minute,
-        chart_datetime.second,  
-        lng=geopos[0],
-        lat=geopos[1],
-        tz_str=timezone_name,
-        houses_system_identifier="T"
-    )
-    
-    date_natal_chart = KerykeionChartSVG(chart_subject, theme="dark-high-contrast", new_output_directory="static/charts")
-    date_natal_chart.makeSVG()
-
-    return send_file(svg_path, mimetype='image/svg+xml')
-
 
 def reset_globals():
     global geo_pos_natal, dt_radix

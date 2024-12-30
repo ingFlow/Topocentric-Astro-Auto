@@ -60,8 +60,8 @@ def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long, e, ramc, 
     planets_prog = calc_planets_labelled(jd_prog, "(p)")
     planets_reg = calc_planets_labelled(jd_reg, "(c)")
     #add POF
-    pof_prog = calc_POF(planets_prog, houses_prog[2][1])
-    pof_reg = calc_POF(planets_reg, houses_reg[2][1])
+    pof_prog = calc_POF(planets_prog, houses_prog[0][1])
+    pof_reg = calc_POF(planets_reg, houses_reg[0][1])
     planets_prog.append(('POF', pof_prog,"(p)"))
     planets_reg.append(('POF', pof_reg,"(c)"))
 

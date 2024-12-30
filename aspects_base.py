@@ -188,7 +188,7 @@ def find_pd_swiss_aspects(planet_set1, planet_set2):
 
 def get_str_aspect(p1,p2,d1,d2,s1,s2, aspect_name, aspect_orb):
     return (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
-            f'({aspect_name},{aspect_orb * 60:.0f}\')\n')
+            f'({aspect_name},{aspect_orb * 60:.2f}\')\n')
 
 def find_pssr_swiss_aspects(planet_set1, planet_set2):
     aspects_str = ''
