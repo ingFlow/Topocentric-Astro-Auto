@@ -1,0 +1,75 @@
+{
+    "dt_radix_start": "1743-04-13T00:00:00",
+    "dt_radix_end": "1743-04-13T03:00:00",
+    "dt_actual_dob": "1743-04-13T14:43:00",
+    "geopos_natal": [
+        38.33333,
+        -78.433333,
+        183.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1752-10-10T12:00:00",
+            "event_type": "BIRTH_SISTER",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1762-04-25T12:00:00",
+            "event_type": "GRADUATION",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1765-10-01T12:00:00",
+            "event_type": "DEATH_SISTER",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1772-01-01T12:00:00",
+            "event_type": "MARRIAGE_FOR_MALE",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1774-02-15T12:00:00",
+            "event_type": "DEATH_SISTER",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1776-03-31T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "1789-09-02T12:00:00",
+            "event_type": "PROMOTION_JOB",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        }
+    ]
+}

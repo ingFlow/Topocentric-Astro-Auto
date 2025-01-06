@@ -198,7 +198,7 @@ def find_pssr_swiss_aspects(planet_set1, planet_set2):
             if (p2 == 'Moon'):
                 orb = 32/60
             else:
-                orb = 14/60
+                orb = 12/60 #{CHANGE it was 14/60 before but the book says its 12'? don't know what happened}
 
             aspect = calculate_aspect(d1, d2, orb, False)
             

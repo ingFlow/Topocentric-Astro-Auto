@@ -15,6 +15,8 @@ from timezonefinder import TimezoneFinder
 import pytz
 from constants import calc_planets_pof_houses_labelled, PLANETS
 from aspects_base import calculate_obliquity
+import ast
+
 
 
 class TechniqueType:
@@ -57,6 +59,9 @@ def generate_grid_angular_aspects(filename, start_time, end_time, increment_seco
     if current_time > end_time:
         append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
     
+    directory = os.path.dirname(filename)
+    os.makedirs(directory, exist_ok=True)
+    
     with open(f"{filename}.txt", "w") as file:
         for time in grid_aspects:
             file.write(f"{str(time)}\n")
@@ -96,10 +101,10 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_nata
             str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
         
     
-        if date_technique == TechniqueType.PRIMARY_DIRECT:
+        ''' if date_technique == TechniqueType.PRIMARY_DIRECT:
             count, str_acceptable_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
-        else:
-            count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
+        else:'''
+        count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
 
         if str_acceptable_aspects == '':
             temp_list_event.append(f"{str(event_index)}")
@@ -154,6 +159,13 @@ def categorize_aspect(first, second, aspect):
             return 'mon_p_maj'
         else:
             return 'mon_p_min'
+    elif first in PLANETS and second in PLANETS:
+        if aspect in conj_asp:
+            return 'p_p_conj'
+        elif aspect in maj_asp:
+            return 'p_p_maj'
+        else: 
+            return 'p_p_min'
     else:
         return None
 
@@ -179,6 +191,10 @@ def count_extended_aspect_groups_txt(filename, technique):
         'mon_p_maj': 0,
         'mon_p_allm': 0,
         'mon_p_min': 0,
+        'p_p_conj': 0,
+        'p_p_maj': 0,
+        'p_p_allm': 0,
+        'p_p_all_m': 0,
         'e': 0,
     }
     results = []
@@ -213,26 +229,29 @@ def count_extended_aspect_groups_txt(filename, technique):
                                 if category:
                                     counts[category] += 1
                 counts.update({'total_count':count_total})
+                #{TODO decide whether to integrate p_p directions i put them here cause level_aspects is what will filter them out if need be}
                 counts['p_a_allm'] = counts['p_a_conj'] + counts['p_a_maj']
                 counts['a_p_allm'] = counts['a_p_conj'] + counts['a_p_maj']
                 counts['p_h_allm'] = counts['p_h_conj'] + counts['p_h_maj']
                 counts['h_p_allm'] = counts['h_p_conj'] + counts['h_p_maj']
                 counts['mon_p_allm'] = counts['mon_p_conj'] + counts['mon_p_maj']
-                counts['all_conj'] = counts['p_a_conj'] + counts['a_p_conj'] + counts['p_h_conj'] + counts['h_p_conj'] + counts['mon_p_conj']
+                counts['p_p_allm'] = counts['p_p_conj'] + counts['p_p_maj']
+                counts['all_conj'] = counts['p_a_conj'] + counts['a_p_conj'] + counts['p_h_conj'] + counts['h_p_conj'] + counts['mon_p_conj'] + counts['p_p_conj']
                 counts['p_a_mon_conj'] = counts['p_a_conj'] + counts['mon_p_conj']
                 counts['a_p_p_a_conj'] = counts['a_p_conj'] + counts['p_a_conj']    
-                counts['all_maj'] = counts['p_h_maj'] + counts['p_a_maj'] + counts['mon_p_maj'] + counts['a_p_maj'] + counts['h_p_maj']
+                counts['all_maj'] = counts['p_h_maj'] + counts['p_a_maj'] + counts['mon_p_maj'] + counts['a_p_maj'] + counts['h_p_maj'] + counts['p_p_maj']
+                counts['all_m'] = counts['a_p_allm'] + counts['h_p_allm'] + counts['p_a_allm'] + counts['p_h_allm'] + counts['mon_p_allm'] + counts['p_p_allm']
 
                 results.append(counts) 
 
     with open(f"{filename}COUNT.txt", 'w') as f:
         for index, count in enumerate(results):
             if technique == TechniqueType.PRIMARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'e', 'all_conj', 'all_maj', 'a_p_p_a_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'p_p_conj', 'p_p_maj', 'p_p_allm', 'e', 'all_conj', 'all_maj', 'a_p_p_a_conj', 'all_m']
             elif technique == TechniqueType.SECONDARY_DIRECT:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_maj', 'all_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'a_p_conj', 'a_p_maj', 'a_p_allm', 'a_p_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'h_p_conj', 'h_p_maj', 'h_p_allm', 'h_p_min', 'p_p_conj', 'p_p_maj', 'p_p_allm', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_maj', 'all_conj', 'all_m']
             elif technique == TechniqueType.PSSR:
-                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj', 'all_maj', 'p_a_mon_conj']
+                selected_categories = ['time', 'p_a_conj', 'p_a_maj', 'p_a_allm', 'p_a_min', 'p_h_conj', 'p_h_maj', 'p_h_allm', 'p_h_min', 'p_p_conj', 'p_p_maj', 'p_p_allm', 'mon_p_conj', 'mon_p_maj', 'mon_p_allm', 'mon_p_min', 'e', 'all_conj', 'all_maj', 'p_a_mon_conj']
             elif technique == TechniqueType.TRANSIT:
                 selected_categories = ['time', 'p_a_allm', 'p_a_min', 'e', 'p_a_maj', 'p_a_conj']
 
@@ -493,6 +512,20 @@ def get_timezone_from_pos(geopos):
 
     return utc_offset
 
+def generate_hourly_datetimes(geopos, input_datetime):
+    utc_offset = get_timezone_from_pos(geopos)
+    
+    start_datetime = input_datetime.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(hours=utc_offset)
+    end_datetime = start_datetime + timedelta(days=1)
+
+    hourly_datetimes = []
+    current_datetime = start_datetime
+    while current_datetime <= end_datetime:
+        hourly_datetimes.append(current_datetime)
+        current_datetime += timedelta(hours=1)
+
+    return hourly_datetimes
+
 def delete_rows_below_threshold_counttxt(threshold, file_name): 
     with open(file_name, 'r') as file:
         rows = file.readlines()
@@ -513,8 +546,47 @@ def delete_rows_below_threshold_counttxt(threshold, file_name):
 
     with open(file_name, 'w') as file:
         file.writelines(sorted_rows)
+        
+#the following is to do with the summing of two files with the same times prim sec rectification verification stuff
+# Function to read and process the file
+def read_file(file_path):
+    data = {}
+    with open(file_path, 'r') as f:
+        for line in f:
+            # Extracting the Row number and the dictionary
+            row_number, row_data = line.split(":", 1)
+            row_number = row_number.strip()
+            row_data = ast.literal_eval(row_data.strip())  # Safely convert the string to a dictionary
+            time = row_data['time']
+            # Store the all_m value along with the time in the dictionary
+            data[time] = row_data['all_m']
+    return data
 
+# Function to sum the 'all_m' values from two dictionaries
+def sum_all_m(data1, data2):
+    result = {}
+    # Merge data1 and data2 by summing values for the same time
+    for time in data1:
+        if time in data2:
+            result[time] = data1[time] + data2[time]
+    return result
+
+# Function to write the result into a new file
+def write_result(file_path, result):
+    directory = os.path.dirname(file_path)
+    os.makedirs(directory, exist_ok=True)
     
+    with open(file_path, 'w') as f:
+        for i, (time, summed_value) in enumerate(result.items(), start=1):
+            f.write(f"Row {i}: {{'time': '{time}', 'sum_all_m': {summed_value}}}\n")
+
+def sum_sec_prim(prim_filename, sec_filename):
+    result_file_path = f"{prim_filename[:-18]}summed_prim_sec.txt"
+    prim_data = read_file(prim_filename)
+    sec_data = read_file(sec_filename)
+    result = sum_all_m(prim_data, sec_data)
+
+    write_result(result_file_path, result)
 
 #sort_polaris_times('data_times/bin k rect.txt', 'data_times/bin k sorted max a 1 rect.txt',49, 1)
 #delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
