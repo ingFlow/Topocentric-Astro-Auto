@@ -79,7 +79,9 @@ def home():
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     #list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
     list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
-    #list_times = [dt_actual_dob, dt_epoch]
+    list_times = [dt_actual_dob, dt_epoch]
+    list_times = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
+    list_times.append(dt_actual_dob)
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     print(list_times)
@@ -168,10 +170,13 @@ def update_content():
         list_all_asp = str_all_directed_aspects.split('\n')
 
         if flag_show_accepted:
-            if technique != aTechniqueType.LUNAR:
+            if technique != aTechniqueType.LUNAR and technique != aTechniqueType.PSSR:
                 score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
                 list_all_asp = str_accepted_aspects.split('\n')
-
+            elif technique == aTechniqueType.PSSR:
+                score, str_accepted_aspects = pd_automate.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
+                list_all_asp = str_accepted_aspects.split('\n')
+                
         temp_arr = []
         if flag_orb_restrict:
             for line in list_all_asp:
