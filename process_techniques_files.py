@@ -522,7 +522,7 @@ def generate_hourly_datetimes(geopos, input_datetime):
     current_datetime = start_datetime
     while current_datetime <= end_datetime:
         hourly_datetimes.append(current_datetime)
-        current_datetime += timedelta(hours=1)
+        current_datetime += timedelta(minutes=5)
 
     return hourly_datetimes
 
@@ -588,5 +588,5 @@ def sum_sec_prim(prim_filename, sec_filename):
 
     write_result(result_file_path, result)
 
-#sort_polaris_times('data_times/bin k rect.txt', 'data_times/bin k sorted max a 1 rect.txt',49, 1)
+#sort_polaris_times(r'data_times\25_01_07_ingtea rect 5 to 8.txt', 'data_times/25_01_07_ingtea sorted max a 3 rect.txt',58, 3)
 #delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')

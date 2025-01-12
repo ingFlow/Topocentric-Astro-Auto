@@ -100,7 +100,7 @@ def get_times_from_file(filename, times_type : timesFileType, birth_data_filenam
     elif times_type == timesFileType.MANUAL_RECT:
         return asp.process_manual_rect_csv(filename,real_dob,count_times_wanted_pola_man,geopos)
 
-def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_filename, prefix_data_str, count_times_wanted_pola_man=None):
+def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_filename, prefix_data_str, aspects_type, count_times_wanted_pola_man=None):
     """prefix data str must be like: txt/26_10_24_IngTea_v3/26_10_24_"""
     real_dob, _, _, geopos, list_of_events = get_json_birth_data(birth_data_filename)
 
@@ -127,6 +127,9 @@ def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_
             level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
         elif technique == asp.TechniqueType.PRIMARY_DIRECT:
             level_aspects = AspectType.ANGLE_HOUSE_SECONDARY
+            
+        #OVERRIDING ALL LEVEL_ASPECTS
+        level_aspects = aspects_type
         
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         asp.count_extended_aspect_groups_txt(filename, technique)
@@ -168,8 +171,8 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 
 
 #convert_birth_data_json('data_input/thomas jefferson')
-#rect_ver_data_create('txt/19_10_24 IngTea rect.txt', timesFileType.POLARIS,'data_input/ing tea prim.json','txt/26_10_24_IngTea_v3/26_10_24_',70)
+rect_ver_data_create(r'data_times\25_01_07_ing_tea rect 5-15.txt', timesFileType.POLARIS,r'data_input/ing tea extra.json',r'data_rect/25_01_07_IngTeaRectExtra/25_01_07_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP,150)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
-#pd_rect_grid_score_create(r'data_input\winston.json', r'data_times\winston rect.txt',timesFileType.POLARIS, 'data_rect/25_01_05_MillardStep3/25_01_05_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP, 8, 76)
+#pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)
 #asp.sum_sec_prim(r"data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_primariesCOUNT.txt",r'data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_secondCOUNT.txt')
