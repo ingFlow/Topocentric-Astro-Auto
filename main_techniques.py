@@ -101,7 +101,6 @@ def get_times_from_file(filename, times_type : timesFileType, birth_data_filenam
         return asp.process_manual_rect_csv(filename,real_dob,count_times_wanted_pola_man,geopos)
 
 def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_filename, prefix_data_str, aspects_type, count_times_wanted_pola_man=None):
-    """prefix data str must be like: txt/26_10_24_IngTea_v3/26_10_24_"""
     real_dob, _, _, geopos, list_of_events = get_json_birth_data(birth_data_filename)
 
     list_times_to_process = get_times_from_file(times_filename, times_type, birth_data_filename, count_times_wanted_pola_man)
@@ -119,17 +118,14 @@ def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_
         flag_count_moon = False
         if technique == asp.TechniqueType.PSSR:
             flag_count_moon = True
-            level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
+            level_aspects = AspectType.MOON_ANGLE_HOUSE_PRIMARY
         elif technique == asp.TechniqueType.TRANSIT:
-            level_aspects = AspectType.ANGLE_SECONDARY
+            level_aspects = AspectType.ANGLE_HOUSE_PRIMARY
         elif technique == asp.TechniqueType.SECONDARY_DIRECT:
             flag_count_moon = True
-            level_aspects = AspectType.MOON_ANGLE_HOUSE_SECONDARY
+            level_aspects = AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP
         elif technique == asp.TechniqueType.PRIMARY_DIRECT:
-            level_aspects = AspectType.ANGLE_HOUSE_SECONDARY
-            
-        #OVERRIDING ALL LEVEL_ASPECTS
-        level_aspects = aspects_type
+            level_aspects = AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP
         
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         asp.count_extended_aspect_groups_txt(filename, technique)
@@ -171,7 +167,7 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 
 
 #convert_birth_data_json('data_input/thomas jefferson')
-rect_ver_data_create(r'data_times\25_01_07_ing_tea rect 5-15.txt', timesFileType.POLARIS,r'data_input/ing tea extra.json',r'data_rect/25_01_07_IngTeaRectExtra/25_01_07_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP,150)
+#rect_ver_data_create(r'data_times\25_01_07_ing_tea rect 5-15.txt', timesFileType.POLARIS,r'data_input\ing tea prim.json',r'data_rect/25_01_13_IngTeaRectPrim/25_01_13_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP,150)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
 #pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)

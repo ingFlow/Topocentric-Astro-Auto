@@ -80,8 +80,11 @@ def home():
     #list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
     list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
     list_times = [dt_actual_dob, dt_epoch]
-    list_times = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
     list_times.append(dt_actual_dob)
+    temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
+    for t in temp:
+        list_times.append(t)
+    
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
     print(list_times)
