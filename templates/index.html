@@ -281,8 +281,8 @@
             <div style = "display: flexbox;">
                 <label for="chartdatetime">Datetime:</label>
                 <input type="text" id="chartdatetime" name="chartdatetime" placeholder="yyyy-mm-dd hh:mm:ss">
-                <label for="chartpos">Coords:</label>
-                <input type="text" id="chartpos" name="chartpos" placeholder="[+lat,-long]">                
+                <label for="chartPos">Coords:</label>
+                <input type="text" id="chartPos" name="chartPos" placeholder="[+lat,-long,lat(optional)]">                
                 <button type="button" onclick="generateChart()">Hi</button>                
             </div>
             <div class="scroll-box" style="height: 400px;">
@@ -319,28 +319,52 @@
 
         async function generateChart(rightItem = null) {
             // Get values from input fields
-            const chartDatetime = document.getElementById("chartdatetime").value;
-            const chartPos = document.getElementById("chartpos").value;
-            const rightRadioValue = getSelectedRadioValue('right-radio');
-            const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
-
             try {
-                // Send the AJAX request to the Flask route
-                let response = await fetch(`/generate_chart?&chart_datetime=${encodeURIComponent(chartDatetime)}&chart_pos=${encodeURIComponent(chartPos)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`);
-                let data = await response.json();
+                const chartDatetime = document.getElementById("chartdatetime").value;
+                const chartPos = document.getElementById("chartPos").value;
+                const rightRadioValue = getSelectedRadioValue('right-radio');
+                const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
 
-                if (response.ok) {
-                    // Get the SVG as a Blob
-                    const svgBlob = await response.blob();
+                const url = `/generate_chart?&chart_datetime=${encodeURIComponent(chartDatetime)}&chart_pos=${encodeURIComponent(chartPos)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`;
                     
-                    // Create a URL for the Blob and open it in a new tab
-                    const svgUrl = URL.createObjectURL(svgBlob);
-                    window.open(svgUrl, '_blank');
-                }
+                window.open(url, '_blank');
             } catch (error) {
                 console.error('Error:', error);
             }
         }
+
+        document.addEventListener('mouseup', async function(event) {
+            const selectedText = window.getSelection().toString();  // Get the selected text
+
+            // Ensure the selection is not empty (i.e., text was highlighted)
+            if (selectedText.length > 0) {
+                try {
+                    // Default parameters (no event_info and chart_pos, using geo_pos_natal)
+                    chartDatetime = selectedText;  // Example datetime string
+                    const rightRadioValue = getSelectedRadioValue('right-radio') || '1';
+                    const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';  
+                    
+                    // Construct the URL for chart generation
+                    const url = `/generate_chart?chart_datetime=${encodeURIComponent(chartDatetime)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`;
+
+                    // Fetch the SVG content (without event info and chart_pos)
+                    const response = await fetch(url);
+
+                    if (response.ok) {
+                        const svgContent = await response.text();  // Get the SVG content as text
+
+                        // Open the SVG content in a new tab
+                        const newWindow = window.open('', '_blank');
+                        newWindow.document.write(svgContent);  // Write SVG content to the new tab
+                        newWindow.document.close();  // Close the document to render the SVG
+                    } else {
+                        console.error('Error fetching SVG file:', response.statusText);
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            }
+        });
 
         async function updateMiddleContent(rightItem = null, leftItem = null) {
             const isShowAccept = document.getElementById('cb-show-accepted').checked;
@@ -400,6 +424,7 @@
             setupList('right-list');
         });
 
+        
     </script>
 </body>
 </html>
