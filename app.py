@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request, send_file
+from flask import Flask, render_template, jsonify, request, send_from_directory
 import pd_automate 
 import pssr_swiss_auto
 import secondary_automate
@@ -15,8 +15,10 @@ from timezonefinder import TimezoneFinder
 import os
 import re
 import shutil
+import json
 from constants import calc_planets_pof_houses_labelled
 from aspects_base import calculate_obliquity
+from kerykeion import AstrologicalSubject, KerykeionChartSVG
 
 class aTechniqueType:
     PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
@@ -270,6 +272,63 @@ def reset_globals():
     global geo_pos_natal, dt_radix
     geo_pos_natal = []
     dt_radix = None
+    
+@app.route('/generate_chart')
+def generate_chart():
+    global geo_pos_natal
+
+    chart_datetime = request.args.get('chart_datetime', default=dt_radix) 
+    chart_pos = request.args.get('chart_pos', default=geo_pos_natal)
+    technique = int(request.args.get('right_radio', ''))
+    event_info = request.args.get('right_item', '').split(', ')
+
+    try:
+        event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
+        event_pos = [float(i) for i in event_locstr]
+    except:
+        event_pos = chart_pos
+    
+    if chart_datetime != dt_radix:
+        try:
+            chart_datetime = datetime.fromisoformat(chart_datetime)
+        except ValueError:
+            try:
+                chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S.%f")
+            except ValueError:
+                try:
+                    chart_datetime = datetime.strptime(chart_datetime, "%Y-%m-%d %H:%M:%S")
+                except ValueError:
+                    return None # 
+
+    if technique in [aTechniqueType.SRA, aTechniqueType.LUNAR, aTechniqueType.TRANSIT] and chart_pos == geo_pos_natal:
+        chart_pos = [event_pos[0],event_pos[1]]
+    
+    #timezone_name = get_timezone_name_from_pos(chart_pos)
+    filename = f'{chart_datetime.strftime("%Y-%m-%d %H_%M_%S")}'    
+    svg_full_path = f"static/charts/{filename} - Natal Chart.svg"
+    svg_path = f"{filename} - Natal Chart.svg" 
+    
+    chart_subject = AstrologicalSubject(
+        filename,
+        chart_datetime.year,
+        chart_datetime.month,
+        chart_datetime.day,
+        chart_datetime.hour,
+        chart_datetime.minute,
+        chart_datetime.second,  
+        lng=chart_pos[1],
+        lat=chart_pos[0],
+        tz_str="UTC",
+        houses_system_identifier="T"
+    )
+    
+    date_natal_chart = KerykeionChartSVG(chart_subject, theme="dark-high-contrast", new_output_directory="static/charts")
+    date_natal_chart.makeSVG()
+
+    if os.path.exists(svg_full_path):
+        return send_from_directory('static/charts', svg_path) 
+    else:
+        return "File not found", 404
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
