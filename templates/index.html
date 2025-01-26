@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrology Program</title>
+    <script src="{{ url_for('static', filename='js/astrochart.min.js') }}"></script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Yrsa:wght@400;700&family=Oranienbaum:wght@400&display=swap" rel="stylesheet">
@@ -216,6 +217,12 @@
             color: #777;
             margin-top: 40px;
         }
+
+        #paper {
+            width: 800px;
+            height: 800px;
+            margin: 50px auto;
+        }
     </style>
 </head>
 <body>
@@ -296,6 +303,7 @@
                 <label>
                     <input type="checkbox" id="cb-show-data" onchange="updateMiddleContent()"> Show Data
                 </label>
+                <button id="loadChart">Load Chart</button>
             </div>          
         </div>
     </div>    
@@ -365,6 +373,9 @@
                 }
             }
         });
+
+        
+
 
         async function updateMiddleContent(rightItem = null, leftItem = null) {
             const isShowAccept = document.getElementById('cb-show-accepted').checked;
