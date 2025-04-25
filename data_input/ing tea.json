@@ -55,7 +55,7 @@
         },
         {
             "datetime": "2010-09-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -82,7 +82,7 @@
         },
         {
             "datetime": "2012-10-09T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "FAILURE_DEFEATED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -145,7 +145,7 @@
         },
         {
             "datetime": "2017-09-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -172,7 +172,7 @@
         },
         {
             "datetime": "2019-01-08T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -289,7 +289,7 @@
         },
         {
             "datetime": "2024-12-26T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -302,7 +302,7 @@
         {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [-26.17678333,28.04259444,1753.0]},
         {
             "datetime": "2017-01-31T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -311,7 +311,7 @@
         },
         {
             "datetime": "2018-10-10T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -320,7 +320,7 @@
         },
         {
             "datetime": "2018-04-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -329,7 +329,7 @@
         },
         {
             "datetime": "2018-01-28T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -338,7 +338,7 @@
         },
         {
             "datetime": "2016-10-05T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -347,7 +347,7 @@
         },
         {
             "datetime": "2016-01-28T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -356,7 +356,7 @@
         },
         {
             "datetime": "2015-11-04T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -365,7 +365,7 @@
         },
         {
             "datetime": "2015-03-27T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -374,7 +374,7 @@
         },
         {
             "datetime": "2015-03-16T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,

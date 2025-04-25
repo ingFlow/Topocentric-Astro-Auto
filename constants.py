@@ -1,5 +1,8 @@
 # constants.py
 import swisseph as swe
+import requests
+import json
+import os
 
 ZODIAC_SIGNS = [
     "aries", "taurus", "gemini", "cancer", "leo", "virgo",
@@ -12,6 +15,9 @@ PLANETS = [
 ]
 
 HOUSES = ['H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12']    
+
+ALT_FILE_PATH = "altitudes.json"
+
 
 def calc_planets_labelled(jd_radix, label):
     planets = []
@@ -70,3 +76,33 @@ def get_precession(jd1, jd2):
     aya2 = swe.get_ayanamsa_ut(jd2)
     
     return abs(aya1 - aya2)
+
+def get_altitude(lat, lon):
+    """Load stored altitude data from a JSON file."""
+    if lat == None or lon == None:
+        return None
+    rlat = round(lat, 6)
+    rlon = round(lon, 6)
+    data = {}
+    if os.path.exists(ALT_FILE_PATH):
+        with open(ALT_FILE_PATH, "r") as f:
+            data = json.load(f)
+    key = f"{rlat},{rlon}"
+    
+    if key in data:
+        return data[key]
+    else:
+        """Get altitude data from the Open-Elevation API."""
+        url = f"https://api.open-elevation.com/api/v1/lookup?locations={lat},{lon}"
+        response = requests.get(url)
+        altitude = None
+        if response.status_code == 200:
+            altitude = response.json()["results"][0]["elevation"]
+        data[key] = altitude
+        
+        """Save new altitude data to a JSON file."""
+        with open(ALT_FILE_PATH, "w") as f:
+            json.dump(data, f, indent=4)
+            
+        return data[key]
+

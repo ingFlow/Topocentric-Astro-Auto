@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "1954-07-30T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 34.25,
                 -88.716666667,
@@ -28,7 +28,7 @@
         },
         {
             "datetime": "1956-01-28T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 34.25,
                 -88.716666667,
@@ -37,7 +37,7 @@
         },
         {
             "datetime": "1956-09-09T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 34.25,
                 -88.716666667,
@@ -73,7 +73,7 @@
         },
         {
             "datetime": "1959-06-01T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 34.25,
                 -88.716666667,
@@ -91,7 +91,7 @@
         },
         {
             "datetime": "1967-05-01T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 34.25,
                 -88.716666667,

@@ -14,7 +14,7 @@
       {"datetime": "2022-01-03T12:00:00", "event_type": "INTRIGUE","geopos": [53.4, -2.9833333, 70.0]},
       {
         "datetime": "2024-10-09T08:00:00",
-        "event_type": "SUCCESS",
+        "event_type": "SUCCESS_ELECTED",
         "geopos": [
             -26.137999448,
             28.15166606,

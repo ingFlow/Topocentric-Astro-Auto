@@ -19,7 +19,7 @@
         },
         {
             "datetime": "1762-04-25T12:00:00",
-            "event_type": "GRADUATION",
+            "event_type": "GRADUATION_PUBLICATION",
             "geopos": [
                 38.33333,
                 -78.433333,
@@ -37,7 +37,7 @@
         },
         {
             "datetime": "1772-01-01T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 38.33333,
                 -78.433333,

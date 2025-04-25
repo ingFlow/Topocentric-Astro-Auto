@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "1953-05-02T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -19,7 +19,7 @@
         },
         {
             "datetime": "1955-02-27T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -28,7 +28,7 @@
         },
         {
             "datetime": "1955-04-19T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -73,7 +73,7 @@
         },
         {
             "datetime": "1967-06-09T12:00:00",
-            "event_type": "FAILURE",
+            "event_type": "FAILURE_DEFEATED",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -91,7 +91,7 @@
         },
         {
             "datetime": "1972-12-24T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -100,7 +100,7 @@
         },
         {
             "datetime": "1977-02-09T12:00:00",
-            "event_type": "DEATH_WIFE",
+            "event_type": "DEATH_WIFE_FRIEND",
             "geopos": [
                 31.95,
                 35.9333333,
@@ -109,7 +109,7 @@
         },
         {
             "datetime": "1978-06-15T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 31.95,
                 35.9333333,

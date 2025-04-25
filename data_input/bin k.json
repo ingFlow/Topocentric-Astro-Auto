@@ -19,7 +19,7 @@
         },
         {
             "datetime": "2024-10-25T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.17678333,
                 28.04259444,

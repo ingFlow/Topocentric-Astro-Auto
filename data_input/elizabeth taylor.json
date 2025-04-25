@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "1958-03-23T12:00:00",
-            "event_type": "DEATH_HUSBAND",
+            "event_type": "DEATH_HUSBAND_FRIEND",
             "geopos": [51.571507,-0.179128,42.0]
         },
         {
@@ -20,7 +20,7 @@
         },
         {
             "datetime": "1961-04-17T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [51.571507,-0.179128,42.0]
         },
         {
@@ -30,7 +30,7 @@
         },
         {
             "datetime": "2002-12-08T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [51.571507,-0.179128,42.0]
         },
         {

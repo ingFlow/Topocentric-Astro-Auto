@@ -4,7 +4,10 @@ results are giving the values corresponding to POLARIS"""
 import math
 import swisseph as swe
 from aspects_base import convert_dec_degrees_to_deg_min_sec
-from julian import from_jd
+from julian import from_jd, to_jd
+from constants import PLANETS
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 class PD_Base:
     def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
@@ -390,3 +393,51 @@ def get_directed_from_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag
     print(f"long directed: {LONG_deg}")'''
     
     return LONG_deg
+
+def get_date_of_conjunction(static_planet, dt_radix, geopos):
+    #----get ramc of radix
+    #----get ra of static_planet
+    #----get ramc-raplanet (arc travelled)
+    #----get arc/naibod number in years
+    #----get decimal * 365 to get days 
+    #add to radix date
+    
+    '''so keep in mind there is forward and back
+    travel but we are taking the absolute (shortest)
+    distance when the bodies come into conjunction 
+    with each other so that doesn't matter'''
+    
+    jd_radix = to_jd(dt_radix)
+    xx, _ = swe.calc_ut(jd_radix, static_planet, swe.FLG_EQUATORIAL)
+    ra_planet = xx[0]
+    
+    houses = swe.houses(jd_radix, geopos[0], geopos[1], b'T')
+    ramc = houses[1][2]
+    
+    arc_travelled1 = swe.degnorm(ra_planet - ramc)
+    arc_travelled2 = swe.degnorm(ramc - ra_planet)
+    
+    arc_travelled = arc_travelled1 if arc_travelled1 < arc_travelled2 else arc_travelled2
+    
+    naibod = (59/60 + 8.33/3600)
+    years_elapsed = arc_travelled//naibod
+    days_left = ((arc_travelled/naibod) % 1) * 365
+    dt_new = dt_radix + timedelta(days=days_left) 
+    dt_new = dt_new + relativedelta(years=years_elapsed)
+    
+    print(f"ra_planet: {ra_planet}, ramc: {ramc}, arc_travelled: {arc_travelled}, years_elapsed: {arc_travelled/naibod}, days_elapsed: {days_left}, dt_new: {dt_new}")
+    return dt_new
+
+'''swe.set_ephe_path(None)
+dt_radix = datetime(1685,3,31,11,49,4)
+geopos = [50.98333,10.3]
+
+arr_dates = []
+for planet in PLANETS:
+    p = PLANETS.index(planet)
+    arr_dates.append((planet, get_date_of_conjunction(p, dt_radix, geopos)))
+
+for ar in arr_dates:
+    print(ar)'''
+    
+swe.set_ephe_path('/usr/share/swisseph/ephe')

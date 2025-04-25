@@ -2,6 +2,8 @@ from datetime import datetime
 from pd_automate import EventType, AspectType
 import process_techniques_files as asp
 import json
+import re
+from constants import get_altitude
 
 class timesFileType:
     POLARIS = 0
@@ -24,16 +26,146 @@ class timesFileType:
     datetime(1974, 6, 13, 23, 3, 20),
     datetime(1974, 6, 13, 23, 46, 24)'''
 
-def convert_birth_data_json(file_to_write_str):
+def parse_coordinate(coord_str):
+    m = re.match(r"(\d+)([EWNS])(\d+)'", coord_str)
+    if m:
+        degrees = int(m.group(1))
+        direction = m.group(2)
+        minutes = int(m.group(3))
+        decimal = degrees + minutes / 60.0
+        if direction in ['W', 'S']:
+            decimal = -decimal
+        return decimal
+    return None
+
+
+
+def convert_polaris_event_data_json(file_to_write_str, file_to_read_str):
+    output_data = {
+        "dt_radix_start": "1981-09-04T02:47:00",
+        "dt_radix_end": "1981-09-04T02:47:00",
+        "dt_actual_dob": "1981-09-04T02:47:00",
+        "geopos_natal": [29.7217, -95.3875, 32],  
+        "list_of_events": []
+    }
+    
+    # Mapping from month abbreviations to two-digit month numbers.
+    month_to_num = {
+        "Jan": "01", "Feb": "02", "Mar": "03", "Apr": "04",
+        "May": "05", "Jun": "06", "Jul": "07", "Aug": "08",
+        "Sep": "09", "Oct": "10", "Nov": "11", "Dec": "12"
+    }
+
+    # --- Parse the events file ---
+    # Each event spans two lines.
+    events_combined = []
+    with open(file_to_read_str, "r", encoding="utf-8") as f:
+        all_lines = f.readlines()
+
+    # Skip header lines and combine events:
+    # We assume that a new event starts with a line that begins with an event index (e.g., "01)")
+    i = 0
+    while i < len(all_lines):
+        line = all_lines[i].strip()
+        if re.match(r'^\d+\)', line):  # event first line detected
+            first_line = line
+            # Look ahead for the next non-empty line that does not start with an event index
+            second_line = ""
+            j = i + 1
+            while j < len(all_lines):
+                candidate = all_lines[j].strip()
+                if candidate and not re.match(r'^\d+\)', candidate):
+                    second_line = candidate
+                    break
+                j += 1
+            events_combined.append((first_line, second_line))
+            i = j  # jump to the next candidate
+        else:
+            i += 1
+
+    # Process each combined event (first_line, second_line)
+    for first_line, second_line in events_combined:
+        # Tokenize the two lines by whitespace.
+        tokens_first = first_line.split()
+        tokens_second = second_line.split()
+
+        # --- Extract Year and Day from the first line ---
+        # Find the token that is a 4-digit number (assumed to be the year)
+        year = None
+        year_index = None
+        for idx, tok in enumerate(tokens_first):
+            if re.fullmatch(r'\d{4}', tok):
+                year = tok
+                year_index = idx
+                break
+        if not year or year_index is None:
+            continue  # Skip if no year found
+
+        try:
+            # The token immediately before the year is the day.
+            day_token = tokens_first[year_index - 1]
+            day = int(day_token)
+        except (IndexError, ValueError):
+            continue
+
+        # --- Extract Month from the second line ---
+        month = None
+        for tok in tokens_second:
+            if tok in month_to_num:
+                month = month_to_num[tok]
+                break
+        if not month:
+            continue
+
+        # Construct the ISO datetime string (using a fixed time T12:00:00)
+        dt_str = f"{year}-{month}-{day:02d}T12:00:00"
+
+        # --- Extract Coordinates from the first line ---
+        # We assume that the last two tokens are the longitude and latitude.
+        if len(tokens_first) >= 2:
+            lon_str = tokens_first[-2]
+            lat_str = tokens_first[-1]
+        else:
+            lon_str = lat_str = None
+
+        lon = parse_coordinate(lon_str) if lon_str else None
+        lat = parse_coordinate(lat_str) if lat_str else None
+        altitude = get_altitude(lat, lon)
+
+        if len(tokens_second) >= 2 and tokens_second[1].isdigit():
+            event_type_num = int(tokens_second[1])
+        elif len(tokens_second) >= 2 and tokens_second[0].isdigit():
+            event_type_num = int(tokens_second[0])
+        else:
+            event_type_num = None
+
+        event_type = EventType.get_name(event_type_num)
+
+        # Build the event entry.
+        event_entry = {
+            "datetime": dt_str,
+            "event_type": event_type,
+            "geopos": [lat, lon, altitude] if (lon is not None and lat is not None) else output_data["geopos_natal"]
+        }
+        output_data["list_of_events"].append(event_entry)
+
+    # --- Write out the JSON file ---
+    with open(file_to_write_str, "w", encoding="utf-8") as out_file:
+        json.dump(output_data, out_file, indent=4)
+
+    print(f"JSON file successfully created as {file_to_write_str}")
+    
+
+def convert_manual_birth_data_json(file_to_write_str):
     dt_radix_start = datetime(1743,4,13, 00, 00, 00)
     dt_radix_end = datetime(1743,4,13, 3, 00, 00)
     dt_actual_dob = datetime(1743,4,13, 14, 43, 00)
     geopos = [38.33333,-78.433333,183.0]
     list_of_events = [
         (datetime(1752,10,10, 12, 00, 00) ,EventType.BIRTH_SISTER,[38.33333,-78.433333,183.0]),
-        (datetime(1762,4,25, 12, 00, 00) ,EventType.GRADUATION,[38.33333,-78.433333,183.0]),
+        (datetime(1762,4,25, 12, 00, 00) ,EventType.GRADUATION_PUBLICATION,[38.33333,-78.433333,183.0]),
         (datetime(1765,10,1, 12, 00, 00) ,EventType.DEATH_SISTER,[38.33333,-78.433333,183.0]),
-        (datetime(1772,1,1, 12, 00, 00) ,EventType.MARRIAGE_FOR_MALE,[38.33333,-78.433333,183.0]),
+        (datetime(1772,1,1, 12, 00, 00) ,EventType.MARRIAGE_ENGAGEMENT_FOR_MALE,[38.33333,-78.433333,183.0]),
         (datetime(1774,2,15, 12, 00, 00) ,EventType.DEATH_SISTER,[38.33333,-78.433333,183.0]),
         (datetime(1776,3,31, 12, 00, 00) ,EventType.DEATH_MOTHER_GRAND,[38.33333,-78.433333,183.0]),
         (datetime(1789,9,2, 12, 00, 00) ,EventType.PROMOTION_JOB,[38.33333,-78.433333,183.0]),
@@ -172,3 +304,4 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
 #pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)
 #asp.sum_sec_prim(r"data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_primariesCOUNT.txt",r'data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_secondCOUNT.txt')
+#convert_polaris_event_data_json("data_input/beyonce.json", "data_input/beyonce_pola_events.txt")
