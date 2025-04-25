@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "1861-12-23T12:00:00",
-            "event_type": "DEATH_HUSBAND",
+            "event_type": "DEATH_HUSBAND_FRIEND",
             "geopos": [51.5,-0.1833333,8.0]
         },
         {

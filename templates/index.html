@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrology Program</title>
-    <script src="{{ url_for('static', filename='js/astrochart.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/astrochart.js') }}"></script>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Yrsa:wght@400;700&family=Oranienbaum:wght@400&display=swap" rel="stylesheet">
@@ -303,7 +303,7 @@
                 <label>
                     <input type="checkbox" id="cb-show-data" onchange="updateMiddleContent()"> Show Data
                 </label>
-                <button id="loadChart">Load Chart</button>
+                <button id="loadChart" onclick="loadChart()">Load Chart</button>
             </div>          
         </div>
     </div>    
@@ -341,6 +341,47 @@
             }
         }
 
+        async function loadChart() {
+            console.log(window.AstroChart);
+            try {
+                // Fetch chart data from the Flask server
+                const response = await fetch('/chart-data');
+                const { radix: dataRadix, transit: dataTransit } = await response.json();
+
+                // Initialize the chart
+                const chart = new AstroChart('paper', 800, 800, {
+                    MARGIN: 100,
+                    SYMBOL_SCALE: 0.8,
+                    COLOR_ARIES: 'transparent',
+                    COLOR_TAURUS: 'transparent',
+                    COLOR_GEMINI: 'transparent',
+                    COLOR_CANCER: 'transparent',
+                    COLOR_LEO: 'transparent',
+                    COLOR_VIRGO: 'transparent',
+                    COLOR_LIBRA: 'transparent',
+                    COLOR_SCORPIO: 'transparent',
+                    COLOR_SAGITTARIUS: 'transparent',
+                    COLOR_CAPRICORN: 'transparent',
+                    COLOR_AQUARIUS: 'transparent',
+                    COLOR_PISCES: 'transparent',
+                });
+
+                // Render the radix chart
+                const radix = chart.radix(dataRadix);
+                radix.addPointsOfInterest({
+                    As: [dataRadix.cusps[0]],
+                    Ic: [dataRadix.cusps[3]],
+                    Ds: [dataRadix.cusps[6]],
+                    Mc: [dataRadix.cusps[9]],
+                });
+
+                // Add transit data to the chart
+                radix.transit(dataTransit);
+            } catch (error) {
+                console.error('Error loading chart data:', error);
+            }
+        }
+
         document.addEventListener('mouseup', async function(event) {
             const selectedText = window.getSelection().toString();  // Get the selected text
 
@@ -373,9 +414,6 @@
                 }
             }
         });
-
-        
-
 
         async function updateMiddleContent(rightItem = null, leftItem = null) {
             const isShowAccept = document.getElementById('cb-show-accepted').checked;

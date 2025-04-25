@@ -1,0 +1,91 @@
+                                 Date
+     01) Death of mother         10  1694 ±         - 010E18'  50N59' 
+                             12  May      00           00"      00"
+     02) Death of father         02  1695 ±         - 010E18'  50N59' 
+                             11  Mar      00           00"      00"
+     03) Move                    25  1700 ±         - 010E18'  50N59' 
+                             39  Mar      00           00"      00"
+     04) Job                     09  1703 ±         - 010E57'  50N50' 
+                             22  Aug      00           00"      00"
+     05) Voyage (positive)       18  1705 ±         -         -       -
+                             26  Oct      00
+     06) Marriage (1)            17  1707 ±         - 010E57'  50N50' 
+                             07  Oct      00           00"      00"
+     07) SUCCESS_ELECTED/Elected         25  1708 ±         - 011E20'  50N59' 
+                             21  Jun      00           00"      00"
+     08) Birth of daughter       27  1708 ±         - 010E57'  50N50' 
+                             04  Dec      00           00"      00"
+     09) Birth of son            22  1710 ±         - 010E57'  50N50' 
+                             03  Nov      00           00"      00"
+     10) Death of son            23  1713 ±         - 010E57'  50N50' 
+                             13  Feb      00           00"      00"
+     11) Birth of son            08  1714 ±         - 010E57'  50N50' 
+                             03  Mar      00           00"      00"
+     12) Birth of son            11  1715 ±         - 010E57'  50N50' 
+                             03  May      00           00"      00"
+     13) Arrest                  06  1717 ±         - 011E59'  51N46' 
+                             30  Nov      00           00"      00"
+     14) Release                 02  1717 ±         - 011E59'  51N46' 
+                             29  Dec      00           00"      00"
+     15) Birth of son            15  1718 ±         - 011E59'  51N46' 
+                             03  Nov      00           00"      00"
+     16) Death of son            28  1719 ±         - 011E59'  51N46' 
+                             13  Sep      00           00"      00"
+     17) Death of wife           07  1720 ±         - 011E59'  51N46' 
+                             15  Jul      00           00"      00"
+     18) Death of brother        22  1721 ±         - 012E24'  51N20' 
+                             17  Feb      00           00"      00"
+     19) Job                     05  1721 ±         - 012E24'  51N20' 
+                             22  May      00           00"      00"
+     20) Marriage (2)            03  1721 ±         - 011E59'  51N46' 
+                             07  Dec      00           00"      00"
+     21) Death of brother        16  1722 ±         - 012E24'  51N20' 
+                             17  Apr      00           00"      00"
+     22) Birth of son            25  1724 ±         - 012E24'  51N20' 
+                             03  Feb      00           00"      00"
+     23) Birth of son            12  1725 ±         - 012E24'  51N20' 
+                             03  Apr      00           00"      00"
+     24) Birth of daughter       03  1726 ±         - 012E24'  51N20' 
+                             04  Apr      00           00"      00"
+     25) Death of daughter       29  1726 ±         - 012E24'  51N20' 
+                             14  Jun      00           00"      00"
+     26) Death of son            28  1727 ±         - 012E24'  51N20' 
+                             13  Oct      00           00"      00"
+     27) Death of son            21  1728 ±         - 012E24'  51N20' 
+                             13  Sep      00           00"      00"
+     28) Birth of daughter       08  1728 ±         - 012E24'  51N20' 
+                             04  Oct      00           00"      00"
+     29) Promotion               15  1729 ±         - 012E24'  51N20' 
+                             22  Apr      00           00"      00"
+     30) Death of daughter       04  1730 ±         - 012E24'  51N20' 
+                             14  Jan      00           00"      00"
+     31) Birth of daughter       16  1731 ±         - 012E24'  51N20' 
+                             04  Mar      00           00"      00"
+     32) Move                    30  1731 ±         - 012E24'  51N20' 
+                             39  Jun      00           00"      00"
+     33) Birth of son            21  1732 ±         - 012E24'  51N20' 
+                             03  Jun      00           00"      00"
+     34) Death of daughter       30  1732 ±         - 012E24'  51N20' 
+                             14  Aug      00           00"      00"
+     35) Death of daughter       25  1733 ±         - 012E24'  51N20' 
+                             14  Apr      00           00"      00"
+     36) Death of son            03  1733 ±         - 012E24'  51N20' 
+                             13  Nov      00           00"      00"
+     37) Birth of son            05  1735 ±         - 012E24'  51N20' 
+                             03  Sep      00           00"      00"
+     38) Intrigue                15  1736 ±         - 012E24'  51N20' 
+                             34  Aug      00           00"      00"
+     39) Promotion               19  1736 ±         - 012E24'  51N20' 
+                             22  Nov      00           00"      00"
+     40) Birth of daughter       28  1737 ±         - 012E24'  51N20' 
+                             04  Oct      00           00"      00"
+     41) Death of friend         30  1741 ±         - 012E24'  51N20' 
+                             16  May      00           00"      00"
+     42) Birth of daughter       20  1742 ±         - 012E24'  51N20' 
+                             04  Feb      00           00"      00"
+     43)                         30  1750 ±         - 012E24'  51N20' 
+     Hospitalization/Illness 32  Mar      00           00"      00"
+     44) Death                   28  1750 ±         - 012E24'  51N20' 
+                             19  Jul      00           00"      00"
+     45) Death of daughter       24  1781 ±         - 012E24'  51N20' 
+                             14  Aug      00           00"      00"

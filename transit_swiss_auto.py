@@ -39,4 +39,4 @@ class Transit_Auto:
         return self.__dict_info
 
 
-
+swe.set_ephe_path('/usr/share/swisseph/ephe')

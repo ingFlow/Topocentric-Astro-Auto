@@ -110,3 +110,5 @@ jd_radix = julian.to_jd(datetime(1926,4,21,1,12,48))
 jd_event = julian.to_jd(datetime(1948,11,14,12,00,00))
 geopos = [51.5166667, -0.111666667, 15.0]
 '''
+
+swe.set_ephe_path('/usr/share/swisseph/ephe')

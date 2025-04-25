@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "1870-08-25T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 51.33333333333333,
         12.38333333333333,
@@ -37,7 +37,7 @@
         },
         {
             "datetime": "1836-07-07T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 51.33333333333333,
         12.38333333333333,
@@ -46,7 +46,7 @@
         },
         {
             "datetime": "1836-11-24T12:00:00",
-            "event_type": "MARRIAGE_FOR_MALE",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_MALE",
             "geopos": [
                 51.33333333333333,
         12.38333333333333,
@@ -73,7 +73,7 @@
         },
         {
             "datetime": "1866-01-25T12:00:00",
-            "event_type": "DEATH_WIFE",
+            "event_type": "DEATH_WIFE_FRIEND",
             "geopos": [
                 51.33333333333333,
         12.38333333333333,

@@ -28,7 +28,7 @@
         },
         {
             "datetime": "2010-09-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.0803698177348, 
                 28.100897638076653,
@@ -91,7 +91,7 @@
         },
         {
             "datetime": "2017-09-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.130908357936896,
                 28.161136353870678,

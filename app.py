@@ -79,17 +79,16 @@ def home():
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    #list_times = process_techniques_files.process_polaris_times('data_times/jacqui sorted max a 4 rect.txt', 100)
-    list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
+    #list_times = process_techniques_files.process_polaris_times(r'data_times\25_01_07_ing_tea rect 5-15.txt', 100)
+    #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
     list_times = [dt_actual_dob, dt_epoch]
-    list_times.append(dt_actual_dob)
+    #list_times.append(dt_actual_dob)
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
-    for t in temp:
-        list_times.append(t)
+    '''for t in temp:
+        list_times.append(t)'''
     
     #left_items = [t.isoformat() for t in list_times]
     left_items = list_times
-    print(list_times)
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
 
@@ -273,6 +272,62 @@ def reset_globals():
     geo_pos_natal = []
     dt_radix = None
     
+@app.route('/chart-data')
+def chart_data():
+    data_radix = {
+        "planets": {
+            "Moon": [45.930008627285154],
+            "Venus": [263.2584780960899],
+            "Jupiter": [173.07043720306802],
+            "NNode": [174.6895307834239],
+            "Mars": [217.97167231451178],
+            "Lilith": [196.19480722950317],
+            "Saturn": [252.92341772675047],
+            "Chiron": [348.1157239728284],
+            "Uranus": [16.7900184974611],
+            "Sun": [297.68062428797253],
+            "Mercury": [289.10132025725494],
+            "Neptune": [338.01899718442604],
+            "Pluto": [285.6473452237151, -0.123]
+        },
+        "cusps": [
+            348.20510089894015,
+            38.108507808919654,
+            65.20783751818992,
+            84.96083001338991,
+            103.77897207128007,
+            127.1084408347092,
+            168.20510089894015,
+            218.10850780891965,
+            245.20783751818993,
+            264.9608300133899,
+            283.77897207128007,
+            307.1084408347092
+        ]
+    }
+
+    data_transit = {
+        "planets": {
+            "Moon": [60.739220451080115],
+            "Venus": [305.6996431634707],
+            "Jupiter": [198.6565699576221],
+            "NNode": [157.25592636170012],
+            "Mars": [324.84013049518734],
+            "Lilith": [232.88904207991555],
+            "Saturn": [259.1015412368795, -0.2],
+            "Chiron": [350.7285587924208],
+            "Uranus": [20.678747795787075],
+            "Sun": [260.94912160755536],
+            "Mercury": [281.5699804920016],
+            "Neptune": [339.3848859932604],
+            "Pluto": [286.29683069280685]
+        },
+        "cusps": [296, 350, 30, 56, 75, 94, 116, 170, 210, 236, 255, 274]
+    }
+
+    return jsonify({"radix": data_radix, "transit": data_transit})
+
+    
 @app.route('/generate_chart')
 def generate_chart():
     global geo_pos_natal
@@ -329,69 +384,6 @@ def generate_chart():
         return send_from_directory('static/charts', svg_path) 
     else:
         return "File not found", 404
-    
-from flask import Flask, render_template, jsonify
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-'''@app.route('/chart-data')
-def chart_data():
-    data_radix = {
-        "planets": {
-            "Moon": [45.930008627285154],
-            "Venus": [263.2584780960899],
-            "Jupiter": [173.07043720306802],
-            "NNode": [174.6895307834239],
-            "Mars": [217.97167231451178],
-            "Lilith": [196.19480722950317],
-            "Saturn": [252.92341772675047],
-            "Chiron": [348.1157239728284],
-            "Uranus": [16.7900184974611],
-            "Sun": [297.68062428797253],
-            "Mercury": [289.10132025725494],
-            "Neptune": [338.01899718442604],
-            "Pluto": [285.6473452237151, -0.123]
-        },
-        "cusps": [
-            348.20510089894015,
-            38.108507808919654,
-            65.20783751818992,
-            84.96083001338991,
-            103.77897207128007,
-            127.1084408347092,
-            168.20510089894015,
-            218.10850780891965,
-            245.20783751818993,
-            264.9608300133899,
-            283.77897207128007,
-            307.1084408347092
-        ]
-    }
-
-    data_transit = {
-        "planets": {
-            "Moon": [60.739220451080115],
-            "Venus": [305.6996431634707],
-            "Jupiter": [198.6565699576221],
-            "NNode": [157.25592636170012],
-            "Mars": [324.84013049518734],
-            "Lilith": [232.88904207991555],
-            "Saturn": [259.1015412368795, -0.2],
-            "Chiron": [350.7285587924208],
-            "Uranus": [20.678747795787075],
-            "Sun": [260.94912160755536],
-            "Mercury": [281.5699804920016],
-            "Neptune": [339.3848859932604],
-            "Pluto": [286.29683069280685]
-        },
-        "cusps": [296, 350, 30, 56, 75, 94, 116, 170, 210, 236, 255, 274]
-    }
-
-    return jsonify({"radix": data_radix, "transit": data_transit})'''
 
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)

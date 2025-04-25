@@ -10,7 +10,7 @@
     "list_of_events": [
         {
             "datetime": "2017-01-31T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -19,7 +19,7 @@
         },
         {
             "datetime": "2018-10-10T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -28,7 +28,7 @@
         },
         {
             "datetime": "2018-04-15T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -37,7 +37,7 @@
         },
         {
             "datetime": "2018-01-28T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -46,7 +46,7 @@
         },
         {
             "datetime": "2016-10-05T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -55,7 +55,7 @@
         },
         {
             "datetime": "2016-01-28T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -64,7 +64,7 @@
         },
         {
             "datetime": "2015-11-04T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,
@@ -73,7 +73,7 @@
         },
         {
             "datetime": "2015-03-27T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.075,
                 28.09472,
@@ -82,7 +82,7 @@
         },
         {
             "datetime": "2015-03-16T12:00:00",
-            "event_type": "SUCCESS",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.137999448,
                 28.15166606,

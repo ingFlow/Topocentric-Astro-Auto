@@ -9,17 +9,30 @@
       {"datetime": "1997-11-16T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [53.4, -2.9833333, 70.0]},
       {"datetime": "2000-03-11T12:00:00", "event_type": "BIRTH_DAUGHTER","geopos": [53.4, -2.9833333, 70.0]},
       {"datetime": "2021-02-20T12:00:00", "event_type": "DEATH_MOTHER_GRAND","geopos": [53.4, -2.9833333, 70.0]},
-      {"datetime": "2021-04-06T12:00:00", "event_type": "LOSSES","geopos": [53.4, -2.9833333, 70.0]},
-      {"datetime": "2022-05-25T12:00:00", "event_type": "ARREST","geopos": [53.4, -2.9833333, 70.0]},
-      {"datetime": "2022-01-03T12:00:00", "event_type": "INTRIGUE","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2021-04-06T12:00:00", "event_type": "FAILURE_DEFEATED","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2022-05-25T12:00:00", "event_type": "TRAVEL_POSITIVE","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2019-05-26T12:00:00", "event_type": "DEATH_SISTER","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2017-09-22T12:00:00", "event_type": "LOSSES","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2017-01-29T12:00:00", "event_type": "DEATH_SISTER","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "1993-09-15T12:00:00", "event_type": "GRADUATION_PUBLICATION","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "1996-11-15T12:00:00", "event_type": "GRADUATION_PUBLICATION","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2021-06-15T12:00:00", "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2021-04-18T12:00:00", "event_type": "TRAVEL_POSITIVE","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "1997-10-17T12:00:00", "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2008-09-05T12:00:00", "event_type": "DIVORCE_SEPARATION","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2012-10-09T12:00:00", "event_type": "FAILURE_DEFEATED","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2013-12-12T12:00:00", "event_type": "FAILURE_DEFEATED","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2013-12-12T12:00:00", "event_type": "FAILURE_DEFEATED","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2015-05-27T12:00:00", "event_type": "ARREST","geopos": [53.4, -2.9833333, 70.0]},
+      {"datetime": "2022-01-03T12:00:00", "event_type": "SUCCESS_ELECTED","geopos": [53.4, -2.9833333, 70.0]},
       {
         "datetime": "2024-10-09T08:00:00",
-        "event_type": "SUCCESS",
+        "event_type": "BLANK",
         "geopos": [
             -26.137999448,
             28.15166606,
             1753.0
         ]
-    }
+      }
     ]
   }
