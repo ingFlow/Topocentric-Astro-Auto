@@ -40,7 +40,10 @@
             padding-left: 0; /* Remove padding */
         }
         li {
-            margin-bottom: 10px; /* Optional: space between items */
+            margin-bottom: 1px; /* Optional: space between items */
+            padding: 3px 5px; /* Padding for list items */
+            cursor: pointer;
+            border-bottom: 1px solid #eee; /* Lighter separator */
         }
 
         .container {
@@ -55,32 +58,35 @@
         .column {
             width: 20%; /* Smaller columns */
             background-color: #f5f5f5; /* Light grey background */
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-family: 'Yrsa', sans-serif; /* Yrsa font for columns */
+            display: flex;
+            flex-direction: column;
         }
 
         .middle-column {
-            width: 60%; /* Wider middle column */
+            width: 55%; /* Wider middle column */
             background-color: #ffffff; /* White background */
-            padding: 20px;
+            padding: 15px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             font-family: 'Yrsa', sans-serif; /* Yrsa font for middle column */
+            display: flex;
+            flex-direction: column;
         }
 
         /* Scrollable Box Styling */
         .scroll-box {
-            width: 100%;
-            height: 250px;
+            flex-grow: 1; /* Allow the box to grow and fill available space */
             border: 1px solid #1a1f36;
-            overflow-y: scroll;
+            overflow-y: auto;
             background-color: #ffffff; /* White background */
             color: #1a1f36;
-            /*padding: 10px;*/
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border-radius: 8px;
+            min-height: 150px; /* Minimum height for the scroll box */
         }
 
         .scroll-box ul {
@@ -94,12 +100,16 @@
             border-bottom: 1px solid #ccc;
         }
 
+        .scroll-box li.selected {
+            background-color: #549dc2; /* Background color when item is clicked */
+            color: #fff; /* White text color for selected item */
+        }
+
         /* Radio Group Styling */
         .radio-group {
             display: flex;
-            /*flex-direction: column;*/
             gap: 5px;
-            margin-top: 10px;
+            margin-top: 5px;
             flex-wrap: wrap; /* Allow wrapping to the next line if necessary */
         }
 
@@ -108,39 +118,26 @@
             align-items: center;
             font-family: 'Yrsa', sans-serif; /* Yrsa font for radio labels */
             font-weight: 400;
-            font-size: 1em;
+            font-size: 0.9em;
             color: #1a1f36;
             margin-right: 10px; /* Space between radio and label text */
         }
 
         input[type="radio"] {
             accent-color: #1a1f36;
-            margin-right: 5px;
+            margin-right: 3px;
         }
 
         /* Middle Column Specific Styling */
         .text-section {
             background-color: #f5f5f5; /* Light grey background */
-            padding: 15px;
+            padding: 10px;
             border-radius: 8px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            margin-bottom: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            font-size: 0.9em;
         }
-
-        .text-section li {
-            padding: 1px;
-            cursor: pointer;
-            border-bottom: 1px solid #ccc;
-        }
-
-        li:hover {
-            background-color: #f3cf6c; /* Gold highlight on hover */
-        }
-
-        .active {
-            background-color: #549dc2; /* Background color when item is clicked */
-        }
-
+        
         .text-section p {
             margin: 0;
             font-family: 'Yrsa', sans-serif; /* Yrsa font for middle column text */
@@ -149,73 +146,60 @@
         }
 
         .scroll-text {
-            height: 300px;
+            flex-grow: 1; /* Allow the box to grow and fill available space */
             overflow-y: scroll;
             padding: 10px;
             background-color: #f5f5f5; /* Light grey background */
             color: #1a1f36;
             border-radius: 5px;
+            border: 1px solid #ccc;
+            min-height: 200px; /* Minimum height for the scroll box */
+        }
+
+        .scroll-text .aspect-item {
+            padding: 4px 8px;
+            margin-bottom: 2px;
+            border-bottom: 1px dotted #ccc; /* Lighter separator */
+            cursor: pointer;
+            font-family: monospace; /* Good for fixed-width aspect data */
+            font-size: 0.95em;
+            white-space: pre; /* Preserve whitespace from string */
+            border-radius: 3px;
+        }
+
+        .scroll-text .aspect-item:hover {
+            background-color: #f3cf6c; /* Gold highlight on hover */
+        }
+
+        .scroll-text .aspect-item.selected {
+            background-color: #a8d8ff; /* Light blue highlight */
+            border-color: #6ab7ff;
+            font-weight: bold;
         }
 
         /* Orb Input Styling */
-        #orbInput {
-            width: 100px;
-            padding: 5px;
-            font-family: 'Yrsa', sans-serif;
-            font-size: 1em;
-            color: #1a1f36;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            background-color: #fff;
-            margin-top: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        #orbInput, #fileSelector, .inline-form input[type="text"], .inline-form button, #loadChart {
+            padding: 5px 8px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            /*background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);*/
+            margin-top: 5px;
+            border: 1px solid #ccc;
         }
 
-        /* File Selector Styling */
-        #fileSelector {
-            width: 100%;
-            padding: 10px;
-            font-family: 'Yrsa', sans-serif;
-            font-size: 1em;
-            color: #1a1f36;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            background-color: #fff;
-            margin-top: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .inline-form {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-family: 'Yrsa', sans-serif;
-            font-size: 1em;
-            color: #1a1f36;
-            margin-top: 10px;
-            margin-bottom: 15px;
-        }
-
-        .inline-form input[type="text"],
-        .inline-form button {
-            width: 100px;
-            padding: 5px;
-            border: 2px solid #ccc;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .inline-form button {
-            cursor: pointer;
-        }
+        #fileSelector { width: 100%;}
+        label { font-size: 0.9em; margin-bottom: 3px; } /* Adjust label size/margin */
+        .checkbox-group label { font-size: 0.9em; }
+        .inline-form { gap: 3px; margin-top: 5px; margin-bottom: 10px; }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             color: #777;
             margin-top: 40px;
+            font-size: 0.8em;
         }
 
         #paper {
@@ -232,37 +216,6 @@
     <div class="container">
         <!-- Left Column -->
         <div class="column">
-            <div class="scroll-box">
-                <ul id="left-list">
-                    {% for item in left_column_items %}
-                        <li onclick="updateMiddleContent(null, '{{ item }}')">{{ item }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            <div style="margin-bottom: 20px;"></div>
-            
-            <div class="checkbox-group" id="left-checkbox-group">
-                <label>
-                    <input type="checkbox" id="cb-show-accepted" onchange="updateMiddleContent()"> Show Accepted only
-                </label>
-            </div>
-
-            <div style="margin-bottom: 5px;"></div>
-
-            <div class="radio-group" id="right-radio-group">
-                <label><input type="radio" name="right-radio" value=0 onchange="updateMiddleContent()"> PD</label>
-                <label><input type="radio" name="right-radio" value=1 onchange="updateMiddleContent()"> Secondary</label>
-                <label><input type="radio" name="right-radio" value=2 onchange="updateMiddleContent()"> PSSR</label>
-                <label><input type="radio" name="right-radio" value=3 onchange="updateMiddleContent()"> Transit</label>
-                <label><input type="radio" name="right-radio" value=4 onchange="updateMiddleContent()"> Lunar</label>
-                <label><input type="radio" name="right-radio" value=5 onchange="updateMiddleContent()"> SRA</label>
-                <label><input type="radio" name="right-radio" value=6 onchange="updateMiddleContent()"> Harmonics</label>
-                <label><input type="radio" name="right-radio" value=7 onchange="updateMiddleContent()"> Natal</label>
-            </div>
-            <div>
-                <label for="orbInput">Orb:</label>
-                <input type="number" id="orbInput" name="orbInput" min="-1" value="-1" onchange="updateMiddleContent()">
-            </div>
             <form id="fileSelectorForm" method="GET" action="/">
                 <select id="fileSelector" name="filename" onchange="this.form.submit()">
                     {% for file in files %}
@@ -270,38 +223,65 @@
                     {% endfor %}
                 </select>
             </form>
+            <div class="scroll-box">
+                <ul id="left-list">
+                    {% for item in left_column_items %}
+                        <li data-value="{{ item }}">{{ item }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="checkbox-group" id="left-checkbox-group">
+                <label>
+                    <input type="checkbox" id="cb-show-accepted" onchange="handleContextChange()"> Show Accepted only
+                </label>
+            </div>
+
+            <div class="radio-group" id="right-radio-group">
+                <label><input type="radio" name="right-radio" value=0 data-technique-name="PD" onchange="handleContextChange()"> PD</label>
+                <label><input type="radio" name="right-radio" value=1 data-technique-name="Secondary" onchange="handleContextChange()"> Secondary</label>
+                <label><input type="radio" name="right-radio" value=2 data-technique-name="PSSR" onchange="handleContextChange()"> PSSR</label>
+                <label><input type="radio" name="right-radio" value=3 data-technique-name="Transit" onchange="handleContextChange()"> Transit</label>
+                <label><input type="radio" name="right-radio" value=4 data-technique-name="Lunar" onchange="handleContextChange()"> Lunar</label>
+                <label><input type="radio" name="right-radio" value=5 data-technique-name="SRA" onchange="handleContextChange()"> SRA</label>
+                <label><input type="radio" name="right-radio" value=6 data-technique-name="Harmonics" onchange="handleContextChange()"> Harmonics</label>
+                <label><input type="radio" name="right-radio" value=7 data-technique-name="Natal" onchange="handleContextChange()" checked> Natal</label>
+            </div>
+            <div>
+                <label for="orbInput">Orb:</label>
+                <input type="number" id="orbInput" name="orbInput" min="-1" value="-1" onchange="handleContextChange()">
+            </div>
         </div>
 
         <!-- Middle Column -->
         <div class="middle-column">
             <div class="text-section" id="middle-text-1">
-                <p>Row 1: Dynamic content goes here</p>
-                <p>Row 2: Another dynamic line</p>
+                <p>Select items from left and right columns...</p>
             </div>
             <div class="text-section scroll-text" id="middle-scroll-text">
-                <p>Scrollable content generated here...</p>
+                <p>Aspects will load here...</p>
             </div>
         </div>
 
         <!-- Right Column -->
         <div class="column">
-            <div style = "display: flexbox;">
+            <div class="inline-form">
                 <label for="chartdatetime">Datetime:</label>
                 <input type="text" id="chartdatetime" name="chartdatetime" placeholder="yyyy-mm-dd hh:mm:ss">
                 <label for="chartPos">Coords:</label>
-                <input type="text" id="chartPos" name="chartPos" placeholder="[+lat,-long,lat(optional)]">                
+                <input type="text" id="chartPos" name="chartPos" placeholder="[+lat,-long,alt(optional)]">                
                 <button type="button" onclick="generateChart()">Hi</button>                
             </div>
-            <div class="scroll-box" style="height: 400px;">
+            <div class="scroll-box" style="height: 350px;">
                 <ul id="right-list">
                     {% for item in right_column_items %}
-                        <li onclick="updateMiddleContent('{{ item }}', null)">{{ item }}</li>
+                        <li data-value="{{ item }}">{{ item }}</li>
                     {% endfor %}
                 </ul>
             </div>
             <div class="checkbox-group" id="right-checkbox-group">
                 <label>
-                    <input type="checkbox" id="cb-show-data" onchange="updateMiddleContent()"> Show Data
+                    <input type="checkbox" id="cb-show-data" onchange="handleContextChange()"> Show Data
                 </label>
                 <button id="loadChart" onclick="loadChart()">Load Chart</button>
             </div>          
@@ -310,170 +290,329 @@
 
     <!-- Footer -->
     <footer>
-        © 2024 Your Astrology Program. All Rights Reserved.
+        © 2025 Astrology Program. All Rights Reserved.
     </footer>
 
+
     <script>
-        // Function to get selected radio value from a group
-        function getSelectedRadioValue(name) {
-            const radios = document.getElementsByName(name);
-            for (const radio of radios) {
-                if (radio.checked) {
-                    return radio.value;
+        let currentPrimaryDate = null;
+        let currentFetchedSelections = {}; // Should always be an object {}
+
+        // --- Helper: Get currently selected values ---
+        function getCurrentContext() {
+            const selectedLeftItem = document.querySelector('#left-list li.selected');
+            const selectedRightItem = document.querySelector('#right-list li.selected');
+            const selectedRadio = document.querySelector('input[name="right-radio"]:checked');
+            return {
+                primaryDate: selectedLeftItem ? selectedLeftItem.dataset.value : null,
+                event: selectedRightItem ? selectedRightItem.dataset.value : null,
+                techniqueIndex: selectedRadio ? selectedRadio.value : null,
+                techniqueName: selectedRadio ? selectedRadio.dataset.techniqueName : null, // Make sure radios have data-technique-name
+                orb: document.getElementById('orbInput').value,
+                showAccepted: document.getElementById('cb-show-accepted').checked,
+                showData: document.getElementById('cb-show-data').checked
+            };
+        }
+
+        // Function to get selected radio value from a group (keep)
+        function getSelectedRadioValue(name) { /* ... */ }
+
+        // --- Function to Populate Middle List and Apply Highlighting ---
+        function populateAspectList(aspects) {
+            const aspectListDiv = document.getElementById('middle-scroll-text');
+            aspectListDiv.innerHTML = ''; // Clear previous content
+
+            if (!aspects || aspects.length === 0) {
+                aspectListDiv.innerHTML = '<p>No aspects found for this selection.</p>';
+                return;
+            }
+
+            const context = getCurrentContext();
+            // Ensure currentFetchedSelections is an object before accessing
+            const eventSelections = (currentFetchedSelections && currentFetchedSelections[context.event]) ? currentFetchedSelections[context.event] : {};
+            const selectionsForCurrentContext = (eventSelections && eventSelections[context.techniqueName]) ? eventSelections[context.techniqueName] : [];
+
+            aspects.forEach(aspectStr => {
+                const item = document.createElement('div');
+                item.classList.add('aspect-item');
+                item.textContent = aspectStr;
+                item.dataset.aspect = aspectStr; // Store aspect text
+
+                // Apply highlighting if this aspect is in the current selections
+                if (selectionsForCurrentContext.includes(aspectStr)) {
+                    item.classList.add('selected');
                 }
-            }
-            return null;
+                aspectListDiv.appendChild(item);
+            });
         }
 
-        async function generateChart(rightItem = null) {
-            // Get values from input fields
+        // --- Main Function to Update Middle Column ---
+        async function updateMiddleContent() { /* ... keep as is ... */
+            console.log("Updating middle content...");
+            const context = getCurrentContext();
+            const staticTextDiv = document.getElementById('middle-text-1');
+            const scrollTextDiv = document.getElementById('middle-scroll-text');
+
+            if (!context.primaryDate) {
+                staticTextDiv.innerHTML = '<p>Please select a Primary Date.</p>';
+                scrollTextDiv.innerHTML = '';
+                return;
+            }
+            staticTextDiv.innerHTML = '<p>Loading...</p>';
+            scrollTextDiv.innerHTML = '<p>Calculating aspects...</p>';
             try {
-                const chartDatetime = document.getElementById("chartdatetime").value;
-                const chartPos = document.getElementById("chartPos").value;
-                const rightRadioValue = getSelectedRadioValue('right-radio');
-                const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
-
-                const url = `/generate_chart?&chart_datetime=${encodeURIComponent(chartDatetime)}&chart_pos=${encodeURIComponent(chartPos)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`;
-                    
-                window.open(url, '_blank');
-            } catch (error) {
-                console.error('Error:', error);
-            }
-        }
-
-        async function loadChart() {
-            console.log(window.AstroChart);
-            try {
-                // Fetch chart data from the Flask server
-                const response = await fetch('/chart-data');
-                const { radix: dataRadix, transit: dataTransit } = await response.json();
-
-                // Initialize the chart
-                const chart = new AstroChart('paper', 800, 800, {
-                    MARGIN: 100,
-                    SYMBOL_SCALE: 0.8,
-                    COLOR_ARIES: 'transparent',
-                    COLOR_TAURUS: 'transparent',
-                    COLOR_GEMINI: 'transparent',
-                    COLOR_CANCER: 'transparent',
-                    COLOR_LEO: 'transparent',
-                    COLOR_VIRGO: 'transparent',
-                    COLOR_LIBRA: 'transparent',
-                    COLOR_SCORPIO: 'transparent',
-                    COLOR_SAGITTARIUS: 'transparent',
-                    COLOR_CAPRICORN: 'transparent',
-                    COLOR_AQUARIUS: 'transparent',
-                    COLOR_PISCES: 'transparent',
-                });
-
-                // Render the radix chart
-                const radix = chart.radix(dataRadix);
-                radix.addPointsOfInterest({
-                    As: [dataRadix.cusps[0]],
-                    Ic: [dataRadix.cusps[3]],
-                    Ds: [dataRadix.cusps[6]],
-                    Mc: [dataRadix.cusps[9]],
-                });
-
-                // Add transit data to the chart
-                radix.transit(dataTransit);
-            } catch (error) {
-                console.error('Error loading chart data:', error);
-            }
-        }
-
-        document.addEventListener('mouseup', async function(event) {
-            const selectedText = window.getSelection().toString();  // Get the selected text
-
-            // Ensure the selection is not empty (i.e., text was highlighted)
-            if (selectedText.length > 0) {
-                try {
-                    // Default parameters (no event_info and chart_pos, using geo_pos_natal)
-                    chartDatetime = selectedText;  // Example datetime string
-                    const rightRadioValue = getSelectedRadioValue('right-radio') || '1';
-                    const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';  
-                    
-                    // Construct the URL for chart generation
-                    const url = `/generate_chart?chart_datetime=${encodeURIComponent(chartDatetime)}&right_radio=${encodeURIComponent(rightRadioValue)}&right_item=${encodeURIComponent(rightItemText)}`;
-
-                    // Fetch the SVG content (without event info and chart_pos)
-                    const response = await fetch(url);
-
-                    if (response.ok) {
-                        const svgContent = await response.text();  // Get the SVG content as text
-
-                        // Open the SVG content in a new tab
-                        const newWindow = window.open('', '_blank');
-                        newWindow.document.write(svgContent);  // Write SVG content to the new tab
-                        newWindow.document.close();  // Close the document to render the SVG
-                    } else {
-                        console.error('Error fetching SVG file:', response.statusText);
-                    }
-                } catch (error) {
-                    console.error('Error:', error);
+                const url = `/update_content?show_accepted=${encodeURIComponent(context.showAccepted)}&right_radio=${encodeURIComponent(context.techniqueIndex)}&left_item=${encodeURIComponent(context.primaryDate)}&right_item=${encodeURIComponent(context.event || '')}&orb_input=${encodeURIComponent(context.orb)}&show_data=${encodeURIComponent(context.showData)}`;
+                const response = await fetch(url);
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error ${response.status}: ${errorData.static_message || response.statusText}`);
                 }
-            }
-        });
-
-        async function updateMiddleContent(rightItem = null, leftItem = null) {
-            const isShowAccept = document.getElementById('cb-show-accepted').checked;
-            const isShowData = document.getElementById('cb-show-data').checked;
-            const rightRadioValue = getSelectedRadioValue('right-radio');
-            const orbInputValue = document.getElementById('orbInput').value;
-            // Get the clicked item from column 1 or 3
-            const leftItemText = leftItem || document.querySelector('#left-list .selected')?.textContent || '';
-            const rightItemText = rightItem || document.querySelector('#right-list .selected')?.textContent || '';
-
-            try {
-                // Send the AJAX request to the Flask route
-                let response = await fetch(`/update_content?&show_accepted=${encodeURIComponent(isShowAccept)}&right_radio=${encodeURIComponent(rightRadioValue)}&left_item=${encodeURIComponent(leftItemText)}&right_item=${encodeURIComponent(rightItemText)}&orb_input=${encodeURIComponent(orbInputValue)}&show_data=${encodeURIComponent(isShowData)}`);
-                let data = await response.json();
-
-                // Update the static and scrollable sections of the middle column with the response data
-                document.getElementById('middle-text-1').innerHTML = `<p>${data.static_message}</p>`;
-                document.getElementById('middle-scroll-text').innerHTML = `<p>${data.scrollable_message}</p>`;
+                const data = await response.json();
+                staticTextDiv.innerHTML = `<p>${data.static_message || 'Info loaded.'}</p>`;
+                currentFetchedSelections = data.selections || {}; // Ensure it's an object
+                console.log("Fetched selections for date:", currentPrimaryDate, currentFetchedSelections);
+                populateAspectList(data.aspects);
             } catch (error) {
                 console.error('Error fetching content:', error);
+                staticTextDiv.innerHTML = `<p>Error loading data: ${error.message}</p>`;
+                scrollTextDiv.innerHTML = '<p>Could not load aspects.</p>';
+                 currentFetchedSelections = {}; // Reset on error
             }
         }
 
-        // Add event listeners to handle selection changes in the left and right column lists
-        document.querySelectorAll('#left-list li').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('#left-list li').forEach(li => li.classList.remove('selected'));
-                this.classList.add('selected');
-                updateMiddleContent(null, this.textContent);
-            });
-        });
 
-        document.querySelectorAll('#right-list li').forEach(item => {
-            item.addEventListener('click', function() {
-                document.querySelectorAll('#right-list li').forEach(li => li.classList.remove('selected'));
-                this.classList.add('selected');
-                updateMiddleContent(this.textContent, null);
-            });
-        });
+        // --- Function to Re-apply Highlighting Only ---
+        function updateAspectHighlightingOnly() { /* ... keep as is ... */
+            console.log("Updating aspect highlighting only...");
+            const aspectListDiv = document.getElementById('middle-scroll-text');
+            const aspectItems = aspectListDiv.querySelectorAll('.aspect-item');
+            const context = getCurrentContext();
 
-        function setupList(id) {
-            const listItems = document.querySelectorAll(`#${id} li`);
-            listItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    // Remove 'active' class from all items in the list
-                    listItems.forEach(li => li.classList.remove('active'));
-                    
-                    // Add 'active' class to the clicked item
-                    this.classList.add('active');
-                });
+            if (!context.primaryDate || !context.event || !context.techniqueName) {
+                console.log("Highlighting skipped: Context incomplete");
+                aspectItems.forEach(item => item.classList.remove('selected'));
+                return;
+            }
+
+             // Get selections specifically for the current event and technique
+            const eventSelections = (currentFetchedSelections && currentFetchedSelections[context.event]) ? currentFetchedSelections[context.event] : {};
+            const selectionsForCurrentContext = (eventSelections && eventSelections[context.techniqueName]) ? eventSelections[context.techniqueName] : [];
+            console.log(`Highlighting based on context: Event=${context.event}, Tech=${context.techniqueName}, Selections=`, selectionsForCurrentContext);
+
+            aspectItems.forEach(item => {
+                const aspectText = item.dataset.aspect;
+                if (selectionsForCurrentContext.includes(aspectText)) {
+                    item.classList.add('selected');
+                } else {
+                    item.classList.remove('selected');
+                }
             });
         }
 
-        document.addEventListener('DOMContentLoaded', (event) => {
-            // Apply the function to both lists
-            setupList('left-list');
-            setupList('right-list');
+
+        // --- Function to Send Selection Update to Backend ---
+        async function sendSelectionUpdate(aspectText, isSelected) { /* ... keep as is ... */
+            const context = getCurrentContext();
+            if (!context.primaryDate || !context.event || context.techniqueIndex === null) {
+                console.warn("Cannot send selection update: Context incomplete (Date, Event, or Technique missing).");
+                const aspectItem = document.querySelector(`.aspect-item[data-aspect="${aspectText}"]`);
+                 if(aspectItem) aspectItem.classList.toggle('selected'); // Toggle back
+                alert("Please ensure a Primary Date, Event, and Technique are selected before choosing aspects.");
+                return;
+            }
+            console.log(`Sending update: ${aspectText}, Selected: ${isSelected}, Context:`, context);
+            try {
+                const response = await fetch('/update_selection', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        primary_date: context.primaryDate,
+                        event: context.event,
+                         technique_idx: context.techniqueIndex, // Send index
+                        aspect: aspectText,
+                        selected: isSelected
+                    })
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error ${response.status}: ${errorData.message || response.statusText}`);
+                }
+                const result = await response.json();
+                console.log("Backend update response:", result);
+                if (result.status === 'success') {
+                     // Update local cache *after* successful backend update
+                    updateLocalSelectionCache(context.primaryDate, context.event, context.techniqueName, aspectText, isSelected);
+                } else {
+                     // If backend reported success false, revert visual?
+                    throw new Error(result.message || "Backend reported update failure.");
+                }
+            } catch (error) {
+                console.error("Error updating selection:", error);
+                const aspectItem = document.querySelector(`.aspect-item[data-aspect="${aspectText}"]`);
+                 if(aspectItem) aspectItem.classList.toggle('selected'); // Toggle back
+                alert(`Failed to save selection: ${error.message}`);
+            }
+        }
+
+        // --- Helper to update the JS cache of selections ---
+        // --- CORRECTED: Replaced setdefault with standard JS ---
+        function updateLocalSelectionCache(primaryDate, eventStr, techniqueName, aspect, isSelected) {
+            if (primaryDate !== currentPrimaryDate) return; // Safety check
+
+            // Ensure currentFetchedSelections is an object
+            if (typeof currentFetchedSelections !== 'object' || currentFetchedSelections === null) {
+                console.error("currentFetchedSelections is not an object!", currentFetchedSelections);
+                currentFetchedSelections = {}; // Reset it if it's wrong
+            }
+
+            // Ensure eventStr property exists as an object
+            if (!currentFetchedSelections[eventStr]) {
+                currentFetchedSelections[eventStr] = {};
+            }
+
+            // Ensure techniqueName property exists as an array
+            if (!currentFetchedSelections[eventStr][techniqueName]) {
+                currentFetchedSelections[eventStr][techniqueName] = [];
+            }
+
+            const list = currentFetchedSelections[eventStr][techniqueName];
+
+            if (isSelected) {
+                if (!list.includes(aspect)) {
+                    list.push(aspect);
+                    console.log("Added to local cache:", aspect);
+                }
+            } else {
+                const index = list.indexOf(aspect);
+                if (index > -1) {
+                    list.splice(index, 1);
+                    console.log("Removed from local cache:", aspect);
+                }
+            }
+             // console.log("Updated local cache:", JSON.stringify(currentFetchedSelections));
+        }
+
+
+        // --- Function to Trigger Saving Data ---
+        async function saveSelectionsForDate(dateToSave) { /* ... keep as is ... */
+            if (!dateToSave) {
+                console.log("No previous date to save.");
+                 return; // Nothing to save
+            }
+            console.log(`Requesting save for date: ${dateToSave}`);
+            try {
+                const response = await fetch('/save_data', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ date_to_save: dateToSave })
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`HTTP error ${response.status}: ${errorData.message || response.statusText}`);
+                }
+                const result = await response.json();
+                console.log("Backend save response:", result);
+                 if(result.status !== 'success' && result.message !== "No selections to save") { // Don't alert if just nothing to save
+                    alert(`Warning: Could not save data for ${dateToSave}. ${result.message}`);
+                }
+            } catch (error) {
+                console.error("Error saving data:", error);
+                alert(`Error saving data for ${dateToSave}: ${error.message}`);
+            }
+        }
+
+        // --- Event Listener for Left List Clicks (Delegation) ---
+        document.getElementById('left-list').addEventListener('click', async function(event) {
+            if (event.target && event.target.tagName === 'LI') {
+                const clickedItem = event.target;
+                const newPrimaryDate = clickedItem.dataset.value;
+
+                if (newPrimaryDate === currentPrimaryDate) return; // Do nothing if same date clicked
+
+                console.log(`Primary Date changing from ${currentPrimaryDate} to ${newPrimaryDate}`);
+                await saveSelectionsForDate(currentPrimaryDate); // Save previous
+
+                document.querySelectorAll('#left-list li').forEach(li => li.classList.remove('selected'));
+                clickedItem.classList.add('selected');
+
+                currentPrimaryDate = newPrimaryDate; // Update global state
+                currentFetchedSelections = {}; // Clear cache
+
+                await updateMiddleContent(); // Load new content
+            }
         });
 
-        
+        // --- Event Listener for Right List Clicks (Delegation) ---
+        document.getElementById('right-list').addEventListener('click', function(event) {
+            if (event.target && event.target.tagName === 'LI') {
+                const clickedItem = event.target;
+
+                // If the same event is clicked again, do nothing
+                if (clickedItem.classList.contains('selected')) {
+                    return;
+                }
+
+                // Update selection visuals
+                document.querySelectorAll('#right-list li').forEach(li => li.classList.remove('selected'));
+                clickedItem.classList.add('selected');
+
+                // Trigger a full content update for the new event
+                updateMiddleContent(); // <<<--- CHANGE HERE
+            }
+        });
+
+        // --- Event Listener for Middle List Aspect Clicks (Delegation) ---
+        document.getElementById('middle-scroll-text').addEventListener('click', function(event) {
+            if (event.target && event.target.classList.contains('aspect-item')) {
+                const aspectItem = event.target;
+                const aspectText = aspectItem.dataset.aspect;
+
+                aspectItem.classList.toggle('selected'); // Toggle visual
+                const isSelected = aspectItem.classList.contains('selected');
+
+                sendSelectionUpdate(aspectText, isSelected); // Send update
+            }
+        });
+
+
+        // --- Function to handle changes in context controls ---
+        function handleContextChange() {
+            // Triggers a full update as orb/show flags require backend recalculation
+            updateMiddleContent();
+        }
+
+
+        // --- Chart Generation and Other Functions ---
+        async function generateChart(rightItem = null) { /* ... keep as is ... */ }
+        async function loadChart() { /* ... keep as is ... */ }
+
+
+        // --- Initial Load on Page Ready ---
+        // --- MERGED AND CORRECTED DOMContentLoaded ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Select the first item in the left list by default if it exists
+            const firstLeftItem = document.querySelector('#left-list li');
+            if (firstLeftItem) {
+                firstLeftItem.classList.add('selected');
+                currentPrimaryDate = firstLeftItem.dataset.value; // Set initial date
+                console.log("Initial primary date set:", currentPrimaryDate);
+                updateMiddleContent(); // Load initial content
+            } else {
+                console.log("No items in left list on load.");
+                document.getElementById('middle-text-1').innerHTML = '<p>No primary dates found.</p>';
+            }
+
+            // Ensure a default technique is selected (HTML 'checked' handles this)
+            const defaultTechnique = document.querySelector('input[name="right-radio"]:checked');
+            if (!defaultTechnique) {
+                 // If no default checked in HTML, check the first one
+                const firstTechnique = document.querySelector('input[name="right-radio"]');
+                if (firstTechnique) firstTechnique.checked = true;
+            }
+
+             // Event delegation listeners are already set up above, no need for setupList or forEach listeners here.
+        });
+
     </script>
 </body>
 </html>
