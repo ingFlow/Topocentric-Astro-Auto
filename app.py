@@ -19,6 +19,9 @@ import json
 from constants import calc_planets_pof_houses_labelled
 from aspects_base import calculate_obliquity
 from kerykeion import AstrologicalSubject, KerykeionChartSVG
+import logging
+
+logging.basicConfig(level=logging.INFO)
 
 class aTechniqueType:
     PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
@@ -37,17 +40,27 @@ restrict_orb = 3
 current_file = "ing tea.json"
 DATA_INPUT_DIR = 'data_input'
 
+selections_data = {}
+
 app = Flask(__name__)
+app.secret_key = 'toposecret'
 
 @app.route('/')
 def home():
     global current_file
     files = [f for f in os.listdir(DATA_INPUT_DIR) if f.endswith('.json')]
     current_file = request.args.get('filename', current_file)
+    if not files:
+        return "Error: No JSON files found in data_input directory.", 500
     if current_file not in files:
         current_file = files[0]
 
-    dt_actual_dob, _, dt_epoch, geopos_nat, list_of_events = main_techniques.get_json_birth_data(f"data_input/{current_file}")
+
+    try:
+        dt_actual_dob, _, dt_epoch, geopos_nat, list_of_events = main_techniques.get_json_birth_data(f"data_input/{current_file}")
+    except Exception as e:
+        return f"Error loading data file {current_file}. Please check the file format and content.", 500
+    
     global geo_pos_natal, dt_radix
     geo_pos_natal = geopos_nat
     dt_radix = dt_actual_dob
@@ -88,158 +101,410 @@ def home():
         list_times.append(t)'''
     
     #left_items = [t.isoformat() for t in list_times]
-    left_items = list_times
+    left_items = [dt.isoformat() for dt in list_times]
     right_items = [f"{dt}, {ty}, {i}, {loc}" for dt, ty, i, loc in zip(list_dt_events, list_type_events, list_event_index,list_event_locations)]
+    logging.info(f"Serving homepage with file: {current_file}")
+    
+    
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
+
+def parse_selection_file(filepath):
+    """Reads a saved selection file and parses it into a dictionary."""
+    if not os.path.exists(filepath):
+        return None # Return None if file doesn't exist
+
+    loaded_selections = {}
+    current_event = None
+    current_technique = None
+
+    try:
+        with open(filepath, 'r', encoding='utf-8') as f:
+            for line in f:
+                # Use rstrip() to remove only trailing newline/whitespace if needed
+                processed_line = line.rstrip()
+                if not processed_line.startswith(' ') and processed_line.startswith("Event: "):
+                    current_event = processed_line[len("Event: "):].strip() # Strip result AFTER slicing
+                    loaded_selections[current_event] = {}
+                    current_technique = None # Reset technique when new event starts
+
+                # Check for Technique (must start with spaces)
+                elif processed_line.startswith("  ") and not processed_line.startswith("   ") and "Technique: " in processed_line:
+                    if current_event:
+                        # Find the technique name after the prefix
+                        try:
+                            technique_part = processed_line.split("Technique: ", 1)[1]
+                            current_technique = technique_part.strip() # Strip result AFTER splitting/slicing
+                            loaded_selections[current_event][current_technique] = []
+                        except IndexError:
+                            logging.warning(f"Malformed Technique line in {filepath}: {line.rstrip()}")
+                            current_technique = None # Invalid state
+                    else:
+                        logging.warning(f"Found Technique line without preceding Event in {filepath}: {line.rstrip()}")
+                        current_technique = None # Invalid state
+
+                # Check for Aspect (must start with more spaces and '- ')
+                elif processed_line.startswith("    - ") and not processed_line.startswith("     "):
+                    if current_event and current_technique:
+                        # Check if the list was initialized correctly
+                        if isinstance(loaded_selections[current_event].get(current_technique), list):
+                            aspect = processed_line[len("    - "):].strip() # Strip result AFTER slicing
+                            loaded_selections[current_event][current_technique].append(aspect)
+                        else:
+                            logging.warning(f"Found Aspect line but Technique list not initialized in {filepath}: {line.rstrip()}")
+                    # else: Ignore aspect lines found out of place (e.g., before a Technique)
+
+        logging.info(f"Successfully parsed selections from {filepath}")
+        # --- Keep the debug print from your version ---
+        print("Parsed Dictionary:", loaded_selections) # Or use logging.info
+        # --- End Debug Print ---
+        return loaded_selections
+
+    except Exception as e:
+        logging.error(f"Error parsing selection file {filepath}: {e}")
+        return None # Return None on error
 
 @app.route('/update_content')
 def update_content():
-    global restrict_orb
+    global restrict_orb, selections_data
     flag_show_accepted = request.args.get('show_accepted', default='false') == 'true'
-    technique = int(request.args.get('right_radio', ''))
-    radix_date = request.args.get('left_item', '')
-    dt_event = request.args.get('right_item', '')  
+    technique = int(request.args.get('right_radio', '0'))
+    radix_date_str = request.args.get('left_item', '')
+    right_item_str = request.args.get('right_item', '')  
     restrict_orb = int(request.args.get('orb_input',restrict_orb))
     flag_orb_restrict = True if (restrict_orb != -1) else False
     flag_show_data = request.args.get('show_data', default='false') == 'true'
 
+    static_message = ''
+    list_all_asp = []
+    score = 0
+    dt_event = None
+    
+    if not radix_date_str:
+        return jsonify({
+            'static_message': "Pleasee select a radix date.",
+            'aspects': [],
+            'selections': {}
+        }), 400
+
     try:
-        radix_date = datetime.fromisoformat(request.args.get('left_item', ''))
+        radix_date = datetime.fromisoformat(radix_date_str)
         jd_radix = julian.to_jd(radix_date)
-        static_message = ''
-        event_info = request.args.get('right_item', '').split(', ')
-        dt_event = datetime.fromisoformat(event_info[0])
-        event_id = int(event_info[2])
-        event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
-        event_geopos = [float(i) for i in event_locstr]
-        score = 0
-
-        rad_houses_info = swe.houses(jd_radix, geo_pos_natal[0], geo_pos_natal[1], b'T')
-        rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
-        rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_pos_natal)
-        if technique == aTechniqueType.PRIMARY_DIRECT:
-            e = calculate_obliquity(jd_radix)
-            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
-            str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
-            pd_info = pd_auto_obj.get_extended_information()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
-            mdos_list = pd_auto_obj.get_mdos_natal()
-            print(mdos_list)
-        elif technique == aTechniqueType.SECONDARY_DIRECT:
-            e = calculate_obliquity(jd_radix)
-            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
-            secondary_info = secondary_obj.get_dict_info()
-            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
-            str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
-        elif technique == aTechniqueType.PSSR:
-            pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
-            pssr_info = pssr_obj.get_dict_info()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-        elif technique == aTechniqueType.TRANSIT:
-            transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), event_geopos, rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
-            transit_info = transit_obj.get_dict_info()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-        elif technique == aTechniqueType.SRA:
-            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
-            sra_info = sra_auto_obj.get_info()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-            str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
-        elif technique == aTechniqueType.NATAL:
-            str_all_directed_aspects = ''
-            for p in rad_planets_pof_houses_labelled:
-                str_all_directed_aspects+= f"{p}\n"
-        elif technique == aTechniqueType.LUNAR:
-            lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)
-            lunar_info = lunar_obj.get_info()
-            all_charts = lunar_obj.get_all_lunars()
-            str_all_directed_aspects = lunar_auto.get_str_labelled_aspects_from_array(all_charts)
-            counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
-            str_counts = lunar_auto.get_str_planet_counts(counts)
-            mal_count, ben_count = lunar_auto.count_mal_ben_from_str_aspects(str_all_directed_aspects)
-            static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
-        elif technique == aTechniqueType.HARMONICS:
-            harmonics_obj = harmonics_auto.Harmonics_Auto(jd_radix, julian.to_jd(dt_event), geo_pos_natal, rad_planets_pof_houses_labelled)
-            str_rad_harm_aspects = harmonics_obj.get_str_aspects()
-            harmonics_info = harmonics_obj.get_dict_info()
-            str_all_directed_aspects = str_rad_harm_aspects
         
-        str_all_directed_aspects = re.sub(r"H10,","MC,", str_all_directed_aspects)
-        str_all_directed_aspects = re.sub(r"H1,","AS,", str_all_directed_aspects)
-        str_all_directed_aspects = re.sub(r"H7,","DS,", str_all_directed_aspects)
-        str_all_directed_aspects = re.sub(r"H4,","IC,", str_all_directed_aspects)
-
-        list_all_asp = str_all_directed_aspects.split('\n')
-
-        if flag_show_accepted:
-            if technique != aTechniqueType.LUNAR and technique != aTechniqueType.PSSR:
-                score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
-                list_all_asp = str_accepted_aspects.split('\n')
-            elif technique == aTechniqueType.PSSR:
-                score, str_accepted_aspects = pd_automate.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
-                list_all_asp = str_accepted_aspects.split('\n')
-                
-        temp_arr = []
-        if flag_orb_restrict:
-            for line in list_all_asp:
-                match = re.search(r'(\d+(\.\d+)?)\'', line)
-                if match:
-                    asp_orb_deg = float(match.group(1))
-                    if asp_orb_deg <= restrict_orb:
-                        temp_arr.append(line)
-                else:
-                    temp_arr.append(line)
-            list_all_asp = temp_arr
+        event_info = []
+        event_geopos = geo_pos_natal
         
-        list_all_asp = list(filter(lambda s: s.strip(), list_all_asp))
-        html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in list_all_asp) + "</ul>"
+        if right_item_str:
+            event_info = right_item_str.split(', ')
+            if len(event_info) >= 6:
+                try:
+                    dt_event = datetime.fromisoformat(event_info[0])
+                    event_id = int(event_info[2])
+                    event_locstr = [event_info[3][1:],event_info[4],event_info[5][:-1]]
+                    event_geopos = [float(i) for i in event_locstr]
+                except (ValueError, IndexError) as parse_error:
+                    logging.warning(f"Could not parse event info (right_item_str): {right_item_str}: {parse_error}")
+                    static_message = "Please select valid event"
+                    event_id = None # Ensure event_id is None if parsing fails
+                    dt_event = None
+            else:
+                logging.warning(f"Incomplete event info string: {right_item_str}")
+                static_message = "Please select valid event"
         
-        if technique == aTechniqueType.LUNAR and flag_show_accepted:
-            html_list = str_counts.replace(",", "\n")
-
-        if flag_show_data:
-            technique_data = None
-            if technique == aTechniqueType.PRIMARY_DIRECT:
-                technique_data = pd_info
-            elif technique == aTechniqueType.SECONDARY_DIRECT:
-                technique_data = secondary_info
-            elif technique == aTechniqueType.PSSR:
-                technique_data = pssr_info
-            elif technique == aTechniqueType.TRANSIT:
-                technique_data = transit_info
-            elif technique == aTechniqueType.LUNAR:
-                technique_data = lunar_info
-            elif technique == aTechniqueType.SRA:
-                technique_data = sra_info
-            elif technique == aTechniqueType.HARMONICS:
-                technique_data = harmonics_info
+        if right_item_str or technique == aTechniqueType.NATAL:
+            rad_houses_info = swe.houses(jd_radix, geo_pos_natal[0], geo_pos_natal[1], b'T')
+            rad_planets_equatorial = pd_automate.calc_rad_planets_equatorial(jd_radix)
+            rad_planets_pof_houses_labelled = calc_planets_pof_houses_labelled(jd_radix, geo_pos_natal)
+            str_all_directed_aspects = ""
             
-            if technique == aTechniqueType.PRIMARY_DIRECT or technique == aTechniqueType.LUNAR:
-                data_list = []
-                for main_key, sub_dict in technique_data.items():
-                    data_list.append(f"{main_key}:") 
+            if dt_event:
+                jd_event = julian.to_jd(dt_event)
+                e = calculate_obliquity(jd_event)
+                
+                if technique == aTechniqueType.PRIMARY_DIRECT:
+                    pd_auto_obj  = pd_automate.PD_Automate(jd_radix, jd_event, geo_pos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
+                    str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
+                    pd_info = pd_auto_obj.get_extended_information()
+                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
+                    mdos_list = pd_auto_obj.get_mdos_natal()
+                elif technique == aTechniqueType.SECONDARY_DIRECT:
+                    secondary_obj = secondary_automate.Secondary_Auto(jd_radix, jd_event, geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
+                    secondary_info = secondary_obj.get_dict_info()
+                    str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
+                    str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
+                elif technique == aTechniqueType.PSSR:
+                    pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
+                    str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
+                    pssr_info = pssr_obj.get_dict_info()
+                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+                elif technique == aTechniqueType.TRANSIT:
+                    transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, jd_event, event_geopos, rad_planets_pof_houses_labelled)
+                    str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
+                    transit_info = transit_obj.get_dict_info()
+                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+                elif technique == aTechniqueType.SRA:
+                    sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_pof_houses_labelled)
+                    str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
+                    sra_info = sra_auto_obj.get_info()
+                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
+                    str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
+                elif technique == aTechniqueType.NATAL:
+                    for p in rad_planets_pof_houses_labelled:
+                        str_all_directed_aspects+= f"{p}\n"
+                elif technique == aTechniqueType.LUNAR:
+                    lunar_obj = lunar_auto.Lunar_Auto(julian.from_jd(jd_radix),dt_event,event_geopos,geo_pos_natal,lunar_orb)
+                    lunar_info = lunar_obj.get_info()
+                    all_charts = lunar_obj.get_all_lunars()
+                    str_all_directed_aspects = lunar_auto.get_str_labelled_aspects_from_array(all_charts)
+                    counts = lunar_auto.count_each_planet_lunars(str_all_directed_aspects)
+                    str_counts = lunar_auto.get_str_planet_counts(counts)
+                    mal_count, ben_count = lunar_auto.count_mal_ben_from_str_aspects(str_all_directed_aspects)
+                    static_message = f"{str_counts} #Malefics: {mal_count} vs Benefics: {ben_count}#"
+                elif technique == aTechniqueType.HARMONICS:
+                    harmonics_obj = harmonics_auto.Harmonics_Auto(jd_radix, jd_event, geo_pos_natal, rad_planets_pof_houses_labelled)
+                    harmonics_info = harmonics_obj.get_dict_info()
+                    str_all_directed_aspects = harmonics_obj.get_str_aspects()
+                
+                str_all_directed_aspects = re.sub(r"H10,","MC,", str_all_directed_aspects)
+                str_all_directed_aspects = re.sub(r"H1,","AS,", str_all_directed_aspects)
+                str_all_directed_aspects = re.sub(r"H7,","DS,", str_all_directed_aspects)
+                str_all_directed_aspects = re.sub(r"H4,","IC,", str_all_directed_aspects)
+
+                list_all_asp = str_all_directed_aspects.split('\n')
+                list_all_asp = [asp.strip() for asp in list_all_asp if asp.strip()] 
+
+                if flag_show_accepted:
+                    temp_filtered_list = []
+                    str_accepted_aspects = ""
+                    try:
+                        if technique in [aTechniqueType.PRIMARY_DIRECT, aTechniqueType.SECONDARY_DIRECT, aTechniqueType.TRANSIT, aTechniqueType.SRA, aTechniqueType.HARMONICS]:
+                            if event_id is not None:
+                                score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
+                                temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
+                                logging.info(f"Filtered aspects using pd_score for event {event_id}. Count: {len(temp_filtered_list)}")
+                            else:
+                                logging.warning(f"Show Accepted checked for technique {technique}, but no valid event_id found. Skipping filtering.")
+                                temp_filtered_list = list_all_asp # Show unfiltered if event_id missing but flag checked      
+                        elif technique == aTechniqueType.PSSR:
+                            if event_id is not None:
+                                score, str_accepted_aspects = pd_automate.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
+                                temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
+                                logging.info(f"Filtered aspects using event_acceptable for PSSR event {event_id}. Count: {len(temp_filtered_list)}")
+                            else:
+                                logging.warning(f"Show Accepted checked for PSSR, but no valid event_id found. Skipping filtering.")
+                                temp_filtered_list = list_all_asp # Show unfiltered if event_id missing but flag checked
+                        elif technique == aTechniqueType.LUNAR:
+                            logging.info("Show Accepted checked for LUNAR - currently no specific filter applied.")
+                            temp_filtered_list = list_all_asp
+                        elif technique == aTechniqueType.NATAL:
+                            logging.info("Show Accepted checked for NATAL - currently no specific filter applied.")
+                            temp_filtered_list = list_all_asp
+                            
+                        list_all_asp = temp_filtered_list
+                        
+                    except Exception as filter_error:
+                        logging.error(f"Error during filtering for technique {technique}, event {event_id}: {filter_error}")
+                        list_all_asp = [asp.strip() for asp in str_all_directed_aspects.split('\n') if asp.strip()] # Revert to unfiltered
+                        static_message = "Error filtering aspects. Please check the event ID and try again."
+                            
+
+                if flag_orb_restrict:
+                    orb_restricted_list = []
+                    for line in list_all_asp:
+                        match = re.search(r'(\d+(\.\d+)?)\'', line)
+                        if match:
+                            try:
+                                asp_orb_deg = float(match.group(1))
+                                if asp_orb_deg <= restrict_orb:
+                                    orb_restricted_list.append(line)
+                            except ValueError:
+                                orb_restricted_list.append(line)
+                        else:
+                            orb_restricted_list.append(line)
+                    list_all_asp = orb_restricted_list
+
+                if flag_show_data:
+                    technique_data = {}
+                    if technique == aTechniqueType.PRIMARY_DIRECT:
+                        technique_data = pd_info
+                    elif technique == aTechniqueType.SECONDARY_DIRECT:
+                        technique_data = secondary_info
+                    elif technique == aTechniqueType.PSSR:
+                        technique_data = pssr_info
+                    elif technique == aTechniqueType.TRANSIT:
+                        technique_data = transit_info
+                    elif technique == aTechniqueType.LUNAR:
+                        technique_data = lunar_info
+                    elif technique == aTechniqueType.SRA:
+                        technique_data = sra_info
+                    elif technique == aTechniqueType.HARMONICS:
+                        technique_data = harmonics_info
                     
-                    if main_key == "MDOs":
-                        data_list.append(sub_dict)
-                    else:
-                        for sub_key, value in sub_dict.items():
-                            data_list.append(f"  {sub_key}: {value}")
-            else:  
-                data_list = [f"{key}: {value}" for key, value in technique_data.items()]
-            html_list = "<ul>" + "".join(f"<li>{item}</li>" for item in data_list) + "</ul>"
+                    if technique == aTechniqueType.PRIMARY_DIRECT or technique == aTechniqueType.LUNAR:
+                        data_list = []
+                        for main_key, sub_dict in technique_data.items():
+                            data_list.append(f"{main_key}:") 
+                            
+                            if main_key == "MDOs":
+                                data_list.append(sub_dict)
+                            else:
+                                for sub_key, value in sub_dict.items():
+                                    data_list.append(f"  {sub_key}: {value}")
+                    else:  
+                        data_list = [f"{key}: {value}" for key, value in technique_data.items()]
+                    
+                    list_all_asp = data_list
 
-        static_message = static_message + f"Radix Date: {radix_date} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LAT: {geo_pos_natal[0]} &nbsp;&nbsp;&nbsp;&nbsp; GEO_LONG: {geo_pos_natal[1]} <br> Event Date: {dt_event} &nbsp;&nbsp;&nbsp;&nbsp; Event Type: {event_info[1]}: {event_id} &nbsp;&nbsp;&nbsp;&nbsp; Score: {score}"           
-        scrollable_message = f"{html_list}"
-    except:
-        static_message = f"Static Content: Only show accepted directions?: {flag_show_accepted}, Technique: {technique}"
-        scrollable_message = f"Scrollable Content: Detailed information about {type(radix_date)} {radix_date} and {type(dt_event)} {dt_event} "
+            selections_to_send = {} # Start with empty
+            # 1. Try to load from file first
+            save_dir = 'saved_selections'
+            filename = sanitize_filename(radix_date_str)
+            filepath = os.path.join(save_dir, filename)
+            
+            logging.info(f"Attempting to parse file: {filepath}") # DEBUG LINE
+            loaded_selections = parse_selection_file(filepath)
+            
+            if loaded_selections is not None:
+                logging.info(f"Using selections loaded from file: {filepath}")
+                selections_to_send = loaded_selections
+                print(loaded_selections)
+                selections_data[radix_date_str] = loaded_selections # Update in-memory data
+            else:
+                #2. if file not found, or failed to parse, use in-memory data
+                logging.info(f"No valid saved file found for {radix_date_str}. Using in-memory selections (if any).")
+                selections_to_send = selections_data.get(radix_date_str, {})
 
-    return jsonify({
-        'static_message': static_message,
-        'scrollable_message': scrollable_message
-    })
+            static_message_parts = []
+            if radix_date:
+                static_message_parts.append(f"Radix Date: {radix_date.isoformat()}")
+            if geo_pos_natal:
+                static_message_parts.append(f"GEO_LAT: {geo_pos_natal[0]} GEO_LONG: {geo_pos_natal[1]}")
+            if dt_event and event_info:
+                static_message_parts.append(f"Event Date: {dt_event.isoformat()}")
+                static_message_parts.append(f"Event Type: {event_info[1]}: {event_id} Score: {score}")  
+                static_message_parts.append(f"Score: {score}")
+            if technique == aTechniqueType.LUNAR and 'str_counts' in locals():
+                static_message_parts.append(f"Lunar Counts: {str_counts} Mal:{mal_count} Ben:{ben_count}")
+
+            static_message = " | ".join(static_message_parts) # Use separator
+            
+            return jsonify({
+                'static_message': static_message,
+                'aspects': list_all_asp, # Return the list of strings
+                'selections': selections_to_send # Send back all known selections for this date
+            })
+        
+    except ValueError as e:
+        logging.error(f"Value error processing request: {e}")
+        return jsonify({'static_message': f"Error: Invalid date format or value. {e}", 'aspects': [], 'selections': {}}), 400
+        
+    except Exception as e:
+        logging.error(f"Error in /update_content")
+        return jsonify({'static_message': f"An unexpected error occurred: {e}", 'aspects': [], 'selections': {}}), 500
+
+@app.route('/update_selection', methods=['POST'])
+def update_selection():
+    global selections_data
+    data = request.get_json()
+
+    primary_date_str = data.get('primary_date')
+    event_str = data.get('event')
+    technique_idx = data.get('technique_idx') # Send index from frontend
+    aspect = data.get('aspect')
+    is_selected = data.get('selected')
+
+    # Basic validation
+    if not all([primary_date_str, event_str, technique_idx is not None, aspect is not None, is_selected is not None]):
+        logging.warning(f"Missing data in /update_selection: {data}")
+        return jsonify({"status": "error", "message": "Missing data"}), 400
+
+    try:
+        technique_name = get_technique_name(int(technique_idx)) # Get the string name
+
+        # Ensure nested dictionaries/lists exist
+        selections_data.setdefault(primary_date_str, {})
+        selections_data[primary_date_str].setdefault(event_str, {})
+        selections_data[primary_date_str][event_str].setdefault(technique_name, [])
+
+        # Add or remove the aspect
+        aspect_list = selections_data[primary_date_str][event_str][technique_name]
+        if is_selected:
+            if aspect not in aspect_list:
+                aspect_list.append(aspect)
+                logging.info(f"Added selection: {primary_date_str} > {event_str} > {technique_name} > {aspect}")
+        else:
+            if aspect in aspect_list:
+                aspect_list.remove(aspect)
+                logging.info(f"Removed selection: {primary_date_str} > {event_str} > {technique_name} > {aspect}")
+
+        # Clean up empty structures (optional but good practice)
+        if not selections_data[primary_date_str][event_str][technique_name]:
+            del selections_data[primary_date_str][event_str][technique_name]
+        if not selections_data[primary_date_str][event_str]:
+            del selections_data[primary_date_str][event_str]
+        if not selections_data[primary_date_str]:
+            del selections_data[primary_date_str]
+
+        # logging.debug(f"Current selections_data: {json.dumps(selections_data, indent=2)}")
+        return jsonify({"status": "success", "message": "Selection updated"})
+
+    except Exception as e:
+        logging.exception("Error in /update_selection")
+        return jsonify({"status": "error", "message": f"Server error: {e}"}), 500
+
+@app.route('/save_data', methods=['POST'])
+def save_data():
+    global selections_data
+    data = request.get_json()
+    date_to_save_str = data.get('date_to_save') # Expecting ISO string format
+
+    if not date_to_save_str:
+        return jsonify({"status": "error", "message": "Missing date_to_save"}), 400
+
+    if date_to_save_str not in selections_data:
+        logging.info(f"No selections found for date {date_to_save_str}, nothing to save.")
+        return jsonify({"status": "success", "message": "No selections to save"})
+
+    # Prepare filename
+    filename = sanitize_filename(date_to_save_str) # Use existing sanitize function
+    save_dir = 'saved_selections' # Define a subdirectory for saved files
+    filepath = os.path.join(save_dir, filename)
+
+    # Ensure the save directory exists
+    os.makedirs(save_dir, exist_ok=True)
+
+    logging.info(f"Attempting to save data for {date_to_save_str} to {filepath}")
+
+    try:
+        with open(filepath, 'w', encoding='utf-8') as f:
+            date_data = selections_data[date_to_save_str]
+            sorted_events = sorted(date_data.keys()) # Sort events for consistent output
+
+            for event_str in sorted_events:
+                if not date_data[event_str]: continue # Skip empty events
+                f.write(f"Event: {event_str}\n")
+                technique_data = date_data[event_str]
+                sorted_techniques = sorted(technique_data.keys()) # Sort techniques
+
+                for technique_name in sorted_techniques:
+                    if not technique_data[technique_name]: continue # Skip empty techniques
+                    f.write(f"  Technique: {technique_name}\n")
+                    aspect_list = technique_data[technique_name]
+                    sorted_aspects = sorted(aspect_list) # Sort aspects
+                    for aspect in sorted_aspects:
+                        f.write(f"    - {aspect}\n")
+                f.write("\n") # Add a blank line between events
+
+        logging.info(f"Successfully saved data to {filepath}")
+
+        # Optional: Clear data from memory after successful save if desired
+        # del selections_data[date_to_save_str]
+
+        return jsonify({"status": "success", "message": f"Data saved to {filename}"})
+
+    except Exception as e:
+        logging.exception(f"Error writing file {filepath}")
+        return jsonify({"status": "error", "message": f"Failed to save file: {e}"}), 500
+
 
 @app.route('/custom_action', methods=['POST'])
 def custom_action():
@@ -385,6 +650,25 @@ def generate_chart():
     else:
         return "File not found", 404
 
+def sanitize_filename(filename):
+    sanitized = filename.replace(":", "-").replace(" ", "_").replace("T", "_")
+    sanitized = re.sub(r'[<>:"/\\|?*]+', '', sanitized)
+    return f"{sanitized}.txt"
+
+def get_technique_name(technique_index):
+    # Map index back to a meaningful name for storing selections
+    mapping = {
+        aTechniqueType.PRIMARY_DIRECT: "PD",
+        aTechniqueType.SECONDARY_DIRECT: "Secondary",
+        aTechniqueType.PSSR: "PSSR",
+        aTechniqueType.TRANSIT: "Transit",
+        aTechniqueType.LUNAR: "Lunar",
+        aTechniqueType.SRA: "SRA",
+        aTechniqueType.HARMONICS: "Harmonics",
+        aTechniqueType.NATAL: "Natal",
+    }
+    return mapping.get(technique_index, "Unknown")
+
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
     #main_techniques.rect_ver_data_create('data_times/winston narrow.csv', main_techniques.timesFileType.DATE_N_TIME, 'data_input/winston.json', 'data_rect/02_12_24_Winston_v1/02_12_24_')
@@ -392,7 +676,20 @@ if __name__ == '__main__':
     #aspects_implementation.count_aspect_groups_txt('ingtea_rect_ver4_2000-03-12_primaries.txt',False)
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_secondCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_pssrCOUNT.txt','txt/26_10_24_Jacqui/26_10_24_1929-07-28_transCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
     #analysis.create_csv_count_txt(['txt/26_10_24_Jacqui/26_10_24_1929-07-28_primdirCOUNT.txt'],'txt/26_10_24_Jacqui/26_10_24_Jacqui_data_tally.csv')
+    # Ensure the data directory exists
+    if not os.path.isdir(DATA_INPUT_DIR):
+        logging.error(f"Data input directory '{DATA_INPUT_DIR}' not found.")
+        exit(1) # Or handle appropriately
+
+    # Optional: Clear charts directory on start if desired
+    charts_dir = 'static/charts'
+    if os.path.exists(charts_dir):
+        # shutil.rmtree(charts_dir) # Uncomment carefully - deletes existing charts!
+        pass
+    os.makedirs(charts_dir, exist_ok=True)
+
+    logging.info("Starting Flask application...")
+    app.run(debug=True, port=5000) # Use specific port, debug=True for developmen
     
-    app.run(debug=True)
 
 
