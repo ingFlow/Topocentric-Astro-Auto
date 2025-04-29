@@ -39,6 +39,7 @@ lunar_orb = 9
 restrict_orb = 3
 current_file = "ing tea.json"
 DATA_INPUT_DIR = 'data_input'
+SELECTIONS_DIR = 'saved_selections' # Define a subdirectory for saved files
 
 selections_data = {}
 
@@ -92,9 +93,9 @@ def home():
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    #list_times = process_techniques_files.process_polaris_times(r'data_times\25_01_07_ing_tea rect 5-15.txt', 100)
+    list_times = process_techniques_files.process_polaris_times(r'data_times\beyonce 1 hour rect pola.txt', 28)
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
-    list_times = [dt_actual_dob, dt_epoch]
+    #list_times = [dt_actual_dob, dt_epoch]
     #list_times.append(dt_actual_dob)
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
     '''for t in temp:
@@ -162,10 +163,29 @@ def parse_selection_file(filepath):
     except Exception as e:
         logging.error(f"Error parsing selection file {filepath}: {e}")
         return None # Return None on error
+    
+def get_aspect_str_orb(line):
+    """
+    Extracts the orb value from an aspect string/*.
+    Returns the orb as a float, or infinity if not found/error.
+    """
+    # Regex to find the orb value like '2.44' or '120'
+    match = re.search(r'(\d+(\.\d+)?)\'', line)
+    if match:
+        try:
+            # Group 1 captures the full number string (e.g., "2.44")
+            return float(match.group(1))
+        except (ValueError, IndexError):
+            # Error converting to float or accessing group
+            logging.warning(f"Could not convert orb to float in line: {line}")
+            return float('inf') # Put problematic lines at the end
+    else:
+        # No orb match found in the expected format
+        return float('inf') # Put lines without orbs at the end
 
 @app.route('/update_content')
 def update_content():
-    global restrict_orb, selections_data
+    global restrict_orb, selections_data, current_file, SELECTIONS_DIR
     flag_show_accepted = request.args.get('show_accepted', default='false') == 'true'
     technique = int(request.args.get('right_radio', '0'))
     radix_date_str = request.args.get('left_item', '')
@@ -173,6 +193,10 @@ def update_content():
     restrict_orb = int(request.args.get('orb_input',restrict_orb))
     flag_orb_restrict = True if (restrict_orb != -1) else False
     flag_show_data = request.args.get('show_data', default='false') == 'true'
+    
+    #swapping the aspects so that the direction part is always first
+    aspect_pattern = re.compile(r"\(([^,]+),([0-9.]+),\(([^)]+)\)\)\s+\(([^,]+),([0-9.]+),\(([^)]+)\)\)\s+\(([^,]+),([0-9.]+)'\)")
+    replacement_pattern = r"(\g<4>,\g<5>,(\g<6>)) (\g<1>,\g<2>,(\g<3>)) (\g<7>,\g<8>')"
 
     static_message = ''
     list_all_asp = []
@@ -268,9 +292,9 @@ def update_content():
                 str_all_directed_aspects = re.sub(r"H1,","AS,", str_all_directed_aspects)
                 str_all_directed_aspects = re.sub(r"H7,","DS,", str_all_directed_aspects)
                 str_all_directed_aspects = re.sub(r"H4,","IC,", str_all_directed_aspects)
-
-                list_all_asp = str_all_directed_aspects.split('\n')
-                list_all_asp = [asp.strip() for asp in list_all_asp if asp.strip()] 
+                
+                list_all_asp = str_all_directed_aspects.split('\n') 
+                list_all_asp = [asp.strip() for asp in list_all_asp if asp.strip()] #Clean up
 
                 if flag_show_accepted:
                     temp_filtered_list = []
@@ -322,7 +346,13 @@ def update_content():
                             orb_restricted_list.append(line)
                     list_all_asp = orb_restricted_list
 
-                if flag_show_data:
+                final_list_to_send = []
+                if not flag_show_data:
+                    for line in list_all_asp:
+                        swapped_line = aspect_pattern.sub(replacement_pattern, line)
+                        final_list_to_send.append(swapped_line)
+                    final_list_to_send.sort(key=get_aspect_str_orb)
+                else:
                     technique_data = {}
                     if technique == aTechniqueType.PRIMARY_DIRECT:
                         technique_data = pd_info
@@ -352,13 +382,13 @@ def update_content():
                     else:  
                         data_list = [f"{key}: {value}" for key, value in technique_data.items()]
                     
-                    list_all_asp = data_list
+                    final_list_to_send = data_list
 
-            selections_to_send = {} # Start with empty
-            # 1. Try to load from file first
-            save_dir = 'saved_selections'
-            filename = sanitize_filename(radix_date_str)
-            filepath = os.path.join(save_dir, filename)
+            selections_to_send = {} 
+            current_file_base_name = os.path.splitext(current_file)[0]
+            base_filename_part = f"{current_file_base_name}_{radix_date_str}"
+            filename = sanitize_filename(base_filename_part)
+            filepath = os.path.join(SELECTIONS_DIR, filename)
             
             logging.info(f"Attempting to parse file: {filepath}") # DEBUG LINE
             loaded_selections = parse_selection_file(filepath)
@@ -389,7 +419,7 @@ def update_content():
             
             return jsonify({
                 'static_message': static_message,
-                'aspects': list_all_asp, # Return the list of strings
+                'aspects': final_list_to_send, # Return the list of strings
                 'selections': selections_to_send # Send back all known selections for this date
             })
         
@@ -453,7 +483,7 @@ def update_selection():
 
 @app.route('/save_data', methods=['POST'])
 def save_data():
-    global selections_data
+    global selections_data, current_file, SELECTIONS_DIR
     data = request.get_json()
     date_to_save_str = data.get('date_to_save') # Expecting ISO string format
 
@@ -465,12 +495,13 @@ def save_data():
         return jsonify({"status": "success", "message": "No selections to save"})
 
     # Prepare filename
-    filename = sanitize_filename(date_to_save_str) # Use existing sanitize function
-    save_dir = 'saved_selections' # Define a subdirectory for saved files
-    filepath = os.path.join(save_dir, filename)
+    json_base_name = os.path.splitext(current_file)[0]
+    base_name_filename = f"{json_base_name}_{date_to_save_str}"
+    filename = sanitize_filename(base_name_filename) # Use existing sanitize function
+    filepath = os.path.join(SELECTIONS_DIR, filename)
 
     # Ensure the save directory exists
-    os.makedirs(save_dir, exist_ok=True)
+    os.makedirs(SELECTIONS_DIR, exist_ok=True)
 
     logging.info(f"Attempting to save data for {date_to_save_str} to {filepath}")
 
