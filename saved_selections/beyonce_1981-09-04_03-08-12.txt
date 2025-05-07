@@ -1,0 +1,21 @@
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,239.470,(c)) (Mean_Node,119.480,(r)) (trine,0.60')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,263.197,(d)) (H6,173.243,(r)) (square,2.73')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,164.973,(c)) (Moon,225.015,(r)) (sextile,2.49')
+    - (Mean_Node,86.510,(c)) (Uranus,236.456,(r)) (150-quincunx,3.22')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,86.510,(c)) (Uranus,236.456,(r)) (150-quincunx,3.22')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,229.618,(d)) (Venus,199.640,(r)) (30-semisextile,1.32')
+

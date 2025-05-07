@@ -1,0 +1,33 @@
+Event: 1901-05-09T12:00:00, DEATH_FATHER_GRAND, 11, [51.516666, -0.1, 306.0]
+  Technique: PD
+    - (DS,43.534,(d)) (Mars,43.561,(r)) (conjunction,1.61')
+
+Event: 1919-07-10T12:00:00, DEATH_SON, 13, [51.516666, -0.1, 306.0]
+  Technique: PD
+    - (H3,252.033,(c)) (Sun,26.987,(r)) (135-sesquisquare,2.77')
+    - (Pluto,80.916,(d)) (H5,350.970,(r)) (square,3.24')
+  Technique: PSSR
+    - (Pluto,94.716,(dr)) (Pluto,64.593,(r)) (30-semisextile,7.40')
+    - (Venus,61.183,(dr)) (H6,16.122,(r)) (45-semisquare,3.67')
+  Technique: Secondary
+    - (MC,110.895,(c)) (H5,350.970,(r)) (trine,4.53')
+    - (MC,168.183,(p)) (Venus,48.117,(r)) (trine,3.96')
+
+Event: 1928-08-28T12:00:00, DEATH_MOTHER_GRAND, 12, [51.516666, -0.1, 306.0]
+  Technique: PD
+    - (Mercury,47.670,(d)) (MC,137.756,(r)) (square,5.18')
+    - (Moon,243.691,(d)) (H2,243.566,(r)) (conjunction,7.46')
+  Technique: PSSR
+    - (Uranus,4.721,(dr)) (Pluto,64.593,(r)) (sextile,7.67')
+    - (Venus,38.183,(cp)) (Jupiter,278.169,(r)) (trine,0.83')
+  Technique: Secondary
+    - (DS,62.159,(p)) (Neptune,62.126,(p)) (conjunction,1.94')
+
+Event: 1962-07-08T12:00:00, BIRTH_SON, 3, [51.516666, -0.1, 306.0]
+  Technique: Secondary
+    - (Uranus,197.873,(p)) (Saturn,137.965,(p)) (sextile,5.54')
+
+Event: 1977-12-25T12:00:00, DEATH, 19, [51.516666, -0.1, 306.0]
+  Technique: PSSR
+    - (Mercury,2.851,(cp)) (MC,137.756,(r)) (135-sesquisquare,5.70')
+

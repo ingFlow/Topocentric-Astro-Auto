@@ -1,0 +1,28 @@
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,144.008,(d)) (Saturn,188.991,(r)) (45-semisquare,1.01')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,162.017,(c)) (MC,282.008,(r)) (trine,0.57')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Saturn,147.019,(c)) (MC,282.008,(r)) (135-sesquisquare,0.70')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,44.611,(c)) (Moon,224.626,(r)) (opposition,0.87')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,131.514,(c)) (Sun,161.469,(r)) (30-semisextile,2.71')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,139.572,(c)) (Venus,199.602,(r)) (sextile,1.80')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,244.633,(d)) (Venus,199.602,(r)) (45-semisquare,1.87')
+

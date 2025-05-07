@@ -1,0 +1,58 @@
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,172.712,(c)) (Pluto,202.641,(r)) (30-semisextile,4.26')
+    - (Mars,98.990,(c)) (Saturn,188.993,(r)) (square,0.20')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,59.744,(c)) (POF,89.776,(r)) (30-semisextile,1.94')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,146.392,(d)) (DS,206.450,(r)) (sextile,3.46')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,229.651,(d)) (Venus,199.620,(r)) (30-semisextile,1.86')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,79.636,(c)) (Venus,199.620,(r)) (trine,0.97')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Saturn,232.684,(d)) (Pluto,202.641,(r)) (30-semisextile,2.56')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,236.448,(d)) (AS,26.450,(r)) (150-quincunx,0.09')
+    - (Jupiter,236.448,(d)) (Uranus,236.455,(r)) (conjunction,0.44')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,137.223,(c)) (MC,287.191,(r)) (150-quincunx,1.97')
+    - (Sun,121.775,(c)) (Mercury,181.778,(r)) (sextile,0.19')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,206.460,(d)) (DS,206.450,(r)) (conjunction,0.65')
+    - (Sun,206.460,(d)) (Uranus,236.455,(r)) (30-semisextile,0.30')
+    - (Uranus,271.302,(d)) (Mars,121.294,(r)) (150-quincunx,0.52')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,132.301,(c)) (Jupiter,192.286,(r)) (sextile,0.90')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,242.220,(d)) (MC,287.191,(r)) (45-semisquare,1.79')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,327.260,(d)) (Jupiter,192.286,(r)) (135-sesquisquare,1.59')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,42.290,(c)) (Jupiter,192.286,(r)) (150-quincunx,0.24')
+    - (Jupiter,137.197,(c)) (IC,107.191,(r)) (30-semisextile,0.41')
+

@@ -1,0 +1,26 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,85.480,(d)) (POF,85.544,(r)) (conjunction,3.82')
+    - (POF,81.152,(c)) (H3,81.078,(r)) (conjunction,4.40')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,101.431,(d)) (Sun,161.476,(r)) (sextile,2.70')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,232.676,(d)) (Pluto,202.641,(r)) (30-semisextile,2.09')
+    - (Mars,98.929,(c)) (Saturn,188.992,(r)) (square,3.77')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,342.223,(c)) (Jupiter,192.285,(r)) (150-quincunx,3.69')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,237.356,(d)) (Jupiter,192.285,(r)) (45-semisquare,4.25')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,211.751,(d)) (Mercury,181.766,(r)) (30-semisextile,0.92')
+

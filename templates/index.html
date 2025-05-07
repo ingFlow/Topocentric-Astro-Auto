@@ -87,6 +87,8 @@
             margin-bottom: 10px;
             border-radius: 8px;
             min-height: 150px; /* Minimum height for the scroll box */
+            max-height: 350px;
+            overflow-y: scroll; /* Enable vertical scrolling */
         }
 
         .scroll-box ul {
@@ -238,14 +240,14 @@
             </div>
 
             <div class="radio-group" id="right-radio-group">
-                <label><input type="radio" name="right-radio" value=0 data-technique-name="PD" onchange="handleContextChange()"> PD</label>
+                <label><input type="radio" name="right-radio" value=0 data-technique-name="PD" onchange="handleContextChange()" checked> PD</label>
                 <label><input type="radio" name="right-radio" value=1 data-technique-name="Secondary" onchange="handleContextChange()"> Secondary</label>
                 <label><input type="radio" name="right-radio" value=2 data-technique-name="PSSR" onchange="handleContextChange()"> PSSR</label>
                 <label><input type="radio" name="right-radio" value=3 data-technique-name="Transit" onchange="handleContextChange()"> Transit</label>
                 <label><input type="radio" name="right-radio" value=4 data-technique-name="Lunar" onchange="handleContextChange()"> Lunar</label>
                 <label><input type="radio" name="right-radio" value=5 data-technique-name="SRA" onchange="handleContextChange()"> SRA</label>
                 <label><input type="radio" name="right-radio" value=6 data-technique-name="Harmonics" onchange="handleContextChange()"> Harmonics</label>
-                <label><input type="radio" name="right-radio" value=7 data-technique-name="Natal" onchange="handleContextChange()" checked> Natal</label>
+                <label><input type="radio" name="right-radio" value=7 data-technique-name="Natal" onchange="handleContextChange()"> Natal</label>
             </div>
             <div>
                 <label for="orbInput">Orb:</label>

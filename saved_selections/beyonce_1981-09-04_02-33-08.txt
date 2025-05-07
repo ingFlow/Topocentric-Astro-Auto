@@ -1,0 +1,51 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Uranus,231.440,(c)) (H3,81.453,(r)) (150-quincunx,0.81')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,134.699,(c)) (MC,284.764,(r)) (150-quincunx,3.92')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mars,98.937,(c)) (Saturn,188.992,(r)) (square,3.29')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,130.085,(c)) (H5,130.095,(r)) (conjunction,0.60')
+    - (Venus,162.252,(c)) (Jupiter,192.285,(r)) (30-semisextile,2.00')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,154.545,(c)) (Venus,199.611,(r)) (45-semisquare,3.96')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,237.321,(d)) (Jupiter,192.285,(r)) (45-semisquare,2.17')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,64.645,(d)) (Venus,199.611,(r)) (135-sesquisquare,2.03')
+    - (Venus,241.810,(d)) (Mercury,181.768,(r)) (sextile,2.54')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H5,169.673,(d)) (Venus,199.611,(r)) (30-semisextile,3.68')
+    - (MC,252.249,(c)) (Jupiter,192.285,(r)) (sextile,2.16')
+    - (Uranus,194.778,(c)) (MC,284.764,(r)) (square,0.82')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H5,169.673,(d)) (Venus,199.611,(r)) (30-semisextile,3.68')
+    - (IC,72.249,(c)) (Jupiter,192.285,(r)) (trine,2.16')
+    - (Uranus,194.778,(c)) (IC,104.764,(r)) (square,0.82')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,116.429,(d)) (Uranus,236.455,(r)) (trine,1.56')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,42.284,(c)) (Jupiter,192.285,(r)) (150-quincunx,0.03')
+    - (Moon,179.454,(c)) (Mean_Node,119.481,(r)) (sextile,1.60')
+

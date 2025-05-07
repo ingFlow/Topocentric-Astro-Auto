@@ -1,0 +1,46 @@
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,162.815,(c)) (AS,27.768,(r)) (135-sesquisquare,2.79')
+    - (Venus,228.092,(d)) (MC,288.095,(r)) (sextile,0.22')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mars,99.009,(c)) (Saturn,188.993,(r)) (square,0.95')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,162.705,(c)) (DS,207.768,(r)) (45-semisquare,3.81')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,144.716,(c)) (H3,84.779,(r)) (sextile,3.78')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Saturn,147.775,(c)) (AS,27.768,(r)) (trine,0.41')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,204.715,(d)) (H3,84.779,(r)) (trine,3.88')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,236.473,(d)) (Uranus,236.455,(r)) (conjunction,1.03')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,237.790,(d)) (DS,207.768,(r)) (30-semisextile,1.27')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,237.790,(d)) (DS,207.768,(r)) (30-semisextile,1.27')
+    - (Uranus,271.335,(d)) (Mars,121.295,(r)) (150-quincunx,2.38')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,116.512,(c)) (Uranus,236.455,(r)) (trine,3.42')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,42.279,(c)) (Jupiter,192.287,(r)) (150-quincunx,0.46')
+

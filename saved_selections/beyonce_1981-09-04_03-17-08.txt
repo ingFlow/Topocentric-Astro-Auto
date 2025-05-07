@@ -1,0 +1,49 @@
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (POF,121.650,(d)) (H3,91.640,(r)) (30-semisextile,0.57')
+    - (Pluto,192.362,(c)) (Jupiter,192.291,(r)) (conjunction,4.23')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Pluto,192.259,(c)) (Jupiter,192.291,(r)) (conjunction,1.94')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H12,326.186,(c)) (POF,101.216,(r)) (135-sesquisquare,1.81')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,132.232,(c)) (Jupiter,192.291,(r)) (sextile,3.54')
+    - (Venus,165.150,(c)) (Moon,225.089,(r)) (sextile,3.65')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,181.239,(c)) (Mars,121.308,(r)) (sextile,4.18')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H5,176.394,(d)) (Uranus,236.456,(r)) (sextile,3.69')
+    - (Venus,236.399,(d)) (Uranus,236.456,(r)) (conjunction,3.45')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,265.098,(d)) (MC,295.109,(r)) (30-semisextile,0.65')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,121.343,(c)) (Mars,121.308,(r)) (conjunction,2.06')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,79.701,(c)) (Venus,199.647,(r)) (trine,3.24')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,139.647,(c)) (Venus,199.647,(r)) (sextile,0.01')
+    - (Moon,176.404,(c)) (Uranus,236.456,(r)) (sextile,3.14')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,79.644,(c)) (Venus,199.647,(r)) (trine,0.21')
+    - (Venus,250.097,(d)) (MC,295.109,(r)) (45-semisquare,0.74')
+

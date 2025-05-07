@@ -1,0 +1,29 @@
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,96.857,(c)) (H6,156.867,(r)) (sextile,0.60')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,131.015,(c)) (MC,281.081,(r)) (150-quincunx,3.94')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mars,149.426,(d)) (Mean_Node,119.481,(r)) (30-semisextile,3.34')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,257.793,(d)) (H3,77.721,(r)) (opposition,4.37')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,154.614,(c)) (Venus,199.598,(r)) (45-semisquare,0.93')
+    - (Moon,259.612,(d)) (Venus,199.598,(r)) (sextile,0.82')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,291.869,(d)) (H6,156.867,(r)) (135-sesquisquare,0.11')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Uranus,191.498,(c)) (Sun,161.466,(r)) (30-semisextile,1.91')
+

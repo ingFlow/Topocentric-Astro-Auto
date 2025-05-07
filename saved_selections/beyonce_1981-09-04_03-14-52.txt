@@ -1,0 +1,55 @@
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,70.403,(c)) (POF,100.465,(r)) (30-semisextile,3.68')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,239.442,(c)) (Mean_Node,119.479,(r)) (trine,2.23')
+    - (Saturn,159.537,(c)) (MC,294.570,(r)) (135-sesquisquare,1.99')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,159.577,(c)) (MC,294.570,(r)) (135-sesquisquare,0.38')
+    - (Venus,165.084,(c)) (Moon,225.070,(r)) (sextile,0.83')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,64.641,(c)) (Venus,199.646,(r)) (135-sesquisquare,0.30')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,236.445,(d)) (Uranus,236.456,(r)) (conjunction,0.65')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,326.455,(d)) (Uranus,236.456,(r)) (square,0.08')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Uranus,195.072,(c)) (Moon,225.070,(r)) (30-semisextile,0.12')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,146.432,(c)) (Uranus,236.456,(r)) (square,1.42')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,146.432,(c)) (Uranus,236.456,(r)) (square,1.42')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,79.701,(d)) (Venus,199.646,(r)) (trine,3.35')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,132.289,(c)) (Jupiter,192.291,(r)) (sextile,0.08')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,176.452,(c)) (Uranus,236.456,(r)) (sextile,0.23')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,49.610,(c)) (Venus,199.646,(r)) (150-quincunx,2.15')
+    - (Mean_Node,79.632,(c)) (Venus,199.646,(r)) (trine,0.83')
+

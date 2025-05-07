@@ -95,7 +95,7 @@ def home():
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     list_times = process_techniques_files.process_polaris_times(r'data_times\beyonce 1 hour rect pola.txt', 28)
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
-    #list_times = [dt_actual_dob, dt_epoch]
+    list_times = [dt_actual_dob, dt_epoch]
     #list_times.append(dt_actual_dob)
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
     '''for t in temp:

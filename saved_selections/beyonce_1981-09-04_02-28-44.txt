@@ -1,0 +1,35 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,194.667,(c)) (Moon,224.688,(r)) (30-semisextile,1.23')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,349.627,(c)) (Venus,199.608,(r)) (150-quincunx,1.15')
+    - (Moon,252.330,(d)) (Jupiter,192.284,(r)) (sextile,2.76')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Pluto,189.065,(c)) (Saturn,188.992,(r)) (conjunction,4.41')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,163.696,(c)) (MC,283.741,(r)) (trine,2.71')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,259.632,(c)) (Venus,199.608,(r)) (sextile,1.42')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H12,22.089,(d)) (Neptune,262.087,(r)) (trine,0.12')
+    - (MC,314.657,(d)) (Moon,224.688,(r)) (square,1.83')
+    - (Moon,262.108,(d)) (Neptune,262.087,(r)) (conjunction,1.28')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,252.325,(c)) (Jupiter,192.284,(r)) (sextile,2.45')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,331.240,(c)) (Mars,121.287,(r)) (150-quincunx,2.80')
+

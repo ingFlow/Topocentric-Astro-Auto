@@ -1,0 +1,51 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,222.291,(d)) (Jupiter,192.291,(r)) (30-semisextile,0.06')
+    - (IC,109.639,(c)) (Venus,199.644,(r)) (square,0.32')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Pluto,192.255,(c)) (Jupiter,192.291,(r)) (conjunction,2.13')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,69.848,(c)) (POF,99.799,(r)) (30-semisextile,2.93')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,165.026,(c)) (Moon,225.054,(r)) (sextile,1.67')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,86.403,(c)) (Uranus,236.456,(r)) (150-quincunx,3.17')
+    - (Venus,236.486,(d)) (Uranus,236.456,(r)) (conjunction,1.82')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (POF,129.726,(d)) (H6,174.766,(r)) (45-semisquare,2.38')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,75.087,(d)) (Moon,225.054,(r)) (150-quincunx,1.99')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,256.267,(d)) (Mars,121.307,(r)) (135-sesquisquare,2.39')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,142.634,(c)) (Pluto,202.642,(r)) (sextile,0.47')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,176.495,(c)) (Uranus,236.456,(r)) (sextile,2.32')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (POF,60.626,(c)) (H3,90.660,(r)) (30-semisextile,2.06')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,129.839,(d)) (POF,99.799,(r)) (30-semisextile,2.40')
+    - (Mean_Node,79.621,(c)) (Venus,199.644,(r)) (trine,1.38')
+

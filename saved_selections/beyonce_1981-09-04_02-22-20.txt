@@ -1,0 +1,48 @@
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Uranus,258.848,(d)) (H3,78.917,(r)) (opposition,4.13')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,57.296,(c)) (Jupiter,192.284,(r)) (135-sesquisquare,0.75')
+    - (Jupiter,162.236,(c)) (MC,282.255,(r)) (trine,1.15')
+    - (Moon,252.230,(d)) (Jupiter,192.284,(r)) (sextile,3.22')
+    - (Moon,252.230,(d)) (MC,282.255,(r)) (30-semisextile,1.51')
+    - (Uranus,258.917,(d)) (H3,78.917,(r)) (opposition,0.04')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,143.993,(d)) (Saturn,188.992,(r)) (45-semisquare,0.06')
+    - (Pluto,188.928,(c)) (Saturn,188.992,(r)) (conjunction,3.78')
+    - (Saturn,158.446,(c)) (H6,158.467,(r)) (conjunction,1.26')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,161.526,(c)) (Sun,161.469,(r)) (conjunction,3.37')
+    - (H5,101.495,(c)) (Sun,161.469,(r)) (sextile,1.54')
+    - (H5,101.495,(c)) (Uranus,236.455,(r)) (135-sesquisquare,2.41')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,104.631,(d)) (Moon,224.635,(r)) (trine,0.19')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,61.707,(d)) (Mercury,181.756,(r)) (trine,2.98')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,237.201,(d)) (MC,282.255,(r)) (45-semisquare,3.27')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,149.530,(c)) (Mean_Node,119.481,(r)) (30-semisextile,2.92')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,139.612,(c)) (Venus,199.603,(r)) (sextile,0.56')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,244.600,(d)) (Venus,199.603,(r)) (45-semisquare,0.17')
+
