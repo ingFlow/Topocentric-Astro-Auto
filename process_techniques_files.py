@@ -16,8 +16,14 @@ import pytz
 from constants import calc_planets_pof_houses_labelled, PLANETS
 from aspects_base import calculate_obliquity
 import ast
+import json
+import logging
+import openpyxl
+from openpyxl.utils import get_column_letter
+from openpyxl.styles import Font, Alignment
+from constants import parse_selection_file, DATA_INPUT_DIR, SELECTIONS_DIR, aTechniqueType, get_technique_name, PLANET_ABBREVIATIONS, ALL_ASPECTS
 
-
+logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
 class TechniqueType:
     PRIMARY_DIRECT = 0
@@ -587,6 +593,274 @@ def sum_sec_prim(prim_filename, sec_filename):
     result = sum_all_m(prim_data, sec_data)
 
     write_result(result_file_path, result)
+    
+def sanitize_sheet_name(name):
+    """Sanitizes a string to be a valid Excel sheet name."""
+    # Max length is 31. Invalid chars: []:*?/\\
+    name = name.replace(':', '-').replace('/', '_').replace('\\', '_')
+    name = name.replace('[', '(').replace(']', ')')
+    name = name.replace('*', '_').replace('?', '_')
+    return name[:31] # Truncate to 31 chars
+
+def abbreviate_aspect_string(aspect_line):
+    """
+    Transforms an aspect string to an abbreviated format including direction.
+    Original: (Planet1,Deg,(Dir1)) (Planet2,Deg,(Dir2)) (AspectName,Orb')
+    Target:   ABB1 (Dir1) DEGREE ABB2 (Dir2) (Orb')
+    """
+    # Regex to capture the main parts including directions
+    # Group 1: Planet1 Name
+    # Group 2: Planet1 Direction (e.g., 'c', 'r', 'd')
+    # Group 3: Planet2 Name
+    # Group 4: Planet2 Direction (e.g., 'c', 'r', 'd')
+    # Group 5: Aspect Name
+    # Group 6: Orb (e.g., "0.06'")
+    pattern = re.compile(
+        r"\(([^,]+),[0-9.]+,\(([^)]+)\)\)"  # Planet 1 block (captures name, then direction)
+        r"\s+"
+        r"\(([^,]+),[0-9.]+,\(([^)]+)\)\)"  # Planet 2 block (captures name, then direction)
+        r"\s+"
+        r"\(([^,]+),([0-9.]+'\))"          # Aspect block (captures aspect name and orb)
+    )
+    match = pattern.match(aspect_line.strip())
+    
+    if match:
+        p1_name_full = match.group(1)
+        p1_dir = match.group(2) # Captured direction for P1 is it converse or radix etc.
+        p2_name_full = match.group(3)
+        p2_dir = match.group(4) # Captured direction for P2
+        aspect_name_full = match.group(5).lower()
+        orb_str = match.group(6)[:-1] # This is "0.06'" very ugly fix for why there where 2 brackets in the display string so just forced out the bracket from the match group
+
+        p1_abbr = PLANET_ABBREVIATIONS.get(p1_name_full, p1_name_full[:3].upper()) # Default to first 3 chars if not found
+        p2_abbr = PLANET_ABBREVIATIONS.get(p2_name_full, p2_name_full[:3].upper())
+        aspect_deg = ALL_ASPECTS.get(aspect_name_full)[0]
+
+        if aspect_deg is not None:
+            return f"{p1_abbr} ({p1_dir}) {aspect_deg} {p2_abbr} ({p2_dir}) ({orb_str})"
+        else:
+            logging.warning(f"Aspect name '{aspect_name_full}' not found in ASPECT_DEGREES for line: {aspect_line}")
+            return aspect_line # Return original if aspect name not found
+    else:
+        # If the line doesn't match the expected 3-part structure, return it as is
+        # This handles Natal listings, headers, or malformed lines gracefully.
+        logging.debug(f"Line did not match abbreviation pattern: {aspect_line}")
+        return aspect_line
+
+def create_analysis_workbook():
+    # 1. Get User Input for JSON filename
+    while True:
+        json_filename_input = input(f"Enter the JSON data filename (e.g., charlie chaplin.json, found in '{DATA_INPUT_DIR}'): ").strip()
+        json_filepath = os.path.join(DATA_INPUT_DIR, json_filename_input)
+        if os.path.exists(json_filepath):
+            break
+        else:
+            logging.error(f"File not found: {json_filepath}. Please try again.")
+
+    # 2. Derive base name for .txt files and Excel output
+    base_name_for_txt = os.path.splitext(json_filename_input)[0].replace(' ', '_')
+    excel_output_filename = f"{base_name_for_txt}_rectification_analysis.xlsx"
+    logging.info(f"Derived base name for text files: {base_name_for_txt}")
+    logging.info(f"Output Excel file will be: {excel_output_filename}")
+
+    # 3. Technique Selection
+    available_techniques = aTechniqueType.get_all_techniques()
+    print("\nAvailable Techniques:")
+    for index, name in sorted(available_techniques.items()):
+        print(f"{index}: {name}")
+
+    while True:
+        try:
+            selected_indices_str = input("Enter the numbers of the techniques to process, separated by commas (e.g., 0,1,6): ").strip()
+            selected_indices = [int(s.strip()) for s in selected_indices_str.split(',') if s.strip()]
+            if not selected_indices:
+                raise ValueError("No techniques selected.")
+            # Validate indices
+            valid_selection = True
+            for idx in selected_indices:
+                if idx not in available_techniques:
+                    logging.error(f"Invalid technique index: {idx}")
+                    valid_selection = False
+                    break
+            if valid_selection:
+                break
+        except ValueError as e:
+            logging.error(f"Invalid input. Please enter numbers separated by commas. Error: {e}")
+
+    selected_technique_names = [get_technique_name(idx) for idx in selected_indices]
+    logging.info(f"Selected techniques for processing: {', '.join(selected_technique_names)}")
+
+    # 4. Load or Create Workbook
+    workbook = None
+    if os.path.exists(excel_output_filename):
+        logging.info(f"Loading existing workbook: {excel_output_filename}")
+        try:
+            workbook = openpyxl.load_workbook(excel_output_filename)
+        except Exception as e:
+            logging.error(f"Could not load existing workbook {excel_output_filename}: {e}. A new one will be created.")
+            workbook = openpyxl.Workbook() # Create new if loading fails
+    else:
+        logging.info(f"Creating new workbook: {excel_output_filename}")
+        workbook = openpyxl.Workbook()
+        # Remove default sheet if a new workbook is created
+        if "Sheet" in workbook.sheetnames and len(workbook.sheetnames) == 1:
+            workbook.remove(workbook["Sheet"])
+
+
+    # 5. Parse JSON for Event Headers
+    event_headers_formatted = [] # For Excel display: "EVENT_TYPE YYYY-MM-DD"
+    event_data_from_json = [] # To store {formatted_header: original_full_event_string} mapping
+
+    try:
+        with open(json_filepath, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            json_events = data.get("list_of_events", [])
+            temp_event_list_for_sorting = [] # For sorting events by datetime
+            for event_detail in json_events:
+                dt_str = event_detail.get("datetime", "")
+                event_type = event_detail.get("event_type", "UNKNOWN_EVENT")
+                event_geopos = event_detail.get("geopos", []) # Not used in header but part of original_full_event_string
+                # Find the event index from the original source, if possible, or generate one
+                # This part depends on how event_id is stored/used in your .txt files
+                # For simplicity, let's assume the event type from JSON is sufficient with date.
+                # The original event string in .txt files is like "YYYY-MM-DDTHH:MM:SS, TYPE, ID, [GEO]"
+                # We need to match based on TYPE and YYYY-MM-DD part of the datetime from JSON.
+
+                # Create the formatted header
+                try:
+                    event_dt_obj = datetime.datetime.fromisoformat(dt_str)
+                    formatted_header = f"{event_type} {event_dt_obj.strftime('%Y-%m-%d')}"
+                    temp_event_list_for_sorting.append((event_dt_obj, formatted_header))
+
+                    # Store mapping for later lookup. The key in all_data will be the *exact* string
+                    # from the "Event: ..." line in the .txt file.
+                    # We need to be able to find this original string based on our formatted_header.
+                    # This is the trickiest part. For now, let's assume we will iterate through all_data's event keys
+                    # and try to match them to the formatted_header.
+
+                except ValueError:
+                    logging.warning(f"Could not parse datetime for event: {event_detail}")
+                    # Add with max date to sort invalid ones last
+                    formatted_header = f"{event_type} INVALID_DATE"
+                    temp_event_list_for_sorting.append((datetime.max, formatted_header))
+
+            temp_event_list_for_sorting.sort()
+
+            for _, formatted_header in temp_event_list_for_sorting:
+                event_headers_formatted.append(formatted_header)
+            #event headers is the sorted list of temp event list but with the date after string label    
+                
+            if not event_headers_formatted:
+                logging.error("No events found in JSON file. Cannot proceed.")
+                return
+
+    except Exception as e:
+        logging.error(f"Error reading or parsing JSON file {json_filepath}: {e}")
+        return
+
+    # 6. Find and Parse all relevant .txt files
+    all_parsed_data = {} # { "filename_datetime": { "original_event_string": { "TechniqueName": [aspects] } } }
+    filename_datetimes = []
+
+    for txt_filename in os.listdir(SELECTIONS_DIR):
+        if txt_filename.startswith(base_name_for_txt + "_") and txt_filename.endswith(".txt"):
+            full_txt_filepath = os.path.join(SELECTIONS_DIR, txt_filename)
+            # Extract datetime part from filename: base_name_YYYY-MM-DD_HH-MM-SS.txt
+            try:
+                datetime_part_from_filename = txt_filename[len(base_name_for_txt) + 1:-4] # Remove prefix and .txt
+                # Further sanitize/validate datetime_part_from_filename if needed
+                datetime.datetime.strptime(datetime_part_from_filename, "%Y-%m-%d_%H-%M-%S") # Validate format
+                filename_datetimes.append(datetime_part_from_filename)
+            except ValueError:
+                logging.warning(f"Could not parse datetime from filename {txt_filename}. Skipping.")
+                continue
+
+            parsed_selections = parse_selection_file(full_txt_filepath)
+            if parsed_selections:
+                all_parsed_data[datetime_part_from_filename] = parsed_selections
+            else:
+                logging.warning(f"No data parsed from {full_txt_filepath}")
+
+    if not all_parsed_data:
+        logging.error(f"No .txt selection files found or parsed for base name '{base_name_for_txt}' in '{SELECTIONS_DIR}'.")
+        return
+
+    filename_datetimes = sorted(list(set(filename_datetimes))) # Unique datetimes
+
+    # 7. Populate Excel Sheets
+    current_timestamp_for_sheets = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+
+    for technique_name_to_process in selected_technique_names: # Iterate only selected techniques
+        new_sheet_name_base = technique_name_to_process
+        new_sheet_name_dated = sanitize_sheet_name(f"{new_sheet_name_base}_{current_timestamp_for_sheets}")
+
+        # Remove existing sheet with the same dated name if it somehow exists (should be rare)
+        if new_sheet_name_dated in workbook.sheetnames:
+            workbook.remove(workbook[new_sheet_name_dated])
+
+        sheet = workbook.create_sheet(title=new_sheet_name_dated)
+        logging.info(f"Processing data for sheet: {new_sheet_name_dated}")
+
+        # Write Headers
+        sheet['A1'] = "Datetime \\ Event" # Label for A1
+        sheet['A1'].font = Font(bold=True)
+        for col_idx, header_text in enumerate(event_headers_formatted, start=2): # Start at col B
+            col_letter = get_column_letter(col_idx)
+            sheet[f"{col_letter}1"] = header_text
+            sheet[f"{col_letter}1"].font = Font(bold=True)
+            sheet[f"{col_letter}1"].alignment = Alignment(wrap_text=True) # Wrap header text
+            sheet.column_dimensions[col_letter].width = 24 # Set column width
+
+
+        # Write Datetime Row Labels and Data
+        for row_idx, filename_dt in enumerate(filename_datetimes, start=2): # Start at row 2
+            sheet[f"A{row_idx}"] = filename_dt
+            sheet[f"A{row_idx}"].font = Font(bold=True)
+
+            # Get data for this specific filename_datetime
+            data_for_this_dt = all_parsed_data.get(filename_dt, {})
+
+            for col_idx, formatted_event_header in enumerate(event_headers_formatted, start=2):
+                # Find the original_full_event_string that matches this formatted_event_header
+                # This requires matching the "EVENT_TYPE YYYY-MM-DD" part
+                target_event_type = formatted_event_header.split(' ')[0]
+                target_event_date = formatted_event_header.split(' ')[1]
+
+                found_original_event_key = None
+                for original_event_key in data_for_this_dt.keys():
+                    # Parse the original_event_key (e.g., "2004-12-01T12:00:00, MOVE_HOME, ...")
+                    try:
+                        orig_dt_str = original_event_key.split(',')[0].strip()
+                        orig_type_str = original_event_key.split(',')[1].strip()
+                        orig_dt_obj = datetime.datetime.fromisoformat(orig_dt_str)
+
+                        if orig_type_str == target_event_type and orig_dt_obj.strftime('%Y-%m-%d') == target_event_date:
+                            found_original_event_key = original_event_key
+                            break
+                    except Exception: # Broad exception for parsing robustness
+                        continue # Skip if original_event_key is malformed
+
+                if found_original_event_key:
+                    aspect_data_for_cell = data_for_this_dt.get(found_original_event_key, {}).get(technique_name_to_process, [])
+                    if aspect_data_for_cell:
+                        # Abbreviate each aspect string in the list
+                        abbreviated_aspects = [abbreviate_aspect_string(aspect) for aspect in aspect_data_for_cell]
+                        sheet.cell(row=row_idx, column=col_idx).value = "\n".join(abbreviated_aspects)
+                        sheet.cell(row=row_idx, column=col_idx).alignment = Alignment(wrap_text=True, vertical='top')
+                    else:
+                        sheet.cell(row=row_idx, column=col_idx).value = "" # Empty if no aspects for this combo
+                else:
+                    sheet.cell(row=row_idx, column=col_idx).value = "" # Empty if event not found in this .txt file's dzata
+
+        sheet.column_dimensions['A'].width = 25 # Width for datetime column
+
+    # 8. Save Workbook
+    try:
+        workbook.save(excel_output_filename)
+        logging.info(f"Successfully saved Excel file: {excel_output_filename}")
+    except Exception as e:
+        logging.error(f"Error saving Excel file {excel_output_filename}: {e}")
 
 #sort_polaris_times(r'data_times\25_01_07_ingtea rect 5 to 8.txt', 'data_times/25_01_07_ingtea sorted max a 3 rect.txt',58, 3)
 #delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
+#create_analysis_workbook()

@@ -16,30 +16,18 @@ import os
 import re
 import shutil
 import json
-from constants import calc_planets_pof_houses_labelled
+from constants import calc_planets_pof_houses_labelled, parse_selection_file, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
 from aspects_base import calculate_obliquity
 from kerykeion import AstrologicalSubject, KerykeionChartSVG
 import logging
 
 logging.basicConfig(level=logging.INFO)
 
-class aTechniqueType:
-    PRIMARY_DIRECT = 0  #diff order of technique type specific to index.html
-    SECONDARY_DIRECT = 1
-    PSSR = 2
-    TRANSIT = 3
-    LUNAR = 4
-    SRA = 5
-    HARMONICS = 6
-    NATAL = 7
-
 geo_pos_natal = []
 dt_radix = None
 lunar_orb = 9
 restrict_orb = 3
 current_file = "ing tea.json"
-DATA_INPUT_DIR = 'data_input'
-SELECTIONS_DIR = 'saved_selections' # Define a subdirectory for saved files
 
 selections_data = {}
 
@@ -95,7 +83,7 @@ def home():
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
     list_times = process_techniques_files.process_polaris_times(r'data_times\beyonce 1 hour rect pola.txt', 28)
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
-    list_times = [dt_actual_dob, dt_epoch]
+    #452801u7\'^":iclist_times = [dt_actual_dob, dt_epoch]
     #list_times.append(dt_actual_dob)
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
     '''for t in temp:
@@ -117,14 +105,19 @@ def parse_selection_file(filepath):
     loaded_selections = {}
     current_event = None
     current_technique = None
+    line_number = 0
 
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
+                line_number += 1
                 # Use rstrip() to remove only trailing newline/whitespace if needed
                 processed_line = line.rstrip()
                 if not processed_line.startswith(' ') and processed_line.startswith("Event: "):
                     current_event = processed_line[len("Event: "):].strip() # Strip result AFTER slicing
+                    if not current_event: # Handle empty event string if it occurs
+                        logging.warning(f"Empty event string found at line {line_number} in {filepath}")
+                        current_event = f"UNKNOWN_EVENT_{line_number}" # Placeholder
                     loaded_selections[current_event] = {}
                     current_technique = None # Reset technique when new event starts
 
@@ -135,6 +128,9 @@ def parse_selection_file(filepath):
                         try:
                             technique_part = processed_line.split("Technique: ", 1)[1]
                             current_technique = technique_part.strip() # Strip result AFTER splitting/slicing
+                            if not current_technique: # Handle empty technique string
+                                logging.warning(f"Empty technique string for event '{current_event}' at line {line_number} in {filepath}")
+                                current_technique = f"UNKNOWN_TECHNIQUE_{line_number}" # Placeholder
                             loaded_selections[current_event][current_technique] = []
                         except IndexError:
                             logging.warning(f"Malformed Technique line in {filepath}: {line.rstrip()}")
@@ -146,13 +142,17 @@ def parse_selection_file(filepath):
                 # Check for Aspect (must start with more spaces and '- ')
                 elif processed_line.startswith("    - ") and not processed_line.startswith("     "):
                     if current_event and current_technique:
+                        if current_technique not in loaded_selections[current_event]:
+                            logging.warning(f"Aspect found for event '{current_event}' but technique '{current_technique}' not initialized at line {line_number} in {filepath}. Initializing.")
+                            loaded_selections[current_event][current_technique] = []
                         # Check if the list was initialized correctly
                         if isinstance(loaded_selections[current_event].get(current_technique), list):
                             aspect = processed_line[len("    - "):].strip() # Strip result AFTER slicing
-                            loaded_selections[current_event][current_technique].append(aspect)
+                            if aspect: # Only add non-empty aspects
+                                loaded_selections[current_event][current_technique].append(aspect)
                         else:
-                            logging.warning(f"Found Aspect line but Technique list not initialized in {filepath}: {line.rstrip()}")
-                    # else: Ignore aspect lines found out of place (e.g., before a Technique)
+                            logging.error(f"Critical parsing error: Technique list for '{current_event}' -> '{current_technique}' is not a list at line {line_number} in {filepath}.")
+                    # else: Ignore aspect lines found out of proper context
 
         logging.info(f"Successfully parsed selections from {filepath}")
         # --- Keep the debug print from your version ---
@@ -161,7 +161,7 @@ def parse_selection_file(filepath):
         return loaded_selections
 
     except Exception as e:
-        logging.error(f"Error parsing selection file {filepath}: {e}")
+        logging.error(f"Error parsing selection file {filepath} at line ~{line_number}: {e}")
         return None # Return None on error
     
 def get_aspect_str_orb(line):
@@ -185,7 +185,7 @@ def get_aspect_str_orb(line):
 
 @app.route('/update_content')
 def update_content():
-    global restrict_orb, selections_data, current_file, SELECTIONS_DIR
+    global restrict_orb, selections_data, current_file
     flag_show_accepted = request.args.get('show_accepted', default='false') == 'true'
     technique = int(request.args.get('right_radio', '0'))
     radix_date_str = request.args.get('left_item', '')
@@ -483,7 +483,7 @@ def update_selection():
 
 @app.route('/save_data', methods=['POST'])
 def save_data():
-    global selections_data, current_file, SELECTIONS_DIR
+    global selections_data, current_file
     data = request.get_json()
     date_to_save_str = data.get('date_to_save') # Expecting ISO string format
 

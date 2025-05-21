@@ -5,6 +5,19 @@ import math
 from aspects_base import calculate_obliquity, find_pd_swiss_aspects, format_house_list
 from constants import PLANETS, HOUSES, calc_planets_pof_houses_labelled
 
+class Planet:
+    SUN = 'Sun'
+    MON = 'Moon'
+    MER = 'Mercury'
+    VEN = 'Venus'
+    MAR = 'Mars'
+    JUP = 'Jupiter'
+    SAT = 'Saturn'
+    URA = 'Uranus'
+    NEP = 'Neptune'
+    PLU = 'Pluto'
+    NNO = 'Mean_Node'
+
 #the values correspond to POLARIS event list
 class EventType:
     BIRTH_BROTHER = 1
@@ -83,19 +96,6 @@ class AspectType:
     APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP = 12
     APPROPRIATE_INCLUDING_PLANET_COMBOS = 13
     FAST_TO_SLOW_COMBO = 14
-
-class Planet:
-    SUN = 'Sun'
-    MON = 'Moon'
-    MER = 'Mercury'
-    VEN = 'Venus'
-    MAR = 'Mars'
-    JUP = 'Jupiter'
-    SAT = 'Saturn'
-    URA = 'Uranus'
-    NEP = 'Neptune'
-    PLU = 'Pluto'
-    NNO = 'Mean_Node'
     
 class GoodBadFlag:
     GOOD = 0

@@ -1,6 +1,6 @@
 """ACROSS THE MODULE THE RADICAL POSITIONS ARE ALWAYS P1 first planet set"""
 from enum import Enum
-from constants import ZODIAC_SIGNS
+from constants import ZODIAC_SIGNS, ALL_ASPECTS
 
 class ProcessType(Enum):
     PSSR = "PSSR"
@@ -12,18 +12,6 @@ MAJOR_ASPECTS = {
     "trine": (120,240),
     "square": (90, 270),
     "opposition": (180, 180)
-}
-
-ALL_ASPECTS = {
-    "sextile": (60,300),
-    "conjunction": (0,360),
-    "trine": (120,240),
-    "square": (90, 270),
-    "opposition": (180, 180),
-    "45-semisquare": (45,315),
-    "135-sesquisquare": (135,225),
-    "30-semisextile": (30,330),
-    "150-quincunx": (150, 210)
 }
 
 ZODIAC_START_DEGREES = {

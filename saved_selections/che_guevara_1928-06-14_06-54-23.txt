@@ -1,0 +1,17 @@
+Event: 1967-10-08T12:00:00, ARREST, 30, [-18.794722, -64.201111, 1950.0]
+  Technique: PD
+    - (DS,242.041,(d)) (Jupiter,32.010,(r)) (150-quincunx,1.87')
+    - (H2,92.981,(d)) (MC,302.988,(r)) (150-quincunx,0.45')
+  Technique: SRA
+    - (Jupiter,124.053,(pd)) (MC,303.431,(pd)) (opposition,37.35')
+    - (Mercury,91.526,(pc)) (H9,271.088,(pc)) (opposition,26.28')
+  Technique: Secondary
+    - (H2,23.451,(c)) (Jupiter,23.549,(c)) (conjunction,5.91')
+    - (Mercury,48.138,(c)) (Venus,78.192,(r)) (30-semisextile,3.23')
+
+Event: 1967-10-09T12:00:00, DEATH, 19, [-18.794722, -64.201111, 1950.0]
+  Technique: SRA
+    - (H3,254.691,(td)) (Saturn,255.288,(r)) (conjunction,35.84')
+    - (Mercury,91.526,(pc)) (H3,91.075,(pc)) (conjunction,27.08')
+    - (Mercury,91.526,(pc)) (H9,271.075,(pc)) (opposition,27.08')
+
