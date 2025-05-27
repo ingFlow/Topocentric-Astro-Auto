@@ -1,0 +1,49 @@
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,162.548,(c)) (Sun,162.440,(r)) (conjunction,6.50')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Pluto,189.071,(c)) (Saturn,189.106,(r)) (conjunction,2.06')
+    - (Uranus,209.485,(c)) (Mean_Node,119.428,(r)) (square,3.39')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,230.250,(d)) (H3,80.187,(r)) (150-quincunx,3.80')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,230.944,(c)) (AS,20.983,(r)) (150-quincunx,2.34')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,63.180,(d)) (Mercury,183.256,(r)) (trine,4.57')
+    - (Sun,206.447,(d)) (Uranus,236.481,(r)) (30-semisextile,2.08')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,63.312,(d)) (Mercury,183.256,(r)) (trine,3.33')
+    - (Jupiter,146.533,(c)) (Moon,236.543,(r)) (square,0.65')
+    - (Sun,206.598,(d)) (Moon,236.543,(r)) (30-semisextile,3.30')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,238.537,(d)) (IC,103.508,(r)) (135-sesquisquare,1.70')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,238.537,(d)) (IC,103.508,(r)) (135-sesquisquare,1.70')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,245.747,(c)) (Venus,200.782,(r)) (45-semisquare,2.12')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,80.228,(c)) (H3,80.187,(r)) (conjunction,2.50')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,72.465,(d)) (Jupiter,192.484,(r)) (trine,1.11')
+    - (H3,119.346,(d)) (Mean_Node,119.428,(r)) (conjunction,4.95')
+

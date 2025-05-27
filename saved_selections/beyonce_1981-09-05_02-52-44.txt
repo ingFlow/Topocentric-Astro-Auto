@@ -1,0 +1,54 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,200.205,(d)) (IC,110.269,(r)) (square,3.85')
+    - (Mercury,176.561,(c)) (Uranus,236.482,(r)) (sextile,4.75')
+    - (Venus,207.015,(d)) (H3,86.927,(r)) (trine,5.29')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,222.475,(d)) (Sun,162.459,(r)) (sextile,0.91')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,65.892,(c)) (Venus,200.806,(r)) (135-sesquisquare,5.18')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mars,149.409,(d)) (Mean_Node,119.427,(r)) (30-semisextile,1.06')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,82.672,(c)) (Pluto,202.674,(r)) (trine,0.08')
+    - (Moon,269.381,(d)) (Mean_Node,119.427,(r)) (150-quincunx,2.79')
+    - (Uranus,200.984,(c)) (Venus,200.806,(r)) (conjunction,10.67')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,69.024,(d)) (Saturn,189.108,(r)) (trine,5.05')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,342.561,(c)) (Jupiter,192.488,(r)) (150-quincunx,4.37')
+    - (Jupiter,236.382,(d)) (Uranus,236.482,(r)) (conjunction,6.02')
+    - (Venus,153.319,(c)) (Mercury,183.286,(r)) (30-semisextile,1.94')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,86.393,(c)) (Uranus,236.482,(r)) (150-quincunx,5.31')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,86.393,(c)) (Uranus,236.482,(r)) (150-quincunx,5.31')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,240.967,(d)) (AS,30.896,(r)) (150-quincunx,4.23')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,252.561,(c)) (Jupiter,192.488,(r)) (sextile,4.40')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,245.791,(d)) (Venus,200.806,(r)) (45-semisquare,0.91')
+

@@ -1,0 +1,70 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,102.407,(c)) (Jupiter,192.486,(r)) (square,4.72')
+    - (Mercury,176.453,(c)) (Uranus,236.482,(r)) (sextile,1.69')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,266.431,(c)) (Uranus,236.482,(r)) (30-semisextile,3.07')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,172.114,(c)) (Neptune,262.087,(r)) (square,1.57')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,149.385,(c)) (Mean_Node,119.428,(r)) (30-semisextile,2.58')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,235.963,(d)) (AS,25.878,(r)) (150-quincunx,5.12')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,52.039,(c)) (Neptune,262.087,(r)) (150-quincunx,2.92')
+    - (Mercury,224.641,(d)) (H6,164.704,(r)) (sextile,3.78')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,236.669,(d)) (Moon,236.660,(r)) (conjunction,0.54')
+    - (Mercury,226.710,(d)) (MC,286.801,(r)) (sextile,5.43')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,236.805,(d)) (Moon,236.660,(r)) (conjunction,8.68')
+    - (Mercury,226.852,(d)) (MC,286.801,(r)) (sextile,3.10')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,155.734,(c)) (Venus,200.794,(r)) (45-semisquare,3.58')
+    - (Mercury,136.804,(c)) (MC,286.801,(r)) (150-quincunx,0.19')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,155.734,(c)) (Venus,200.794,(r)) (45-semisquare,3.58')
+    - (Mercury,136.804,(c)) (IC,106.801,(r)) (30-semisextile,0.19')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,83.560,(c)) (H3,83.492,(r)) (conjunction,4.07')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,72.427,(d)) (Jupiter,192.486,(r)) (trine,3.53')
+    - (H3,119.311,(d)) (Mean_Node,119.428,(r)) (conjunction,7.02')
+    - (Venus,145.948,(c)) (AS,25.878,(r)) (trine,4.22')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,162.438,(d)) (Jupiter,192.486,(r)) (30-semisextile,2.89')
+    - (Mean_Node,162.438,(d)) (Sun,162.449,(r)) (conjunction,0.70')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,250.831,(d)) (AS,25.878,(r)) (135-sesquisquare,2.85')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,236.750,(d)) (Moon,236.660,(r)) (conjunction,5.38')
+    - (Sun,113.414,(c)) (H3,83.492,(r)) (30-semisextile,4.69')
+

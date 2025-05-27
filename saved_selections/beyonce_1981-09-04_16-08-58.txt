@@ -1,0 +1,281 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,188.036,(c)) (IC,308.125,(r)) (trine,5.36')
+  Technique: PSSR
+    - (Mercury,162.367,(cp)) (Jupiter,192.398,(r)) (30-semisextile,1.89')
+    - (Venus,128.033,(dr)) (IC,308.125,(r)) (opposition,5.54')
+  Technique: Secondary
+    - (IC,312.405,(p)) (Jupiter,192.398,(r)) (trine,0.43')
+    - (Moon,172.490,(c)) (Pluto,202.659,(r)) (30-semisextile,10.16')
+  Technique: Transit
+    - (Moon,154.810,(c)) (DS,35.117,(r)) (trine,18.47')
+    - (Moon,154.810,(c)) (H3,275.357,(r)) (trine,32.83')
+    - (Moon,305.609,(p)) (H3,275.357,(r)) (30-semisextile,15.12')
+    - (Pluto,214.656,(p)) (H3,275.357,(r)) (sextile,42.04')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,296.473,(d)) (Uranus,236.470,(r)) (sextile,0.17')
+    - (Jupiter,212.665,(d)) (Mercury,182.619,(r)) (30-semisextile,2.75')
+  Technique: PSSR
+    - (Mean_Node,184.997,(cr)) (AS,215.117,(r)) (30-semisextile,7.25')
+    - (Moon,192.778,(cp)) (Jupiter,192.398,(r)) (conjunction,22.78')
+    - (Moon,269.636,(dr)) (Mean_Node,119.451,(r)) (150-quincunx,11.11')
+    - (Venus,155.529,(cp)) (H3,275.357,(r)) (trine,10.35')
+  Technique: Secondary
+    - (Jupiter,188.161,(c)) (MC,128.125,(r)) (sextile,2.18')
+    - (Sun,140.392,(c)) (Venus,200.279,(r)) (sextile,6.75')
+    - (Venus,173.637,(c)) (Mercury,143.565,(c)) (30-semisextile,4.28')
+  Technique: Transit
+    - (Mercury,5.121,(c)) (AS,215.117,(r)) (150-quincunx,0.21')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,296.545,(d)) (Uranus,236.470,(r)) (sextile,4.50')
+  Technique: PSSR
+    - (Mean_Node,184.947,(cp)) (AS,215.117,(r)) (30-semisextile,10.20')
+    - (Mean_Node,185.001,(cr)) (AS,215.117,(r)) (30-semisextile,7.01')
+    - (Moon,179.704,(cr)) (Mean_Node,119.451,(r)) (sextile,15.21')
+    - (Moon,282.508,(dp)) (Jupiter,192.398,(r)) (square,6.58')
+    - (Venus,155.487,(cp)) (H3,275.357,(r)) (trine,7.79')
+  Technique: Secondary
+    - (AS,232.265,(p)) (Moon,172.377,(p)) (sextile,6.71')
+    - (Jupiter,188.148,(c)) (MC,128.125,(r)) (sextile,1.41')
+    - (Moon,290.014,(c)) (Sun,140.321,(c)) (150-quincunx,18.38')
+    - (Moon,290.014,(c)) (Venus,200.279,(r)) (square,15.89')
+    - (Sun,140.321,(c)) (Venus,200.279,(r)) (sextile,2.49')
+    - (Venus,173.548,(c)) (Mercury,143.418,(c)) (30-semisextile,7.81')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H12,211.710,(d)) (Mars,121.648,(r)) (square,3.72')
+  Technique: PSSR
+    - (Mercury,171.922,(cr)) (Neptune,262.087,(r)) (square,9.90')
+    - (Saturn,248.127,(cr)) (IC,308.125,(r)) (sextile,0.09')
+  Technique: Secondary
+    - (DS,16.056,(c)) (Mars,106.166,(c)) (square,6.60')
+    - (Moon,191.402,(p)) (Uranus,236.470,(r)) (45-semisquare,4.10')
+    - (Moon,271.231,(c)) (Mars,121.648,(r)) (150-quincunx,25.03')
+    - (Saturn,191.914,(p)) (Moon,191.402,(p)) (conjunction,30.77')
+  Technique: Transit
+    - (Saturn,247.939,(c)) (MC,128.125,(r)) (trine,11.15')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,236.368,(d)) (Uranus,236.470,(r)) (conjunction,6.12')
+    - (H3,252.465,(c)) (Jupiter,192.398,(r)) (sextile,4.03')
+    - (Jupiter,215.342,(d)) (H3,275.357,(r)) (sextile,0.86')
+  Technique: PSSR
+    - (Jupiter,162.089,(cp)) (Sun,162.026,(r)) (conjunction,3.77')
+    - (Mercury,188.011,(cr)) (MC,128.125,(r)) (sextile,6.87')
+    - (Moon,147.613,(cr)) (Jupiter,192.398,(r)) (45-semisquare,12.91')
+    - (Venus,116.283,(cp)) (Uranus,236.470,(r)) (trine,11.21')
+  Technique: Secondary
+    - (H3,253.917,(c)) (Moon,254.050,(c)) (conjunction,7.95')
+    - (H3,297.226,(p)) (Uranus,237.383,(p)) (sextile,9.43')
+    - (Mercury,137.488,(c)) (Sun,137.505,(c)) (conjunction,0.98')
+    - (Venus,170.034,(c)) (AS,215.117,(r)) (45-semisquare,5.01')
+  Technique: Transit
+    - (Moon,244.625,(p)) (AS,215.117,(r)) (30-semisextile,29.55')
+    - (Moon,244.625,(p)) (H3,275.357,(r)) (30-semisextile,43.91')
+    - (Sun,8.128,(c)) (MC,128.125,(r)) (trine,0.18')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,12.516,(c)) (Jupiter,192.398,(r)) (opposition,7.06')
+    - (DS,57.322,(d)) (Jupiter,192.398,(r)) (135-sesquisquare,4.61')
+    - (Venus,176.513,(c)) (Uranus,236.470,(r)) (sextile,2.60')
+  Technique: PSSR
+    - (Mars,155.080,(cr)) (DS,35.117,(r)) (trine,2.27')
+    - (Moon,80.274,(dr)) (Venus,200.279,(r)) (trine,0.32')
+    - (Venus,161.931,(cr)) (Sun,162.026,(r)) (conjunction,5.67')
+  Technique: Secondary
+    - (Mean_Node,120.859,(c)) (Moon,240.402,(c)) (trine,27.39')
+    - (Moon,222.692,(p)) (Jupiter,192.398,(r)) (30-semisextile,17.64')
+    - (Sun,187.976,(p)) (IC,308.125,(r)) (trine,8.95')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PSSR
+    - (Mercury,158.040,(cr)) (MC,128.125,(r)) (30-semisextile,5.08')
+  Technique: Secondary
+    - (AS,192.418,(c)) (Jupiter,192.398,(r)) (conjunction,1.19')
+    - (H3,251.338,(c)) (Mercury,131.338,(c)) (trine,0.02')
+  Technique: Transit
+    - (Venus,321.215,(p)) (H3,275.357,(r)) (45-semisquare,51.51')
+
+Event: 2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,173.144,(c)) (IC,308.125,(r)) (135-sesquisquare,1.11')
+  Technique: PSSR
+    - (Pluto,140.205,(cp)) (Venus,200.279,(r)) (sextile,4.48')
+    - (Pluto,274.923,(dr)) (DS,35.117,(r)) (trine,11.67')
+  Technique: Secondary
+    - (Uranus,237.609,(p)) (Moon,267.284,(p)) (30-semisextile,19.50')
+  Technique: Transit
+    - (Pluto,277.555,(p)) (IC,308.125,(r)) (30-semisextile,34.21')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,232.739,(c)) (Pluto,202.659,(r)) (30-semisextile,4.77')
+  Technique: PSSR
+    - (Mars,125.388,(dp)) (H3,275.357,(r)) (150-quincunx,1.86')
+    - (Moon,299.715,(cr)) (Mean_Node,119.451,(r)) (opposition,15.86')
+    - (Pluto,279.057,(dr)) (Saturn,189.057,(r)) (square,0.01')
+    - (Saturn,159.914,(cp)) (H6,9.855,(r)) (150-quincunx,3.56')
+  Technique: Secondary
+    - (H12,216.939,(p)) (Neptune,262.087,(r)) (45-semisquare,8.86')
+    - (H3,247.622,(c)) (Pluto,202.659,(r)) (45-semisquare,2.23')
+  Technique: Transit
+    - (Neptune,337.259,(p)) (MC,128.125,(r)) (150-quincunx,51.95')
+    - (Saturn,155.879,(c)) (AS,215.117,(r)) (sextile,45.68')
+    - (Saturn,155.879,(c)) (H3,275.357,(r)) (trine,31.32')
+    - (Saturn,230.413,(p)) (H3,275.357,(r)) (45-semisquare,3.40')
+
+Event: 2016-02-15T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,230.337,(d)) (H3,275.357,(r)) (45-semisquare,1.22')
+  Technique: PSSR
+    - (Jupiter,155.312,(dr)) (AS,215.117,(r)) (sextile,11.66')
+    - (Jupiter,155.312,(dr)) (H3,275.357,(r)) (trine,2.70')
+    - (Jupiter,155.312,(dr)) (Venus,200.279,(r)) (45-semisquare,1.95')
+    - (Jupiter,231.414,(cp)) (Moon,231.473,(r)) (conjunction,3.58')
+    - (Venus,134.428,(dr)) (POF,284.565,(r)) (150-quincunx,8.22')
+    - (Venus,162.468,(cp)) (Jupiter,192.398,(r)) (30-semisextile,4.18')
+  Technique: Secondary
+    - (H3,246.047,(c)) (Jupiter,186.151,(c)) (sextile,6.27')
+  Technique: Transit
+    - (Jupiter,171.005,(p)) (AS,215.117,(r)) (45-semisquare,53.25')
+    - (Mean_Node,65.706,(c)) (AS,215.117,(r)) (150-quincunx,35.33')
+    - (Mean_Node,65.706,(c)) (H3,275.357,(r)) (150-quincunx,20.97')
+    - (Sun,4.344,(c)) (AS,215.117,(r)) (150-quincunx,46.42')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Moon,260.210,(d)) (Venus,200.279,(r)) (sextile,4.15')
+    - (Venus,230.442,(d)) (H3,275.357,(r)) (45-semisquare,5.13')
+  Technique: PSSR
+    - (Jupiter,155.285,(dr)) (AS,215.117,(r)) (sextile,10.08')
+    - (Jupiter,155.285,(dr)) (H3,275.357,(r)) (trine,4.28')
+    - (Jupiter,155.285,(dr)) (Venus,200.279,(r)) (45-semisquare,0.37')
+    - (Jupiter,231.430,(cp)) (Moon,231.473,(r)) (conjunction,2.59')
+    - (Venus,134.435,(dr)) (POF,284.565,(r)) (150-quincunx,7.79')
+  Technique: Secondary
+    - (Jupiter,186.132,(c)) (Moon,140.762,(c)) (45-semisquare,22.19')
+    - (Jupiter,199.677,(p)) (Moon,319.645,(p)) (trine,1.92')
+    - (Moon,140.762,(c)) (Venus,200.279,(r)) (sextile,28.95')
+  Technique: Transit
+    - (Mean_Node,68.090,(c)) (MC,128.125,(r)) (sextile,2.13')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,86.484,(c)) (Uranus,236.470,(r)) (150-quincunx,0.85')
+    - (Venus,231.474,(d)) (Moon,231.473,(r)) (conjunction,0.04')
+  Technique: PSSR
+    - (Mean_Node,162.453,(dp)) (Jupiter,192.398,(r)) (30-semisextile,3.28')
+    - (Moon,190.251,(dr)) (H5,340.503,(r)) (150-quincunx,15.14')
+    - (Pluto,132.326,(cp)) (Jupiter,192.398,(r)) (sextile,4.36')
+    - (Uranus,81.550,(cr)) (Moon,231.473,(r)) (150-quincunx,4.60')
+  Technique: Secondary
+    - (H5,12.885,(p)) (Uranus,237.875,(p)) (135-sesquisquare,0.62')
+    - (Moon,335.752,(p)) (Venus,200.279,(r)) (135-sesquisquare,28.36')
+    - (Venus,157.615,(c)) (Pluto,202.659,(r)) (45-semisquare,2.68')
+  Technique: Transit
+    - (Venus,37.179,(p)) (IC,308.125,(r)) (square,56.79')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mars,158.209,(d)) (IC,308.125,(r)) (150-quincunx,5.06')
+    - (Mean_Node,86.484,(c)) (Uranus,236.470,(r)) (150-quincunx,0.85')
+    - (Venus,231.474,(d)) (Moon,231.473,(r)) (conjunction,0.04')
+  Technique: PSSR
+    - (Mean_Node,162.453,(dp)) (Jupiter,192.398,(r)) (30-semisextile,3.28')
+    - (Moon,190.251,(dr)) (H5,340.503,(r)) (150-quincunx,15.14')
+    - (Pluto,132.326,(cp)) (Jupiter,192.398,(r)) (sextile,4.36')
+    - (Uranus,81.550,(cr)) (Moon,231.473,(r)) (150-quincunx,4.60')
+    - (Venus,206.945,(cr)) (Sun,162.026,(r)) (45-semisquare,4.88')
+  Technique: Secondary
+    - (H5,12.885,(p)) (Uranus,237.875,(p)) (135-sesquisquare,0.62')
+    - (H5,308.296,(c)) (Mars,98.405,(c)) (150-quincunx,6.49')
+    - (Moon,335.752,(p)) (Venus,200.279,(r)) (135-sesquisquare,28.36')
+    - (Venus,157.615,(c)) (Sun,127.604,(c)) (30-semisextile,0.64')
+    - (Venus,241.627,(p)) (Mars,121.648,(r)) (trine,1.25')
+  Technique: Transit
+    - (Mars,95.846,(p)) (DS,35.117,(r)) (sextile,43.72')
+    - (Moon,157.512,(c)) (IC,308.125,(r)) (150-quincunx,36.77')
+    - (Sun,244.230,(c)) (DS,35.117,(r)) (150-quincunx,53.24')
+    - (Venus,37.179,(p)) (IC,308.125,(r)) (square,56.79')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,125.321,(c)) (H3,275.357,(r)) (150-quincunx,2.16')
+    - (Sun,200.228,(d)) (Venus,200.279,(r)) (conjunction,3.06')
+  Technique: PSSR
+    - (Jupiter,134.541,(cp)) (POF,284.565,(r)) (150-quincunx,1.43')
+    - (Mercury,162.291,(dr)) (Jupiter,192.398,(r)) (30-semisextile,6.43')
+    - (Moon,229.981,(cp)) (Venus,200.279,(r)) (30-semisextile,17.87')
+  Technique: Secondary
+    - (Jupiter,185.476,(c)) (H3,275.357,(r)) (square,7.18')
+    - (MC,93.814,(c)) (Venus,153.948,(c)) (sextile,8.06')
+    - (Venus,245.042,(p)) (AS,215.117,(r)) (30-semisextile,4.53')
+  Technique: Transit
+    - (Sun,97.246,(p)) (MC,128.125,(r)) (30-semisextile,52.74')
+    - (Venus,65.531,(p)) (AS,215.117,(r)) (150-quincunx,24.83')
+    - (Venus,65.531,(p)) (H3,275.357,(r)) (150-quincunx,10.47')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PSSR
+    - (Mercury,179.413,(dp)) (Mean_Node,119.451,(r)) (sextile,2.30')
+    - (Moon,102.671,(cp)) (Jupiter,192.398,(r)) (square,16.34')
+  Technique: Secondary
+    - (AS,182.798,(c)) (Mercury,182.619,(r)) (conjunction,10.73')
+    - (AS,182.798,(c)) (Venus,152.779,(c)) (30-semisextile,1.12')
+    - (Jupiter,185.331,(c)) (H3,275.357,(r)) (square,1.53')
+    - (MC,92.939,(c)) (Venus,152.779,(c)) (sextile,9.58')
+    - (Venus,152.779,(c)) (Mercury,182.619,(r)) (30-semisextile,9.61')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,236.314,(d)) (Uranus,236.470,(r)) (conjunction,9.38')
+  Technique: PSSR
+    - (Jupiter,6.475,(dr)) (Moon,231.473,(r)) (135-sesquisquare,0.09')
+    - (Mean_Node,192.445,(cp)) (Jupiter,192.398,(r)) (conjunction,2.80')
+    - (Mercury,161.913,(cp)) (Sun,162.026,(r)) (conjunction,6.75')
+    - (Mercury,187.941,(dp)) (MC,128.125,(r)) (sextile,11.05')
+    - (Moon,182.918,(cr)) (Mercury,182.619,(r)) (conjunction,17.95')
+    - (Venus,149.489,(dr)) (Mean_Node,119.451,(r)) (30-semisextile,2.31')
+  Technique: Secondary
+    - (H3,312.225,(p)) (Jupiter,192.398,(r)) (trine,10.38')
+    - (Jupiter,185.090,(c)) (AS,215.117,(r)) (30-semisextile,1.67')
+    - (Uranus,238.167,(p)) (Moon,58.494,(p)) (opposition,19.60')
+    - (Venus,247.950,(p)) (MC,128.125,(r)) (trine,10.53')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,230.281,(d)) (H3,275.357,(r)) (45-semisquare,4.52')
+    - (Jupiter,230.281,(d)) (Venus,200.279,(r)) (30-semisextile,0.13')
+    - (Venus,162.351,(c)) (Jupiter,192.398,(r)) (30-semisextile,2.82')
+  Technique: PSSR
+    - (Jupiter,6.597,(cp)) (Moon,231.473,(r)) (135-sesquisquare,7.43')
+    - (Moon,42.688,(cr)) (Jupiter,192.398,(r)) (150-quincunx,17.40')
+    - (Venus,132.222,(dr)) (Jupiter,192.398,(r)) (sextile,10.59')
+    - (Venus,132.222,(dr)) (Sun,162.026,(r)) (30-semisextile,11.75')
+    - (Venus,132.267,(dp)) (Jupiter,192.398,(r)) (sextile,7.87')
+  Technique: Secondary
+    - (H3,238.870,(c)) (Moon,29.224,(c)) (150-quincunx,21.24')
+    - (Jupiter,201.381,(p)) (Moon,231.473,(r)) (30-semisextile,5.53')
+    - (Mercury,206.608,(p)) (Uranus,236.470,(r)) (30-semisextile,8.26')
+    - (Venus,149.594,(c)) (Mean_Node,119.451,(r)) (30-semisextile,8.56')
+    - (Venus,149.594,(c)) (Moon,29.224,(c)) (trine,22.18')
+  Technique: Transit
+    - (Jupiter,37.888,(p)) (MC,128.125,(r)) (square,14.23')
+    - (Moon,188.729,(c)) (MC,128.125,(r)) (sextile,36.27')
+    - (Venus,334.117,(c)) (AS,215.117,(r)) (trine,60.03')
+
+Event: 2025-02-03T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PSSR
+    - (Mercury,149.509,(cr)) (Mean_Node,119.451,(r)) (30-semisextile,3.46')
+    - (Moon,185.111,(dp)) (AS,215.117,(r)) (30-semisextile,0.41')
+    - (Moon,278.258,(cr)) (MC,128.125,(r)) (150-quincunx,7.98')
+    - (Venus,188.019,(dp)) (MC,128.125,(r)) (sextile,6.33')
+    - (Venus,207.147,(cr)) (Sun,162.026,(r)) (45-semisquare,7.28')
+

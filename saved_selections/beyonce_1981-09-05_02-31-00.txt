@@ -1,0 +1,39 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,176.402,(c)) (Uranus,236.482,(r)) (sextile,4.76')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Pluto,189.227,(c)) (Saturn,189.106,(r)) (conjunction,7.23')
+    - (Uranus,209.346,(c)) (Mean_Node,119.428,(r)) (square,4.93')
+
+Event: 2007-02-11T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,57.568,(c)) (Jupiter,192.485,(r)) (135-sesquisquare,4.99')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,236.572,(d)) (Moon,236.603,(r)) (conjunction,1.86')
+    - (DS,236.572,(d)) (Uranus,236.482,(r)) (conjunction,5.41')
+
+Event: 2014-05-05T12:00:00, FAILURE_DEFEATED, 23, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Neptune,291.859,(d)) (H3,81.874,(r)) (150-quincunx,0.90')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (POF,130.734,(d)) (H5,130.568,(r)) (conjunction,9.96')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (POF,130.734,(d)) (H5,130.568,(r)) (conjunction,9.96')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,83.519,(c)) (AS,23.488,(r)) (sextile,1.85')
+    - (Mercury,231.886,(d)) (H3,81.874,(r)) (150-quincunx,0.75')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Venus,143.556,(c)) (AS,23.488,(r)) (trine,4.05')
+

@@ -1,0 +1,39 @@
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,350.854,(c)) (Venus,200.786,(r)) (150-quincunx,4.11')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,350.750,(c)) (Venus,200.786,(r)) (150-quincunx,2.18')
+
+Event: 2005-09-10T12:00:00, DIVORCE_SEPARATION, 10, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,262.749,(c)) (Pluto,202.673,(r)) (sextile,4.57')
+    - (MC,307.048,(d)) (Neptune,262.087,(r)) (45-semisquare,2.34')
+    - (Neptune,239.618,(c)) (MC,284.531,(r)) (45-semisquare,5.19')
+    - (Pluto,189.166,(c)) (Saturn,189.106,(r)) (conjunction,3.61')
+    - (Uranus,209.400,(c)) (Mean_Node,119.428,(r)) (square,1.68')
+
+Event: 2010-02-04T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,342.439,(c)) (Jupiter,192.484,(r)) (150-quincunx,2.75')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,245.771,(d)) (Venus,200.786,(r)) (45-semisquare,0.90')
+    - (POF,129.664,(d)) (H5,129.832,(r)) (conjunction,10.08')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (DS,245.771,(d)) (Venus,200.786,(r)) (45-semisquare,0.90')
+    - (POF,129.664,(d)) (H5,129.832,(r)) (conjunction,10.08')
+
+Event: 2023-02-05T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,81.155,(c)) (H3,81.219,(r)) (conjunction,3.82')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (H3,119.459,(d)) (Mean_Node,119.428,(r)) (conjunction,1.87')
+    - (MC,245.856,(c)) (Venus,200.786,(r)) (45-semisquare,4.21')
+

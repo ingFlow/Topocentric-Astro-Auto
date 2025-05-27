@@ -659,7 +659,7 @@ def create_analysis_workbook():
 
     # 2. Derive base name for .txt files and Excel output
     base_name_for_txt = os.path.splitext(json_filename_input)[0].replace(' ', '_')
-    excel_output_filename = f"{base_name_for_txt}_rectification_analysis.xlsx"
+    excel_output_filename = f"{base_name_for_txt}_rectification_analysis_grouped.xlsx"
     logging.info(f"Derived base name for text files: {base_name_for_txt}")
     logging.info(f"Output Excel file will be: {excel_output_filename}")
 

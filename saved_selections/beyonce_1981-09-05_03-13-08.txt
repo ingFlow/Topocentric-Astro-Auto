@@ -1,0 +1,50 @@
+Event: 1986-06-24T12:00:00, BIRTH_SISTER, 2, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (IC,119.606,(d)) (Mean_Node,119.426,(r)) (conjunction,10.79')
+    - (Venus,206.940,(d)) (Moon,236.950,(r)) (30-semisextile,0.60')
+
+Event: 2004-02-08T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,211.564,(d)) (H3,91.624,(r)) (trine,3.61')
+    - (POF,91.656,(c)) (H3,91.624,(r)) (conjunction,1.89')
+
+Event: 2004-03-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mercury,211.654,(d)) (H3,91.624,(r)) (trine,1.80')
+    - (POF,91.589,(c)) (H3,91.624,(r)) (conjunction,2.12')
+
+Event: 2008-04-04T12:00:00, MARRIAGE_ENGAGEMENT_FOR_FEMALE, 8, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,320.847,(d)) (Venus,200.823,(r)) (trine,1.45')
+    - (Moon,266.410,(d)) (Uranus,236.482,(r)) (30-semisextile,4.37')
+
+Event: 2016-03-31T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Sun,123.332,(c)) (Mercury,183.307,(r)) (sextile,1.50')
+
+Event: 2017-06-13T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,237.113,(d)) (Moon,236.950,(r)) (conjunction,9.77')
+    - (Mean_Node,86.517,(c)) (Uranus,236.482,(r)) (150-quincunx,2.10')
+
+Event: 2017-06-13T12:00:00, BIRTH_SON, 3, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Jupiter,237.113,(d)) (Moon,236.950,(r)) (conjunction,9.77')
+    - (Mean_Node,86.517,(c)) (Uranus,236.482,(r)) (150-quincunx,2.10')
+    - (Sun,122.089,(c)) (Mars,121.941,(r)) (conjunction,8.92')
+
+Event: 2020-06-28T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (MC,333.371,(d)) (Mercury,183.307,(r)) (150-quincunx,3.84')
+
+Event: 2021-06-17T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (AS,342.527,(c)) (Jupiter,192.491,(r)) (150-quincunx,2.17')
+    - (Venus,147.427,(c)) (Jupiter,192.491,(r)) (45-semisquare,3.81')
+
+Event: 2024-02-06T12:00:00, SUCCESS_ELECTED, 21, [29.7217, -95.3875, 32]
+  Technique: PD
+    - (Mean_Node,162.508,(d)) (Jupiter,192.491,(r)) (30-semisextile,1.02')
+    - (Uranus,277.525,(d)) (AS,37.611,(r)) (trine,5.19')
+    - (Venus,250.018,(d)) (MC,295.093,(r)) (45-semisquare,4.49')
+
