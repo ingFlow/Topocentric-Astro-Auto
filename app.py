@@ -385,23 +385,28 @@ def update_content():
                     final_list_to_send = data_list
 
             selections_to_send = {} 
-            current_file_base_name = os.path.splitext(current_file)[0]
-            base_filename_part = f"{current_file_base_name}_{radix_date_str}"
-            filename = sanitize_filename(base_filename_part)
-            filepath = os.path.join(SELECTIONS_DIR, filename)
             
-            logging.info(f"Attempting to parse file: {filepath}") # DEBUG LINE
-            loaded_selections = parse_selection_file(filepath)
-            
-            if loaded_selections is not None:
-                logging.info(f"Using selections loaded from file: {filepath}")
-                selections_to_send = loaded_selections
-                print(loaded_selections)
-                selections_data[radix_date_str] = loaded_selections # Update in-memory data
+            if radix_date_str in selections_data:
+                logging.info(f"Using existing in-memory selections_data for {radix_date_str}.")
+                selections_to_send = selections_data[radix_date_str]
             else:
-                #2. if file not found, or failed to parse, use in-memory data
-                logging.info(f"No valid saved file found for {radix_date_str}. Using in-memory selections (if any).")
-                selections_to_send = selections_data.get(radix_date_str, {})
+                current_file_base_name = os.path.splitext(current_file)[0]
+                base_filename_part = f"{current_file_base_name}_{radix_date_str}"
+                filename = sanitize_filename(base_filename_part)
+                filepath = os.path.join(SELECTIONS_DIR, filename)
+                
+                logging.info(f"Attempting to parse file: {filepath}") # DEBUG LINE
+                loaded_selections = parse_selection_file(filepath)
+                
+                if loaded_selections is not None:
+                    logging.info(f"Using selections loaded from file: {filepath}")
+                    selections_to_send = loaded_selections
+                    print(loaded_selections)
+                    selections_data[radix_date_str] = loaded_selections # Update in-memory data
+                else:
+                    #2. if file not found, or failed to parse, use in-memory data
+                    logging.info(f"No valid saved file found for {radix_date_str}. Using in-memory selections (if any).")
+                    selections_to_send = selections_data.get(radix_date_str, {})
 
             static_message_parts = []
             if radix_date:
