@@ -1,0 +1,89 @@
+                                 Date
+     01) Death of                02  1994 ±         -         -       -
+     father/gr'father        11  Jul      00
+     02) Death of                13  1997 ±         -         -       -
+     mother/gr'mother        12  Aug      00
+     03) Birth of sister         16  1997 ±         -         -       -
+                             02  Nov      00
+     04) Move home               01  2004 ±         - 028E04'  26S11' 
+                             39  Dec      15           28"      17"
+     05) Failure/Defeated        05  2008 ±         - 028E06'  26S04' 
+                             23  Sep      00           03"      48"
+     06) Failure/Defeated        11  2008 ±         - 028E06'  26S04' 
+                             23  Dec      00           03"      48"
+     07) Failure/Defeated        14  2009 ±         - 028E06'  26S04' 
+                             23  Jan      00           03"      48"
+     08) Travel (positive)       15  2009 ±         -         -       -
+                             26  Jan      00
+     09) Birth of brother        19  2009 ±         - 028E06'  26S04' 
+                             01  Mar      00           03"      48"
+     10) Success/Elected         15  2010 ±         - 028E06'  26S04' 
+                             21  Sep      00           03"      48"
+     11) Travel (positive)       07  2011 ±         - 028E06'  26S04' 
+                             26  Dec      05           03"      48"
+     12) Travel (positive)       06  2012 ±         - 028E06'  26S04' 
+                             26  Mar      00           03"      48"
+     13) Failure/Defeated        09  2012 ±         - 028E06'  26S04' 
+                             23  Oct      00           03"      48"
+     14) Travel (positive)       12  2012 ±         - 028E06'  26S04' 
+                             26  Dec      00           03"      48"
+     15) Failure/Defeated        12  2013 ±         - 028E06'  26S04' 
+                             23  Dec      00           03"      48"
+     16) Birth of brother        24  2014 ±         - 028E09'  26S07' 
+                             01  Mar      00           40"      50"
+     17) back to hr              16  2015 ±         - 028E09'  26S07' 
+                             21  Mar      00           40"      50"
+     18) Bur                     27  2015 ±         - 028E09'  26S07' 
+                             21  Mar      00           40"      50"
+     19) Death of                27  2015 ±         - 028E09'  26S07' 
+     mother/gr'mother        12  May      00           40"      50"
+     20) Bur                     04  2015 ±         - 028E09'  26S07' 
+                             21  Nov      00           40"      50"
+     21) Success/Elected         28  2016 ±         - 028E09'  26S07' 
+                             21  Jan      00           40"      50"
+     22) Death of                27  2016 ±         - 028E09'  26S07' 
+     father/gr'father        11  May      00           40"      50"
+     23) Bish                    05  2016 ±         - 028E09'  26S07' 
+                             21  Oct      00           40"      50"
+     24) Success/Elected         31  2017 ±         - 028E09'  26S07' 
+                             21  Jan      00           40"      50"
+     25) Success/Elected         15  2017 ±         - 028E09'  26S07' 
+                             21  Sep      00           40"      50"
+     26) Failure/Defeated        22  2017 ±         - 028E09'  26S07' 
+                             23  Sep      00           40"      50"
+     27) Success/Elected         28  2018 ±         - 028E09'  26S07' 
+                             21  Jan      00           40"      50"
+     28) Birth of sister         19  2018 ±         - 028E09'  26S07' 
+                             02  Feb      00           40"      50"
+     29) Success/Elected         15  2018 ±         - 028E09'  26S07' 
+                             21  Apr      00           40"      50"
+     30) Success/Elected         10  2018 ±         - 028E09'  26S07' 
+                             21  Oct      00           40"      50"
+     31) Success/Elected         03  2019 ±         - 028E09'  26S07' 
+                             21  Jan      00           40"      50"
+     32) Travel (negative)       22  2019 ±         - 028E09'  26S07' 
+                             27  May      00           40"      50"
+     33) Travel (negative)       13  2019 ±         - 028E09'  26S07' 
+                             27  Aug      00           40"      50"
+     34) Death of                20  2021 ±         - 028E09'  26S07' 
+     mother/gr'mother        12  Feb      00           40"      50"
+     35) Divorce/Separation      06  2021 ±         - 028E09'  26S07' 
+                             10  Apr      00           40"      50"
+     36) Travel (negative)       10  2021 ±         - 028E09'  26S07' 
+                             27  Jul      00           40"      50"
+     37) Death                   01  2022 ±         - 037E05'  01S17' 
+                             19  Jan      00           50"      01"
+     38) Success/Elected         03  2022 ±         - 037E05'  01S17' 
+                             21  Jan      00           50"      01"
+     39) Travel (positive)       25  2022 ±         - 037E05'  01S17' 
+                             26  May      00           50"      00"
+     40) Accident                11  2024 ±         -         -       -
+                             31  Jan      00
+     41) Success/Elected         23  2024 ±         - 028E09'  26S07' 
+                             21  Feb      00           40"      50"
+     42) Move home               28  2024 ±         - 028E09'  26S07' 
+                             39  Feb      00           40"      50"
+     43) 6/12 +                  08  2024 ±         - 028E09'  26S07' 
+                             49  Mar      00           40"      50"
+     44) Success/Elected         26  2024 ±         - 028E09'  26S07' 
+                             21  Dec      00           40"      50"

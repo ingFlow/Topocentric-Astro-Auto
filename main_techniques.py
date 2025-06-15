@@ -304,4 +304,4 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
 #pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)
 #asp.sum_sec_prim(r"data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_primariesCOUNT.txt",r'data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_secondCOUNT.txt')
-#convert_polaris_event_data_json("data_input/beyonce.json", "data_input/beyonce_pola_events.txt")
+#convert_polaris_event_data_json("data_input/25_06_15 ing tea.json", "data_input\ing tea pola events.txt")

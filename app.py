@@ -81,7 +81,7 @@ def home():
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = process_techniques_files.process_polaris_times(r'data_times\beyonce new rect 1 hour.txt', 24)
+    list_times = process_techniques_files.process_polaris_times(r'data_times\25_06_15 ingtea times.txt', 150)
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
     #452801u7\'^":iclist_times = [dt_actual_dob, dt_epoch]
     #list_times.append(dt_actual_dob)
