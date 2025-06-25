@@ -21,3 +21,5 @@ rm -rf /tmp/swisseph
 # RUN THESE IN TERMINAL
 # chmod +x setup.sh
 # sudo ./setup.sh
+#python -m venv venv  IF YOU NEED A VIRTUAL ENVIRONMENT
+
