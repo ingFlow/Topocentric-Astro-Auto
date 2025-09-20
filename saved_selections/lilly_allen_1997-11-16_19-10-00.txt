@@ -1,0 +1,4 @@
+Event: 2015-05-27T12:00:00, DEATH_MOTHER_GRAND, 12, [-4.043055556, 39.658333333, 23.0]
+  Technique: PSSR
+    - dt_converse_return: 1980-11-16 10:14:30.938010
+

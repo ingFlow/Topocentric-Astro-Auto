@@ -521,6 +521,7 @@ def get_timezone_from_pos(geopos):
 def generate_hourly_datetimes(geopos, input_datetime):
     utc_offset = get_timezone_from_pos(geopos)
     
+    #this just needed the date and sets the time to local midnight
     start_datetime = input_datetime.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(hours=utc_offset)
     end_datetime = start_datetime + timedelta(days=1)
 

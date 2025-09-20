@@ -1,0 +1,30 @@
+{
+    "dt_radix_start": "2025-05-15T12:56:00",
+    "dt_radix_end": "2025-05-15T12:56:00",
+    "dt_actual_dob": "2025-05-15T12:56:00",
+    "geopos_natal": [
+        40.77,
+        -111.883,
+        1319.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "2025-05-15T12:56:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                40.77,
+                -111.883,
+                1319.0
+            ]
+        },
+        {
+            "datetime": "2025-06-25T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                40.77,
+                -111.883,
+                1319.0
+            ]
+        }
+    ]
+}

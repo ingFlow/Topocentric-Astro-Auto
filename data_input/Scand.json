@@ -1,0 +1,48 @@
+{
+    "dt_radix_start": "1986-03-26T05:00:00",
+    "dt_radix_end": "1986-03-26T05:00:00",
+    "dt_actual_dob": "1986-03-26T05:00:00",
+    "geopos_natal": [
+        -0.417,
+        36.95,
+        1750.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "2025-06-25T03:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "2009-03-19T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "2014-03-24T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        },
+        {
+            "datetime": "2018-02-19T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                38.33333,
+                -78.433333,
+                183.0
+            ]
+        }
+    ]
+}

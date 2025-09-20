@@ -18,7 +18,7 @@ import shutil
 import json
 from constants import calc_planets_pof_houses_labelled, parse_selection_file, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
 from aspects_base import calculate_obliquity
-from kerykeion import AstrologicalSubject, KerykeionChartSVG
+#from kerykeion import AstrologicalSubject, KerykeionChartSVG
 import logging
 
 logging.basicConfig(level=logging.INFO)
@@ -59,7 +59,8 @@ def home():
     list_event_locations = [t[2] for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
-    list_times = [
+    list_times = []
+    '''list_times = [
         datetime(1929,7,27,21,17,36),
         datetime(1929,7,28,18,30,4),
         datetime(1929,7,27,21,41,20),
@@ -67,7 +68,7 @@ def home():
         #07:49:20
         #15:49:36
         
-    ]
+    ]'''
 
     time_strings = [
         "1:51:36", "7:46:40", "13:49:20", "10:38:48", "13:41:12", "15:26:56",
@@ -81,13 +82,13 @@ def home():
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    list_times = process_techniques_files.process_polaris_times(r'data_times\25_06_15 ingtea times.txt', 150)
+    #list_times = process_techniques_files.process_polaris_times(r'data_times\14 11 lilly allen rect.txt', 150)
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
     #452801u7\'^":iclist_times = [dt_actual_dob, dt_epoch]
-    #list_times.append(dt_actual_dob)
+    list_times.append(dt_actual_dob)
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
-    '''for t in temp:
-        list_times.append(t)'''
+    for t in temp:
+        list_times.append(t)
     
     #left_items = [t.isoformat() for t in list_times]
     left_items = [dt.isoformat() for dt in list_times]
@@ -436,6 +437,8 @@ def update_content():
         logging.error(f"Error in /update_content")
         return jsonify({'static_message': f"An unexpected error occurred: {e}", 'aspects': [], 'selections': {}}), 500
 
+    return jsonify({'static_message': "No data available for the selected options.", 'aspects': [], 'selections': {}}), 400
+    
 @app.route('/update_selection', methods=['POST'])
 def update_selection():
     global selections_data
@@ -664,7 +667,7 @@ def generate_chart():
     svg_full_path = f"static/charts/{filename} - Natal Chart.svg"
     svg_path = f"{filename} - Natal Chart.svg" 
     
-    chart_subject = AstrologicalSubject(
+    '''chart_subject = AstrologicalSubject(
         filename,
         chart_datetime.year,
         chart_datetime.month,
@@ -685,7 +688,7 @@ def generate_chart():
         return send_from_directory('static/charts', svg_path) 
     else:
         return "File not found", 404
-
+'''
 def sanitize_filename(filename):
     sanitized = filename.replace(":", "-").replace(" ", "_").replace("T", "_")
     sanitized = re.sub(r'[<>:"/\\|?*]+', '', sanitized)

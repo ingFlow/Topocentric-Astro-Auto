@@ -1,22 +1,13 @@
 {
     "dt_radix_start": "2000-03-11T02:00:00",
     "dt_radix_end": "2000-03-12T02:00:00",
-    "dt_actual_dob": "2000-03-11T15:00:31",
+    "dt_actual_dob": "2000-03-11T12:34:40",
     "geopos_natal": [
         -26.17678333,
         28.04259444,
         1753.0
     ],
     "list_of_events": [
-        {
-            "datetime": "2008-09-05T12:00:00",
-            "event_type": "DIVORCE_SEPARATION",
-            "geopos": [
-                -26.0803698177348, 
-                28.100897638076653,
-                1753.0
-            ]
-        },
         {
             "datetime": "2009-03-19T12:00:00",
             "event_type": "BIRTH_BROTHER",
@@ -27,8 +18,8 @@
             ]
         },
         {
-            "datetime": "2010-09-15T12:00:00",
-            "event_type": "SUCCESS_ELECTED",
+            "datetime": "2011-12-07T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
             "geopos": [
                 -26.0803698177348, 
                 28.100897638076653,
@@ -74,6 +65,15 @@
         {
             "datetime": "2015-05-27T12:00:00",
             "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                -26.130908357936896,
+                28.161136353870678,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2016-01-26T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
             "geopos": [
                 -26.130908357936896,
                 28.161136353870678,
@@ -144,6 +144,15 @@
             ]
         },
         {
+            "datetime": "2022-01-03T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        }, 
+        {
             "datetime": "2022-05-25T12:00:00",
             "event_type": "TRAVEL_POSITIVE",
             "geopos": [
@@ -151,6 +160,51 @@
                 37.09761640578017,
                 23.0
             ]
-        }     
+        },
+        {
+            "datetime": "2024-01-11T12:00:00",
+            "event_type": "ACCIDENT",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        }, 
+        {
+            "datetime": "2024-03-08T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        },   
+        {
+            "datetime": "2025-06-23T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2025-07-24T12:00:00",
+            "event_type": "FAILURE_DEFEATED",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        },
+        {
+            "datetime": "2025-07-25T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                -26.0803698177348, 
+                28.100897638076653,
+                1753.0
+            ]
+        }
     ]
 }

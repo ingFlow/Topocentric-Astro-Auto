@@ -157,15 +157,13 @@ def convert_polaris_event_data_json(file_to_write_str, file_to_read_str):
     
 
 def convert_manual_birth_data_json(file_to_write_str):
-    dt_radix_start = datetime(1986,3,26, 00, 00, 00)
-    dt_radix_end = datetime(1986,3,26, 3, 00, 00)
-    dt_actual_dob = datetime(1986,3,26, 14, 43, 00)
-    geopos = [-0.417,36.950,1750.0]
+    dt_radix_start = datetime(2025,5,15, 12, 56, 00)
+    dt_radix_end = datetime(2025, 5, 15, 12 ,56, 00)
+    dt_actual_dob = datetime(2025, 5, 15, 12, 56, 00)
+    geopos = [40.77,-111.883,1319.0]
     list_of_events = [
-        (datetime(2025,6,25, 3, 00, 00) ,EventType.SUCCESS_ELECTED,[38.33333,-78.433333,183.0]),
-        (datetime(2009,3,19, 12, 00, 00) ,EventType.BIRTH_SON,[38.33333,-78.433333,183.0]),
-        (datetime(2014,3,24, 12, 00, 00) ,EventType.SUCCESS_ELECTED,[38.33333,-78.433333,183.0]),
-        (datetime(2018,2,19, 12, 00, 00) ,EventType.SUCCESS_ELECTED,[38.33333,-78.433333,183.0])
+        (datetime(2025,5,15, 12, 56, 00) ,EventType.SUCCESS_ELECTED,[40.77,-111.883,1319.0]),
+        (datetime(2025,6,25, 12, 00, 00) ,EventType.DEATH_FATHER_GRAND,[40.77,-111.883,1319.0])
     
     ]
     
@@ -303,4 +301,4 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 #pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)
 #asp.sum_sec_prim(r"data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_primariesCOUNT.txt",r'data_rect\25_01_05_MillardStep3\25_01_05_1874-11-30_secondCOUNT.txt')
 #convert_polaris_event_data_json("data_input/25_06_15 ing tea.json", "data_input\ing tea pola events.txt")
-convert_manual_birth_data_json("data_input/Scand.json")
+#convert_manual_birth_data_json("data_input/AmyLou_tannershay")
