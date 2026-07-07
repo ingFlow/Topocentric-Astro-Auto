@@ -60,15 +60,13 @@ def home():
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
     list_times = []
-    '''list_times = [
-        datetime(1929,7,27,21,17,36),
-        datetime(1929,7,28,18,30,4),
-        datetime(1929,7,27,21,41,20),
-        datetime(1929,7,27,22,14,24)
+    list_times = [
+        datetime(2000,3,11,13,24,56),
+        datetime(1997,11,16,12,57,4)
         #07:49:20
         #15:49:36
         
-    ]'''
+    ]
 
     time_strings = [
         "1:51:36", "7:46:40", "13:49:20", "10:38:48", "13:41:12", "15:26:56",
@@ -81,11 +79,12 @@ def home():
     #list_times = [datetime.strptime(f"1874-11-30 {time}", "%Y-%m-%d %H:%M:%S") for time in time_strings]
     
     str_date = dt_actual_dob.strftime('%d %B %Y')
+    list_times.append(dt_actual_dob)
     #list_times = aspects_implementation.process_manual_rect_csv('ingtea_ver3_sorted_data.csv',str_date,100,+2)
-    #list_times = process_techniques_files.process_polaris_times(r'data_times\14 11 lilly allen rect.txt', 150)
+    #list_times.append(process_techniques_files.process_polaris_times(r'data_times\25_01_05_ingtea react.txt', 150))
     #list_times = process_techniques_files.process_datetime_count_csv('data_times/winston narrow.csv')
     #452801u7\'^":iclist_times = [dt_actual_dob, dt_epoch]
-    list_times.append(dt_actual_dob)
+    
     temp = process_techniques_files.generate_hourly_datetimes(geo_pos_natal,dt_actual_dob)
     for t in temp:
         list_times.append(t)

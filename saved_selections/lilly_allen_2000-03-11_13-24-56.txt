@@ -1,0 +1,8 @@
+Event: 2004-12-01T12:00:00, MOVE_HOME, 39, [-26.075, 28.09472, 1753.0]
+  Technique: Natal
+    - ('Jupiter', 34.75999243716759, '(r)')
+
+Event: 2025-07-24T12:00:00, FAILURE_DEFEATED, 23, [-26.116666666666667, 28.15, 1613.0]
+  Technique: PSSR
+    - (Jupiter,73.272,(dr)) (Saturn,43.345,(r)) (30-semisextile,4.41')
+
