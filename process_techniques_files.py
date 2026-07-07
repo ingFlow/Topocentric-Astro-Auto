@@ -376,7 +376,7 @@ def get_list_datetime_from_times(str_times, dt_bday, i_timezone):
     
     return datetime_list
 
-def sort_polaris_times(file_name, file_write＿name, count_times_wanted, threshold=None):
+def sort_polaris_times(file_name, file_write_name, count_times_wanted, threshold=None):
     '''
     created new file with polaris times sorted according to A value the if you give threshold
     removes the lines that do not have enough A points
@@ -397,7 +397,7 @@ def sort_polaris_times(file_name, file_write＿name, count_times_wanted, thresho
     non_valid_lines = [line for line in lines if len(line.split()) <= 3]
     year = non_valid_lines[0].strip()
 
-    sorted_lines = sorted(valid＿lines, key=lambda x: int(x.split()[4]), reverse=True)
+    sorted_lines = sorted(valid_lines, key=lambda x: int(x.split()[4]), reverse=True)
     #sorted_lines = sorted(valid_lines, key=lambda x: int(x.split()[4]) + int(x.split()[5]), reverse=True)
 
     filtered_lines = [
