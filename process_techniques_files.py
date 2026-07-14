@@ -862,6 +862,9 @@ def create_analysis_workbook():
     except Exception as e:
         logging.error(f"Error saving Excel file {excel_output_filename}: {e}")
 
+#ephemeris-path configuration point
+swe.set_ephe_path('/usr/share/swisseph/ephe')
+
 #sort_polaris_times(r'data_times\25_01_07_ingtea rect 5 to 8.txt', 'data_times/25_01_07_ingtea sorted max a 3 rect.txt',58, 3)
 #delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
 #create_analysis_workbook()

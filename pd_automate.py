@@ -862,5 +862,3 @@ def calc_lst(jd, longitude):
         lst -= 24
     
     return lst
-
-swe.set_ephe_path('/usr/share/swisseph/ephe')

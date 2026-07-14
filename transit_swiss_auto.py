@@ -38,5 +38,3 @@ class Transit_Auto:
     def get_dict_info(self):
         return self.__dict_info
 
-
-swe.set_ephe_path('/usr/share/swisseph/ephe')

@@ -1,0 +1,25 @@
+# Core astrology calculations
+pyswisseph
+julian
+
+# Date, time, and timezone handling
+python-dateutil
+pytz
+timezonefinder
+
+# Web application
+Flask
+
+# Data processing
+numpy
+pandas
+
+# Data visualization
+matplotlib
+seaborn
+
+# API requests
+requests
+
+# Excel support
+openpyxl

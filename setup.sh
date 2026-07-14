@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install required Python packages
-pip install julian pyswisseph flask timezonefinder pandas requests python-datautil openpyxl 
+pip install -r requirements.txt
 
 # Clone the swisseph repository
 git clone --depth 1 https://github.com/aloistr/swisseph.git /tmp/swisseph
@@ -15,14 +15,16 @@ sudo cp -r /tmp/swisseph/ephe/* /usr/share/swisseph/ephe/
 # Delete the temporary folder
 rm -rf /tmp/swisseph
 
-#check port is lsof -i :5000
-#kill port is kill -9 <pid>
-
-# RUN THESE IN TERMINAL DOES NOT WORK IN VSCODE
+#====================== TERMINAL FUNCTIONS FOR EASE OF USE =====================
+# RUN THESE IN TERMINAL (DOES NOT WORK IN VSCODE)
 # chmod +x setup.sh
 # sudo ./setup.sh
-#python -m venv venv  IF YOU NEED A VIRTUAL ENVIRONMENT
-#Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process 
+
+#CHECK PORT:     lsof -i :5000
+#KILL PORT:      kill -9 <pid>
+
+#IF YOU NEED A VIRTUAL ENVIRONMENT: python -m venv venv  
 #BYPASS ERROR FOR .\venv\Scripts\activate
+#Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process 
 
 

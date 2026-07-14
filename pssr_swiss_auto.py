@@ -110,6 +110,3 @@ def calc_pssr_direct_year(radix_datetime, event_datetime):
     else:
         direct_year = event_datetime.year
     return direct_year
-
-
-swe.set_ephe_path('/usr/share/swisseph/ephe')

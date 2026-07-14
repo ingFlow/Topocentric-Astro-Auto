@@ -23,6 +23,9 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+#ephemeris-path configuration point 
+swe.set_ephe_path('/usr/share/swisseph/ephe')
+
 geo_pos_natal = []
 dt_radix = None
 lunar_orb = 9

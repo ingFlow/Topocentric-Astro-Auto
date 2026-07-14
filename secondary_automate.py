@@ -94,4 +94,3 @@ def calc_POF(planets, ac):
 
     return swe.degnorm(ac + long_moon - long_sun)
 
-swe.set_ephe_path('/usr/share/swisseph/ephe')

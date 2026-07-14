@@ -373,7 +373,6 @@ def get_str_planet_counts(counts):
         return_str += f"{PLANETS[i]}: {counts[i]}, "
     return return_str
 
-swe.set_ephe_path('/usr/share/swisseph/ephe')
 '''dt_radix = datetime(1926,4,21,1,12,50)
 dt_event = datetime(1948,11,14,12,00,00)
 geopos = [51.5266667, -0.00852778, 15.0]

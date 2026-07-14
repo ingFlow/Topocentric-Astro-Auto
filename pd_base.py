@@ -428,7 +428,7 @@ def get_date_of_conjunction(static_planet, dt_radix, geopos):
     print(f"ra_planet: {ra_planet}, ramc: {ramc}, arc_travelled: {arc_travelled}, years_elapsed: {arc_travelled/naibod}, days_elapsed: {days_left}, dt_new: {dt_new}")
     return dt_new
 
-'''swe.set_ephe_path(None)
+'''
 dt_radix = datetime(1685,3,31,11,49,4)
 geopos = [50.98333,10.3]
 
@@ -440,4 +440,3 @@ for planet in PLANETS:
 for ar in arr_dates:
     print(ar)'''
     
-swe.set_ephe_path('/usr/share/swisseph/ephe')
