@@ -295,7 +295,7 @@ def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_ti
 
 
 #convert_birth_data_json('data_input/thomas jefferson')
-#rect_ver_data_create(r'data_times\25_01_07_ing_tea rect 5-15.txt', timesFileType.POLARIS,r'data_input\ing tea prim.json',r'data_rect/25_01_13_IngTeaRectPrim/25_01_13_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP,150)
+#rect_ver_data_create(r'data_times\25_01_07_ing_tea rect 5-15.txt', timesFileType.POLARIS,r'data_input\ing tea prim.json',r'data_rect/26_07_14_IngTeaRectPrim/25_01_13_', AspectType.APPROPRIATE_DIRECTED_CUSP_PLANET_TO_CUSP,150)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top50.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 50)
 #count_pssr_moon_write('19_10_24_ing_tea_pssr_Pmoons_top30.csv','data_input/ing tea prim.json','txt/19_10_24 IngTea rect.txt', 30)
 #pd_rect_grid_score_create(r'data_input\ing tea prim.json', r'data_times\25_01_07_ingtea rect 5 to 8.txt',timesFileType.POLARIS, 'data_rect/25_01_07_IngTeaS3/25_01_07_', AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, 8, 58)
