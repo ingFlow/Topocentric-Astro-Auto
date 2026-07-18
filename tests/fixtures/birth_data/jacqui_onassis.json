@@ -1,0 +1,192 @@
+{
+    "dt_radix_start": "1929-07-27T20:00:00",
+    "dt_radix_end": "1929-07-28T20:00:00",
+    "dt_actual_dob": "1929-07-27T20:00:00",
+    "geopos_natal": [
+        40.885384,
+        -72.3964,
+        8.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1949-08-15T12:00:00",
+            "event_type": "TRAVEL_POSITIVE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1952-01-21T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1953-04-18T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1953-06-25T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1953-09-12T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1956-08-23T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [
+                41.316667,
+                -71.316667,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1957-08-03T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1957-11-27T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                40.75,
+                -73.96667,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1958-11-04T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1960-11-25T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1963-08-07T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1963-08-09T12:00:00",
+            "event_type": "DEATH_SON",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1963-11-22T12:00:00",
+            "event_type": "DEATH_HUSBAND_FRIEND",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1964-06-15T12:00:00",
+            "event_type": "TRAVEL_NEGATIVE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1957-11-15T12:00:00",
+            "event_type": "TRAVEL_POSITIVE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1968-03-15T12:00:00",
+            "event_type": "TRAVEL_POSITIVE",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1968-06-05T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1968-10-20T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                39.16667,
+                23.66667,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1975-03-15T12:00:00",
+            "event_type": "DEATH_HUSBAND_FRIEND",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        },
+        {
+            "datetime": "1994-05-20T12:00:00",
+            "event_type": "DEATH",
+            "geopos": [
+                40.885384,
+                -72.3964,
+                8.0
+            ]
+        }
+    ]
+}

@@ -1,0 +1,147 @@
+{
+    "dt_radix_start": "1874-11-30T00:00:00",
+    "dt_radix_end": "1874-11-30T03:00:00",
+    "dt_actual_dob": "1874-11-30T01:04:00",
+    "geopos_natal": [
+        51.783333333,
+        -1.35,
+        113.0
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1883-07-05T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1895-01-24T12:00:00",
+            "event_type": "DEATH_FATHER_GRAND",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1899-11-15T12:00:00",
+            "event_type": "ARREST",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1898-12-01T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1900-06-05T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1909-07-11T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1911-05-28T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1914-10-07T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1918-11-15T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1921-06-29T12:00:00",
+            "event_type": "DEATH_MOTHER_GRAND",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1922-09-15T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1941-12-12T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1944-09-05T12:00:00",
+            "event_type": "TRAVEL_OVERSEAS_POSITIVE",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1953-06-24T12:00:00",
+            "event_type": "HOSPITALIZATION_ILLNESS",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        },
+        {
+            "datetime": "1963-10-19T12:00:00",
+            "event_type": "DEATH_SISTER",
+            "geopos": [
+                51.783333333,
+                -1.35,
+                113.0
+            ]
+        }
+    ]
+}

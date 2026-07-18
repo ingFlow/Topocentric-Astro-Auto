@@ -1,0 +1,174 @@
+{
+    "dt_radix_start": "1981-09-04T02:28:44",
+    "dt_radix_end": "1981-09-04T02:28:44",
+    "dt_actual_dob": "1981-09-04T02:28:44",
+    "geopos_natal": [
+        29.7217,
+        -95.3875,
+        32
+    ],
+    "list_of_events": [
+        {
+            "datetime": "1986-06-24T12:00:00",
+            "event_type": "BIRTH_SISTER",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2004-02-08T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2004-03-06T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2005-09-10T12:00:00",
+            "event_type": "DIVORCE_SEPARATION",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2007-02-11T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2008-04-04T12:00:00",
+            "event_type": "MARRIAGE_ENGAGEMENT_FOR_FEMALE",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2010-02-04T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2012-01-07T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2014-05-05T12:00:00",
+            "event_type": "FAILURE_DEFEATED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2016-02-15T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2016-03-31T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2017-06-13T12:00:00",
+            "event_type": "BIRTH_SON",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2017-06-13T12:00:00",
+            "event_type": "BIRTH_DAUGHTER",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2020-06-28T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2021-06-17T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2023-02-05T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2024-02-06T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        },
+        {
+            "datetime": "2025-02-03T12:00:00",
+            "event_type": "SUCCESS_ELECTED",
+            "geopos": [
+                29.7217,
+                -95.3875,
+                32
+            ]
+        }
+    ]
+}
