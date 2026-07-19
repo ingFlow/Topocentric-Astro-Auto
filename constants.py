@@ -1,4 +1,27 @@
-# constants.py
+"""
+constants.py - shared domain constants and low-level calculation helpers
+used across every technique module and both operating modes (the
+interactive Flask app and the offline batch/rectification tooling).
+
+Responsibilities:
+    - Domain vocabulary: PLANETS, ZODIAC_SIGNS, ALL_ASPECTS (the aspect
+      angle/orb table), aTechniqueType (the canonical technique-type
+      enum - see the note in process_techniques_files.py for why this is
+      the one and only technique-type enum that should ever be defined).
+    - Radix-position calculation helpers used by every technique class:
+      calc_planets_labelled, calc_planets_pof_houses_labelled,
+      calc_planets_houses_labelled.
+    - The altitude/geocoding cache (get_altitude), backed by a local
+      altitudes.json file with a live network fallback.
+    - Persistence: parse_selection_file, the single canonical reader for
+      saved_selections/*.txt files (do not re-define a local copy of this
+      elsewhere - see app.py's history for why that's a trap).
+
+This module has no knowledge of Flask, the batch-orchestration layer, or
+any specific technique's internals - it is pure, reusable domain logic,
+and every other module in this project either imports from here directly
+or (in the case of the technique modules) builds directly on top of it.
+"""
 import swisseph as swe
 import requests
 import json

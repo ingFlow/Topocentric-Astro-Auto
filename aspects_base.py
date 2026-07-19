@@ -1,18 +1,31 @@
-"""ACROSS THE MODULE THE RADICAL POSITIONS ARE ALWAYS P1 first planet set"""
+"""
+aspects_base.py - the core aspect-matching engine shared by every
+technique module: calculate_aspect (matches a degree difference against
+the ALL_ASPECTS table within a given orb), find_trans_swiss_aspects (the
+actively-used, all-pairs transit/harmonic aspect finder), find_trans_aspects
+(a reserved, currently-unused alternate finder with its own caller-supplied
+orb and a narrower, hardcoded planet/house vocabulary - preserved, not
+deleted, per the migration plan), and calculate_obliquity.
+
+Convention note (original): across this module, the radical (radix)
+positions are always the first planet set (P1) passed into these functions.
+
+Recent change (de-duplication phase): MAJOR_ASPECTS is now derived from
+ALL_ASPECTS (constants.py, already imported below) instead of being a
+separately hand-maintained duplicate of the same five entries.
+"""
 from enum import Enum
 from constants import ZODIAC_SIGNS, ALL_ASPECTS
 
 class ProcessType(Enum):
     PSSR = "PSSR"
     TRANSIT = "TRANSIT"
-    
-MAJOR_ASPECTS = {
-    "sextile": (60,300),
-    "conjunction": (0,360),
-    "trine": (120,240),
-    "square": (90, 270),
-    "opposition": (180, 180)
-}
+
+# Derived from ALL_ASPECTS (constants.py), not a separately hand-maintained
+# duplicate - these five names are the only entries considered "major"
+# aspects; adding a new aspect to ALL_ASPECTS never requires remembering to
+# also update a second, parallel copy here.
+MAJOR_ASPECTS = {name: ALL_ASPECTS[name] for name in ("sextile", "conjunction", "trine", "square", "opposition")}
 
 ZODIAC_START_DEGREES = {
     "Aries": 0,

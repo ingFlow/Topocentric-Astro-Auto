@@ -1,3 +1,27 @@
+"""
+app.py - the interactive Flask application ("Mode 1" per the Developer
+Manual). Six routes: '/' (loads a birth-data JSON and builds the
+candidate-time/event lists), '/update_content' (the main technique
+calculation + display route), '/update_selection' and '/save_data' (the
+selection-persistence workflow), plus '/custom_action', '/chart-data',
+and '/generate_chart' (the charting subsystem - partially non-functional,
+see the migration plan for the kerykeion-vs-astrochart.js disposition).
+
+This module holds module-level global state (geo_pos_natal, dt_radix,
+lunar_orb, restrict_orb, current_file, selections_data) that persists
+across requests within a single running process - a known architectural
+issue, not something this phase changes.
+
+Recent change (de-duplication phase): this file no longer defines its own
+local copies of parse_selection_file and get_technique_name - both are
+now imported directly from constants.py, which already defined the
+canonical versions. The only previously-forked functional differences
+were: an extra debug print() statement, one extra (redundant, given
+well-formed real data) whitespace guard on the aspect-line check, and one
+missing log line for the file-not-found case - none of which affect the
+parsed result for any real saved_selections file, confirmed directly by
+diffing both implementations before removing this one.
+"""
 from flask import Flask, render_template, jsonify, request, send_from_directory
 import pd_automate 
 import pssr_swiss_auto
@@ -16,15 +40,12 @@ import os
 import re
 import shutil
 import json
-from constants import calc_planets_pof_houses_labelled, parse_selection_file, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
+from constants import calc_planets_pof_houses_labelled, parse_selection_file, get_technique_name, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
 from aspects_base import calculate_obliquity
 #from kerykeion import AstrologicalSubject, KerykeionChartSVG
 import logging
 
 logging.basicConfig(level=logging.INFO)
-
-#ephemeris-path configuration point 
-swe.set_ephe_path('/usr/share/swisseph/ephe')
 
 geo_pos_natal = []
 dt_radix = None
@@ -65,7 +86,6 @@ def home():
     list_times = []
     list_times = [
         datetime(2000,3,11,13,24,56),
-        datetime(2000,3,11,7,39,11),
         datetime(1997,11,16,12,57,4)
         #07:49:20
         #15:49:36
@@ -101,73 +121,6 @@ def home():
     
     return render_template('index.html', left_column_items=left_items, right_column_items=right_items, files=files, current_file=current_file)
 
-def parse_selection_file(filepath):
-    """Reads a saved selection file and parses it into a dictionary."""
-    if not os.path.exists(filepath):
-        return None # Return None if file doesn't exist
-
-    loaded_selections = {}
-    current_event = None
-    current_technique = None
-    line_number = 0
-
-    try:
-        with open(filepath, 'r', encoding='utf-8') as f:
-            for line in f:
-                line_number += 1
-                # Use rstrip() to remove only trailing newline/whitespace if needed
-                processed_line = line.rstrip()
-                if not processed_line.startswith(' ') and processed_line.startswith("Event: "):
-                    current_event = processed_line[len("Event: "):].strip() # Strip result AFTER slicing
-                    if not current_event: # Handle empty event string if it occurs
-                        logging.warning(f"Empty event string found at line {line_number} in {filepath}")
-                        current_event = f"UNKNOWN_EVENT_{line_number}" # Placeholder
-                    loaded_selections[current_event] = {}
-                    current_technique = None # Reset technique when new event starts
-
-                # Check for Technique (must start with spaces)
-                elif processed_line.startswith("  ") and not processed_line.startswith("   ") and "Technique: " in processed_line:
-                    if current_event:
-                        # Find the technique name after the prefix
-                        try:
-                            technique_part = processed_line.split("Technique: ", 1)[1]
-                            current_technique = technique_part.strip() # Strip result AFTER splitting/slicing
-                            if not current_technique: # Handle empty technique string
-                                logging.warning(f"Empty technique string for event '{current_event}' at line {line_number} in {filepath}")
-                                current_technique = f"UNKNOWN_TECHNIQUE_{line_number}" # Placeholder
-                            loaded_selections[current_event][current_technique] = []
-                        except IndexError:
-                            logging.warning(f"Malformed Technique line in {filepath}: {line.rstrip()}")
-                            current_technique = None # Invalid state
-                    else:
-                        logging.warning(f"Found Technique line without preceding Event in {filepath}: {line.rstrip()}")
-                        current_technique = None # Invalid state
-
-                # Check for Aspect (must start with more spaces and '- ')
-                elif processed_line.startswith("    - ") and not processed_line.startswith("     "):
-                    if current_event and current_technique:
-                        if current_technique not in loaded_selections[current_event]:
-                            logging.warning(f"Aspect found for event '{current_event}' but technique '{current_technique}' not initialized at line {line_number} in {filepath}. Initializing.")
-                            loaded_selections[current_event][current_technique] = []
-                        # Check if the list was initialized correctly
-                        if isinstance(loaded_selections[current_event].get(current_technique), list):
-                            aspect = processed_line[len("    - "):].strip() # Strip result AFTER slicing
-                            if aspect: # Only add non-empty aspects
-                                loaded_selections[current_event][current_technique].append(aspect)
-                        else:
-                            logging.error(f"Critical parsing error: Technique list for '{current_event}' -> '{current_technique}' is not a list at line {line_number} in {filepath}.")
-                    # else: Ignore aspect lines found out of proper context
-
-        logging.info(f"Successfully parsed selections from {filepath}")
-        # --- Keep the debug print from your version ---
-        print("Parsed Dictionary:", loaded_selections) # Or use logging.info
-        # --- End Debug Print ---
-        return loaded_selections
-
-    except Exception as e:
-        logging.error(f"Error parsing selection file {filepath} at line ~{line_number}: {e}")
-        return None # Return None on error
-    
 def get_aspect_str_orb(line):
     """
     Extracts the orb value from an aspect string/*.
@@ -697,20 +650,6 @@ def sanitize_filename(filename):
     sanitized = re.sub(r'[<>:"/\\|?*]+', '', sanitized)
     return f"{sanitized}.txt"
 
-def get_technique_name(technique_index):
-    # Map index back to a meaningful name for storing selections
-    mapping = {
-        aTechniqueType.PRIMARY_DIRECT: "PD",
-        aTechniqueType.SECONDARY_DIRECT: "Secondary",
-        aTechniqueType.PSSR: "PSSR",
-        aTechniqueType.TRANSIT: "Transit",
-        aTechniqueType.LUNAR: "Lunar",
-        aTechniqueType.SRA: "SRA",
-        aTechniqueType.HARMONICS: "Harmonics",
-        aTechniqueType.NATAL: "Natal",
-    }
-    return mapping.get(technique_index, "Unknown")
-
 if __name__ == '__main__':
     #THIS DOES NOT WORK  main_converge.pd_rect_grid_score_create('data_input/ing tea prim.json','ingtea_rect_ver4_',8)
     #main_techniques.rect_ver_data_create('data_times/winston narrow.csv', main_techniques.timesFileType.DATE_N_TIME, 'data_input/winston.json', 'data_rect/02_12_24_Winston_v1/02_12_24_')
@@ -732,6 +671,3 @@ if __name__ == '__main__':
 
     logging.info("Starting Flask application...")
     app.run(debug=True, port=5000) # Use specific port, debug=True for developmen
-    
-
-

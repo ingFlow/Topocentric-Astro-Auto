@@ -1,3 +1,22 @@
+"""
+process_techniques_files.py - the offline/batch rectification engine
+("Mode 2" per the Developer Manual): candidate-time-list generation
+(generate_hourly_datetimes, sort_polaris_times), the grid-scanning engine
+(generate_grid_angular_aspects, generate_grid_times_manual,
+append_grid_acceptable_angles), aspect counting and categorization
+(categorize_aspect, count_aspect_groups_txt, count_extended_aspect_groups_txt),
+the convergence family (sum_sec_prim and friends), and Excel export
+(create_analysis_workbook).
+
+This module still has module-level mutable state (grid_aspects,
+date_technique, aspect_type, reset via resetvars()) that the grid-engine
+functions depend on implicitly rather than through explicit parameters -
+a known architectural issue, not something this phase changes.
+
+Recent change (de-duplication phase): TechniqueType is now an alias for
+constants.aTechniqueType rather than a separately-defined, incomplete
+local enum - see the comment at its definition below for why.
+"""
 import pd_automate
 import datetime 
 import julian
@@ -25,12 +44,17 @@ from constants import parse_selection_file, DATA_INPUT_DIR, SELECTIONS_DIR, aTec
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 
-class TechniqueType:
-    PRIMARY_DIRECT = 0
-    SECONDARY_DIRECT = 1
-    PSSR = 2
-    TRANSIT = 3
-    LUNAR = 4
+# TechniqueType is an alias for the canonical constants.aTechniqueType (already
+# imported above), not a separate enum. Previously this module defined its own,
+# incomplete local TechniqueType (5 members: PRIMARY_DIRECT/SECONDARY_DIRECT/
+# PSSR/TRANSIT/LUNAR) missing SRA, HARMONICS, and NATAL - which meant the
+# `date_technique == TechniqueType.SRA` branch in append_grid_acceptable_angles
+# raised an AttributeError before it could ever compare anything, since SRA
+# didn't exist on the local class. Aliasing to the complete, canonical enum
+# fixes that entirely while leaving every existing `TechniqueType.X` reference
+# in this file (and in main_techniques.py's `asp.TechniqueType.X` usages)
+# working unchanged.
+TechniqueType = aTechniqueType
 
 grid_aspects =[]
 date_technique = -1
@@ -862,9 +886,6 @@ def create_analysis_workbook():
     except Exception as e:
         logging.error(f"Error saving Excel file {excel_output_filename}: {e}")
 
-#ephemeris-path configuration point
-swe.set_ephe_path('/usr/share/swisseph/ephe')
-
-#sort_polaris_times(r'data_times\25_01_07_ingtea rect 5 to 8.txt', 'data_times/25_01_07_ingtea sorted max a 3 rect.txt',58, 3)
+#sort_polaris_times(r'data_times\25_01_07_ingtea rect 5 to 8.txt', 'data_times/07_07_2026_ingtea sorted max a 3 rect.txt',58, 3)
 #delete_rows_below_threshold_counttxt(0,'data_rect/30_11_24_Ingtea_v1/30_11_24_2000-03-11_pssrCOUNT.txt')
 #create_analysis_workbook()
