@@ -107,14 +107,15 @@ def load_and_concatenate_files(file_list):
     """Load multiple text files and concatenate them into a single DataFrame."""
     all_dfs = []
     
-    if 'pssr' in filename:
-        technique = aTechniqueType.PSSR
-    elif 'prim' in filename:
-        technique = aTechniqueType.PRIMARY_DIRECT
-    elif 'sec' in filename:
-        technique = aTechniqueType.SECONDARY_DIRECT
-    elif 'tran' in filename:
-        technique = aTechniqueType.TRANSIT
+    for filename in file_list:
+        if 'pssr' in filename:
+            technique = aTechniqueType.PSSR
+        elif 'prim' in filename:
+            technique = aTechniqueType.PRIMARY_DIRECT
+        elif 'sec' in filename:
+            technique = aTechniqueType.SECONDARY_DIRECT
+        elif 'tran' in filename:
+            technique = aTechniqueType.TRANSIT
 
         df = extract_data_from_file(filename, technique)
         all_dfs.append(df)

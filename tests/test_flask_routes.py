@@ -17,7 +17,7 @@ import shutil
 
 import pytest
 
-tests/test_flask_routes.py
+from webapp import app as flask_app_module
 
 FIXTURES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
 BIRTH_DATA_DIR = os.path.join(FIXTURES_DIR, "birth_data")

@@ -79,7 +79,7 @@ class TestAbbreviateAspectString:
     def test_trine_degree_matches_all_aspects_table(self):
         line = "(Venus,120.000,(r)) (Jupiter,0.000,(d)) (trine,0.00')"
         result = ptf.abbreviate_aspect_string(line)
-        import aspects_base → from core import aspects as aspects_base
+        from core import aspects as aspects_base
         assert f" {aspects_base.ALL_ASPECTS['trine'][0]} " in result
 
     def test_malformed_line_returned_unchanged(self):

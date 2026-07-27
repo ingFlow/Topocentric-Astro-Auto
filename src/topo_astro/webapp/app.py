@@ -38,7 +38,8 @@ from techniques import sra as sra_auto
 from techniques import harmonics as harmonics_auto
 from batch import entrypoints as main_techniques
 import julian
-from batch import grid_engine as process_techniques_filesfrom datetime import datetime
+from batch import grid_engine as process_techniques_files
+from datetime import datetime
 import swisseph as swe
 from timezonefinder import TimezoneFinder
 import os
