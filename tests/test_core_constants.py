@@ -27,7 +27,7 @@ than assume" standard the migration plan itself was built on):
 import json
 import os
 
-import constants
+from core import constants
 
 
 class TestCalcPlanetsPofHousesLabelled:

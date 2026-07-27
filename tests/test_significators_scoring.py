@@ -48,8 +48,8 @@ here rather than silently worked around:
 import json
 import os
 
-import pd_automate
-from pd_automate import EventType, AspectType
+from techniques.primary_directions import technique as pd_automate
+from techniques.primary_directions.technique import EventType, AspectType
 
 GOLDEN_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures", "golden")
 

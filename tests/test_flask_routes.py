@@ -17,7 +17,7 @@ import shutil
 
 import pytest
 
-import app as flask_app_module
+from webapp import app as flask_app_module
 
 FIXTURES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures")
 BIRTH_DATA_DIR = os.path.join(FIXTURES_DIR, "birth_data")
@@ -221,7 +221,7 @@ class TestUpdateSelectionAndSaveDataRoutes:
         assert saved_files[0].startswith("beyonce_")
 
         # Confirms the saved file round-trips through the real parse_selection_file
-        import constants
+        from persistence import selections as constants
         parsed = constants.parse_selection_file(str(tmp_path / "saved_selections" / saved_files[0]))
         key = "2012-01-07T12:00:00, BIRTH_DAUGHTER, 4, [29.7217, -95.3875, 32]"
         assert parsed[key]["PD"] == ["(Jupiter,192.284,(r)) (IC,132.368,(d)) (sextile,5.00')"]

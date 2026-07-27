@@ -8,7 +8,7 @@ running Flask app.
 
 import os
 
-import constants
+from persistence import selections as constants
 
 SAVED_SELECTIONS_DIR = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "fixtures", "saved_selections"

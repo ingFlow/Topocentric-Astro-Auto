@@ -25,10 +25,10 @@ import julian
 import swisseph as swe
 from datetime import datetime
 
-import pd_base
-import pd_automate
-import aspects_base
-from constants import PLANETS
+from techniques.primary_directions import trig as pd_base
+from techniques.primary_directions import technique as pd_automate
+from core import aspects as aspects_base
+from core.constants import PLANETS
 
 
 WAGNER_GEOPOS = [51.33333333333333, 12.38333333333333, 113.0]

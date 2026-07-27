@@ -21,7 +21,8 @@ import pytest
 # `pip install -e .` on the new package and delete this insert entirely)
 # once Phase 4 lands.
 # --------------------------------------------------------------------
-SOURCE_ROOT = os.environ.get("TOPO_ASTRO_SOURCE_ROOT", "/home/claude/repo_extracted")
+_DEFAULT_SOURCE_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "topo_astro")
+SOURCE_ROOT = os.environ.get("TOPO_ASTRO_SOURCE_ROOT", _DEFAULT_SOURCE_ROOT)
 if SOURCE_ROOT not in sys.path:
     sys.path.insert(0, SOURCE_ROOT)
 

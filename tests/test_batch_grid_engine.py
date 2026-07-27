@@ -27,8 +27,8 @@ import julian
 import swisseph as swe
 from datetime import datetime
 
-import process_techniques_files as ptf
-import pd_automate
+from batch import grid_engine as ptf
+from techniques.primary_directions import technique as pd_automate
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 

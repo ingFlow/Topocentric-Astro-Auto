@@ -29,7 +29,7 @@ import datetime as real_datetime
 import pytz
 import pytest
 
-import process_techniques_files as ptf
+from batch import grid_engine as ptf
 
 
 class _FrozenNow(real_datetime.datetime):
