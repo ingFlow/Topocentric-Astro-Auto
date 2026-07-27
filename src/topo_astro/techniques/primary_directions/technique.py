@@ -730,16 +730,35 @@ def is_acceptable_pd_aspect(event_id, str_aspect):
             return 3
 
     return angularity_score * planet_score * aspect_score
-    
+   
 def calc_directed_pd_houses(jd_radix, jd_event, geo_latitude, rad_houses, e):
-    """returns 2 tuples with house cusps 1 to 12 dir, conv
-    removed functionality for Hmd1 and Hmd2 (H1/H2)"""
+    """returns 2 lists (index 0=H1 ... index 11=H12) for directed and converse.
+    Directs each of MC/11/12/ASC/2/3 individually via its own Speculum entry
+    (OA = RAMC + 30*n, per-cusp topocentric pole, calc_long_from_OA) -- matching
+    the book's documented method for houses XI-III (Oblique Ascension) -- rather
+    than rebuilding a fresh house table at the shifted ARMC. H4-H9 are the exact
+    +180 opposites of H10-H12/H1-H3, same as any quadrant-based house system."""
     arc = pd.calc_arc(jd_radix, jd_event)
-    ramc = rad_houses[1][2]
+    ramc_radix = rad_houses[1][2]
 
-    directed = swe.houses_armc(swe.degnorm(ramc+arc), geo_latitude, e, b'T')[0]
-    converse = swe.houses_armc(swe.degnorm(ramc-arc), geo_latitude, e, b'T')[0]
-    #print(f"dirHouse ----- {directed} \nconvHouse------- {converse}")
+    def six_cusps(directed_ramc):
+        # (house_number, OA_offset_multiple_of_30, pole_house_id)
+        seq = [(10, 0, 10), (11, 1, 11), (12, 2, 12), (1, 3, 1), (2, 4, 2), (3, 5, 3)]
+        out = {}
+        for housenum, n, pole_id in seq:
+            OA = swe.degnorm(directed_ramc + 30*n)
+            phi = pd.calc_house_pole(pole_id, geo_latitude)
+            out[housenum] = pd.calc_long_from_OA(OA, phi, e, True)
+        out[4] = swe.degnorm(out[10] + 180)
+        out[5] = swe.degnorm(out[11] + 180)
+        out[6] = swe.degnorm(out[12] + 180)
+        out[7] = swe.degnorm(out[1] + 180)
+        out[8] = swe.degnorm(out[2] + 180)
+        out[9] = swe.degnorm(out[3] + 180)
+        return [out[h] for h in range(1, 13)]
+
+    directed = six_cusps(swe.degnorm(ramc_radix + arc))
+    converse = six_cusps(swe.degnorm(ramc_radix - arc))
     return directed, converse
 
 def calc_directed_pd_planets(jd_radix, jd_event, geo_latitude, geo_longitude, houses_info, rad_planets_equatorial, e):

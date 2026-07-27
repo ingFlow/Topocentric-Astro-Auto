@@ -30,6 +30,7 @@ class PD_Base:
         self.set_directed_data(jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e)
 
     def set_directed_data(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):
+        """change is the two lines right after the "before" log write: left_angle, right_angle are now recomputed from new_quadrant (the already-shifted value), and the second shift starts from new_quadrant instead of the stale original quadrant. That makes the second attempt a genuinely different quadrant candidate instead of a no-op repeat of the first."""
         quadrant = get_quadrant_from_house_pos(house_pos)
         MD, AD, SA, phi, ADP, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, quadrant, GEO_LAT, DECL, ac, long)
 
@@ -42,7 +43,8 @@ class PD_Base:
                 with open("log_md_sa.txt", "a") as file:
                         file.write(f"before \t{from_jd(jd_radix)} ra: {RA} md: {MD} sa: {SA} : oad {OA_OD} {FLAG_ASCEN} \n")
 
-                new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, quadrant)
+                left_angle, right_angle = calc_left_right_angles(ac, mc, new_quadrant)
+                new_quadrant = shift_point_to_closest_next_quad(long, left_angle, right_angle, new_quadrant)
                 MD, _, SA, phi, _, OA_OD, FLAG_ASCEN = calc_md_to_oa_data(RA, RAMC, new_quadrant, GEO_LAT, DECL, ac, long)
                 
                 with open("log_md_sa.txt", "a") as file:
@@ -322,8 +324,10 @@ def calc_houses_with_ramc(RAMC, GEO_LAT, label, E):
 
     return directed_longitudes
 
+# The obliquity-negation condition is inverted
+# Correction for matching PD's for planets in POLARIS
 def calc_long_from_OA(OA, phi, E, flag_ascen):
-    if not(flag_ascen):
+    if flag_ascen:
         E *= -1
     tan_long = (math.sin(math.radians(E)) * math.tan(math.radians(phi)) - math.cos(math.radians(E)) * math.cos(math.radians(OA))) / math.sin(math.radians(OA))
     LONG_deg = math.degrees(math.atan(tan_long))
