@@ -43,8 +43,8 @@ PLANETS = [
 HOUSES = ['H1','H2','H3','H4','H5','H6','H7','H8','H9','H10','H11','H12']    
 
 ALT_FILE_PATH = "altitudes.json"
-DATA_INPUT_DIR = "data/data_input"
-SELECTIONS_DIR = "data/saved_selections"
+DATA_INPUT_DIR = "data_input"
+SELECTIONS_DIR = "saved_selections"
 CHARTS_DIR = "static/charts"
 
 ALL_ASPECTS = {

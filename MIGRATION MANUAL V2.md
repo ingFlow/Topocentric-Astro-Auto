@@ -418,13 +418,13 @@ Phases 1→9 happen in order. Phase 10 depends on 9. Phase 11 has no hard depend
 
 **Validation Checklist:**
 
-- [ ] Full characterization suite passes unchanged, now importing from the new package paths, including the newly-fixed Lunar unlabeled-aspects test from Phase 2.
-- [ ] The Flask app boots from its new location and serves the home page.
-- [ ] Repository-wide search confirms zero remaining old-style bare imports.
-- [ ] Every `reserve.py` file imports cleanly on its own (confirms the move didn't silently break something), even though nothing calls into it yet.
-- [ ] `drafts/pd_assist.py` is confirmed present and byte-identical to its pre-move version (still expected to fail to parse — that's fine, it's a draft).
-- [ ] `batch/analysis.py` imports cleanly with the canonical enum.
-- [ ] One full interactive cycle re-run manually in the browser.
+- [X] Full characterization suite passes unchanged, now importing from the new package paths, including the newly-fixed Lunar unlabeled-aspects test from Phase 2.
+- [X] The Flask app boots from its new location and serves the home page.
+- [X] Repository-wide search confirms zero remaining old-style bare imports.
+- [X] Every `reserve.py` file imports cleanly on its own (confirms the move didn't silently break something), even though nothing calls into it yet.
+- [X] `drafts/pd_assist.py` is confirmed present and byte-identical to its pre-move version (still expected to fail to parse — that's fine, it's a draft).
+- [X] `batch/analysis.py` imports cleanly with the canonical enum.
+- [X] One full interactive cycle re-run manually in the browser.
 
 **Suggested Commit Message:** `refactor: introduce src/ package layout; relocate all modules, including preserved reserve/draft items, to their labeled homes`
 
