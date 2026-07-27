@@ -50,9 +50,9 @@ from datetime import datetime
 import pytest
 import swisseph as swe
 
-import process_techniques_files as ptf
-import pd_automate
-import csv_analysis
+from batch import grid_engine as ptf
+from techniques.primary_directions import technique as pd_automate
+from batch import analysis as csv_analysis
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 
@@ -72,9 +72,9 @@ REAL_PIPELINE_MAPPING = {
     "TRANSIT": (ptf.TechniqueType.TRANSIT, pd_automate.AspectType.ANGLE_PRIMARY, False),
 }
 CSV_ANALYSIS_TYPE_MAP = {
-    "SECONDARY_DIRECT": csv_analysis.TechniqueType.Secondary_Direct,
-    "PSSR": csv_analysis.TechniqueType.PSSR,
-    "TRANSIT": csv_analysis.TechniqueType.Transit,
+    "SECONDARY_DIRECT": csv_analysis.aTechniqueType.SECONDARY_DIRECT,
+    "PSSR": csv_analysis.aTechniqueType.PSSR,
+    "TRANSIT": csv_analysis.aTechniqueType.TRANSIT,
 }
 
 
@@ -114,14 +114,14 @@ class TestExtractDataFromFileAgainstRealPipelineOutput:
 
     def test_pssr_parses_correctly_two_real_rows(self, tmp_path):
         count_file = _build_real_count_file(tmp_path, "PSSR")
-        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.TechniqueType.PSSR)
+        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.aTechniqueType.PSSR)
         assert len(df) == 2
         assert list(df.columns) == ["Time", "all-sr", "mj1-sr", "mj2-sr", "mja-sr", "min-sr", "mon-conj-sr", "mon-maj-sr", "e-sr"]
         assert df["Time"].tolist() == ["1981-09-04 02:28:43", "1981-09-04 02:33:44"]
 
     def test_transit_parses_correctly_two_real_rows(self, tmp_path):
         count_file = _build_real_count_file(tmp_path, "TRANSIT")
-        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.TechniqueType.Transit)
+        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.aTechniqueType.TRANSIT)
         assert len(df) == 2
         assert list(df.columns) == ["Time", "all-tr", "mj1-tr", "mj2-tr", "mja-tr", "min-tr", "e-tr"]
 
@@ -133,7 +133,7 @@ class TestExtractDataFromFileAgainstRealPipelineOutput:
             pd_automate.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, ptf.TechniqueType.PRIMARY_DIRECT,
         )
         ptf.count_aspect_groups_txt(prefix, False)
-        df = csv_analysis.extract_data_from_file(prefix + "COUNT.txt", csv_analysis.TechniqueType.Primary_Direct)
+        df = csv_analysis.extract_data_from_file(prefix + "COUNT.txt", csv_analysis.aTechniqueType.PRIMARY_DIRECT)
         assert len(df) == 2
         assert list(df.columns) == ["Time", "all-pd", "mj1-pd", "mj2-pd", "mja-pd", "min-pd", "e-pd"]
 
@@ -146,7 +146,7 @@ class TestExtractDataFromFileAgainstRealPipelineOutput:
         good news, but this test needs to be updated to match the fix
         rather than silently left behind expecting the old, broken shape."""
         count_file = _build_real_count_file(tmp_path, "SECONDARY_DIRECT")
-        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.TechniqueType.Secondary_Direct)
+        df = csv_analysis.extract_data_from_file(count_file, csv_analysis.aTechniqueType.SECONDARY_DIRECT)
         assert df.empty
         assert len(df) == 0
         # the file itself DOES contain 2 real, valid data rows - confirming
@@ -207,7 +207,7 @@ class TestLoadAndConcatenateFiles:
 
             # extract_data_from_file takes an explicit technique argument, so
             # it is unaffected by this and parses correctly as Transit data.
-            df = csv_analysis.extract_data_from_file(transit_renamed, csv_analysis.TechniqueType.Transit)
+            df = csv_analysis.extract_data_from_file(transit_renamed, csv_analysis.aTechniqueType.TRANSIT)
             assert len(df) == 2
 
             # load_and_concatenate_files instead INFERS the technique from the

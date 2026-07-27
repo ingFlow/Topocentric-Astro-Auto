@@ -28,8 +28,8 @@ corrected here after checking the real source directly:
 import julian
 import swisseph as swe
 
-import lunar_auto
-from constants import PLANETS
+from techniques import lunars as lunar_auto
+from core.constants import PLANETS
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 

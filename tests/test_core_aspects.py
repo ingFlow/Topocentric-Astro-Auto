@@ -15,7 +15,7 @@ calculate_aspect's real contract (verified directly against the source):
     checked as [ideal - orb, ideal + orb] inclusive on both ends.
 """
 
-import aspects_base
+from core import aspects as aspects_base
 
 # Every (aspect_name, forward_ideal, backward_ideal) triple, read directly
 # from aspects_base.ALL_ASPECTS - if a future phase adds/removes an aspect,

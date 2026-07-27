@@ -54,18 +54,20 @@ GOLDEN_DIR = os.path.join(FIXTURES_DIR, "golden")
 # Phase 4 package move has happened and re-run to confirm golden files
 # are unaffected (they should be - Phase 4 is import-path-only).
 # --------------------------------------------------------------------
-SOURCE_ROOT = os.environ.get("TOPO_ASTRO_SOURCE_ROOT", "/home/claude/repo_extracted")
-sys.path.insert(0, SOURCE_ROOT)
+_DEFAULT_SOURCE_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src", "topo_astro")
+SOURCE_ROOT = os.environ.get("TOPO_ASTRO_SOURCE_ROOT", _DEFAULT_SOURCE_ROOT)
+if SOURCE_ROOT not in sys.path:
+    sys.path.insert(0, SOURCE_ROOT)
 
-import constants  # noqa: E402
-import aspects_base  # noqa: E402
-import pd_automate  # noqa: E402
-import secondary_automate  # noqa: E402
-import pssr_swiss_auto  # noqa: E402
-import transit_swiss_auto  # noqa: E402
-import sra_auto  # noqa: E402
-import harmonics_auto  # noqa: E402
-import lunar_auto  # noqa: E402
+import core.constants as constants  # noqa: E402
+import core.aspects as aspects_base  # noqa: E402
+from techniques.primary_directions import technique as pd_automate  # noqa: E402
+from techniques import secondary_progressions as secondary_automate  # noqa: E402
+from techniques import pssr as pssr_swiss_auto  # noqa: E402
+from techniques import transits as transit_swiss_auto  # noqa: E402
+from techniques import sra as sra_auto  # noqa: E402
+from techniques import harmonics as harmonics_auto  # noqa: E402
+from techniques import lunars as lunar_auto  # noqa: E402
 
 from tests.fixtures.fixture_manifest import PEOPLE  # noqa: E402
 
