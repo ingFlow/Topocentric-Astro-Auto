@@ -29,16 +29,20 @@ Recent changes:
       (both zero-caller utilities) moved to webapp/reserve/.
 """
 from flask import Flask, render_template, jsonify, request, send_from_directory
-from techniques.primary_directions import technique as pd_automate  
-from techniques import pssr as pssr_swiss_auto
-from techniques import secondary_progressions as secondary_automate
-from techniques import transits as transit_swiss_auto
-from techniques import lunars as lunar_auto
-from techniques import sra as sra_auto
-from techniques import harmonics as harmonics_auto
-from batch import entrypoints as main_techniques
+from topo_astro.techniques.primary_directions import technique as pd_automate  
+from topo_astro.techniques import pssr as pssr_swiss_auto
+from topo_astro.techniques import secondary_progressions as secondary_automate
+from topo_astro.techniques import transits as transit_swiss_auto
+from topo_astro.techniques import lunars as lunar_auto
+from topo_astro.techniques import sra as sra_auto
+from topo_astro.techniques import harmonics as harmonics_auto
+from topo_astro.batch import entrypoints as main_techniques
+from topo_astro.batch import grid_engine as process_techniques_files
+from topo_astro.core.constants import calc_planets_pof_houses_labelled, get_technique_name, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
+from topo_astro.persistence.selections import parse_selection_file
+from topo_astro.core.aspects import calculate_obliquity
+
 import julian
-from batch import grid_engine as process_techniques_files
 from datetime import datetime
 import swisseph as swe
 from timezonefinder import TimezoneFinder
@@ -46,9 +50,6 @@ import os
 import re
 import shutil
 import json
-from core.constants import calc_planets_pof_houses_labelled, get_technique_name, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
-from persistence.selections import parse_selection_file
-from core.aspects import calculate_obliquity
 #from kerykeion import AstrologicalSubject, KerykeionChartSVG
 import logging
 

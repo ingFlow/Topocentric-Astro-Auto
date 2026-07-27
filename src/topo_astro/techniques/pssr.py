@@ -7,8 +7,9 @@ search this technique is named for.
 import swisseph as swe
 import julian
 from datetime import datetime, timedelta
-from core.aspects import convert_dec_degrees_to_deg_min_sec, find_pssr_swiss_aspects, convert_full_dec_degrees_to_zod_min_sec
-from core.constants import PLANETS, get_precession, calc_planets_labelled, calc_planets_pof_houses_labelled
+
+from topo_astro.core.aspects import convert_dec_degrees_to_deg_min_sec, find_pssr_swiss_aspects, convert_full_dec_degrees_to_zod_min_sec
+from topo_astro.core.constants import PLANETS, get_precession, calc_planets_labelled, calc_planets_pof_houses_labelled
 
 class PSSR_Auto:
     def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None):

@@ -5,9 +5,10 @@ radix/event pair, direct and converse via get_str_aspects), plus its
 supporting position-calculation helpers.
 """
 import swisseph as swe
-from core.aspects import find_secondary_swiss_aspects, remove_duplicates, format_house_list, convert_dec_degrees_to_deg_min_sec
 import julian
-from core.constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
+
+from topo_astro.core.aspects import find_secondary_swiss_aspects, remove_duplicates, format_house_list, convert_dec_degrees_to_deg_min_sec
+from topo_astro.core.constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
         
 class Secondary_Auto:
     def __init__(self, jd_radix, jd_event, geo_lat, geo_long, e, ramc=None, rad_planets=None):

@@ -18,10 +18,11 @@ file's own logic.
 """
 import swisseph as swe
 import julian
-from techniques.primary_directions import trig as pd
 import math
-from core.aspects import calculate_obliquity, find_pd_swiss_aspects, format_house_list
-from core.constants import PLANETS, HOUSES, calc_planets_pof_houses_labelled
+
+from topo_astro.techniques.primary_directions import trig as pd
+from topo_astro.core.aspects import calculate_obliquity, find_pd_swiss_aspects, format_house_list
+from topo_astro.core.constants import PLANETS, HOUSES, calc_planets_pof_houses_labelled
 
 class Planet:
     SUN = 'Sun'

@@ -15,7 +15,7 @@ ALL_ASPECTS (core/constants.py, already imported below) instead of being
 a separately hand-maintained duplicate of the same five entries.
 """
 from enum import Enum
-from core.constants import ZODIAC_SIGNS, ALL_ASPECTS
+from topo_astro.core.constants import ZODIAC_SIGNS, ALL_ASPECTS
 
 class ProcessType(Enum):
     PSSR = "PSSR"

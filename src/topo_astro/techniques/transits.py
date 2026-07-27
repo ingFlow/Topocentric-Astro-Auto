@@ -9,8 +9,8 @@ unexpectedly sensitive to the environment they were generated in.
 """
 import swisseph as swe
 import julian
-from core.aspects import find_trans_swiss_aspects
-from core.constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
+from topo_astro.core.aspects import find_trans_swiss_aspects
+from topo_astro.core.constants import PLANETS, calc_planets_labelled, calc_planets_pof_houses_labelled
 
 class Transit_Auto:
     def __init__(self, jd_radix, jd_event, geopos, rad_planets=None):

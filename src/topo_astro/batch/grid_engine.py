@@ -21,31 +21,35 @@ Recent changes:
       persistence.selections rather than core.constants (see
       create_analysis_workbook's usage of it, further down in this file).
 """
-from techniques.primary_directions import technique as pd_automate
+
 import datetime 
 import julian
 import swisseph as swe
-from techniques import secondary_progressions as secondary_automate
-from techniques import pssr as pssr_auto
-from techniques import transits as transit_auto
-from techniques import sra as sra_auto
 import pandas as pd
-from techniques import lunars as lunar
+
+from topo_astro.techniques.primary_directions import technique as pd_automate
+from topo_astro.techniques import secondary_progressions as secondary_automate
+from topo_astro.techniques import pssr as pssr_auto
+from topo_astro.techniques import transits as transit_auto
+from topo_astro.techniques import sra as sra_auto
+from topo_astro.techniques import lunars as lunar
+from topo_astro.core.constants import calc_planets_pof_houses_labelled, PLANETS
+from topo_astro.core.aspects import calculate_obliquity
+from topo_astro.core.constants import DATA_INPUT_DIR, SELECTIONS_DIR, aTechniqueType, get_technique_name, PLANET_ABBREVIATIONS, ALL_ASPECTS
+from topo_astro.persistence.selections import parse_selection_file
+
 import re
 import os
 import csv
 from timezonefinder import TimezoneFinder
 import pytz
-from core.constants import calc_planets_pof_houses_labelled, PLANETS
-from core.aspects import calculate_obliquity
 import ast
 import json
 import logging
 import openpyxl
 from openpyxl.utils import get_column_letter
 from openpyxl.styles import Font, Alignment
-from core.constants import DATA_INPUT_DIR, SELECTIONS_DIR, aTechniqueType, get_technique_name, PLANET_ABBREVIATIONS, ALL_ASPECTS
-from persistence.selections import parse_selection_file
+
 
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 

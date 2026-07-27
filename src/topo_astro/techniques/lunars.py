@@ -24,8 +24,8 @@ get_all_lunars()/get_str_labelled_aspects_from_array already provide.
 import swisseph as swe
 import julian
 from datetime import timedelta
-from core.aspects import calculate_aspect, convert_full_dec_degrees_to_zod_min_sec, convert_dec_degrees_to_deg_min_sec
-from core.constants import PLANETS
+from topo_astro.core.aspects import calculate_aspect, convert_full_dec_degrees_to_zod_min_sec, convert_dec_degrees_to_deg_min_sec
+from topo_astro.core.constants import PLANETS
 
 class LunarType:
     LUNAR = 0

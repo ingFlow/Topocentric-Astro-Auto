@@ -18,11 +18,12 @@ helpers defined here.
 """
 import math
 import swisseph as swe
-from core.aspects import convert_dec_degrees_to_deg_min_sec
 from julian import from_jd, to_jd
-from core.constants import PLANETS
 from datetime import datetime, timedelta
 from dateutil.relativedelta import relativedelta
+
+from topo_astro.core.aspects import convert_dec_degrees_to_deg_min_sec
+from topo_astro.core.constants import PLANETS
 
 class PD_Base:
     def  __init__(self, jd_radix, jd_event, GEO_LAT, DECL, RA, RAMC, mc, flag_direct, house_pos, ac, long, e):

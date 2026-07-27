@@ -7,11 +7,12 @@ rectification pass; they call into batch/grid_engine.py's lower-level
 grid/counting engine for each technique in turn.
 """
 from datetime import datetime
-from techniques.primary_directions.technique import EventType, AspectType
-from batch import grid_engine as asp
 import json
 import re
-from core.constants import get_altitude
+
+from topo_astro.core.constants import get_altitude
+from topo_astro.techniques.primary_directions.technique import EventType, AspectType
+from topo_astro.batch import grid_engine as asp
 
 class timesFileType:
     POLARIS = 0

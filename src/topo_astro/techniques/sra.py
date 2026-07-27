@@ -7,8 +7,8 @@ webapp/app.py's update_content route).
 import swisseph as swe
 import julian
 from datetime import datetime, timedelta
-from core.aspects import find_sra_swiss_aspects, remove_duplicates, convert_dec_degrees_to_deg_min_sec, convert_full_dec_degrees_to_zod_min_sec
-from core.constants import get_precession, calc_planets_houses_labelled, calc_planets_pof_houses_labelled, PLANETS
+from topo_astro.core.aspects import find_sra_swiss_aspects, remove_duplicates, convert_dec_degrees_to_deg_min_sec, convert_full_dec_degrees_to_zod_min_sec
+from topo_astro.core.constants import get_precession, calc_planets_houses_labelled, calc_planets_pof_houses_labelled, PLANETS
 
 class SRA_Auto:
     def __init__(self, dt_radix, dt_event, geopos, rad_planets=None):
