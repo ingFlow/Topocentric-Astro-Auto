@@ -78,7 +78,7 @@ def home():
 
 
     try:
-        dt_actual_dob, _, dt_epoch, geopos_nat, list_of_events = main_techniques.get_json_birth_data(f"data_input/{current_file}")
+        dt_actual_dob, _, dt_epoch, geopos_nat, list_of_events = main_techniques.get_json_birth_data(f"data/data_input/{current_file}")
     except Exception as e:
         return f"Error loading data file {current_file}. Please check the file format and content.", 500
     

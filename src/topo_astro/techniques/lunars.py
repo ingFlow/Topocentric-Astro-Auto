@@ -317,8 +317,8 @@ def calc_planets_near_angles(list_planets, orb):
                 planets_near_angle.append(str)
     return planets_near_angle
 
-def get_str_only_aspects_from_data(dt_radix, dt_event, geopos, geopos_natal, ltype: LunarType, orb):
-    lunar_obj = Lunar_Auto(dt_radix, dt_event, geopos, geopos_natal, ltype, orb)
+def get_str_only_aspects_from_data(dt_radix, dt_event, geopos, geopos_natal, orb):
+    lunar_obj = Lunar_Auto(dt_radix, dt_event, geopos, geopos_natal, orb)
     all_charts = lunar_obj.get_all_lunars()
     aspects_only_list = get_str_only_aspects_from_array(all_charts)
     return aspects_only_list
