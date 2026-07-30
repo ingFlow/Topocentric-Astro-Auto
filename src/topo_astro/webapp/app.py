@@ -1,4 +1,7 @@
 """
+NOTE set  $env:PYTHONPATH = "$PWD\src"
+in terminal before running - patch fix to run before phase 7 migration 
+
 webapp/app.py - the interactive Flask application ("Mode 1" per the
 Developer Manual). Six routes: '/' (loads a birth-data JSON and builds
 the candidate-time/event lists), '/update_content' (the main technique

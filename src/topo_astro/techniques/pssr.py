@@ -55,13 +55,18 @@ class PSSR_Auto:
         jd_pssr_event_diff_conv = abs(jd_pssr_conv - jd_conv_event)
         
         timelapse = timedelta(hours=jd_pssr_event_diff_conv / 15.218425)
-        jd_prog_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) + timelapse)
-        jd_reg_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) - timelapse)
+        # Prenatal SSR: per Estadella Ch.7 the add/subtract convention is
+        # REVERSED relative to the Direct SSR - adding time to the prenatal
+        # return's start yields converse movement, subtracting yields direct
+        # movement. Labels swapped accordingly; jd_prog_pssr_conv := subtraction
+        # jd_reg_pssr_conv := addition of timelapse
+        jd_prog_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) - timelapse)
+        jd_reg_pssr_conv = julian.to_jd(julian.from_jd(jd_pssr_conv) + timelapse)
         
         planets_to_exclude = ['Sun']
         prog_dir_planets = exclude_planets(calc_planets_labelled(jd_prog_pssr_dir, '(dp)'),planets_to_exclude)
-        prog_conv_planets = exclude_planets(calc_planets_labelled(jd_prog_pssr_conv, '(cp)'),planets_to_exclude)
         reg_dir_planets = exclude_planets(calc_planets_labelled(jd_reg_pssr_dir, '(dr)'),planets_to_exclude)
+        prog_conv_planets = exclude_planets(calc_planets_labelled(jd_prog_pssr_conv, '(cp)'),planets_to_exclude)
         reg_conv_planets = exclude_planets(calc_planets_labelled(jd_reg_pssr_conv, '(cr)'),planets_to_exclude)
         direct_planets = [*prog_dir_planets, *reg_dir_planets]
         conv_planets = [*prog_conv_planets, *reg_conv_planets]

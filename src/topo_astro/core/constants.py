@@ -146,7 +146,12 @@ def calc_planets_pof_houses_labelled(jd_radix, geopos):
     pof_long = swe.degnorm(ac + moon_long - sun_long)
     rad_planets.append(('POF',pof_long,'(r)'))
 
-    for house_no in range(0,11):
+    # FIXED : NOW LOOP TARGETS FULL 12 HOUSES NOT JUST 1-11
+    # This is the shared radix point-generator used by PD, Secondary, 
+    # PSSR, Transit, SRA and Harmonics — so this single fix quietly 
+    # repairs XII-house coverage everywhere
+    
+    for house_no in range(0,12):
         rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
 
     return rad_planets
