@@ -327,16 +327,14 @@ def calc_houses_with_ramc(RAMC, GEO_LAT, label, E):
 # The obliquity-negation condition is inverted
 # Correction for matching PD's for planets in POLARIS
 def calc_long_from_OA(OA, phi, E, flag_ascen):
-    if flag_ascen:
+    #confirmed correct: negate E only on the Oblique-Descension side.
+    if not flag_ascen:
         E *= -1
-    tan_long = (math.sin(math.radians(E)) * math.tan(math.radians(phi)) - math.cos(math.radians(E)) * math.cos(math.radians(OA))) / math.sin(math.radians(OA))
-    LONG_deg = math.degrees(math.atan(tan_long))
-
-    if (OA < 180):
-        LONG_deg += 90
-    else:
-        LONG_deg += 270
-    return swe.degnorm(LONG_deg)
+    Er, phir, OAr = math.radians(E), math.radians(phi), math.radians(OA)
+    tan_long = (math.sin(Er)*math.tan(phir) - math.cos(Er)*math.cos(OAr)) / math.sin(OAr)
+    long_deg = math.degrees(math.atan(tan_long))
+    long_deg += 90 if OA < 180 else 270
+    return swe.degnorm(long_deg)
 
 def shift_point_to_closest_next_quad(point_angle, left, right, current_quadrant):
     """will return new shifted quadrant based on which angle it is closer to (left or right of the point)

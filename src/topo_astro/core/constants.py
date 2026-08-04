@@ -155,12 +155,11 @@ def calc_planets_pof_houses_labelled(jd_radix, geopos):
         rad_planets.append((f'H{house_no+1}',houses[0][house_no],'(r)'))
 
     return rad_planets
-
+    
 def get_precession(jd1, jd2):
     """Give the jd of the 2 dates you want the precession between"""
-    aya1 = swe.get_ayanamsa_ut(jd1)
-    aya2 = swe.get_ayanamsa_ut(jd2)
-    
+    _, aya1 = swe.get_ayanamsa_ex_ut(jd1, 0)   # flag=0: true equinox of date (nutation included)
+    _, aya2 = swe.get_ayanamsa_ex_ut(jd2, 0)
     return abs(aya1 - aya2)
 
 def get_altitude(lat, lon):
