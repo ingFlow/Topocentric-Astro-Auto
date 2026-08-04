@@ -37,6 +37,8 @@ from topo_astro.core.constants import calc_planets_pof_houses_labelled, PLANETS
 from topo_astro.core.aspects import calculate_obliquity
 from topo_astro.core.constants import DATA_INPUT_DIR, SELECTIONS_DIR, aTechniqueType, get_technique_name, PLANET_ABBREVIATIONS, ALL_ASPECTS
 from topo_astro.persistence.selections import parse_selection_file
+from topo_astro.significators import rules_data as significators_rules
+from topo_astro.significators import scoring as significators_scoring
 
 import re
 import os
@@ -75,7 +77,7 @@ def resetvars():
     date_technique = -1
     aspect_type = -1
 
-def generate_grid_angular_aspects(filename, start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3], type: pd_automate.AspectType, technique: TechniqueType):
+def generate_grid_angular_aspects(filename, start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3], type: significators_rules.AspectType, technique: TechniqueType):
     global grid_aspects, date_technique, aspect_type
     date_technique = technique
     aspect_type = type
@@ -141,9 +143,9 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_nata
         
     
         ''' if date_technique == TechniqueType.PRIMARY_DIRECT:
-            count, str_acceptable_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
+            count, str_acceptable_aspects = significators_scoring.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, count)
         else:'''
-        count, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
+        count, str_acceptable_aspects = significators_scoring.count_event_acceptable_aspects(event_id, str_all_directed_aspects, count, aspect_type)
 
         if str_acceptable_aspects == '':
             temp_list_event.append(f"{str(event_index)}")
@@ -346,7 +348,7 @@ def count_aspect_groups_txt(filename, flag_count_moon):
         for result in results:
             outfile.write(str(result) + '\n')
 
-def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positions: list[3], type: pd_automate.AspectType, technique: TechniqueType):
+def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positions: list[3], type: significators_rules.AspectType, technique: TechniqueType):
     global grid_aspects, date_technique, aspect_type
     date_technique = technique
     aspect_type = type
@@ -483,7 +485,7 @@ def process_polaris_times(file_name, count_times_wanted):
 
 def count_pssr_moon_from_times_events(filename_write, list_datetimes: list, events_list :list, geopos):
     count_array = [('DateTime','count')]
-    aspect_type = pd_automate.AspectType.MOON_PRIMARY
+    aspect_type = significators_rules.AspectType.MOON_PRIMARY
 
     for dtime in list_datetimes:
         count_moon_conj_opp = 0
@@ -491,12 +493,12 @@ def count_pssr_moon_from_times_events(filename_write, list_datetimes: list, even
             pssr_obj = pssr_auto.PSSR_Auto(dtime, dt_event, None, geopos)
             str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
             str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-            _, str_acceptable_aspects = pd_automate.count_event_acceptable_aspects(event_id, str_all_directed_aspects, 0, aspect_type)
+            _, str_acceptable_aspects = significators_rules.count_event_acceptable_aspects(event_id, str_all_directed_aspects, 0, aspect_type)
             list_aspects = str_acceptable_aspects.split('\n')
             temp_arr = []
             for str_aspect in list_aspects:
                 try:
-                    if pd_automate.is_aspect_conj_opp(str_aspect):
+                    if significators_rules.is_aspect_conj_opp(str_aspect):
                         temp_arr.append(str_aspect)
                 except:
                     pass

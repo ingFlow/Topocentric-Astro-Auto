@@ -21,14 +21,15 @@ import swisseph as swe
 
 from batch import grid_engine as ptf
 from techniques.primary_directions import technique as pd_automate
+from topo_astro.significators import rules_data as significators_rules
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 
 BEYONCE_GEOPOS = [29.7217, -95.3875, 32]
 BEYONCE_RADIX_DT = datetime.fromisoformat("1981-09-04T02:28:44")
 BEYONCE_EVENTS = [
-    (datetime.fromisoformat("2012-01-07T12:00:00"), pd_automate.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
-    (datetime.fromisoformat("2005-09-10T12:00:00"), pd_automate.EventType.DIVORCE_SEPARATION, BEYONCE_GEOPOS),
+    (datetime.fromisoformat("2012-01-07T12:00:00"), significators_rules.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
+    (datetime.fromisoformat("2005-09-10T12:00:00"), significators_rules.EventType.DIVORCE_SEPARATION, BEYONCE_GEOPOS),
 ]
 CANDIDATE_TIMES = [BEYONCE_RADIX_DT, BEYONCE_RADIX_DT.replace(minute=33, second=44)]
 

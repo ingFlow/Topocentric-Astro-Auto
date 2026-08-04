@@ -29,6 +29,8 @@ from datetime import datetime
 
 from batch import grid_engine as ptf
 from techniques.primary_directions import technique as pd_automate
+from topo_astro.significators import rules_data as significators_rules
+from topo_astro.significators import scoring as significators_scoring
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 
@@ -49,8 +51,8 @@ class TestGenerateGridTimesManualEndToEnd:
 
     def test_writes_one_header_row_plus_one_row_per_candidate_time(self, tmp_path):
         list_dt_events = [
-            (datetime.fromisoformat("2012-01-07T12:00:00"), pd_automate.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
-            (datetime.fromisoformat("2005-09-10T12:00:00"), pd_automate.EventType.DIVORCE_SEPARATION, BEYONCE_GEOPOS),
+            (datetime.fromisoformat("2012-01-07T12:00:00"), significators_rules.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
+            (datetime.fromisoformat("2005-09-10T12:00:00"), significators_rules.EventType.DIVORCE_SEPARATION, BEYONCE_GEOPOS),
         ]
         candidate_times = [
             BEYONCE_RADIX_DT,
@@ -88,7 +90,7 @@ class TestGenerateGridTimesManualEndToEnd:
         behavior main_techniques.py's orchestration functions currently
         depend on remembering to do."""
         list_dt_events = [
-            (datetime.fromisoformat("2012-01-07T12:00:00"), pd_automate.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
+            (datetime.fromisoformat("2012-01-07T12:00:00"), significators_rules.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
         ]
 
         ptf.generate_grid_times_manual(
@@ -114,7 +116,7 @@ class TestGenerateGridTimesManualEndToEnd:
 
     def test_resetvars_clears_grid_aspects_and_technique_selection(self):
         list_dt_events = [
-            (datetime.fromisoformat("2012-01-07T12:00:00"), pd_automate.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
+            (datetime.fromisoformat("2012-01-07T12:00:00"), significators_rules.EventType.BIRTH_DAUGHTER, BEYONCE_GEOPOS),
         ]
         import tempfile
         with tempfile.TemporaryDirectory() as d:

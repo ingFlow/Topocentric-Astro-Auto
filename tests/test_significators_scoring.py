@@ -49,7 +49,7 @@ import json
 import os
 
 from techniques.primary_directions import technique as pd_automate
-from techniques.primary_directions.technique import EventType, AspectType
+from topo_astro.significators.rules_data import EventType, AspectType
 
 GOLDEN_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures", "golden")
 

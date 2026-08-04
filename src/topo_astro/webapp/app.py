@@ -41,6 +41,8 @@ from topo_astro.batch import grid_engine as process_techniques_files
 from topo_astro.core.constants import calc_planets_pof_houses_labelled, get_technique_name, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
 from topo_astro.persistence.selections import parse_selection_file
 from topo_astro.core.aspects import calculate_obliquity
+from topo_astro.significators import rules_data as significators_rules
+from topo_astro.significators import scoring as significators_scoring
 
 import julian
 from datetime import datetime
@@ -87,7 +89,7 @@ def home():
     dt_radix = dt_actual_dob
     
     list_dt_events = [t[0].isoformat() for t in list_of_events]
-    list_type_events = [pd_automate.EventType.get_name(t[1]) for t in list_of_events]
+    list_type_events = [significators_rules.EventType.get_name(t[1]) for t in list_of_events]
     list_event_locations = [t[2] for t in list_of_events]
     list_event_index = [t[1] for t in list_of_events]
     #CHANGE HERE FOR LEFT COL TIMES
@@ -267,7 +269,7 @@ def update_content():
                     try:
                         if technique in [aTechniqueType.PRIMARY_DIRECT, aTechniqueType.SECONDARY_DIRECT, aTechniqueType.TRANSIT, aTechniqueType.SRA, aTechniqueType.HARMONICS]:
                             if event_id is not None:
-                                score, str_accepted_aspects = pd_automate.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
+                                score, str_accepted_aspects = significators_scoring.count_pd_score_acceptable_aspects(event_id, str_all_directed_aspects, 0)
                                 temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
                                 logging.info(f"Filtered aspects using pd_score for event {event_id}. Count: {len(temp_filtered_list)}")
                             else:
@@ -275,7 +277,7 @@ def update_content():
                                 temp_filtered_list = list_all_asp # Show unfiltered if event_id missing but flag checked      
                         elif technique == aTechniqueType.PSSR:
                             if event_id is not None:
-                                score, str_accepted_aspects = pd_automate.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
+                                score, str_accepted_aspects = significators_scoring.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
                                 temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
                                 logging.info(f"Filtered aspects using event_acceptable for PSSR event {event_id}. Count: {len(temp_filtered_list)}")
                             else:

@@ -11,8 +11,9 @@ import json
 import re
 
 from topo_astro.core.constants import get_altitude
-from topo_astro.techniques.primary_directions.technique import EventType, AspectType
+from topo_astro.significators.rules_data import EventType, AspectType
 from topo_astro.batch import grid_engine as asp
+
 
 class timesFileType:
     POLARIS = 0
