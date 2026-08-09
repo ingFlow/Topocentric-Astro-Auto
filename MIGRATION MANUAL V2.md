@@ -485,11 +485,11 @@ Phases 1→9 happen in order. Phase 10 depends on 9. Phase 11 has no hard depend
 
 **Validation Checklist:**
 
-- [ ] Full characterization suite passes unchanged for all seven techniques, direct and converse where applicable.
-- [ ] Explicit side-by-side check: for at least one fixture, manually confirm the new dispatcher's raw aspect output is byte-identical to the pre-Phase-6 output for all seven techniques plus Natal.
-- [ ] Specifically confirm `Harmonics_Auto.get_str_aspects()` still returns a single string (not a tuple, not coerced) and `Lunar_Auto.get_all_lunars()`/`get_info()` are entirely untouched — this is the check most specific to this phase's core risk (accidentally "fixing" a difference that was never a bug).
-- [ ] Interactive smoke test across all eight radio-button options, with and without "Show Accepted"/"Show Data" toggled, and with an orb restriction applied.
-- [ ] A full batch grid run reproduces byte-identical grid and `COUNT` output against the Phase 2 golden files.
+- [X] Full characterization suite passes unchanged for all seven techniques, direct and converse where applicable.
+- [x] Explicit side-by-side check: for at least one fixture, manually confirm the new dispatcher's raw aspect output is byte-identical to the pre-Phase-6 output for all seven techniques plus Natal.
+- [x] Specifically confirm `Harmonics_Auto.get_str_aspects()` still returns a single string (not a tuple, not coerced) and `Lunar_Auto.get_all_lunars()`/`get_info()` are entirely untouched — this is the check most specific to this phase's core risk (accidentally "fixing" a difference that was never a bug).
+- [x] Interactive smoke test across all eight radio-button options, with and without "Show Accepted"/"Show Data" toggled, and with an orb restriction applied.
+- [X] A full batch grid run reproduces byte-identical grid and `COUNT` output against the Phase 2 golden files.
 
 **Suggested Commit Message:** `refactor: unify getter naming across the five uniform techniques; introduce shared dispatcher; leave Lunar and Harmonics untouched`
 

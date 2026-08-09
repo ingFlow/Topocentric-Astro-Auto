@@ -3,6 +3,18 @@ techniques/pssr.py - the Primary Solar/Secondary Return (PSSR) technique:
 PSSR_Auto (the solar-return-nearest-to-the-event-date chart, direct and
 converse via get_str_aspects), including the return-date convergence
 search this technique is named for.
+
+Phase 6 update: added get_aspects()/get_info() as thin additive wrappers
+around get_str_aspects()/get_dict_info() (see the class body below).
+PSSR_Auto is one of the five techniques (with PD, Secondary, Transit,
+SRA) unified under this common two-method shape by techniques/base.py's
+dispatcher. The original get_str_aspects()/get_dict_info() names are left
+in place unchanged; nothing that already calls them needs to change. Note
+that PSSR's own acceptance/scoring path (count_event_acceptable_aspects
+via AspectType.FAST_TO_SLOW_COMBO) is unaffected by this - Phase 6 only
+touches aspect/info retrieval shape, not scoring, and PSSR's distinct
+scoring function was never part of the count_pd_score_acceptable_aspects
+group the other four uniform techniques share.
 """
 import swisseph as swe
 import julian
@@ -97,6 +109,19 @@ class PSSR_Auto:
 
     def get_dict_info(self):
         return self.__dict_info
+
+    # --- Phase 6: additive uniform-interface wrappers (see module docstring) ---
+    def get_aspects(self):
+        """Thin wrapper over get_str_aspects() - part of the 5-technique
+        uniform (direct, converse) contract introduced in Phase 6. Does
+        not replace get_str_aspects(), which remains available unchanged."""
+        return self.get_str_aspects()
+
+    def get_info(self):
+        """Thin wrapper over get_dict_info() - part of the 5-technique
+        uniform info-dict contract introduced in Phase 6. Does not
+        replace get_dict_info(), which remains available unchanged."""
+        return self.get_dict_info()
     
 def exclude_planets(planets_list, exclude_planets):
     temp_planets = []

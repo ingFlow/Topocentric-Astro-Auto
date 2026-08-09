@@ -20,6 +20,24 @@ Recent changes:
     - Mechanical-move phase: parse_selection_file is now imported from
       persistence.selections rather than core.constants (see
       create_analysis_workbook's usage of it, further down in this file).
+    - Phase 6: append_grid_acceptable_angles now constructs the 5 uniform
+      techniques (PD, Secondary, PSSR, Transit, SRA) via the new
+      techniques.base.construct_technique() dispatcher instead of five
+      near-duplicate inline constructor calls - the exact batch-side
+      counterpart of the same edit made to webapp/app.py's update_content
+      route (see techniques/base.py's module docstring for the shared
+      dispatcher's full reasoning and the argument-shape mapping this
+      replaces). Getter calls on the dispatcher's result use the
+      pre-existing per-technique method names (get_aspects_str()/
+      get_str_aspects()) unchanged, matching this file's own pre-Phase-6
+      pattern of reading only the (direct, converse) aspect-string pair
+      and discarding the info dict (this function never read technique
+      info dicts, only aspects_str tuples - that is unchanged). Harmonics
+      and Lunar are NOT touched by this phase; per the Developer Manual's
+      Section 2.2, Harmonics is not currently reachable from any batch
+      orchestration function at all, and Lunar is likewise never
+      dispatched from this function - both facts predate this phase and
+      remain true after it.
 """
 
 import datetime 
@@ -33,6 +51,7 @@ from topo_astro.techniques import pssr as pssr_auto
 from topo_astro.techniques import transits as transit_auto
 from topo_astro.techniques import sra as sra_auto
 from topo_astro.techniques import lunars as lunar
+from topo_astro.techniques import base as technique_dispatcher
 from topo_astro.core.constants import calc_planets_pof_houses_labelled, PLANETS
 from topo_astro.core.aspects import calculate_obliquity
 from topo_astro.core.constants import DATA_INPUT_DIR, SELECTIONS_DIR, aTechniqueType, get_technique_name, PLANET_ABBREVIATIONS, ALL_ASPECTS
@@ -119,27 +138,48 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_nata
 
     event_index = 0
     for dt_event, event_id, geopos in list_dt_events:
-        if date_technique == TechniqueType.PRIMARY_DIRECT:
-            pd_auto_obj  = pd_automate.PD_Automate(jd_radix, julian.to_jd(dt_event), geopos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
-            str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
-        elif date_technique == TechniqueType.SECONDARY_DIRECT:
-            secondary_obj = secondary_automate.Secondary_Auto(jd_radix, julian.to_jd(dt_event), geopos_natal[0], geopos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
-            str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
-            str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
-        elif date_technique == TechniqueType.PSSR:
-            pssr_obj = pssr_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-        elif date_technique == TechniqueType.TRANSIT:
-            transit_obj = transit_auto.Transit_Auto(jd_radix, julian.to_jd(dt_event), geopos, rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-        elif date_technique == TechniqueType.SRA:
-            sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geopos_natal,rad_planets_pof_houses_labelled)
-            str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
-            str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-            str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
+        if date_technique in (TechniqueType.PRIMARY_DIRECT, TechniqueType.SECONDARY_DIRECT, TechniqueType.PSSR, TechniqueType.TRANSIT, TechniqueType.SRA):
+            # Phase 6: construct via the shared dispatcher instead of a
+            # per-technique inline constructor call - the batch-side
+            # counterpart of the same edit made to webapp/app.py's
+            # update_content route. See techniques/base.py's module
+            # docstring for the exact per-technique argument-shape mapping
+            # this replaces - verified argument-for-argument identical to
+            # the original 5 inline constructor calls before this edit was
+            # made. Only get_str_aspects()/get_aspects_str() is read here,
+            # matching this function's own pre-Phase-6 behavior of never
+            # reading any technique's info dict.
+            technique_obj = technique_dispatcher.construct_technique(
+                technique=date_technique,
+                jd_radix=jd_radix,
+                jd_event=julian.to_jd(dt_event),
+                dt_radix=julian.from_jd(jd_radix),
+                dt_event=dt_event,
+                geopos_natal=geopos_natal,
+                geopos_event=geopos,
+                rad_planets=rad_planets_pof_houses_labelled,
+                rad_planets_equatorial=rad_planets_equatorial,
+                rad_houses_info=rad_houses_info,
+                e=e,
+                ramc=rad_houses_info[1][2],
+            )
+
+            if date_technique == TechniqueType.PRIMARY_DIRECT:
+                str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_aspects_str()
+                str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+            elif date_technique == TechniqueType.SECONDARY_DIRECT:
+                str_rad_n_prog_aspects, str_rad_n_reg_aspects = technique_obj.get_str_aspects()
+                str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
+            elif date_technique == TechniqueType.PSSR:
+                str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+            elif date_technique == TechniqueType.TRANSIT:
+                str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+            elif date_technique == TechniqueType.SRA:
+                str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+                str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
         
     
         ''' if date_technique == TechniqueType.PRIMARY_DIRECT:

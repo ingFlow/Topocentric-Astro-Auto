@@ -27,6 +27,23 @@ Recent changes:
       persistence.selections (its own dedicated home) rather than
       core.constants; get_timezone_name_from_pos and clear_directory
       (both zero-caller utilities) moved to webapp/reserve/.
+    - Phase 6: '/update_content' now constructs the 5 uniform techniques
+      (PD, Secondary, PSSR, Transit, SRA) via the new
+      techniques.base.construct_technique() dispatcher instead of five
+      near-duplicate inline constructor calls. Harmonics, Lunar, and
+      Natal are UNCHANGED - they still branch explicitly, exactly as
+      before, since the dispatcher deliberately does not handle them
+      (see techniques/base.py's module docstring). Getter calls on the
+      dispatcher's result use the pre-existing per-technique method names
+      (get_aspects_str()/get_str_aspects(), get_extended_information()/
+      get_dict_info()/get_info()) unchanged - Phase 6 added get_aspects()/
+      get_info() wrappers as an ADDITIVE option on the 5 uniform classes;
+      it did not require switching callers to the new names, and this
+      route continues using the original names to keep this specific
+      diff to "how the object gets constructed" only. Verified
+      argument-for-argument identical to the pre-Phase-6 inline
+      constructor calls before this edit was made (see
+      techniques/base.py's own verification notes).
 """
 from flask import Flask, render_template, jsonify, request, send_from_directory
 from topo_astro.techniques.primary_directions import technique as pd_automate  
@@ -36,6 +53,7 @@ from topo_astro.techniques import transits as transit_swiss_auto
 from topo_astro.techniques import lunars as lunar_auto
 from topo_astro.techniques import sra as sra_auto
 from topo_astro.techniques import harmonics as harmonics_auto
+from topo_astro.techniques import base as technique_dispatcher
 from topo_astro.batch import entrypoints as main_techniques
 from topo_astro.batch import grid_engine as process_techniques_files
 from topo_astro.core.constants import calc_planets_pof_houses_labelled, get_technique_name, SELECTIONS_DIR, DATA_INPUT_DIR, aTechniqueType
@@ -211,33 +229,50 @@ def update_content():
                 jd_event = julian.to_jd(dt_event)
                 e = calculate_obliquity(jd_event)
                 
-                if technique == aTechniqueType.PRIMARY_DIRECT:
-                    pd_auto_obj  = pd_automate.PD_Automate(jd_radix, jd_event, geo_pos_natal, rad_planets_pof_houses_labelled, rad_planets_equatorial, rad_houses_info, e)
-                    str_rad_dir_aspects, str_rad_conv_aspects = pd_auto_obj.get_aspects_str()
-                    pd_info = pd_auto_obj.get_extended_information()
-                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects   
-                    mdos_list = pd_auto_obj.get_mdos_natal()
-                elif technique == aTechniqueType.SECONDARY_DIRECT:
-                    secondary_obj = secondary_automate.Secondary_Auto(jd_radix, jd_event, geo_pos_natal[0], geo_pos_natal[1], e, rad_houses_info[1][2], rad_planets_pof_houses_labelled)
-                    secondary_info = secondary_obj.get_dict_info()
-                    str_rad_n_prog_aspects, str_rad_n_reg_aspects = secondary_obj.get_str_aspects()
-                    str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
-                elif technique == aTechniqueType.PSSR:
-                    pssr_obj = pssr_swiss_auto.PSSR_Auto(julian.from_jd(jd_radix), dt_event, rad_planets_pof_houses_labelled)
-                    str_rad_dir_aspects, str_rad_conv_aspects = pssr_obj.get_str_aspects()
-                    pssr_info = pssr_obj.get_dict_info()
-                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-                elif technique == aTechniqueType.TRANSIT:
-                    transit_obj = transit_swiss_auto.Transit_Auto(jd_radix, jd_event, event_geopos, rad_planets_pof_houses_labelled)
-                    str_rad_dir_aspects, str_rad_conv_aspects = transit_obj.get_str_aspects()
-                    transit_info = transit_obj.get_dict_info()
-                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-                elif technique == aTechniqueType.SRA:
-                    sra_auto_obj = sra_auto.SRA_Auto(julian.from_jd(jd_radix), dt_event, geo_pos_natal,rad_planets_pof_houses_labelled)
-                    str_rad_dir_aspects, str_rad_conv_aspects = sra_auto_obj.get_str_aspects()
-                    sra_info = sra_auto_obj.get_info()
-                    str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects 
-                    str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
+                if technique in (aTechniqueType.PRIMARY_DIRECT, aTechniqueType.SECONDARY_DIRECT, aTechniqueType.PSSR, aTechniqueType.TRANSIT, aTechniqueType.SRA):
+                    # Phase 6: construct via the shared dispatcher instead of a
+                    # per-technique inline constructor call. See
+                    # techniques/base.py's module docstring for the exact
+                    # per-technique argument-shape mapping this replaces -
+                    # verified argument-for-argument identical to the original
+                    # 5 inline constructor calls before this edit was made.
+                    technique_obj = technique_dispatcher.construct_technique(
+                        technique=technique,
+                        jd_radix=jd_radix,
+                        jd_event=jd_event,
+                        dt_radix=julian.from_jd(jd_radix),
+                        dt_event=dt_event,
+                        geopos_natal=geo_pos_natal,
+                        geopos_event=event_geopos,
+                        rad_planets=rad_planets_pof_houses_labelled,
+                        rad_planets_equatorial=rad_planets_equatorial,
+                        rad_houses_info=rad_houses_info,
+                        e=e,
+                        ramc=rad_houses_info[1][2],
+                    )
+
+                    if technique == aTechniqueType.PRIMARY_DIRECT:
+                        str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_aspects_str()
+                        pd_info = technique_obj.get_extended_information()
+                        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+                        mdos_list = technique_obj.get_mdos_natal()
+                    elif technique == aTechniqueType.SECONDARY_DIRECT:
+                        secondary_info = technique_obj.get_dict_info()
+                        str_rad_n_prog_aspects, str_rad_n_reg_aspects = technique_obj.get_str_aspects()
+                        str_all_directed_aspects = str_rad_n_prog_aspects + '\n' + str_rad_n_reg_aspects
+                    elif technique == aTechniqueType.PSSR:
+                        str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                        pssr_info = technique_obj.get_dict_info()
+                        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+                    elif technique == aTechniqueType.TRANSIT:
+                        str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                        transit_info = technique_obj.get_dict_info()
+                        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+                    elif technique == aTechniqueType.SRA:
+                        str_rad_dir_aspects, str_rad_conv_aspects = technique_obj.get_str_aspects()
+                        sra_info = technique_obj.get_info()
+                        str_all_directed_aspects = str_rad_dir_aspects + str_rad_conv_aspects
+                        str_all_directed_aspects = str_all_directed_aspects.replace(")(", ")\n(")
                 elif technique == aTechniqueType.NATAL:
                     for p in rad_planets_pof_houses_labelled:
                         str_all_directed_aspects+= f"{p}\n"
@@ -277,7 +312,7 @@ def update_content():
                                 temp_filtered_list = list_all_asp # Show unfiltered if event_id missing but flag checked      
                         elif technique == aTechniqueType.PSSR:
                             if event_id is not None:
-                                score, str_accepted_aspects = significators_scoring.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,significators_scoring.AspectType.FAST_TO_SLOW_COMBO)
+                                score, str_accepted_aspects = significators_scoring.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
                                 temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
                                 logging.info(f"Filtered aspects using event_acceptable for PSSR event {event_id}. Count: {len(temp_filtered_list)}")
                             else:

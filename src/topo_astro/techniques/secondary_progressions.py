@@ -3,6 +3,13 @@ techniques/secondary_progressions.py - the Secondary Progressions
 technique: Secondary_Auto (day-for-a-year progressed chart for one
 radix/event pair, direct and converse via get_str_aspects), plus its
 supporting position-calculation helpers.
+
+Phase 6 update: added get_aspects()/get_info() as thin additive wrappers
+around get_str_aspects()/get_dict_info() (see the class body below).
+Secondary_Auto is one of the five techniques (with PD, PSSR, Transit,
+SRA) unified under this common two-method shape by techniques/base.py's
+dispatcher. The original get_str_aspects()/get_dict_info() names are left
+in place unchanged; nothing that already calls them needs to change.
 """
 import swisseph as swe
 import julian
@@ -38,6 +45,19 @@ class Secondary_Auto:
 
     def get_dict_info(self):
         return self.__dict_info
+
+    # --- Phase 6: additive uniform-interface wrappers (see module docstring) ---
+    def get_aspects(self):
+        """Thin wrapper over get_str_aspects() - part of the 5-technique
+        uniform (direct, converse) contract introduced in Phase 6. Does
+        not replace get_str_aspects(), which remains available unchanged."""
+        return self.get_str_aspects()
+
+    def get_info(self):
+        """Thin wrapper over get_dict_info() - part of the 5-technique
+        uniform info-dict contract introduced in Phase 6. Does not
+        replace get_dict_info(), which remains available unchanged."""
+        return self.get_dict_info()
 
 def get_all_secondary_positions(jd_radix, jd_event, geo_lat, geo_long, e, ramc, rad_planets):
     """returns tuple rad_pos, prog_pos, reg_pos, dict_info"""
@@ -100,4 +120,3 @@ def calc_POF(planets, ac):
     long_moon = planets[moon_index][1]
 
     return swe.degnorm(ac + long_moon - long_sun)
-

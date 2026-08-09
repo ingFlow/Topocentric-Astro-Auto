@@ -3,6 +3,16 @@ techniques/sra.py - the Solar Revolution Arc (SRA) technique: SRA_Auto
 (get_str_aspects returns a single combined direct+converse string, joined
 with the ")(" -> ")\n(" replacement applied at the display layer - see
 webapp/app.py's update_content route).
+
+Phase 6 update: added get_aspects() as a thin additive wrapper around
+get_str_aspects() (see the class body below). SRA_Auto already defined
+get_info() before this phase - it was the one uniform technique whose
+info-getter already matched the name chosen for the other four (see
+techniques/base.py's module docstring for why get_info() was picked:
+SRA already used it, so that choice required the fewest classes to
+change). SRA_Auto's get_info() is untouched by this phase. The original
+get_str_aspects() name is left in place unchanged; nothing that already
+calls it needs to change.
 """
 import swisseph as swe
 import julian
@@ -92,6 +102,15 @@ class SRA_Auto:
 
     def get_info(self):
         return self.__dict_info
+
+    # --- Phase 6: additive uniform-interface wrapper (see module docstring) ---
+    def get_aspects(self):
+        """Thin wrapper over get_str_aspects() - part of the 5-technique
+        uniform (direct, converse) contract introduced in Phase 6. Does
+        not replace get_str_aspects(), which remains available unchanged.
+        (get_info() already existed on this class before Phase 6 and is
+        unchanged - see module docstring.)"""
+        return self.get_str_aspects()
 
 def calc_direct_year(radix_datetime, event_datetime):
     """give the year for the solar return corresponding to an event """

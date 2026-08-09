@@ -6,6 +6,19 @@ queries the ephemeris fresh at the event date with no arc/derivation step
 in between - see test_techniques_golden.py's notes on cross-environment
 ephemeris precision if this technique's golden values ever look
 unexpectedly sensitive to the environment they were generated in.
+
+Phase 6 update: added get_aspects()/get_info() as thin additive wrappers
+around get_str_aspects()/get_dict_info() (see the class body below).
+Transit_Auto is one of the five techniques (with PD, Secondary, PSSR,
+SRA) unified under this common two-method shape by techniques/base.py's
+dispatcher. The original get_str_aspects()/get_dict_info() names are left
+in place unchanged; nothing that already calls them needs to change.
+Note: Transit is the one uniform technique whose constructor takes the
+*event's* geopos rather than the natal one (see calc_transits_for_date's
+`geopos` parameter, used only to compute `rad_planets` when none is
+supplied) - the Phase 6 dispatcher in techniques/base.py preserves this
+distinction explicitly rather than normalizing all five techniques onto
+a single geopos value.
 """
 import swisseph as swe
 import julian
@@ -47,3 +60,15 @@ class Transit_Auto:
     def get_dict_info(self):
         return self.__dict_info
 
+    # --- Phase 6: additive uniform-interface wrappers (see module docstring) ---
+    def get_aspects(self):
+        """Thin wrapper over get_str_aspects() - part of the 5-technique
+        uniform (direct, converse) contract introduced in Phase 6. Does
+        not replace get_str_aspects(), which remains available unchanged."""
+        return self.get_str_aspects()
+
+    def get_info(self):
+        """Thin wrapper over get_dict_info() - part of the 5-technique
+        uniform info-dict contract introduced in Phase 6. Does not
+        replace get_dict_info(), which remains available unchanged."""
+        return self.get_dict_info()

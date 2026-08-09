@@ -30,6 +30,15 @@ Recent change (de-duplication/mechanical-move phases): add_suffix_to_tuples,
 calc_alt, and calc_lst were relocated to core/reserve.py - they're general
 astronomy utilities, not PD-specific, and had no caller anywhere in this
 file's own logic.
+
+Phase 6 update: added get_aspects()/get_info() as thin additive wrappers
+around get_aspects_str()/get_extended_information() (see the class body
+below). PD_Automate is one of the five techniques (with Secondary, PSSR,
+Transit, SRA) unified under this common two-method shape by
+techniques/base.py's dispatcher; Harmonics and Lunar are deliberately
+excluded - see techniques/base.py's module docstring for why. The
+original get_aspects_str()/get_extended_information() names are left in
+place unchanged; nothing that already calls them needs to change.
 """
 import swisseph as swe
 import julian
@@ -94,6 +103,20 @@ class PD_Automate:
             mdo = value['MDO']
             mdo_list.append((key,mdo[0]))
         return mdo_list
+
+    # --- Phase 6: additive uniform-interface wrappers (see module docstring) ---
+    def get_aspects(self):
+        """Thin wrapper over get_aspects_str() - part of the 5-technique
+        uniform (direct, converse) contract introduced in Phase 6. Does
+        not replace get_aspects_str(), which remains available unchanged."""
+        return self.get_aspects_str()
+
+    def get_info(self):
+        """Thin wrapper over get_extended_information() - part of the
+        5-technique uniform info-dict contract introduced in Phase 6.
+        Does not replace get_extended_information(), which remains
+        available unchanged."""
+        return self.get_extended_information()
     
 
 

@@ -59,17 +59,17 @@ SOURCE_ROOT = os.environ.get("TOPO_ASTRO_SOURCE_ROOT", _DEFAULT_SOURCE_ROOT)
 if SOURCE_ROOT not in sys.path:
     sys.path.insert(0, SOURCE_ROOT)
 
-import core.constants as constants  # noqa: E402
-import core.aspects as aspects_base  # noqa: E402
-from techniques.primary_directions import technique as pd_automate  # noqa: E402
-from techniques import secondary_progressions as secondary_automate  # noqa: E402
-from techniques import pssr as pssr_swiss_auto  # noqa: E402
-from techniques import transits as transit_swiss_auto  # noqa: E402
-from techniques import sra as sra_auto  # noqa: E402
-from techniques import harmonics as harmonics_auto  # noqa: E402
-from techniques import lunars as lunar_auto  # noqa: E402
+import topo_astro.core.constants as constants  # noqa: E402
+import topo_astro.core.aspects as aspects_base  # noqa: E402
+from topo_astro.techniques.primary_directions import technique as pd_automate  # noqa: E402
+from topo_astro.techniques import secondary_progressions as secondary_automate  # noqa: E402
+from topo_astro.techniques import pssr as pssr_swiss_auto  # noqa: E402
+from topo_astro.techniques import transits as transit_swiss_auto  # noqa: E402
+from topo_astro.techniques import sra as sra_auto  # noqa: E402
+from topo_astro.techniques import harmonics as harmonics_auto  # noqa: E402
+from topo_astro.techniques import lunars as lunar_auto  # noqa: E402
 
-from tests.fixtures.fixture_manifest import PEOPLE  # noqa: E402
+from fixture_manifest import PEOPLE  # noqa: E402
 
 EPHE_PATH = "/usr/share/swisseph/ephe"
 swe.set_ephe_path(EPHE_PATH)
