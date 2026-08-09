@@ -28,11 +28,14 @@ class PSSR_Auto:
         
         pssr_direct_year = calc_pssr_direct_year(dt_radix, dt_event)
         jd_pssr_start = julian.to_jd(datetime(pssr_direct_year,1,1,0,0,0))
-        dir_precession = get_precession(jd_radix, jd_event)
         sun_long = rad_planets[0][1]
-        dir_sun_long_precessed = swe.degnorm(sun_long + dir_precession)
         
+        #FIX precession is diff between sr start date and radix not the event as the book mentioned so fixed that algo  - 2 solar returns calculated now one for the precession itself and the other for the pssr date
+        jd_ssr_dir_no_prec = swe.solcross_ut(sun_long, jd_pssr_start)
+        dir_precession = get_precession(jd_radix, jd_ssr_dir_no_prec)
+        dir_sun_long_precessed = swe.degnorm(sun_long + dir_precession)
         jd_pssr_dir = swe.solcross_ut(dir_sun_long_precessed, jd_pssr_start)
+        
         jd_rad_event_diff = abs(jd_radix - jd_event)
         jd_pssr_event_diff_dir = abs(jd_pssr_dir - jd_event)
         jd_conv_event = jd_radix - jd_rad_event_diff
@@ -48,7 +51,9 @@ class PSSR_Auto:
             pssr_converse_year = (dt_radix.year - year_diff) + 1
         jd_pssr_start = julian.to_jd(datetime(pssr_converse_year,1,1,0,0,0))
         
-        conv_precession = get_precession(jd_radix, jd_conv_event)
+        #FIX precession is diff between sr start date and radix not the event as the book mentioned so fixed that algo  - 2 solar returns calculated now one for the precession itself and the other for the pssr date
+        jd_ssr_conv_no_prec = swe.solcross_ut(sun_long, jd_pssr_start)
+        conv_precession = get_precession(jd_radix, jd_ssr_conv_no_prec)
         conv_sun_long_precessed = swe.degnorm(sun_long - conv_precession)
         jd_pssr_conv = swe.solcross_ut(conv_sun_long_precessed, jd_pssr_start)
         

@@ -894,3 +894,256 @@ Cyclic Lunars — all three variants, both directions, demi included — is **va
 | Cyclic Lunars (Lunar/Kinetic/As-Lunar) | ✅ Validated — this report |
 
 Every technique originally audited is now either confirmed correct or has a confirmed, independently-verified fix in hand.
+
+# Primary Direction House Cusps — Algorithm Derivation & POLARIS Validation
+
+## Verdict
+
+**Algorithm 1 (`swe.houses_armc()` fresh recompute at the shifted RAMC) and Algorithm 2
+(per-cusp Speculum method, i.e. the `calc_houses_with_ramc` approach) are mathematically
+identical** — given the same directed RAMC, latitude, and obliquity, they return the same
+12 cusps to well under a milliarcsecond, for every test case run (both Northern-latitude
+POLARIS-matched cases and a synthetic Southern-latitude sanity check).
+
+Both match POLARIS to:
+
+- **median error 1.07 arcsec**
+- **mean error 2.74 arcsec**
+- **max error 15.16 arcsec**
+- **60/82 (73%) under 3 arcsec, 80/82 (98%) under 15 arcsec, 82/82 (100%) under 1 arcminute**
+
+across 82 independently cross-checked directed-cusp values, spanning 3 subjects (Jacqueline
+Kennedy Onassis, Winston Churchill, Richard Wagner), 6 events, both direct and converse
+directions, and both the four angles (As/Ds/Mc/Ic) and all eight intermediate cusps.
+
+**The determining factor was not the recompute-vs-per-cusp structural question — it was the
+sign convention applied to the obliquity `E` inside `calc_long_from_OA()`.** There are two
+possible readings of the book's "the Obliquity of the Ecliptic must be negative" rule
+depending on which hemisphere you take it to apply to. Only one of them works:
+
+| Convention | Rule | Result vs POLARIS |
+|---|---|---|
+| **A (correct)** | E stays **positive** for the Oblique-Ascension hemisphere (houses X–XI–XII–I–II–III); E is **negated** only for the Oblique-Descension hemisphere (IV–V–VI–VII–VIII–IX) | median 1.07″, matches |
+| B (wrong) | E negated on the OA hemisphere instead | median 41,504″ (≈11.5°), catastrophically wrong |
+
+Since houses IV–IX are always the exact +180° opposite of X–III in any quadrant house
+system, the OD branch is never actually *exercised* for house-cusp work — you only ever
+need the OA-hemisphere formula (E unmodified) for MC/11/12/AS/2/3, then mirror by 180° for
+the other six. That's why Convention A vs B only shows up as a live bug once you *do* invoke
+the OD branch directly (e.g. for planets that fall in houses 4–9), not in the house-cusp
+code itself.
+
+## Recommended implementation
+
+Since Algorithm 1 and Algorithm 2 are proven equivalent, use the simpler one — it's less
+code, and it's the one already validated at scale here:
+
+```python
+def calc_directed_pd_houses(jd_radix, jd_event, geo_latitude, rad_houses, e):
+    """Returns (directed_cusps, converse_cusps), each a 12-tuple index 0=H1..11=H12.
+    Validated against POLARIS: median 1.07", max 15.2" across 82 test points
+    (3 subjects x 6 events x direct/converse x all 12 houses)."""
+    arc = pd.calc_arc(jd_radix, jd_event)
+    ramc = rad_houses[1][2]
+    directed = swe.houses_armc(swe.degnorm(ramc + arc), geo_latitude, e, b'T')[0]
+    converse = swe.houses_armc(swe.degnorm(ramc - arc), geo_latitude, e, b'T')[0]
+    return directed, converse
+```
+
+This is exactly "Algorithm 1" as given — it needed no fix. The per-cusp Speculum
+implementation (below) is retained because it's useful for anything that needs the
+intermediate values (pole, OA, per-cusp diagnostics for the extended-info display) — not
+because it produces different final cusp longitudes.
+
+```python
+def calc_house_pole(house_no, GEO_LAT):
+    tan_phi = 0.0
+    if house_no in (3, 9, 5, 11):
+        tan_phi = (1/3) * math.tan(math.radians(GEO_LAT))
+    elif house_no in (2, 8, 6, 12):
+        tan_phi = (2/3) * math.tan(math.radians(GEO_LAT))
+    elif house_no in (1, 7):
+        tan_phi = math.tan(math.radians(GEO_LAT))
+    elif house_no in (4, 10):
+        tan_phi = 0.0
+    return math.degrees(math.atan(tan_phi))
+
+def calc_long_from_OA(OA, phi, E, flag_ascen):
+    # CONVENTION A, confirmed correct: negate E only on the Oblique-Descension side.
+    if not flag_ascen:
+        E *= -1
+    Er, phir, OAr = math.radians(E), math.radians(phi), math.radians(OA)
+    tan_long = (math.sin(Er)*math.tan(phir) - math.cos(Er)*math.cos(OAr)) / math.sin(OAr)
+    long_deg = math.degrees(math.atan(tan_long))
+    long_deg += 90 if OA < 180 else 270
+    return swe.degnorm(long_deg)
+
+def calc_directed_pd_houses_percusp(directed_ramc, geo_latitude, e):
+    """Equivalent-output alternative: directs MC/11/12/AS/2/3 individually via OA,
+    then mirrors the opposite six by +180 (geometric necessity of any quadrant system)."""
+    seq = [(10,0,10), (11,1,11), (12,2,12), (1,3,1), (2,4,2), (3,5,3)]
+    out = {}
+    for housenum, n, pole_id in seq:
+        OA = swe.degnorm(directed_ramc + 30*n)
+        phi = calc_house_pole(pole_id, geo_latitude)
+        out[housenum] = calc_long_from_OA(OA, phi, e, True)  # always OA side, flag_ascen=True
+    for opp, base in [(4,10),(5,11),(6,12),(7,1),(8,2),(9,3)]:
+        out[opp] = swe.degnorm(out[base] + 180)
+    return [out[h] for h in range(1, 13)]
+```
+
+**Important — this is a change to `calc_long_from_OA` itself.** If this function is shared
+with the planet-direction code path, verify it doesn't regress the already-validated planet
+numbers before swapping it in wholesale; the empirical test above only exercised the
+house-cusp call site (which always passes `flag_ascen=True`). If the planet path relies on
+`flag_ascen` being assigned dynamically per-quadrant (via `calculate_OA_OD`), it's worth
+independently confirming Convention A still holds there rather than assuming it transfers —
+the quadrant-to-flag_ascen mapping in that code path could in principle differ from the
+house-cusp usage even though the sign rule inside `calc_long_from_OA` is the same function.
+
+## Validation methodology
+
+1. Recomputed radix JD, RAMC, obliquity, and all 12 topocentric house cusps directly from
+   birth data (date/time/lat/lon) via `swe.houses()`, cross-checked against the printed
+   Speculum/Positions values — agreement within ~1 arcsec on RAMC and Ascendant/MC for all
+   three subjects (Wagner's Ascendant was ~15″ off, likely a small period-appropriate
+   rounding difference in POLARIS's own 1813 computation; not concerning at this precision).
+2. Extracted every aspect-list row where the *directed* factor (the term before `R/R`) is a
+   house-cusp label (`As/Ds/Mc/Ic/2/3/5/6/8/9/11/12`), across all 6 event images — 94 rows.
+3. Cross-checked internal consistency: the same directed cusp is reported multiple times per
+   event (different aspects to different radix planets/cusps), and each repetition should
+   report the identical directed longitude. 26 of 31 repeated groups agreed to 0.0″ exactly.
+   9 rows across 5 conflicting groups were dropped or resolved by majority vote, leaving 85
+   clean rows — this is transcription-error triage on my end, not a data-quality issue with
+   what you gave me.
+4. Computed the arc via the Naibod key (`0.00269861°/day`, matching `calc_arc`), built the
+   directed RAMC for both direct and converse, and ran both candidate algorithms plus the
+   E-sign variant against all 85 targets.
+5. Of 85, 3 remained as outliers after the pass above: 2 resolved cleanly as my own
+   sign-glyph misreads (D:M:S matched the algorithm's output to under 4 arcsec, but the
+   sign I'd transcribed was off by an exact multiple of 30° — corrected, giving 82 clean
+   points total). The remaining 3 rows (Churchill H12/direct ×2 duplicate reading, Wagner
+   H2/direct) don't resolve as a clean sign-slip — the within-sign degree value itself
+   disagrees by 10+ arcmin, not just the sign — so I've left these out rather than force a
+   conclusion. Worth a second look at the source image if you want full closure, but they
+   don't move the verdict: excluding vs. including them doesn't change which algorithm
+   wins, only the noise floor.
+
+## Known gaps
+
+- **All three subjects are Northern-hemisphere.** The formula and both implementations
+  agree with each other for a synthetic Southern-latitude case, but that's a self-consistency
+  check, not a POLARIS match — I have no real Southern-hemisphere ground truth here. If you
+  have a Southern-born POLARIS export, running it through this exact same pipeline would
+  close that gap.
+- 3 unresolved rows noted above.
+
+# Primary Direction House-Cusp Audit Table
+
+Pure transcription of the 85 rows used in the comparison — no re-derivation,
+no filtering, no correction applied here. This is exactly what was fed into
+the algorithm comparison. Cross-check the "POLARIS pos (as read)" column
+directly against the aspect-list images; cross-check Algo1/Algo2 by re-running
+the formulas yourself against the birth data below.
+
+## Birth data used (input to both algorithms)
+
+| Subject | Birth date/time (UT) | Lat | Lon | JD | RAMC (radix) | Obliquity |
+|---|---|---|---|---|---|---|
+| Jackie | 28 Jul 1929, 18:30:04 | 40N54'00" (40.900000°) | 72W23'00" (-72.383333°) | 2425821.270880 | 151.065405° (01Vir03'55") | 23.450151° |
+| Churchill | 30 Nov 1874, 01:14:56 | 51N47'00" (51.783333°) | 1W21'00" (-1.350000°) | 2405857.552037 | 86.129962° (26Gem07'48") | 23.457764° |
+| Wagner | 22 May 1813, 02:53:28 | 51N20'00" (51.333333°) | 12E23'00" (12.383333°) | 2383385.620463 | 295.095850° (25Cap05'45") | 23.461680° |
+
+(JD/RAMC/obliquity above are what *I* computed via `swe.julday`/`swe.houses` from the birth data; they matched the printed Speculum values to within ~1 arcsec on RAMC for all three subjects — see prior message. This is what both Algo1 and Algo2 were run against.)
+
+## Full comparison — all 85 rows
+
+`Diff(1,2)` = Algo1 minus Algo2 (tests whether the two algorithms actually agree). `Diff(vs POLARIS)` = Algo1 minus the POLARIS-read target (tests accuracy). Both in arcseconds.
+
+| # | Subject | Event date | Cusp | Dir | POLARIS pos (as read) | POLARIS pos (decimal°) | Algo1: swe.houses_armc | Algo2: per-cusp | Diff(1,2) ["] | Diff(vs POLARIS) ["] |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | Churchill | 1898-12-01 | Mc | d | 18Can16'03" | 108.26750 | 18Can16'02" (108.26727) | 18Can16'02" (108.26727) | +0.000 | -0.83 |
+| 2 | Churchill | 1898-12-01 | H12 | d | 21Vir51'49" | 171.86361 | 21Vir51'50" (171.86379) | 21Vir51'50" (171.86379) | -0.000 | +0.64 |
+| 3 | Churchill | 1898-12-01 | H11 | d | 23Leo23'36" | 143.39333 | 23Leo23'37" (143.39353) | 23Leo23'37" (143.39353) | +0.000 | +0.69 |
+| 4 | Churchill | 1898-12-01 | H2 | d | 09Sco24'50" | 219.41389 | 09Sco24'49" (219.41350) | 09Sco24'49" (219.41350) | +0.000 | -1.40 |
+| 5 | Churchill | 1898-12-01 | H3 | c | 29Lib40'02" | 209.66722 | 29Lib40'02" (209.66723) | 29Lib40'02" (209.66723) | +0.000 | +0.03 |
+| 6 | Churchill | 1898-12-01 | H12 | d | 21Vir51'49" | 171.86361 | 21Vir51'50" (171.86379) | 21Vir51'50" (171.86379) | -0.000 | +0.64 |
+| 7 | Churchill | 1898-12-01 | H2 | c | 01Lib58'08" | 181.96889 | 01Lib58'09" (181.96906) | 01Lib58'09" (181.96906) | +0.000 | +0.63 |
+| 8 | Churchill | 1898-12-01 | As | d | 13Lib53'39" | 193.89417 | 13Lib53'38" (193.89387) | 13Lib53'38" (193.89387) | +0.000 | -1.07 |
+| 9 | Churchill | 1898-12-01 | H2 | c | 01Lib58'08" | 181.96889 | 01Lib58'09" (181.96906) | 01Lib58'09" (181.96906) | +0.000 | +0.63 |
+| 10 | Churchill | 1898-12-01 | Mc | d | 18Can16'03" | 108.26750 | 18Can16'02" (108.26727) | 18Can16'02" (108.26727) | +0.000 | -0.83 |
+| 11 | Churchill | 1898-12-01 | H12 | c | 14Leo30'53" | 134.51472 | 14Leo30'56" (134.51566) | 14Leo30'56" (134.51566) | +0.000 | +3.36 |
+| 12 | Churchill | 1898-12-01 | Mc | d | 18Can16'03" | 108.26750 | 18Can16'02" (108.26727) | 18Can16'02" (108.26727) | +0.000 | -0.83 |
+| 13 | Churchill | 1911-10-25 | H3 | c | 18Lib08'26" | 198.14056 | 18Lib08'26" (198.14066) | 18Lib08'26" (198.14066) | +0.000 | +0.39 |
+| 14 | Churchill | 1911-10-25 | As | d | 22Lib47'01" | 202.78361 | 22Lib47'00" (202.78326) | 22Lib47'00" (202.78326) | +0.000 | -1.27 |
+| 15 | Churchill | 1911-10-25 | H11 | c | 00Can18'55" | 90.31528 | 00Can18'59" (90.31633) | 00Can18'59" (90.31633) | +0.000 | +3.79 |
+| 16 | Churchill | 1911-10-25 | Mc | c | 22Tau10'34" | 52.17611 | 22Tau10'36" (52.17660) | 22Tau10'36" (52.17660) | +0.000 | +1.76 |
+| 17 | Churchill | 1911-10-25 | H2 | c | 21Vir50'22" | 171.83944 | 21Vir50'23" (171.83966) | 21Vir50'23" (171.83966) | -0.000 | +0.79 |
+| 18 | Churchill | 1911-10-25 | As | c | 01Vir49'11" | 151.81972 | 01Vir49'14" (151.82045) | 01Vir49'14" (151.82045) | +0.000 | +2.62 |
+| 19 | Churchill | 1911-10-25 | H2 | d | 19Sco23'15" | 229.38750 | 19Sco23'12" (229.38667) | 19Sco23'12" (229.38667) | +0.000 | -2.98 |
+| 20 | Churchill | 1911-10-25 | H12 | d | 01Vir49'11" | 151.81972 | 01Lib59'36" (181.99322) | 01Lib59'36" (181.99322) | +0.000 | +108624.58 |
+| 21 | Churchill | 1911-10-25 | H3 | c | 18Lib08'26" | 198.14056 | 18Lib08'26" (198.14066) | 18Lib08'26" (198.14066) | +0.000 | +0.39 |
+| 22 | Churchill | 1911-10-25 | H12 | d | 01Vir49'11" | 151.81972 | 01Lib59'36" (181.99322) | 01Lib59'36" (181.99322) | +0.000 | +108624.58 |
+| 23 | Churchill | 1911-10-25 | H3 | d | 22Sag40'17" | 262.67139 | 22Sag40'15" (262.67075) | 22Sag40'15" (262.67075) | +0.000 | -2.31 |
+| 24 | Churchill | 1911-10-25 | As | c | 01Vir49'11" | 151.81972 | 01Vir49'14" (151.82045) | 01Vir49'14" (151.82045) | +0.000 | +2.62 |
+| 25 | Churchill | 1911-10-25 | As | d | 22Lib47'01" | 202.78361 | 22Lib47'00" (202.78326) | 22Lib47'00" (202.78326) | +0.000 | -1.27 |
+| 26 | Churchill | 1911-10-25 | Mc | c | 22Tau10'34" | 52.17611 | 22Tau10'36" (52.17660) | 22Tau10'36" (52.17660) | +0.000 | +1.76 |
+| 27 | Churchill | 1911-10-25 | Mc | d | 00Leo18'12" | 120.30333 | 00Leo18'11" (120.30314) | 00Leo18'11" (120.30314) | +0.000 | -0.69 |
+| 28 | Churchill | 1911-10-25 | H11 | c | 00Can18'55" | 90.31528 | 00Can18'59" (90.31633) | 00Can18'59" (90.31633) | +0.000 | +3.79 |
+| 29 | Jackie | 1953-09-12 | H12 | d | 17Sco09'52" | 227.16444 | 17Sco09'52" (227.16437) | 17Sco09'52" (227.16437) | +0.000 | -0.28 |
+| 30 | Jackie | 1953-09-12 | H3 | c | 00Cap05'01" | 270.08361 | 00Cap05'00" (270.08329) | 00Cap05'00" (270.08329) | +0.000 | -1.15 |
+| 31 | Jackie | 1953-09-12 | H2 | d | 09Gem44'02" | 69.73389 | 09Cap43'58" (279.73287) | 09Cap43'58" (279.73287) | +0.000 | -540003.68 |
+| 32 | Jackie | 1953-09-12 | H3 | d | 17Aqu48'26" | 317.80722 | 17Aqu48'24" (317.80679) | 17Aqu48'24" (317.80679) | +0.000 | -1.55 |
+| 33 | Jackie | 1953-09-12 | H3 | d | 17Aqu48'26" | 317.80722 | 17Aqu48'24" (317.80679) | 17Aqu48'24" (317.80679) | +0.000 | -1.55 |
+| 34 | Jackie | 1953-09-12 | Mc | c | 04Leo56'07" | 124.93528 | 04Leo56'07" (124.93515) | 04Leo56'07" (124.93515) | +0.000 | -0.47 |
+| 35 | Jackie | 1953-09-12 | Mc | d | 24Vir23'00" | 174.38333 | 24Vir23'01" (174.38356) | 24Vir23'01" (174.38356) | +0.000 | +0.80 |
+| 36 | Jackie | 1953-09-12 | H11 | c | 08Vir06'46" | 158.11278 | 08Vir06'47" (158.11297) | 08Vir06'47" (158.11297) | +0.000 | +0.68 |
+| 37 | Jackie | 1953-09-12 | As | c | 29Lib24'40" | 209.41111 | 29Lib24'40" (209.41108) | 29Lib24'40" (209.41108) | +0.000 | -0.09 |
+| 38 | Jackie | 1953-09-12 | H3 | d | 17Aqu48'26" | 317.80722 | 17Aqu48'24" (317.80679) | 17Aqu48'24" (317.80679) | +0.000 | -1.55 |
+| 39 | Jackie | 1953-09-12 | H11 | d | 23Lib54'59" | 203.91639 | 23Lib55'00" (203.91668) | 23Lib55'00" (203.91668) | +0.000 | +1.05 |
+| 40 | Jackie | 1953-09-12 | H2 | c | 27Sco39'36" | 237.66000 | 27Sco39'35" (237.65982) | 27Sco39'35" (237.65982) | +0.000 | -0.64 |
+| 41 | Jackie | 1953-09-12 | As | c | 29Lib24'40" | 209.41111 | 29Lib24'40" (209.41108) | 29Lib24'40" (209.41108) | +0.000 | -0.09 |
+| 42 | Jackie | 1953-09-12 | H11 | d | 23Lib54'59" | 203.91639 | 23Lib55'00" (203.91668) | 23Lib55'00" (203.91668) | +0.000 | +1.05 |
+| 43 | Jackie | 1953-09-12 | H12 | d | 17Sco09'52" | 227.16444 | 17Sco09'52" (227.16437) | 17Sco09'52" (227.16437) | +0.000 | -0.28 |
+| 44 | Jackie | 1966-06-01 | H11 | c | 26Leo15'40" | 146.26111 | 26Leo15'41" (146.26126) | 26Leo15'41" (146.26126) | +0.000 | +0.55 |
+| 45 | Jackie | 1966-06-01 | As | d | 17Sag06'55" | 257.11528 | 17Sag06'51" (257.11403) | 17Sag06'51" (257.11403) | +0.000 | -4.48 |
+| 46 | Jackie | 1966-06-01 | H2 | c | 17Sco05'07" | 227.08528 | 17Sco05'06" (227.08509) | 17Sco05'06" (227.08509) | +0.000 | -0.69 |
+| 47 | Jackie | 1966-06-01 | H12 | c | 25Vir25'30" | 175.42500 | 25Vir25'31" (175.42530) | 25Vir25'31" (175.42530) | +0.000 | +1.08 |
+| 48 | Jackie | 1966-06-01 | Mc | c | 22Can55'33" | 112.92583 | 22Can55'33" (112.92586) | 22Can55'33" (112.92586) | +0.000 | +0.10 |
+| 49 | Jackie | 1966-06-01 | As | d | 17Sag06'55" | 257.11528 | 17Sag06'51" (257.11403) | 17Sag06'51" (257.11403) | +0.000 | -4.48 |
+| 50 | Jackie | 1966-06-01 | H3 | c | 18Pis42'30" | 348.70833 | 18Sag42'29" (258.70815) | 18Sag42'29" (258.70815) | +0.000 | -324000.67 |
+| 51 | Jackie | 1966-06-01 | H2 | d | 22Cap22'40" | 292.37778 | 22Cap22'36" (292.37669) | 22Cap22'36" (292.37669) | +0.000 | -3.92 |
+| 52 | Jackie | 1966-06-01 | Mc | d | 08Lib02'08" | 188.03556 | 08Lib02'09" (188.03595) | 08Lib02'09" (188.03595) | +0.000 | +1.40 |
+| 53 | Jackie | 1966-06-01 | H11 | d | 05Sco43'50" | 215.73056 | 05Sco43'51" (215.73094) | 05Sco43'51" (215.73094) | +0.000 | +1.39 |
+| 54 | Jackie | 1966-06-01 | H2 | d | 22Cap22'40" | 292.37778 | 22Cap22'36" (292.37669) | 22Cap22'36" (292.37669) | +0.000 | -3.92 |
+| 55 | Jackie | 1966-06-01 | H11 | c | 26Leo15'40" | 146.26111 | 26Leo15'41" (146.26126) | 26Leo15'41" (146.26126) | +0.000 | +0.55 |
+| 56 | Jackie | 1966-06-01 | H12 | c | 25Vir25'30" | 175.42500 | 25Vir25'31" (175.42530) | 25Vir25'31" (175.42530) | +0.000 | +1.08 |
+| 57 | Wagner | 1821-09-30 | As | d | 03Gem56'07" | 63.93528 | 03Gem55'53" (63.93130) | 03Gem55'53" (63.93130) | +0.000 | -14.31 |
+| 58 | Wagner | 1821-09-30 | Mc | c | 15Cap31'56" | 285.53222 | 15Cap31'57" (285.53249) | 15Cap31'57" (285.53249) | -0.000 | +0.96 |
+| 59 | Wagner | 1821-09-30 | As | c | 07Tau19'23" | 37.32306 | 07Tau19'10" (37.31947) | 07Tau19'10" (37.31947) | +0.000 | -12.93 |
+| 60 | Wagner | 1821-09-30 | H12 | d | 05Ari41'22" | 5.68944 | 05Ari41'21" (5.68915) | 05Ari41'21" (5.68915) | +0.000 | -1.07 |
+| 61 | Wagner | 1821-09-30 | Mc | c | 15Cap31'56" | 285.53222 | 15Cap31'57" (285.53249) | 15Cap31'57" (285.53249) | -0.000 | +0.96 |
+| 62 | Wagner | 1821-09-30 | H11 | d | 25Aqu32'19" | 325.53861 | 25Aqu32'23" (325.53963) | 25Aqu32'23" (325.53963) | +0.000 | +3.68 |
+| 63 | Wagner | 1821-09-30 | As | d | 03Gem56'07" | 63.93528 | 03Gem55'53" (63.93130) | 03Gem55'53" (63.93130) | +0.000 | -14.31 |
+| 64 | Wagner | 1821-09-30 | H11 | c | 06Aqu21'39" | 306.36083 | 06Aqu21'43" (306.36197) | 06Aqu21'43" (306.36197) | +0.000 | +4.11 |
+| 65 | Wagner | 1821-09-30 | H12 | c | 07Pis57'17" | 337.95472 | 07Pis57'22" (337.95613) | 07Pis57'22" (337.95613) | +0.000 | +5.07 |
+| 66 | Wagner | 1821-09-30 | H2 | d | 07Gem56'52" | 67.94778 | 24Gem53'13" (84.88686) | 24Gem53'13" (84.88686) | +0.000 | +60980.71 |
+| 67 | Wagner | 1821-09-30 | Mc | c | 15Cap31'56" | 285.53222 | 15Cap31'57" (285.53249) | 15Cap31'57" (285.53249) | -0.000 | +0.96 |
+| 68 | Wagner | 1821-09-30 | Mc | d | 01Aqu06'22" | 301.10611 | 01Aqu06'23" (301.10637) | 01Aqu06'23" (301.10637) | +0.000 | +0.92 |
+| 69 | Wagner | 1821-09-30 | Mc | d | 01Aqu06'22" | 301.10611 | 01Aqu06'23" (301.10637) | 01Aqu06'23" (301.10637) | +0.000 | +0.92 |
+| 70 | Wagner | 1821-09-30 | H12 | d | 05Ari41'22" | 5.68944 | 05Ari41'21" (5.68915) | 05Ari41'21" (5.68915) | +0.000 | -1.07 |
+| 71 | Wagner | 1821-09-30 | As | c | 07Tau19'23" | 37.32306 | 07Tau19'10" (37.31947) | 07Tau19'10" (37.31947) | +0.000 | -12.93 |
+| 72 | Wagner | 1821-09-30 | H2 | c | 07Gem56'52" | 67.94778 | 07Gem56'43" (67.94541) | 07Gem56'43" (67.94541) | +0.000 | -8.51 |
+| 73 | Wagner | 1821-09-30 | H12 | c | 07Pis57'17" | 337.95472 | 07Pis57'22" (337.95613) | 07Pis57'22" (337.95613) | +0.000 | +5.07 |
+| 74 | Wagner | 1866-01-25 | Mc | d | 15Pis53'45" | 345.89583 | 15Pis53'45" (345.89596) | 15Pis53'45" (345.89596) | +0.000 | +0.45 |
+| 75 | Wagner | 1866-01-25 | As | d | 16Can39'26" | 106.65722 | 16Can39'19" (106.65518) | 16Can39'19" (106.65518) | +0.000 | -7.36 |
+| 76 | Wagner | 1866-01-25 | As | c | 05Aqu25'13" | 305.42028 | 05Aqu25'28" (305.42449) | 05Aqu25'28" (305.42449) | +0.000 | +15.16 |
+| 77 | Wagner | 1866-01-25 | Mc | c | 05Sag06'39" | 245.11083 | 05Sag06'38" (245.11056) | 05Sag06'38" (245.11056) | +0.000 | -0.98 |
+| 78 | Wagner | 1866-01-25 | H12 | d | 08Gem07'52" | 68.13111 | 08Gem07'44" (68.12893) | 08Gem07'44" (68.12893) | +0.000 | -7.86 |
+| 79 | Wagner | 1866-01-25 | As | c | 05Aqu25'13" | 305.42028 | 05Aqu25'28" (305.42449) | 05Aqu25'28" (305.42449) | +0.000 | +15.16 |
+| 80 | Wagner | 1866-01-25 | Mc | d | 15Pis53'45" | 345.89583 | 15Pis53'45" (345.89596) | 15Pis53'45" (345.89596) | +0.000 | +0.45 |
+| 81 | Wagner | 1866-01-25 | H3 | d | 20Leo50'11" | 140.83639 | 20Leo50'10" (140.83624) | 20Leo50'10" (140.83624) | +0.000 | -0.55 |
+| 82 | Wagner | 1866-01-25 | Mc | c | 05Sag06'39" | 245.11083 | 05Sag06'38" (245.11056) | 05Sag06'38" (245.11056) | +0.000 | -0.98 |
+| 83 | Wagner | 1866-01-25 | H11 | d | 22Ari22'09" | 22.36917 | 22Ari22'07" (22.36859) | 22Ari22'07" (22.36859) | +0.000 | -2.09 |
+| 84 | Wagner | 1866-01-25 | H12 | c | 11Cap29'30" | 281.49167 | 11Cap29'38" (281.49392) | 11Cap29'38" (281.49392) | +0.000 | +8.10 |
+| 85 | Wagner | 1866-01-25 | H3 | d | 20Leo50'11" | 140.83639 | 20Leo50'10" (140.83624) | 20Leo50'10" (140.83624) | +0.000 | -0.55 |

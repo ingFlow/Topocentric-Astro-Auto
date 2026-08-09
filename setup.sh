@@ -27,4 +27,8 @@ rm -rf /tmp/swisseph
 #BYPASS ERROR FOR .\venv\Scripts\activate
 #Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process 
 
+# AUG 2026 MID MIGRATION RUN COMMANDS
+# $env:PYTHONPATH = "$PWD\src" 
+# cd data
+# python ..\src\topo_astro\webapp\app.py
 
