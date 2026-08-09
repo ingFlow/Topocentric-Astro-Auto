@@ -453,10 +453,10 @@ Phases 1→9 happen in order. Phase 10 depends on 9. Phase 11 has no hard depend
 
 **Validation Checklist:**
 
-- [ ] Full characterization suite passes unchanged, with particular attention to the "Show Accepted"/scoring assertions for PD, Secondary, Transit, SRA, Harmonics, plus PSSR's separate scoring path.
-- [ ] Repository-wide search confirms zero remaining references to the old module-qualified call sites.
-- [ ] Manual interactive smoke test: toggle "Show Accepted" for each of the seven techniques plus Natal.
-- [ ] `rules_data.py` and `scoring.py` have module docstrings; every moved function retains or gains a docstring.
+- [X] Full characterization suite passes unchanged, with particular attention to the "Show Accepted"/scoring assertions for PD, Secondary, Transit, SRA, Harmonics, plus PSSR's separate scoring path.
+- [X] Repository-wide search confirms zero remaining references to the old module-qualified call sites.
+- [x] Manual interactive smoke test: toggle "Show Accepted" for each of the seven techniques plus Natal.
+- [x] `rules_data.py` and `scoring.py` have module docstrings; every moved function retains or gains a docstring.
 
 **Suggested Commit Message:** `refactor: extract significator rules and scoring engine out of primary_directions.technique into significators/`
 

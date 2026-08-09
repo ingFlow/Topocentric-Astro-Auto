@@ -277,7 +277,7 @@ def update_content():
                                 temp_filtered_list = list_all_asp # Show unfiltered if event_id missing but flag checked      
                         elif technique == aTechniqueType.PSSR:
                             if event_id is not None:
-                                score, str_accepted_aspects = significators_scoring.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,pd_automate.AspectType.FAST_TO_SLOW_COMBO)
+                                score, str_accepted_aspects = significators_scoring.count_event_acceptable_aspects(event_id,str_all_directed_aspects,0,significators_scoring.AspectType.FAST_TO_SLOW_COMBO)
                                 temp_filtered_list = [asp.strip() for asp in str_accepted_aspects.split('\n') if asp.strip()]
                                 logging.info(f"Filtered aspects using event_acceptable for PSSR event {event_id}. Count: {len(temp_filtered_list)}")
                             else:
