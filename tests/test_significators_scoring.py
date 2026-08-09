@@ -1,5 +1,5 @@
 """
-Significator/scoring engine tests (pd_automate.is_acceptable_*,
+Significator/scoring engine tests (significators_scoring.is_acceptable_*,
 count_*_acceptable_aspects) - the shared engine the migration plan's
 Phase 5 extracts into significators/scoring.py, currently reused by
 five of the seven techniques.
@@ -48,8 +48,8 @@ here rather than silently worked around:
 import json
 import os
 
-from techniques.primary_directions import technique as pd_automate
-from topo_astro.significators.rules_data import EventType, AspectType
+from topo_astro.significators.rules_data import EventType, AspectType, PLANETARY_COMBO
+from topo_astro.significators import scoring as significators_scoring
 
 GOLDEN_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fixtures", "golden")
 
@@ -75,7 +75,7 @@ class TestIsAcceptablePdAspect:
         SECONDARY_RULES for BIRTH_DAUGHTER. See module docstring, finding 2."""
         golden = _load_golden("beyonce")
         lines = _direct_aspect_lines(golden, "actual_dob", "2012-01-07T12:00:00")
-        scores = [pd_automate.is_acceptable_pd_aspect(EventType.BIRTH_DAUGHTER, line) for line in lines]
+        scores = [significators_scoring.is_acceptable_pd_aspect(EventType.BIRTH_DAUGHTER, line) for line in lines]
         assert all((not s) or s <= 0 for s in scores)
 
     def test_winston_arrest_real_aspect_scores_nonzero_positive_control(self):
@@ -84,7 +84,7 @@ class TestIsAcceptablePdAspect:
         (opposition,10.11') for his real ARREST event scores 20."""
         golden = _load_golden("winston")
         lines = _direct_aspect_lines(golden, "actual_dob", "1899-11-15T12:00:00")  # ARREST
-        scores = [pd_automate.is_acceptable_pd_aspect(EventType.ARREST, line) for line in lines]
+        scores = [significators_scoring.is_acceptable_pd_aspect(EventType.ARREST, line) for line in lines]
         assert any(s and s > 0 for s in scores), (
             "expected Winston's real ARREST direct PD aspects to include at least "
             "one acceptable match - if this fails, either the golden data changed "
@@ -96,14 +96,14 @@ class TestIsAcceptablePdAspect:
         golden = _load_golden("beyonce")
         lines = _direct_aspect_lines(golden, "actual_dob", "2012-01-07T12:00:00")
         for line in lines:
-            assert pd_automate.is_acceptable_pd_aspect(EventType.BLANK, line) == 0
+            assert significators_scoring.is_acceptable_pd_aspect(EventType.BLANK, line) == 0
 
     def test_bad_event_real_aspects_evaluate_without_error(self):
         """DIVORCE_SEPARATION is a BAD-flagged event - confirms the scoring
         path runs cleanly for a BAD category too, not just GOOD."""
         golden = _load_golden("beyonce")
         lines = _direct_aspect_lines(golden, "actual_dob", "2005-09-10T12:00:00")  # DIVORCE_SEPARATION
-        scores = [pd_automate.is_acceptable_pd_aspect(EventType.DIVORCE_SEPARATION, line) for line in lines]
+        scores = [significators_scoring.is_acceptable_pd_aspect(EventType.DIVORCE_SEPARATION, line) for line in lines]
         assert all(isinstance(s, (int, float)) or s is False for s in scores)
 
 
@@ -116,12 +116,12 @@ class TestCountPdScoreAcceptableAspects:
         lines = _direct_aspect_lines(golden, "actual_dob", "1899-11-15T12:00:00")  # ARREST, has real hits
         str_all = "\n".join(lines)
 
-        final_score, accepted_str = pd_automate.count_pd_score_acceptable_aspects(
+        final_score, accepted_str = significators_scoring.count_pd_score_acceptable_aspects(
             EventType.ARREST, str_all, 0
         )
 
         expected_total = sum(
-            max(pd_automate.is_acceptable_pd_aspect(EventType.ARREST, line) or 0, 0)
+            max(significators_scoring.is_acceptable_pd_aspect(EventType.ARREST, line) or 0, 0)
             for line in lines
         )
         assert final_score == expected_total
@@ -134,8 +134,8 @@ class TestCountPdScoreAcceptableAspects:
         lines = _direct_aspect_lines(golden, "actual_dob", "1899-11-15T12:00:00")
         str_all = "\n".join(lines)
 
-        score_from_zero, _ = pd_automate.count_pd_score_acceptable_aspects(EventType.ARREST, str_all, 0)
-        score_from_ten, _ = pd_automate.count_pd_score_acceptable_aspects(EventType.ARREST, str_all, 10)
+        score_from_zero, _ = significators_scoring.count_pd_score_acceptable_aspects(EventType.ARREST, str_all, 0)
+        score_from_ten, _ = significators_scoring.count_pd_score_acceptable_aspects(EventType.ARREST, str_all, 10)
 
         assert score_from_ten == score_from_zero + 10
 
@@ -154,7 +154,7 @@ class TestIsAcceptableAngularAspect:
         ]
         for line in lines[:3]:
             for at_value in aspect_type_values:
-                result = pd_automate.is_acceptable_angular_aspect(EventType.BIRTH_DAUGHTER, line, at_value)
+                result = significators_scoring.is_acceptable_angular_aspect(EventType.BIRTH_DAUGHTER, line, at_value)
                 assert result is True or not result  # True, or falsy (False/None) - never anything else
 
     def test_appropriate_including_planet_combos_can_return_explicit_false(self):
@@ -162,7 +162,7 @@ class TestIsAcceptableAngularAspect:
         return False rather than falling through to None."""
         golden = _load_golden("beyonce")
         lines = _direct_aspect_lines(golden, "actual_dob", "2012-01-07T12:00:00")
-        result = pd_automate.is_acceptable_angular_aspect(
+        result = significators_scoring.is_acceptable_angular_aspect(
             EventType.BIRTH_DAUGHTER, lines[0], AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS
         )
         assert result is False or result is True  # never None for this specific branch
@@ -174,14 +174,14 @@ class TestCountEventAcceptableAspects:
         lines = _direct_aspect_lines(golden, "actual_dob", "2012-01-07T12:00:00")
         str_all = "\n".join(lines)
 
-        count, accepted_str = pd_automate.count_event_acceptable_aspects(
+        count, accepted_str = significators_scoring.count_event_acceptable_aspects(
             EventType.BIRTH_DAUGHTER, str_all, 0, AspectType.ANGLE_PRIMARY
         )
         accepted_lines = [l for l in accepted_str.split("\n") if l.strip()]
         assert count == len(accepted_lines)
         expected_count = sum(
             1 for line in lines
-            if pd_automate.is_acceptable_angular_aspect(EventType.BIRTH_DAUGHTER, line, AspectType.ANGLE_PRIMARY)
+            if significators_scoring.is_acceptable_angular_aspect(EventType.BIRTH_DAUGHTER, line, AspectType.ANGLE_PRIMARY)
         )
         assert count == expected_count
 
@@ -191,16 +191,16 @@ class TestIsAcceptablePlanetCombo:
     against PLANETARY_COMBO[event_id] in either planet order."""
 
     def test_a_real_combo_present_in_the_table_is_accepted_either_order(self):
-        combos = pd_automate.PLANETARY_COMBO[EventType.BIRTH_DAUGHTER]
+        combos = PLANETARY_COMBO[EventType.BIRTH_DAUGHTER]
         assert isinstance(combos, tuple) and len(combos) > 0
         first_combo = combos[0] if isinstance(combos[0], tuple) else None
         assert first_combo is not None, "expected BIRTH_DAUGHTER's PLANETARY_COMBO entry to be a direct combo list"
         p1, p2 = first_combo
-        assert pd_automate.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, p1, p2) is True
-        assert pd_automate.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, p2, p1) is True
+        assert significators_scoring.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, p1, p2) is True
+        assert significators_scoring.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, p2, p1) is True
 
     def test_an_absent_combo_is_rejected(self):
-        # Verified directly against pd_automate.PLANETARY_COMBO[EventType.BIRTH_DAUGHTER]
+        # Verified directly against PLANETARY_COMBO[EventType.BIRTH_DAUGHTER]
         # that neither ordering of Saturn/Mars appears in its 21-entry combo list.
-        assert pd_automate.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, "Saturn", "Mars") is False
-        assert pd_automate.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, "Mars", "Saturn") is False
+        assert significators_scoring.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, "Saturn", "Mars") is False
+        assert significators_scoring.is_acceptable_planet_combo(EventType.BIRTH_DAUGHTER, "Mars", "Saturn") is False

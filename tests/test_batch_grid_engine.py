@@ -28,9 +28,7 @@ import swisseph as swe
 from datetime import datetime
 
 from batch import grid_engine as ptf
-from techniques.primary_directions import technique as pd_automate
 from topo_astro.significators import rules_data as significators_rules
-from topo_astro.significators import scoring as significators_scoring
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
 
@@ -62,7 +60,7 @@ class TestGenerateGridTimesManualEndToEnd:
 
         ptf.generate_grid_times_manual(
             out_prefix, candidate_times, list_dt_events, BEYONCE_GEOPOS,
-            pd_automate.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
+            significators_rules.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
         )
 
         out_path = out_prefix + ".txt"
@@ -95,14 +93,14 @@ class TestGenerateGridTimesManualEndToEnd:
 
         ptf.generate_grid_times_manual(
             str(tmp_path / "run1"), [BEYONCE_RADIX_DT], list_dt_events, BEYONCE_GEOPOS,
-            pd_automate.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
+            significators_rules.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
         )
         rows_after_run1 = len(ptf.grid_aspects)
 
         # WITHOUT calling resetvars(), run a second, independent grid generation
         ptf.generate_grid_times_manual(
             str(tmp_path / "run2"), [BEYONCE_RADIX_DT], list_dt_events, BEYONCE_GEOPOS,
-            pd_automate.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
+            significators_rules.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
         )
         rows_after_run2 = len(ptf.grid_aspects)
 
@@ -122,7 +120,7 @@ class TestGenerateGridTimesManualEndToEnd:
         with tempfile.TemporaryDirectory() as d:
             ptf.generate_grid_times_manual(
                 os.path.join(d, "run"), [BEYONCE_RADIX_DT], list_dt_events, BEYONCE_GEOPOS,
-                pd_automate.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
+                significators_rules.AspectType.ANGLE_HOUSE_PRIMARY, ptf.TechniqueType.PRIMARY_DIRECT,
             )
         assert len(ptf.grid_aspects) > 0
         assert ptf.date_technique == ptf.TechniqueType.PRIMARY_DIRECT

@@ -51,7 +51,6 @@ import pytest
 import swisseph as swe
 
 from batch import grid_engine as ptf
-from techniques.primary_directions import technique as pd_automate
 from batch import analysis as csv_analysis
 from topo_astro.significators import rules_data as significators_rules
 
@@ -131,7 +130,7 @@ class TestExtractDataFromFileAgainstRealPipelineOutput:
         prefix = str(tmp_path / "beyonce_primary")
         ptf.generate_grid_times_manual(
             prefix, CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS,
-            pd_automate.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, ptf.TechniqueType.PRIMARY_DIRECT,
+            significators_rules.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, ptf.TechniqueType.PRIMARY_DIRECT,
         )
         ptf.count_aspect_groups_txt(prefix, False)
         df = csv_analysis.extract_data_from_file(prefix + "COUNT.txt", csv_analysis.aTechniqueType.PRIMARY_DIRECT)
@@ -326,7 +325,7 @@ class TestCreateCsvCountTxt:
         prefix = str(tmp_path / "beyonce_primCOUNT")  # 'prim' substring required for technique inference
         ptf.generate_grid_times_manual(
             prefix.replace("COUNT", ""), CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS,
-            pd_automate.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, ptf.TechniqueType.PRIMARY_DIRECT,
+            significators_rules.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS, ptf.TechniqueType.PRIMARY_DIRECT,
         )
         ptf.count_aspect_groups_txt(prefix.replace("COUNT", ""), False)
         prim_count_file = prefix.replace("COUNT", "") + "COUNT.txt"

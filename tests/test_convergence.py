@@ -20,7 +20,6 @@ from datetime import datetime
 import swisseph as swe
 
 from batch import grid_engine as ptf
-from techniques.primary_directions import technique as pd_automate
 from topo_astro.significators import rules_data as significators_rules
 
 swe.set_ephe_path("/usr/share/swisseph/ephe")
@@ -81,8 +80,8 @@ def _build_extended_count_file(tmp_dir, technique):
     pipeline for one technique, returning the resulting COUNT.txt path."""
     ptf.resetvars()
     level_aspects = {
-        ptf.TechniqueType.PRIMARY_DIRECT: pd_automate.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS,
-        ptf.TechniqueType.SECONDARY_DIRECT: pd_automate.AspectType.ANGLE_HOUSE_PRIMARY,
+        ptf.TechniqueType.PRIMARY_DIRECT: significators_rules.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS,
+        ptf.TechniqueType.SECONDARY_DIRECT: significators_rules.AspectType.ANGLE_HOUSE_PRIMARY,
     }[technique]
     prefix = os.path.join(tmp_dir, f"beyonce_{technique}")
     ptf.generate_grid_times_manual(prefix, CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS, level_aspects, technique)
