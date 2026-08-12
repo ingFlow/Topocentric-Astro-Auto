@@ -8,10 +8,34 @@ append_grid_acceptable_angles), aspect counting and categorization
 the convergence family (sum_sec_prim and friends), and Excel export
 (create_analysis_workbook).
 
-This module still has module-level mutable state (grid_aspects,
-date_technique, aspect_type, reset via resetvars()) that the grid-engine
-functions depend on implicitly rather than through explicit parameters -
-a known architectural issue, not something this phase changes.
+Phase 7 update: this module NO LONGER has module-level mutable state.
+grid_aspects, date_technique, and aspect_type - previously three module
+globals reset between runs via resetvars() - are now purely local:
+    - grid_aspects is a local list, built fresh inside each call to
+      generate_grid_angular_aspects()/generate_grid_times_manual() and
+      returned by append_grid_acceptable_angles() as a single row rather
+      than appended to a shared global. Since there is no longer a shared
+      list for two runs to leak into, the "run twice back-to-back in the
+      same process" invariant that Phase 2's characterization suite
+      pinned down (previously guaranteed only by remembering to call
+      resetvars() between runs) is now true by construction, not by
+      convention.
+    - date_technique and aspect_type are now ordinary parameters passed
+      explicitly into append_grid_acceptable_angles() by its two callers,
+      rather than read implicitly off the module. Every technique-dispatch
+      branch inside append_grid_acceptable_angles() (the Phase 6
+      construct_technique() call, and the per-technique
+      get_str_aspects()/get_aspects_str() reads that follow it) is
+      otherwise byte-for-byte unchanged - only how date_technique/
+      aspect_type arrive in scope has changed, not any comparison, branch,
+      or computed value.
+    - resetvars() has been deleted, per Phase 7's task list: it is
+      "provably unnecessary" now that the three values it used to reset
+      no longer exist as module state to reset. Its 3 call sites in
+      batch/entrypoints.py (once per technique iteration in each of
+      pd_rect_grid_score_create, rect_ver_data_create,
+      other_techniques_from_times) have been removed accordingly - see
+      that module's own Phase 7 note for the exact diff.
 
 Recent changes:
     - De-duplication phase: TechniqueType is now an alias for
@@ -38,6 +62,12 @@ Recent changes:
       orchestration function at all, and Lunar is likewise never
       dispatched from this function - both facts predate this phase and
       remain true after it.
+    - Phase 7: eliminated the grid_aspects/date_technique/aspect_type
+      module globals and resetvars() - see the paragraph above for the
+      exact mechanics. No calculation logic changed; only how state moves
+      between generate_grid_angular_aspects()/generate_grid_times_manual()
+      and append_grid_acceptable_angles() changed, from implicit module
+      state to explicit parameters and a return value.
 """
 
 import datetime 
@@ -86,18 +116,52 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 # working unchanged.
 TechniqueType = aTechniqueType
 
-grid_aspects =[]
-date_technique = -1
-aspect_type = -1
-
-def resetvars():
-    global grid_aspects, date_technique, aspect_type
-    grid_aspects = []
-    date_technique = -1
-    aspect_type = -1
-
 def generate_grid_angular_aspects(filename, start_time, end_time, increment_seconds, list_dt_events, geo_positions: list[3], type: significators_rules.AspectType, technique: TechniqueType):
-    global grid_aspects, date_technique, aspect_type
+    """Brute-force grid scan across an hourly/incremented time range (the
+    "angular" candidate-time-generation strategy, as opposed to
+    generate_grid_times_manual's explicit candidate-time-list strategy).
+
+    Note: per the Developer Manual (Section 2.1) and this file's own
+    pre-Phase-7 history, this function has no live caller anywhere in the
+    current codebase - every real batch orchestration call in
+    batch/entrypoints.py uses generate_grid_times_manual instead. It is
+    kept fully working (not deleted, not simplified) since it is live,
+    correct code, just not currently invoked - the same "preserve, don't
+    delete, just because zero current callers" principle the migration
+    plan applies everywhere else (see MIGRATION_MANUAL_V2.md Section 2).
+
+    Phase 7 change: grid_aspects is now a LOCAL list (built fresh on every
+    call, starting from the header row below) instead of a module global
+    mutated via `global grid_aspects`. date_technique/aspect_type are
+    passed down to append_grid_acceptable_angles() as explicit parameters
+    instead of being set as module globals for it to read implicitly.
+    append_grid_acceptable_angles() now RETURNS the one row it builds for
+    a given candidate time, which this function appends to its own local
+    grid_aspects list - previously that same row was appended directly to
+    the shared module global from inside append_grid_acceptable_angles()
+    itself. The net set of rows written to disk, and their exact content
+    and order, is unchanged.
+
+    Parameters:
+        filename (str): output path prefix (no extension); the raw grid
+            is written to f"{filename}.txt".
+        start_time (datetime): first candidate radix time in the scan.
+        end_time (datetime): last candidate radix time in the scan
+            (inclusive; see the trailing edge-case handling below).
+        increment_seconds (int): step size between candidate times.
+        list_dt_events (list): the person's (datetime, EventType, geopos)
+            event tuples being tested against every candidate time.
+        geo_positions (list): [lat, lon, alt] of the birth location.
+        type (AspectType): the acceptance-scoring granularity to apply
+            when filtering each candidate/event aspect result.
+        technique (aTechniqueType): which technique to compute for every
+            candidate time.
+
+    Returns:
+        None. Writes the raw grid file to f"{filename}.txt" as a side
+        effect, one str(list)-formatted row per line (see the Developer
+        Manual Section 5.6 for the exact on-disk row format).
+    """
     date_technique = technique
     aspect_type = type
     temp_list_event = ['Time']
@@ -105,19 +169,19 @@ def generate_grid_angular_aspects(filename, start_time, end_time, increment_seco
     for i in range(0,len(list_dt_events)):
         temp_list_event.append(f"{i}: {list_dt_events[i][0].strftime('%Y-%m-%d')}")
     temp_list_event.append('Count')
-    grid_aspects.append(temp_list_event)
+    grid_aspects = [temp_list_event]
     
     current_time = start_time
     increment = timedelta(seconds=increment_seconds)
     
     while current_time <= end_time:
         print(f"working on: {current_time}....")
-        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
+        grid_aspects.append(append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time), geo_positions, date_technique, aspect_type))
         current_time += increment
 
     # Handle the case where the last increment might exceed the end time
     if current_time > end_time:
-        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
+        grid_aspects.append(append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time), geo_positions, date_technique, aspect_type))
     
     directory = os.path.dirname(filename)
     os.makedirs(directory, exist_ok=True)
@@ -126,7 +190,39 @@ def generate_grid_angular_aspects(filename, start_time, end_time, increment_seco
         for time in grid_aspects:
             file.write(f"{str(time)}\n")
     
-def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_natal: list[3]):
+def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_natal: list[3], date_technique: TechniqueType, aspect_type: significators_rules.AspectType):
+    """Compute one grid row: for a single candidate radix time, the
+    acceptable-filtered aspect result for every event in list_dt_events,
+    plus a running acceptance count.
+
+    Phase 7 change: date_technique and aspect_type are now explicit
+    parameters (previously read implicitly off this module's globals,
+    set by whichever of generate_grid_angular_aspects/
+    generate_grid_times_manual called this function). This function no
+    longer appends its result to a module-level grid_aspects list via
+    `global grid_aspects` - it now RETURNS the single row it builds, and
+    the caller (either of the two functions above) is responsible for
+    appending that row to its own local accumulator. Every technique
+    branch, every dispatcher call, and every count_event_acceptable_aspects
+    call below is otherwise byte-for-byte identical to the pre-Phase-7
+    version - only how date_technique/aspect_type enter this function's
+    scope, and how the built row leaves it, has changed.
+
+    Parameters:
+        list_dt_events (list): (datetime, EventType, geopos) tuples for
+            every event being tested against this one candidate time.
+        jd_radix (float): the candidate radix time, as a Julian Day.
+        geopos_natal (list): [lat, lon, alt] of the birth location.
+        date_technique (aTechniqueType): which technique to compute.
+        aspect_type (AspectType): the acceptance-scoring granularity to
+            apply when filtering this candidate/event's aspect result.
+
+    Returns:
+        list: one grid row - [formatted_datetime, <per-event acceptable-
+        aspect string or event index if empty>, ..., count] - in the
+        exact on-disk row shape described in the Developer Manual
+        Section 5.6.
+    """
     formatted_datetime = julian.from_jd(jd_radix).strftime("%Y-%m-%d %H:%M:%S")
     temp_list_event = [formatted_datetime] 
     count = 0
@@ -196,9 +292,7 @@ def append_grid_acceptable_angles(list_dt_events, jd_radix : julian, geopos_nata
 
     temp_list_event.append(count)
 
-    global grid_aspects
-    grid_aspects.append(temp_list_event)    
-    return
+    return temp_list_event
 
 def categorize_aspect(first, second, aspect):
     conj_asp = ['conjunction', 'opposition']
@@ -389,7 +483,47 @@ def count_aspect_groups_txt(filename, flag_count_moon):
             outfile.write(str(result) + '\n')
 
 def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positions: list[3], type: significators_rules.AspectType, technique: TechniqueType):
-    global grid_aspects, date_technique, aspect_type
+    """Grid scan across an explicit, caller-supplied candidate-time list -
+    the strategy actually used by all three batch orchestration functions
+    in batch/entrypoints.py (pd_rect_grid_score_create, rect_ver_data_create,
+    other_techniques_from_times), as opposed to
+    generate_grid_angular_aspects's brute-force incremented-range strategy.
+
+    Phase 7 change: grid_aspects is now a LOCAL list (built fresh on every
+    call, starting from the header row below) instead of a module global
+    mutated via `global grid_aspects`. date_technique/aspect_type are
+    passed down to append_grid_acceptable_angles() as explicit parameters
+    instead of being set as module globals for it to read implicitly.
+    append_grid_acceptable_angles() now RETURNS the one row it builds for
+    a given candidate time, which this function appends to its own local
+    grid_aspects list - previously that same row was appended directly to
+    the shared module global from inside append_grid_acceptable_angles()
+    itself. Because grid_aspects is now local and freshly created on every
+    call (rather than a shared module list that needed resetvars() to
+    clear between runs), two calls to this function back-to-back in the
+    same process can no longer leak rows from one run into the next - this
+    is the same guarantee resetvars() used to provide by convention, now
+    true by construction. The net set of rows written to disk, and their
+    exact content and order, is unchanged.
+
+    Parameters:
+        filename (str): output path prefix (no extension); the raw grid
+            is written to f"{filename}.txt".
+        list_times (list[datetime]): the explicit candidate radix times to
+            scan (as opposed to a generated incremented range).
+        list_dt_events (list): the person's (datetime, EventType, geopos)
+            event tuples being tested against every candidate time.
+        geo_positions (list): [lat, lon, alt] of the birth location.
+        type (AspectType): the acceptance-scoring granularity to apply
+            when filtering each candidate/event aspect result.
+        technique (aTechniqueType): which technique to compute for every
+            candidate time.
+
+    Returns:
+        None. Writes the raw grid file to f"{filename}.txt" as a side
+        effect, one str(list)-formatted row per line (see the Developer
+        Manual Section 5.6 for the exact on-disk row format).
+    """
     date_technique = technique
     aspect_type = type
     temp_list_event = ['Time']
@@ -397,11 +531,11 @@ def generate_grid_times_manual(filename, list_times, list_dt_events, geo_positio
     for i in range(0,len(list_dt_events)):
         temp_list_event.append(f"{i}: {list_dt_events[i][0].strftime('%Y-%m-%d')}")
     temp_list_event.append('Count')
-    grid_aspects.append(temp_list_event)
+    grid_aspects = [temp_list_event]
     
     for current_time in list_times:
         print(f"working on: {current_time}....")
-        append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time),geo_positions)
+        grid_aspects.append(append_grid_acceptable_angles(list_dt_events, julian.to_jd(current_time), geo_positions, date_technique, aspect_type))
     
     directory = os.path.dirname(filename)
     os.makedirs(directory, exist_ok=True)

@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Astrology Program</title>
-    <script src="{{ url_for('static', filename='js/astrochart.js') }}"></script>
+    <!-- Phase 8: static/js/astrochart.js removed entirely (it fed the
+         now-deleted client-side charting attempt - generateChart()/
+         loadChart() below were empty stubs, and this vendored library
+         was loaded on every page but never actually used for anything).
+         See webapp/reserve/charting_kerykeion/README.md for the
+         kerykeion-keep/astrochart.js-remove decision this executes. -->
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Yrsa:wght@400;700&family=Oranienbaum:wght@400&display=swap" rel="stylesheet">
@@ -271,8 +276,15 @@
                 <label for="chartdatetime">Datetime:</label>
                 <input type="text" id="chartdatetime" name="chartdatetime" placeholder="yyyy-mm-dd hh:mm:ss">
                 <label for="chartPos">Coords:</label>
-                <input type="text" id="chartPos" name="chartPos" placeholder="[+lat,-long,alt(optional)]">                
-                <button type="button" onclick="generateChart()">Hi</button>                
+                <input type="text" id="chartPos" name="chartPos" placeholder="[+lat,-long,alt(optional)]">
+                <!-- Phase 8: the "Hi" button (never renamed from a
+                     development placeholder - see Developer Manual
+                     Section 7.3) that called the empty generateChart()
+                     JS stub below has been removed, along with the stub
+                     itself. Server-side chart generation is still
+                     available - see webapp/reserve/charting_kerykeion/ -
+                     but it is not wired to any control on this page by
+                     default. -->
             </div>
             <div class="scroll-box" style="height: 350px;">
                 <ul id="right-list">
@@ -285,7 +297,17 @@
                 <label>
                     <input type="checkbox" id="cb-show-data" onchange="handleContextChange()"> Show Data
                 </label>
-                <button id="loadChart" onclick="loadChart()">Load Chart</button>
+                <!-- Phase 8: the "Load Chart" button previously called the
+                     empty loadChart() JS stub, which has been removed
+                     below alongside generateChart()'s stub. Leaving this
+                     button wired to a now-nonexistent function would
+                     throw a JS ReferenceError on click - strictly worse
+                     than the original's silent no-op - so the button is
+                     removed here too. This is a slight extension beyond
+                     the migration plan's literal wording (which names
+                     only the "Hi" button explicitly), flagged per your
+                     stated preference to be told about removals rather
+                     than have them happen silently. -->
             </div>          
         </div>
     </div>    
@@ -316,9 +338,11 @@
             };
         }
 
-        // Function to get selected radio value from a group (keep)
-        function getSelectedRadioValue(name) { /* ... */ }
-
+        // Phase 8: getSelectedRadioValue(name) removed - its body was
+        // entirely empty ('/* ... */', no logic), so there was nothing to
+        // preserve. Flagged per the migration plan's own recommendation
+        // (task 10) to call this out explicitly as a removal rather than
+        // silently drop it.
         // --- Function to Populate Middle List and Apply Highlighting ---
         function populateAspectList(aspects) {
             const aspectListDiv = document.getElementById('middle-scroll-text');
@@ -584,10 +608,12 @@
         }
 
 
-        // --- Chart Generation and Other Functions ---
-        async function generateChart(rightItem = null) { /* ... keep as is ... */ }
-        async function loadChart() { /* ... keep as is ... */ }
-
+        // Phase 8: generateChart()/loadChart() removed - both were empty
+        // stubs ('/* ... keep as is ... */', no implementation) with no
+        // logic to preserve. Server-side chart generation still exists,
+        // working, at webapp/reserve/charting_kerykeion/ - see that
+        // package's README.md - but it is not wired to this page by
+        // default.
 
         // --- Initial Load on Page Ready ---
         // --- MERGED AND CORRECTED DOMContentLoaded ---

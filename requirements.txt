@@ -26,3 +26,6 @@ openpyxl
 
 # Testing
 pytest
+
+# Chart Generation
+kerykeion

@@ -27,4 +27,6 @@ rm -rf /tmp/swisseph
 #BYPASS ERROR FOR .\venv\Scripts\activate
 #Set-ExecutionPolicy -ExecutionPolicy Bypass -Scope Process 
 
-
+#$env:PYTHONPATH = "$PWD\src"
+#cd data
+#python ..\src\topo_astro\webapp\app.py

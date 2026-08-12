@@ -5,6 +5,17 @@ other_techniques_from_times, count_pssr_moon_write. These are the
 functions a script or interactive session calls to run a full
 rectification pass; they call into batch/grid_engine.py's lower-level
 grid/counting engine for each technique in turn.
+
+Phase 7 update: the three calls to asp.resetvars() (one per technique
+iteration in each of the three orchestration functions below) have been
+removed. resetvars() reset batch/grid_engine.py's module-level
+grid_aspects/date_technique/aspect_type globals between technique runs;
+those globals no longer exist (see grid_engine.py's own Phase 7 note) -
+generate_grid_times_manual now builds its grid_aspects list fresh, as a
+local variable, on every call, so there is no shared state left to reset.
+Removing these calls is not a behavior change: resetvars() is confirmed
+"provably unnecessary" now (Phase 7 rationale, MIGRATION_MANUAL_V2.md),
+not merely unused.
 """
 from datetime import datetime
 import json
@@ -223,7 +234,6 @@ def pd_rect_grid_score_create(filename_birth_data, times_filename, times_type : 
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         #asp.count_aspect_groups_txt(filename,asp.TechniqueType.PRIMARY_DIRECT)
         asp.count_extended_aspect_groups_txt(filename, asp.TechniqueType.PRIMARY_DIRECT)
-        asp.resetvars() 
         
 def get_times_from_file(filename, times_type : timesFileType, birth_data_filename, count_times_wanted_pola_man=None):
     real_dob, _, _, geopos, _ = get_json_birth_data(birth_data_filename)
@@ -267,7 +277,6 @@ def rect_ver_data_create(times_filename, times_type : timesFileType, birth_data_
         
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         asp.count_extended_aspect_groups_txt(filename, technique)
-        asp.resetvars()  
 
 def other_techniques_from_times(times_filename, birth_data_filename, prefix_data_str, count_times_to_process=None):
     real_dob, _, dt_radix_end, geopos, list_of_events = get_json_birth_data(birth_data_filename)
@@ -296,7 +305,6 @@ def other_techniques_from_times(times_filename, birth_data_filename, prefix_data
 
         asp.generate_grid_times_manual(filename, list_times_to_process, list_of_events, geopos, level_aspects, technique)
         asp.count_aspect_groups_txt(filename, flag_pssr_count_moon)
-        asp.resetvars()  
 
 def count_pssr_moon_write(filename_write, filename_json, filename_polaris, no_times):
     _, _, _, geopos, list_of_events = get_json_birth_data(filename_json)

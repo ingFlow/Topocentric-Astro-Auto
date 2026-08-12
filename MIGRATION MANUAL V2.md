@@ -516,10 +516,10 @@ Phases 1→9 happen in order. Phase 10 depends on 9. Phase 11 has no hard depend
 
 **Validation Checklist:**
 
-- [ ] Full characterization suite passes unchanged, including the full batch grid/`COUNT` golden-file comparison.
-- [ ] Re-run the "two full batch jobs back-to-back" test from Phase 2 and confirm the second run's output still contains no rows leaked from the first — now true by construction rather than because `resetvars()` was called correctly.
-- [ ] Interactive smoke test confirms selecting different files/candidates/events in sequence within one running Flask process behaves identically to before, including that `selections_data` still persists appropriately.
-- [ ] Confirm zero remaining references to `reset_globals`/`resetvars` anywhere, including comments.
+- [x] Full characterization suite passes unchanged, including the full batch grid/`COUNT` golden-file comparison.
+- [x] Re-run the "two full batch jobs back-to-back" test from Phase 2 and confirm the second run's output still contains no rows leaked from the first — now true by construction rather than because `resetvars()` was called correctly.
+- [x] Interactive smoke test confirms selecting different files/candidates/events in sequence within one running Flask process behaves identically to before, including that `selections_data` still persists appropriately.
+- [x] Confirm zero remaining references to `reset_globals`/`resetvars` anywhere, including comments.
 
 **Suggested Commit Message:** `refactor: eliminate module-level global state from web app and batch grid engine; retire reset_globals/resetvars`
 
@@ -549,11 +549,11 @@ Phases 1→9 happen in order. Phase 10 depends on 9. Phase 11 has no hard depend
 **Validation Checklist:**
 
 - [ ] Full characterization suite passes unchanged (exercises `update_content` and the selections routes).
-- [ ] Every surviving route's URL, method, and response shape verified unchanged via a manual pass through all endpoints.
-- [ ] Full interactive browser smoke test: load the app, pick a file/candidate/event/technique, toggle every checkbox and orb control, select and save aspects, reload and confirm the saved selections restore correctly. Confirm the "Hi" button and its associated dead JS are gone with no console errors.
-- [ ] `webapp/reserve/charting_kerykeion/routes.py` imports cleanly and, run directly (not through the main app), successfully generates an SVG for a test input — confirming the "it worked" claim is still true after relocation, before this code goes dormant again.
-- [ ] The two example SVGs and the template variant are present under `webapp/reserve/charting_kerykeion/examples/` and match the Phase-1 safety copy exactly.
-- [ ] Confirm `static/js/astrochart.js` no longer exists anywhere in the tree, and the page loads with no 404 for it.
+- [x] Every surviving route's URL, method, and response shape verified unchanged via a manual pass through all endpoints.
+- [x] Full interactive browser smoke test: load the app, pick a file/candidate/event/technique, toggle every checkbox and orb control, select and save aspects, reload and confirm the saved selections restore correctly. Confirm the "Hi" button and its associated dead JS are gone with no console errors.
+- [x] `webapp/reserve/charting_kerykeion/routes.py` imports cleanly and, run directly (not through the main app), successfully generates an SVG for a test input — confirming the "it worked" claim is still true after relocation, before this code goes dormant again.
+- [x] The two example SVGs and the template variant are present under `webapp/reserve/charting_kerykeion/examples/` and match the Phase-1 safety copy exactly.
+- [x] Confirm `static/js/astrochart.js` no longer exists anywhere in the tree, and the page loads with no 404 for it.
 
 **Suggested Commit Message:** `refactor: split Flask app into blueprints; relocate working kerykeion chart code to reserve, remove non-working astrochart.js path`
 
