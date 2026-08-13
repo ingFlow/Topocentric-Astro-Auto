@@ -1,5 +1,7 @@
 # PSSR Window-Narrowing — Technique Analysis & Algorithm Design (v3)
 
+note v1-2 are not committed to this codebase - v3 is the first substantial plan worth tracking
+
 **Purpose:** Design (not implement) Step 0 of the rectification framework — narrowing a 24-hour uncertain birth-time window using PSSR, before POLARIS and Primary Directions take over.
 
 **Status:** Analysis and proposal only. No code below.

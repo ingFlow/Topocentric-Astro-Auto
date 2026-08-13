@@ -1,7 +1,5 @@
 # PSSR Window-Narrowing — Final Implementation Plan (v4)
 
-note v1-3 are not committed to this codebase - v4 is the first substantial plan worth tracking
-
 **Purpose:** Final, executable specification for Step 0 of the rectification framework — narrowing an uncertain birth-time window (typically 24 hours) using the Precessed Solar Return technique, before POLARIS and Primary Directions take over the fine search.
 
 **Status:** Spec only. This document is the implementation contract. It supersedes `pssr_window_narrowing_design.md` (v3); every item v3 left open is resolved here in §8. No implementation has been done yet.
