@@ -111,6 +111,25 @@ def calc_planets_labelled(jd_radix, label):
 
     return planets
 
+def calc_planets_labelled_speeds(jd_radix, label):
+    """Same loop as calc_planets_labelled, keeping the per-planet daily
+    speed (swe.calc_ut's xx[3]) alongside the longitude.
+
+    Returns [(planet_name, longitude, speed, label)] in PLANETS order, so
+    the speeds are parallel to calc_planets_labelled's position lists.
+    Speeds are degrees per day (signed; retrograde points are negative).
+    New for the PSSR window-narrowing feature (spec v5 section 5.4)."""
+    planets = []
+
+    for planet in range(0, len(PLANETS)):
+        xx, _ = swe.calc_ut(jd_radix, planet)
+        long = xx[0]
+        speed = xx[3]
+
+        planets.append((PLANETS[planet], long, speed, label))
+
+    return planets
+
 def calc_planets_houses_labelled(jd, label, planets_indexes_to_exclude, geopos):
     planets_houses = []
     

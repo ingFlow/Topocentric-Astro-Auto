@@ -10,6 +10,56 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 2 - `significators/compendium.py` (2026-08-13)
+
+### New files
+
+- `src/topo_astro/significators/compendium.py`
+  The compendium data-access layer (spec v5 section 5.1; there was no
+  compendium loader before). A `Compendium` instance - created via
+  `Compendium.load(base_dir=None)`, defaulting to the repository-root
+  `compendium_reference/`, override for tests - holds the two committed
+  artifacts and exposes the lookups:
+  - `event_title_for(event_id)` - EventType value -> compendium title per
+    the section 4.2 table (40 mapped, 11 no-data EventTypes -> None;
+    unknown event ids -> None, fail closed).
+  - `tier_score(event_id, symbol)` - exact integers from the scoring
+    JSON; None for absent keys (never a synthesized 0), unknown symbols
+    and no-data events.
+  - `pair_strength(event_id, point_a, point_b)` - unordered canonical
+    lookup returning `"strong" | "weak" | "excluded" | None`; inherited
+    pairs resolve; the three marked-none events and unlisted pairs return
+    None (`absent` stays distinct from `excluded`).
+  - `SYMBOL_MAP_NAMED` (section 4.3) plus `normalize_title()` /
+    `to_compendium_symbol()` helpers. Titles are normalized on load
+    (curly vs straight apostrophe - the reference files use a curly one in
+    "Child's Marriage"). `Mean_Node`/`Node` -> `NODE_ANY` is the one
+    lossy mapping (v5 F15) and is stated as such.
+  No module-level mutable state; the loaded data lives on the instance.
+- `tests/test_compendium_lookup.py`
+  21 tests: the full 51-EventType resolution against a self-contained
+  copy of the section 4.2 table; cross-file title consistency (scoring
+  JSON + pairs artifact); tier lookups matched against the scoring JSON
+  exactly, absent keys -> None, normalization; unordered pair lookups
+  across all 1384 artifact pairs, inherited pairs, marked-none events,
+  absent-vs-excluded; fail-closed inputs; SYMBOL_MAP_NAMED validity;
+  load failures raise.
+
+### Fixes found during implementation
+
+- The reference files store "Child's Marriage" with a curly apostrophe
+  (U+2019) while the spec table and code use a straight one - titles are
+  now normalized on load so CHILDS_MARRIAGE lookups actually resolve.
+
+### Verified
+
+- All 51 EventTypes resolve per section 4.2 (40 mapped, 11 no-data).
+- Absent-key tier lookups return None; unordered pair lookups return the
+  same result as the ordered call; inherited pairs resolve.
+- Full suite: 185 passed (164 from Step 1 + 21 new).
+
+---
+
 ## Step 1 - Juan Combos pairwise data build (2026-08-13)
 
 ### New files

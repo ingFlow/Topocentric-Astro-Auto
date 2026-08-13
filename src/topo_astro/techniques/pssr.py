@@ -21,17 +21,27 @@ import julian
 from datetime import datetime, timedelta
 
 from topo_astro.core.aspects import convert_dec_degrees_to_deg_min_sec, find_pssr_swiss_aspects, convert_full_dec_degrees_to_zod_min_sec
-from topo_astro.core.constants import PLANETS, get_precession, calc_planets_labelled, calc_planets_pof_houses_labelled
+from topo_astro.core.constants import PLANETS, get_precession, calc_planets_labelled, calc_planets_labelled_speeds, calc_planets_pof_houses_labelled
 
 class PSSR_Auto:
-    def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None):
+    def __init__(self, dt_radix, dt_event, rad_planets=None, geopos=None, *, return_speeds=False):
         self.__dict_info = {}
-        self.calc_pssr_for_date(dt_radix, dt_event, rad_planets, geopos)
+        self.calc_pssr_for_date(dt_radix, dt_event, rad_planets, geopos, return_speeds=return_speeds)
 
 
-    def calc_pssr_for_date(self, dt_radix, dt_event, rad_planets=None, geopos=None):
+    def calc_pssr_for_date(self, dt_radix, dt_event, rad_planets=None, geopos=None, *, return_speeds=False):
         """returns tuple with 2 str of aspects rad to direct and conv pssr (prog/reg)
-        if no radplanetsyou need to also give geopos natal"""
+        if no radplanetsyou need to also give geopos natal
+
+        return_speeds (keyword-only, default False) additionally computes the
+        per-point daily speeds of the four progressed position sets
+        (prog/reg x direct/converse) and exposes them in dict_info as
+        parallel lists under prog_dir_speeds, reg_dir_speeds,
+        prog_conv_speeds, reg_conv_speeds - each entry is
+        (planet_name, speed, label), the same names and order as the
+        corresponding position list. Additive only: with the default
+        return_speeds=False, dict_info is byte-identical to the
+        pre-change output (spec v5 section 5.3)."""
         jd_radix = julian.to_jd(dt_radix)
         jd_event = julian.to_jd(dt_event)
 
@@ -100,6 +110,23 @@ class PSSR_Auto:
             "direct_planets": direct_planets,
             "converse_planets": conv_planets
         }
+        if return_speeds:
+            prog_dir_speeds = exclude_planets(
+                calc_planets_labelled_speeds(jd_prog_pssr_dir, '(dp)'), planets_to_exclude
+            )
+            reg_dir_speeds = exclude_planets(
+                calc_planets_labelled_speeds(jd_reg_pssr_dir, '(dr)'), planets_to_exclude
+            )
+            prog_conv_speeds = exclude_planets(
+                calc_planets_labelled_speeds(jd_prog_pssr_conv, '(cp)'), planets_to_exclude
+            )
+            reg_conv_speeds = exclude_planets(
+                calc_planets_labelled_speeds(jd_reg_pssr_conv, '(cr)'), planets_to_exclude
+            )
+            self.__dict_info["prog_dir_speeds"] = prog_dir_speeds
+            self.__dict_info["reg_dir_speeds"] = reg_dir_speeds
+            self.__dict_info["prog_conv_speeds"] = prog_conv_speeds
+            self.__dict_info["reg_conv_speeds"] = reg_conv_speeds
 
         self.__str_rad_direct_aspects =  find_pssr_swiss_aspects(rad_planets,direct_planets)
         self.__str_rad_conv_aspects =  find_pssr_swiss_aspects(rad_planets, conv_planets)

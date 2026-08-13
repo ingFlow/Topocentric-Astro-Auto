@@ -14,7 +14,7 @@ Run from the repository root. All test commands use:
     $env:PYTHONPATH = "<repo>\src"; python -m pytest tests/ -q
 
 The full suite must pass at the end of every step (baseline at the start of
-implementation: 152 passed; Step 1 raised it to 164).
+implementation: 152 passed; Step 1 raised it to 164; Step 2 to 185).
 
 ---
 
@@ -25,19 +25,17 @@ data build is reproducible.
 
 1. `git status` - `compendium_reference/` and `docs/` must be tracked
    (the only acceptable untracked item is `docs/ai_archive/`).
-2. `git log --oneline -5` - confirm the commit that added
-   `compendium_reference/` and `docs/` exists.
-3. `compendium_reference/` must contain:
+2. `compendium_reference/` must contain:
    - `Event Astrology a Compendium of Aspects.md`
    - `compendium_scoring_export_v2.json`
    - `juan_combos_pairs_v1.json`
    - `juan_combos_pairs_v1.review.txt`
-4. `docs/` must contain the design docs v3/v4/v5, the developer manual,
+3. `docs/` must contain the design docs v3/v4/v5, the developer manual,
    this file, and `CHANGELOG.md`.
 
 ---
 
-## Step 1 - Juan Combos data build
+## Step 1 - Data build: the pairwise table
 
 Goal: the pairwise table artifact is built from the source markdown, all
 four quality gates pass, and the artifact matches its gate tests.
@@ -52,15 +50,20 @@ four quality gates pass, and the artifact matches its gate tests.
 
 2. Determinism: run the same command again and confirm the JSON is
    byte-identical (e.g. `git diff --stat compendium_reference/` shows no
-   changes; or compare SHA-256 of `juan_combos_pairs_v1.json`).
+   changes).
 
-3. Gate tests over the committed artifact:
+3. Spot-verification (v5 section 7 Step 1): Birth of Brother -> 45 pairs
+   (`n_total=45` in the artifact); the three marked-none events
+   (Demobilization or Release, Assasination or Suicide, Gambling Loss) ->
+   empty pairs; Positive Travel Overseas pairs carry `inherited_from`.
+
+4. Gate tests over the committed artifact:
 
        $env:PYTHONPATH = "<repo>\src"; python -m pytest tests/test_juan_combos_data.py -q
 
    Expected: 12 passed.
 
-4. Open `compendium_reference/juan_combos_pairs_v1.review.txt` and review:
+5. Open `compendium_reference/juan_combos_pairs_v1.review.txt` and review:
    - Every `excluded` assignment (48 total) reads as counter-indicative
      ("only exception"-class wording).
    - Every `weak` assignment (158 total) reads as hedged ("possible",
@@ -71,187 +74,202 @@ four quality gates pass, and the artifact matches its gate tests.
      "Short Relationships" bullets (lines 3421-3425).
    - The "MERGED SOURCE DUPLICATES" section lists exactly
      MOON:NODE_ANY (lines 3386, 3391), both strong.
-5. After review, sign off: edit `compendium_reference/juan_combos_pairs_v1.json`
+6. After review, sign off: edit `compendium_reference/juan_combos_pairs_v1.json`
    and set `_meta.reviewed_by` and `_meta.reviewed_on`. Re-run
-   `tests/test_juan_combos_data.py` - the sign-off test (`test_meta_self_consistency`)
-   will now fail until updated; that is the expected trigger to update the
-   test to pin the signed review.
+   `tests/test_juan_combos_data.py` - the sign-off test
+   (`test_meta_self_consistency`) will then fail until updated; that is the
+   expected trigger to update the test to pin the signed review.
 
 ---
 
-## Step 2 - Compendium lookup module
+## Step 2 - significators/compendium.py
 
-Goal: `src/topo_astro/significators/compendium.py` exposes the artifact to
-the pipeline: symbol name mapping, EventType -> title, tier lookup, pair
-strength lookup.
+Goal: `src/topo_astro/significators/compendium.py` exposes the artifacts
+to the pipeline: EventType -> title mapping, per-symbol tier lookup, and
+the unordered pairwise strength lookup.
 
 1. `$env:PYTHONPATH = "<repo>\src"; python -m pytest tests/test_compendium_lookup.py -q`
-   - Expected: all pass.
-2. Manual spot checks (python -c or REPL):
-   - `event_title_for(EventType.ARREST)` returns the exact JSON title;
-     every EventType with data in the compendium round-trips.
-   - `event_title_for(...)` returns `None` for the 11 no-data EventTypes
-     (no crash, no silent default).
-   - `tier_score(title, "MARS")` style calls return only
-     `"strong" / "weak" / "excluded"` (or the documented None semantics).
-   - `pair_strength(event_title, point_a, point_b)` returns the same
-     result for `(A, B)` and `(B, A)` (unordered).
-   - Unlisted pair returns the documented no-data result (`None`), never
-     a guessed tier.
-   - Spot values against the review file: Birth of Brother
-     MARS:POF -> excluded; Success or Elected MOON:NODE_ANY -> strong.
-3. Confirm the module never imports the builder script and never reads
-   the markdown at runtime (artifact-only).
+   - Expected: 21 passed.
+2. All 51 `EventType`s resolve per v5 section 4.2 (40 mapped, 11 no-data):
+   - `Compendium.load()` then `compendium.event_title_for(EventType.ARREST)`
+     returns the exact JSON title for every mapped EventType.
+   - `compendium.event_title_for(EventType.POSITIVE_AC_MC)` and the other
+     10 no-data EventTypes return `None` (no crash, no silent default).
+3. `compendium.tier_score(event_id, symbol)`:
+   - Returns the exact integer from `compendium_scoring_export_v2.json`
+     for every (event, symbol) present in the data.
+   - Returns `None` for absent keys (e.g. SATURN for the events that lack
+     it) - never a synthesized 0.
+   - Accepts codebase named labels: `tier_score(id, "Mean_Node")` equals
+     `tier_score(id, "NODE_ANY")`; `"H1"` equals `"ASC"`.
+4. `compendium.pair_strength(event_id, point_a, point_b)`:
+   - Unordered: `(A, B)` and `(B, A)` return the same result for every one
+     of the 1384 pairs in the artifact.
+   - Returns only `"strong" | "weak" | "excluded" | None`.
+   - Inherited pairs resolve: `TRAVEL_OVERSEAS_POSITIVE` lookups match
+     "Positive Travel"'s strengths (the artifact's `inherited_from`).
+   - Unlisted pairs and the three marked-none events return `None`.
+   - Spot values: Birth of Brother MARS:POF -> `"excluded"`;
+     Success or Elected MOON:NODE_ANY -> `"strong"`.
+5. Fail-closed: unknown event id (e.g. 9999), unknown symbol, and all
+   no-data EventTypes return `None` for every lookup.
+6. `SYMBOL_MAP_NAMED` covers v5 section 4.3 (planets, Mean_Node, POF,
+   H1->ASC, H4->IC, H7->DESC, H10->MC, minor cusps direct, identity
+   entries), and every value is a real symbol in `symbol_labels`.
+7. Full suite: 185 passed (164 from Step 1 + 21 new).
 
 ---
 
-## Step 3 - Configuration module
+## Step 3 - Plumbing: speeds, orb extraction, and the config module
 
-Goal: every business knob lives in `src/topo_astro/batch/pssr_window_config.py`.
+Goal: `calc_planets_labelled_speeds` in `core/constants.py` (§5.4), the
+named orb constants in `core/aspects.py` (§5.5), `PSSR_Auto`'s additive
+`return_speeds` keyword (§5.3), and the config module
+`batch/pssr_window_config.py` (§5.6) - built in that order, config last.
 
-1. `python -m pytest tests/test_pssr_window_config.py -q` - all pass.
-2. Read `pssr_window_config.py` and check each knob against v5 section 6:
-   every value is a named constant with a comment stating its source
-   (spec section or source book); no tunable value is hard-coded inside
-   `pssr_window.py` or the pipeline logic.
-3. Manual: `python -c "import topo_astro.batch.pssr_window_config as c; print(c.PSSR_WINDOW_FULL_MINUTES, c.ORB_BOOST, ...)"`
-   - Values print without errors and match the documented ranges.
-4. Confirm no orphan knobs: every config constant is referenced somewhere
-   in the pipeline (grep), and every pipeline decision uses a config knob.
-
----
-
-## Step 4 - Planetary speed calculation
-
-Goal: `calc_planets_labelled_speeds` in `src/topo_astro/core/constants.py`
-returns labelled per-planet daily speeds consistent with the existing
-`calc_planets`.
-
-1. `python -m pytest tests/test_core_constants.py -q` - all pass.
-2. Manual cross-check with a real birth chart:
-
-       python -c "import topo_astro.core.constants as c; s = c.calc_planets_labelled_speeds(...)"
-
-   - Keys are the labelled planet names (e.g. `MERCURY`), values are
-     floats in degrees/day.
-   - Every planet present in `calc_planets` output has the same speed
-     value as the new labelled version (call both on the same birth data
-     and compare numerically).
-   - Moon's speed is the largest positive value; a station-retrograde
-     planet (if any in the test chart) shows a near-zero value.
-3. Regression: full suite still green.
-
----
-
-## Step 5 - PSSR technique speeds and orbs
-
-Goal: `PSSR_Auto` gains the additive `return_speeds=False` keyword
-(exposing the four progressed position sets' per-point speeds) and the
-orb literals move into named constants, with NO behavior change by
-default.
-
-1. `python -m pytest tests/test_pssr_return_speeds.py -q` (or the
-   corresponding test module) - all pass.
-2. Backward-compatibility check - the critical one:
-
-       python -c "import json; from topo_astro.techniques.pssr import PSSR_Auto; ..."
-
-   Run `PSSR_Auto` with a real birth/event pair TWICE: once with the
-   previous (default) call and once with `return_speeds=False`. The two
-   `dict_info` outputs must be byte-identical.
-3. With `return_speeds=True`, `dict_info` additionally contains the four
-   keys (prog direct, regressive direct, progressive converse,
-   regressive converse speeds), each mapping every progressed point to a
-   speed; cross-check one or two values against
+1. `python -m pytest tests/test_core_constants.py tests/test_core_aspects.py -q`
+   plus the new regression tests - all pass.
+2. **Backward-compatibility (critical):** run `PSSR_Auto` with a real
+   birth/event pair TWICE - once with the previous (default) call and once
+   with `return_speeds=False`. The two `dict_info` outputs must be
+   byte-identical. `tests/test_techniques_golden.py` untouched and green.
+3. `find_pssr_swiss_aspects` behavior byte-identical after the orb-literal
+   extraction (golden files green); the constants
+   `PSSR_PLANET_ORB_DEG = 12/60` and `PSSR_MOON_ORB_DEG = 32/60` carry the
+   original inline comment; no orb VALUE changed.
+4. With `return_speeds=True`, `dict_info` additionally contains the four
+   speed keys (prog direct, regressive direct, progressive converse,
+   regressive converse), each mapping every progressed point to a
+   per-point daily speed; cross-check one or two values against
    `calc_planets_labelled_speeds` on the same dates.
-4. Open `src/topo_astro/core/aspects.py`: `find_pssr_swiss_aspects` now
-   uses `PSSR_PLANET_ORB_DEG` (12') / `PSSR_MOON_ORB_DEG` (18') /
-   `PSSR_MOON_CONJ_OPP_ORB_DEG` (32') instead of inline literals, with
-   the book citation (p.108) as the constant comment. No orb VALUE
-   changed.
-5. Full suite: `python -m pytest tests/ -q` - all pass (count grows by
-   the new tests).
+5. `calc_planets_labelled_speeds(jd, label)` matches `calc_planets_labelled`
+   positions, keeping the per-planet speed (xx[3]); existing
+   `calc_planets_labelled` untouched. Sanity: Moon speed ~11.7-15.5 deg/day,
+   Venus ~0.8-1.3 deg/day, station behavior visible (|speed| near 0).
+6. Config module: every knob from the v5 section 6.2 table is present with
+   a provenance comment (book page / spec section / existing code
+   location); the imported knobs equal their source constants
+   (`test_pssr_window_config.py` drift guards pass); the pipeline contains
+   zero hardcoded business values.
+7. Full suite green.
 
 ---
 
-## Step 6 - Narrowing pipeline
+## Step 4 - Sweep and per-point evaluation
 
-Goal: `src/topo_astro/batch/pssr_window.py` implements Stage 0, Stage 1
-(narrowing) and Stage 2 (consensus / fail-open) per v5 section 3.
+Goal: `batch/pssr_window.py` implements the sweep and the stage logic
+(v5 sections 3.2-3.6) with relevance stubbed open, so the kinematics are
+tested in isolation.
 
-1. `python -m pytest tests/test_pssr_window_pipeline.py -q` - all pass.
-2. Targeted behavior checks (the tests assert these; re-read them to
-   confirm they cover the contract):
-   - Stage 0: no narrowing when the config disables narrowing, when
-     birth time is unknown, when there are too few matches, or when
-     matches are ambiguous - the window stays at the full PSSR range.
-   - Stage 1: only strong-tier pair matches can narrow; `weak` matches
-     only affect narrowing when the config enables them; `excluded`
-     never narrows.
-   - No fast-to-fast aspects in Stage 1 (per spec constraint).
-   - The true birth time is never silently excluded: if the pipeline's
-     chosen window would exclude it, the window is widened or the
-     event is flagged, never silently dropped.
-   - `None` vs zero are preserved distinctly (an absent match is not a
-     zero-score match).
-   - Fail-open: on any internal error the window remains the full range,
-     the error is surfaced (logged / flagged), and the pipeline returns
-     rather than raising.
-3. Manual run on one small real case: pick a data_input event with a 24h
-   window, run the pipeline, confirm the output lists the stages and the
-   final narrowed range, and confirm the narrowed range is a strict
-   subset of the full range (or is flagged as unchanged).
-4. Full suite green.
-
----
-
-## Step 7 - Real-data end-to-end + docs sweep
-
-Goal: the pipeline runs over real data files and the design docs contain
-no unimplemented requirements.
-
-1. End-to-end on the Step 7 candidates
-   (`data/data_input/`): `hussein.json`, `jacqui onassis.json`,
-   `john lennon.json`, `ing tea prim.json`, `mae.json`,
-   `margaret millard.json`.
-   For each: the pipeline completes without raising, produces a window
-   per event, and every narrowed window is a strict subset of the full
-   range. Document the per-person results (windows before/after) in the
-   changelog entry for Step 7.
-2. Sanity: for at least one person, the known/first-listed event's true
-   date lies inside the pipeline's window (fail-open checks).
-3. Docs sweep - grep the design docs v3/v4/v5 for every requirement
-   (section 5 build list and section 7 checklists) and confirm each is
-   implemented or explicitly logged as not implemented in the changelog.
-   Anything silently skipped is a defect.
-4. Full suite green.
-
----
-
-## Step 8 - Ranges documentation artifact
-
-Goal: the ranges (orb / speed) values are documented with source
-citations, and the config + constants match that documentation.
-
-1. The ranges doc artifact exists (e.g.
-   `docs/pssr_ranges_v1.md` or the path named in v5 section 8) and
-   contains:
-   - The orb ranges with the source book citations (p.108: 12' planets,
-     18' Moon, 32' Moon conjunctions/oppositions; p.108: orbs only
-     reliable with an exact/rectified birth time).
-   - The daily-motion speed range with citation (p.117: 30'-35' per day).
-   - Sun / Part of Fortune receptive-only note (p.109).
-2. Cross-check: `PSSR_PLANET_ORB_DEG` == 12/60, `PSSR_MOON_ORB_DEG` ==
-   18/60, `PSSR_MOON_CONJ_OPP_ORB_DEG` == 32/60, and the config's speed
-   range == 30'-35' per day.
+1. `python -m pytest tests/test_pssr_window.py -q` (stage-kinematics
+   subset) - all pass.
+2. Synthetic checks (the tests assert these; re-read them to confirm they
+   cover the contract):
+   - A computed candidate time making progressed Mercury conjunct natal
+     Jupiter exactly: stage 1 flags it at that time and only within 12'
+     on either side.
+   - A progressed-Moon-to-slow exact aspect fires stage 2 arm 1 with
+     18'/32' boundary behavior.
+   - A Mercury-Venus exact aspect fires stage 2 arm 2 - and is never
+     produced by stage 1 (fast-to-fast removed from stage 1, D6).
+   - Orb-boundary tests at 12'/18'/32'; a 45-degree semisquare just inside
+     orb never fires (majors only).
+   - Speed gate: with a stubbed speed below the floor, the same stage-1
+     hit is excluded and lands in the near-miss ledger with its speed
+     recorded; a fast-to-fast hit with one stalled point is likewise
+     excluded.
 3. Full suite green.
+
+---
+
+## Step 5 - Relevance wiring
+
+Goal: the compendium lookups (Step 2) are wired into the stages.
+
+1. Per-gate unit tests on a fixture person (e.g. `data_input/ing tea.json`):
+   - A `strong` pair passes its gate.
+   - The same pair for an event where it is `excluded` (e.g. Mars-Pluto
+     for Birth of Son) does not pass.
+   - The same pair for an event where it is absent does not pass.
+   - A stage 2 arm-1 target at tier 6 passes, tier 4 fails, absent fails
+     (`STAGE2_TIER_FLOOR`).
+2. Events with no-data EventTypes and the three marked-none events produce
+   zero stage-1 hits and are reported (never silently absent).
+3. Full suite green.
+
+---
+
+## Step 6 - Ranges, coarse pass, fine pass, margin, report
+
+Goal: intervals, consensus, margin and the report (v5 sections 3.7-3.10).
+
+1. Synthetic interval tests:
+   - Full coarse consensus produces the expected narrowed range.
+   - Empty coarse intersection -> max-cardinality partial consensus with
+     the correct subset and the dropped events visible.
+   - Disjoint everything -> full window passes through (`none` tier).
+   - Fine consensus within the coarse window narrows it further.
+   - Empty fine consensus -> coarse window returned.
+   - Margins clamp to the input window (never widen beyond it).
+2. Fine hits outside the coarse window appear in the report's "fine hits
+   outside coarse window" ledger.
+3. Corroboration tiers at the 2 / 1 / 0 boundaries; a single event
+   <= 60 min vs > 60 min (`SINGLE_EVENT_FINE_RANGE_MINUTES`).
+4. Fail-open: on any internal error the window remains the full range,
+   the error is surfaced, and the pipeline returns rather than raises.
+5. Full suite green.
+
+---
+
+## Step 7 - End-to-end and calibration
+
+Goal: `narrow_birth_time_window` over 2-3 real people from `data_input/`
+with well-populated event lists.
+
+1. End-to-end on at least 2-3 of: `hussein.json`, `jacqui onassis.json`,
+   `john lennon.json`, `ing tea prim.json`, `mae.json`,
+   `margaret millard.json`. For each: the pipeline completes without
+   raising, produces a window per event, and every narrowed window is a
+   strict subset of the full range. Document per-person results (windows
+   before/after) in the changelog entry for Step 7.
+2. Produces an hour-scale (or smaller) window with coarse corroboration
+   >= 2 on at least one person; report contents complete (per-event
+   stage/arm-attributed hits, near-misses, tier, actual-DOB placement).
+3. Timing recorded; if a full 24h x full event list exceeds a few minutes,
+   apply the optional coarse pass (v5 section 3.2) and confirm the refined
+   result matches the fine-sweep result on the same input.
+4. **Sensitivity analysis (documented, not auto-tuned):** run with
+   `SPEED_FLOOR_ARC_MIN_PER_DAY` in {25, 30, 35},
+   `ORB_MOON_GENERAL_ARC_MIN` in {16, 18, 20},
+   `STAGE2_TIER_FLOOR` in {4, 6, 8},
+   `SAFETY_MARGIN_MINUTES` in {15, 30, 60} on one person; report
+   coarse/fine corroboration counts and window widths per setting. Do not
+   silently change the defaults without this.
+5. Full suite green.
+
+---
+
+## Step 8 - Docs and hygiene
+
+Goal: module docstrings per the migration manual's section 3.3 standard;
+cross-reference the spec from the module docstrings.
+
+1. Docstring audit for the new/modified files (compendium.py, config,
+   pssr_window.py, constants.py, aspects.py, pssr.py): each module
+   docstring states what the module is responsible for and which
+   architectural layer it belongs to (and where relocated things came
+   from).
+2. The pipeline module docstring references the spec's section 9
+   future-research register.
+3. `docs/CHANGELOG.md` has an entry for every step (1-8).
+4. Full suite green.
 
 ---
 
 ## Final acceptance
 
 1. `$env:PYTHONPATH = "<repo>\src"; python -m pytest tests/ -q` - all
-   pass (count >= 164 + tests added by steps 2-8).
+   pass (185 + tests added by steps 3-8).
 2. `docs/CHANGELOG.md` contains an entry for every step.
 3. `compendium_reference/juan_combos_pairs_v1.json` is signed off
    (`_meta.reviewed_by` / `_meta.reviewed_on` set).

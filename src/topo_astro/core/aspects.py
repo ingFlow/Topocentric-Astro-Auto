@@ -191,15 +191,21 @@ def get_str_aspect(p1,p2,d1,d2,s1,s2, aspect_name, aspect_orb):
     return (f'({p1},{d1:.3f},{s1}) ({p2},{d2:.3f},{s2}) '
             f'({aspect_name},{aspect_orb * 60:.2f}\')\n')
 
+# PSSR aspect orbs, extracted from the inline literals of
+# find_pssr_swiss_aspects into named constants (spec v5 section 5.5) so the
+# window-narrowing config module can import them complete-by-reference.
+PSSR_MOON_ORB_DEG = 32/60
+PSSR_PLANET_ORB_DEG = 12/60  #{CHANGE it was 14/60 before but the book says its 12'? don't know what happened}
+
 def find_pssr_swiss_aspects(planet_set1, planet_set2):
     aspects_str = ''
     
     for p1, d1, s1 in planet_set1:
         for p2, d2, s2 in planet_set2:
             if (p2 == 'Moon'):
-                orb = 32/60
+                orb = PSSR_MOON_ORB_DEG
             else:
-                orb = 12/60 #{CHANGE it was 14/60 before but the book says its 12'? don't know what happened}
+                orb = PSSR_PLANET_ORB_DEG
 
             aspect = calculate_aspect(d1, d2, orb, False)
             
