@@ -60,7 +60,80 @@ All change sets must keep the full test suite green:
 
 ---
 
-## Step 3 - Plumbing: speeds, orb constants, return_speeds, config (2026-08-13)
+## Step 4 - Sweep and per-point stage evaluation (2026-08-13)
+
+### New files
+
+- `src/topo_astro/batch/pssr_window.py`
+  The pipeline's kinematics (spec v5 sections 3.2-3.7), pure functions, no
+  globals, zero hardcoded business values (everything read from
+  `pssr_window_config`):
+  - `sweep_jds` - the section-3.2 grid (inclusive endpoints, default
+    `STEP_SECONDS`).
+  - `evaluate_point` - recomputes the candidate radix once per grid point
+    (shared across events), constructs `PSSR_Auto(..., return_speeds=True)`
+    per (point, event), and evaluates stages 1 and 2 on the four
+    equal-weight variants (dp/dr/cp/cr).
+  - `stage1_hits` - fast-to-slow (Case A fast-progressed / Case B fast-
+    radix), 12' orb, majors-only, speed gate measured on the side the fast
+    point sits (progressed-side speed vs natal speed).
+  - `stage2_hits` - arm 1 Moon-to-slow (32' conj/opp, 18' general; no
+    speed gate - vacuous for the Moon; tier gate) and arm 2 fast-to-fast
+    (both points individually clear the 30'/day floor; Moon party -> the
+    18'/32' Moon orbs).
+  - `_aspect_pair` / `_moon_aspect` - the 12'/18'/32' orb rules over raw
+    degrees via `calculate_aspect(..., flag_major=True)`; the Moon's wider
+    conj/opp orb is name-gated so a non-conj/opp major cannot sneak in at
+    32' (calculate_aspect evaluates all majors within the orb it is given).
+  - `_minor_near_miss` - a minor aspect inside the applicable orb is
+    recorded in the near-miss ledger (`minor_aspect`), never gating.
+  - `group_hits_by_tuple` / `build_intervals` / `merge_intervals` /
+    `per_stage_union` - section-3.7 per-tuple contiguous in-orb intervals
+    (gap > 1.5 grid steps splits a run; overlaps merged) and the per-event
+    per-stage unions C1(e)/C2(e).
+  - `collect_event_hits` - full sweep per event; the interval builder
+    derives the step from the actual point spacing so it cannot drift from
+    the sweep that produced the hits.
+  The relevance gates (`_pair_relevance`, `_tier_gate`) are stubbed open
+  with explicit STEP-4 markers - Step 5 wires the compendium lookups.
+- `tests/test_pssr_window.py`
+  23 tests. Synthetic (deterministic, no ephemeris): sweep endpoint/step;
+  stage-1 exact-conjunction Case A and Case B; the 12' boundary sweep;
+  fast-to-fast never produced by stage 1 (D6); Sun/POF/angles never enter;
+  speed gate on the progressed side and the radix side, retrograde passing
+  on |speed|, the exact floor boundary; arm-1 Moon 32' conj/opp vs 18'
+  general boundaries and the opposition case; arm-2 fast-to-fast plus the
+  Moon-party orbs and both-points speed gate; the 45-degree semisquare just
+  inside orb never fires but is recorded as `minor_aspect`; interval
+  building (gap split, distinct tuples, merge) and per-stage unions.
+  Real-ephemeris (beyonce fixture): integrated-sweep invariants (every
+  stage-1 hit within 12', correct fast/slow membership, no Sun/POF/angles
+  anywhere, near-miss kinds bounded) and the checklist centerpiece - a real
+  in-orb stage-1 episode walked outward from the tightest hit demonstrably
+  leaves orb exactly at the 12' boundary.
+
+### Fixes found during implementation
+
+- `collect_event_hits` originally defaulted `build_intervals`' step to
+  `STEP_SECONDS` (60) regardless of the sweep step actually used - with a
+  600s sweep every run fragmented into singletons. The step is now derived
+  from the point spacing (with an explicit override parameter).
+- The first Moon-orb ladder tried the 32' conj/opp orb and accepted
+  whatever major it returned - since `calculate_aspect` matches all majors
+  within a given orb, a Moon square at 30' was wrongly credited the 32'
+  orb. `_moon_aspect` now name-gates: only conjunction/opposition from the
+  32' attempt, only other majors from the 18' attempt.
+
+### Verified
+
+- Step 4 checklist: orb boundaries at 12'/18'/32'; Mercury-Venus never
+  produced by stage 1; speed gate exclusions land in the near-miss ledger
+  with their speeds; semisquare just inside orb never fires.
+- Real sweep: stage-1 episodes respect the 12' boundary on live
+  ephemeris data.
+- Full suite: 229 passed (206 from Step 3 + 23 new).
+
+---
 
 ### Changed (extraction refactors, behavior-preserving)
 

@@ -167,24 +167,36 @@ Goal: `batch/pssr_window.py` implements the sweep and the stage logic
 (v5 sections 3.2-3.6) with relevance stubbed open, so the kinematics are
 tested in isolation.
 
-1. `python -m pytest tests/test_pssr_window.py -q` (stage-kinematics
-   subset) - all pass.
+1. `python -m pytest tests/test_pssr_window.py -q`
+   - Expected: 23 passed.
 2. Synthetic checks (the tests assert these; re-read them to confirm they
    cover the contract):
-   - A computed candidate time making progressed Mercury conjunct natal
-     Jupiter exactly: stage 1 flags it at that time and only within 12'
-     on either side.
-   - A progressed-Moon-to-slow exact aspect fires stage 2 arm 1 with
-     18'/32' boundary behavior.
+   - A fast-to-slow exact conjunction fires stage 1 in both Case A
+     (fast progressed) and Case B (fast radix), and only within 12' on
+     either side of the exact point.
+   - A progressed-Moon-to-slow aspect fires stage 2 arm 1 with the 18'/32'
+     boundary behavior (conjunction/opposition up to 32', other majors
+     only up to 18' - the wider Moon orb is name-gated so a square at 30'
+     does NOT get the 32' orb).
    - A Mercury-Venus exact aspect fires stage 2 arm 2 - and is never
      produced by stage 1 (fast-to-fast removed from stage 1, D6).
-   - Orb-boundary tests at 12'/18'/32'; a 45-degree semisquare just inside
-     orb never fires (majors only).
-   - Speed gate: with a stubbed speed below the floor, the same stage-1
-     hit is excluded and lands in the near-miss ledger with its speed
-     recorded; a fast-to-fast hit with one stalled point is likewise
-     excluded.
-3. Full suite green.
+   - Orb-boundary tests at 12'/18'/32' and major-only behavior (a
+     45-degree semisquare just inside orb never fires, but is recorded in
+     the near-miss ledger as `minor_aspect`).
+   - Speed gate: with a stubbed speed below the 30'/day floor, the same
+     stage-1 hit is excluded and lands in the near-miss ledger with its
+     speed recorded (`speed_below_floor`, `speed_deg_per_day`); a
+     fast-to-fast hit with one stalled point is likewise excluded; a
+     retrograde fast point passes on |speed|.
+   - No Sun, POF, or angle/house point ever appears in a hit (asserted by
+     membership tests and the real-sweep invariant test).
+3. Real-ephemeris (beyonce fixture): `test_real_sweep_invariants` - every
+   real stage-1 hit is within 12', stage-1 hits have correct fast/slow
+   membership, and `test_real_sweep_in_orb_episode_ends_at_12_arcmin` walks
+   outward from the tightest real stage-1 hit and confirms the pair leaves
+   orb exactly at the 12' boundary (the "computed candidate time ... only
+   within 12' on either side" checklist item, on live data).
+4. Full suite: 229 passed (206 from Step 3 + 23 new).
 
 ---
 
