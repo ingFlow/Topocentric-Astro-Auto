@@ -10,6 +10,84 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 6 - Ranges, coarse pass, fine pass, margin, report (2026-08-13)
+
+### Changes
+
+- `src/topo_astro/batch/pssr_window.py` (spec v5 sections 3.7-3.10)
+  - Interval algebra: `intersect_intervals` (literal per-event interval
+    intersection), `_max_cardinality_subset` (the max-cardinality
+    partial-consensus fallback - exact, not greedy: any subset with a
+    non-empty intersection has a common point, so the maximum-overlap
+    point over all interval endpoints yields a maximum subset; ties
+    broken per `CONSENSUS_TIE_BREAK` by earliest window start),
+    `_apply_margin` (safety margin padded on both ends, clamped to the
+    input window - never wider), `_clip_intervals`, `_window_span`.
+  - `coarse_pass` (section 3.8): full consensus over the stage-1
+    contributors; empty intersection -> max-cardinality partial
+    consensus (subset members and dropped events visible in the report);
+    fewer than 2 contributors or no agreeing subset -> fail-open to the
+    full input window.
+  - `fine_pass` (section 3.9): stage-2 contributions clipped to the
+    margined coarse window; stage-2 hits outside it are recorded in the
+    `fine_outside_coarse` ledger (never silently discarded); same
+    full/partial/none consensus ladder; empty fine consensus -> the
+    coarse window stands.
+  - `_select_final_window` (section 3.10): 0 contributors -> `none`,
+    full window; exactly 1 -> that event's own contribution range (C2 if
+    non-empty else C1), pre-margin, tiered `usable` <= 60 min / `weak`
+    > 60 min against `SINGLE_EVENT_FINE_RANGE_MINUTES`; 2+ -> the fine
+    consensus if present, else the coarse consensus, else fail-open
+    `none`. **Contract resolution (documented in the module docstring):**
+    sections 3.8/3.9 fail the consensus passes open to the full window
+    with fewer than 2 contributors, but section 3.10's "1 (any stage)"
+    tier row and the section 7 checklist (single-event <= 60 vs > 60
+    min) require the single corroborating event's own range to become
+    the final window - otherwise that tier is unreachable. The consensus
+    machinery never narrows below the input window on its own; the
+    final-window selection applies the single-event rule.
+  - `_restrict_to_single_aspect`: the `MAX_ASPECTS_PER_EVENT = "1"`
+    branch - per stage keep the tuple with the widest interval and the
+    hit nearest its center (the book's single-aspect practice).
+  - `narrow_birth_time_window(...)` (section 3.1): the batch entry
+    point. `config` defaults to the resolved config module (any object
+    exposing the same constants works); `compendium` defaults to a
+    loaded `Compendium` (production mode). Single fine sweep at
+    `STEP_SECONDS` over the input window, then coarse -> margined coarse
+    -> fine -> final margin -> report. The `PSSRWindowReport` dict
+    carries: input window, coarse and fine pass outcomes (consensus
+    type, pre-margin window, corroboration count, events-with-data
+    count, margin, subset members / dropped events), final window with
+    and without margin, tier + reason, signed distance of
+    `dt_actual_dob` from the final window, per-event detail (stage/arm/
+    variant-attributed hits with interval, orb at interval center,
+    relevance source + wording, speed values, near-misses), the
+    aggregated near-miss ledger, and the parameters used.
+  - Fail-open on internal errors (manual Step 6 item 4): the entry
+    point wraps the computation; on any exception it returns the full
+    input window with tier `none`, reason `internal_error`, and the
+    error surfaced in the report's `errors` list - it never raises and
+    never silently narrows from broken data.
+- `tests/test_pssr_window.py`
+  15 new tests: full coarse consensus narrows; max-cardinality partial
+  consensus with the dropped event visible; the partial-consensus knob
+  off; disjoint everything -> full window + `none` tier; fewer than two
+  contributors fails open; fine consensus narrows within the coarse
+  window; empty fine consensus returns the coarse window; margin
+  applies and clamps (never wider than the input window); fine-outside-
+  coarse ledger + C2 clip; tiers at the 2 / 1 / 0 boundaries incl. the
+  single-event <= 60 min (`usable`) vs > 60 min (`weak`) boundary; the
+  full `narrow_birth_time_window` run end-to-end on the Beyonce fixture
+  (report schema complete, final window inside the input window,
+  `errors` empty); and the internal-error fail-open (a monkeypatched
+  ephemeris crash returns the full window with the error surfaced).
+
+### Verified
+
+- Full suite: 254 passed (239 from Step 5 + 15 new).
+
+---
+
 ## Step 5 - relevance wiring (2026-08-13)
 
 ### Changes

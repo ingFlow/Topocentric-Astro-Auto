@@ -230,7 +230,8 @@ Goal: the compendium lookups (Step 2) are wired into the stages
 
 Goal: intervals, consensus, margin and the report (v5 sections 3.7-3.10).
 
-1. Synthetic interval tests:
+1. Synthetic interval tests (in `tests/test_pssr_window.py`, pure pass
+   functions over hand-built interval sets):
    - Full coarse consensus produces the expected narrowed range.
    - Empty coarse intersection -> max-cardinality partial consensus with
      the correct subset and the dropped events visible.
@@ -238,13 +239,25 @@ Goal: intervals, consensus, margin and the report (v5 sections 3.7-3.10).
    - Fine consensus within the coarse window narrows it further.
    - Empty fine consensus -> coarse window returned.
    - Margins clamp to the input window (never widen beyond it).
-2. Fine hits outside the coarse window appear in the report's "fine hits
-   outside coarse window" ledger.
+   - Partial consensus disabled via `CONSENSUS_MAX_CARDINALITY=False`.
+2. Fine hits outside the coarse window appear in the report's
+   `fine_outside_coarse` ledger (and C2 is clipped to the margined scan
+   region before consensus).
 3. Corroboration tiers at the 2 / 1 / 0 boundaries; a single event
-   <= 60 min vs > 60 min (`SINGLE_EVENT_FINE_RANGE_MINUTES`).
-4. Fail-open: on any internal error the window remains the full range,
-   the error is surfaced, and the pipeline returns rather than raises.
-5. Full suite green.
+   <= 60 min (`usable`, `single_event`) vs > 60 min (`weak`)
+   (`SINGLE_EVENT_FINE_RANGE_MINUTES`). Contract resolution documented
+   in the `pssr_window.py` module docstring: with exactly one
+   corroborating event its own contribution range becomes the final
+   window (C2 if non-empty else C1) - the consensus machinery itself
+   never narrows below the input window with fewer than 2 contributors.
+4. Fail-open: `narrow_birth_time_window` on any internal error returns
+   the full input window with tier `none`, reason `internal_error`, and
+   the error surfaced in the report's `errors` list - it returns rather
+   than raises (verified by monkeypatching an ephemeris crash).
+5. End-to-end entry-point run on the Beyonce fixture (coarse
+   `STEP_SECONDS` keeps the test sweep small): report schema complete,
+   final window inside the input window, `errors` empty.
+6. Full suite: 254 passed (239 from Step 5 + 15 new).
 
 ---
 

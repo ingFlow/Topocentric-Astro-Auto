@@ -15,6 +15,12 @@ fixture verify the integrated sweep: every real stage-1 hit stays inside
 the 12' orb, and a real in-orb episode demonstrably ends at the 12'
 boundary (the "computed candidate time ... only within 12' on either
 side" checklist item).
+
+Step 5 tests (relevance wiring) and Step 6 tests (ranges, consensus,
+margin, report - sections 3.7-3.10, incl. the narrow_birth_time_window
+entry point) live in the same file. The Step 6 consensus/margin/tier
+tests are pure synthetic interval tests on the pass functions; one
+real-ephemeris test drives the full entry point end to end.
 """
 
 import json
@@ -513,3 +519,232 @@ def test_real_sweep_hits_all_relevant_with_compendium(beyonce_case, compendium):
             to_compendium_symbol(hit["radix_point"]),
         )
         assert strength == "strong", hit
+
+
+# --- Step 6: ranges, consensus, margin, report (sections 3.7-3.10) -----------
+
+B = 2451545.0
+
+
+def fake_result(event_id, c1=(), c2=(), hits=()):
+    """A minimal per-event result dict for the pass functions (real
+    collect_event_hits output has the same shape)."""
+    return {"event": {"datetime": datetime(2000, 1, 1), "event_type": event_id},
+            "tuples": [], "c1": list(c1), "c2": list(c2),
+            "hits": list(hits), "near_misses": []}
+
+
+def fake_hit(jd, stage, arm="fast_to_slow", variant="dp", prog="Mercury",
+             radix="Jupiter", aspect="conjunction", sep=0.1):
+    return {"jd": jd, "stage": stage, "arm": arm, "variant": variant,
+            "progressed_point": prog, "radix_point": radix, "aspect": aspect,
+            "separation_deg": sep, "progressed_speed": 1.0, "radix_speed": 1.0}
+
+
+def make_cfg(**overrides):
+    """A config namespace: the resolved config module plus overrides (the
+    spec's section 3.1 `config` parameter accepts any object exposing the
+    same constants)."""
+    from types import SimpleNamespace
+    base = {k: v for k, v in vars(cfg).items() if not k.startswith("_")}
+    base.update(overrides)
+    return SimpleNamespace(**base)
+
+
+def test_coarse_full_consensus_narrows():
+    results = [
+        fake_result(1, c1=[(B + 1, B + 9)]),
+        fake_result(2, c1=[(B + 3, B + 12)]),
+        fake_result(3, c1=[(B + 5, B + 15)]),
+    ]
+    out = pw.coarse_pass(results, B, B + 24, cfg)
+    assert out["consensus"] == "full"
+    assert out["window_jd"] == (B + 5, B + 9)
+    assert out["corroboration"] == 3
+    assert out["dropped_events"] == []
+
+
+def test_coarse_partial_consensus_max_cardinality():
+    # A and C intersect; B (20-30) intersects neither span. The
+    # max-cardinality subset is {A, C} and the dropped event is visible.
+    results = [
+        fake_result(1, c1=[(B + 0, B + 10)]),
+        fake_result(2, c1=[(B + 20, B + 30)]),
+        fake_result(3, c1=[(B + 5, B + 15)]),
+    ]
+    out = pw.coarse_pass(results, B, B + 40, cfg)
+    assert out["consensus"] == "partial"
+    assert out["window_jd"] == (B + 5, B + 10)
+    assert {e["event_type"] for e in out["subset_members"]} == {1, 3}
+    assert [e["event_type"] for e in out["dropped_events"]] == [2]
+
+
+def test_coarse_partial_consensus_disabled_by_knob():
+    results = [
+        fake_result(1, c1=[(B + 0, B + 10)]),
+        fake_result(2, c1=[(B + 20, B + 30)]),
+        fake_result(3, c1=[(B + 5, B + 15)]),
+    ]
+    out = pw.coarse_pass(results, B, B + 40, make_cfg(CONSENSUS_MAX_CARDINALITY=False))
+    assert out["consensus"] == "none"
+    assert out["window_jd"] == (B, B + 40)
+
+
+def test_coarse_disjoint_fails_open_to_full_window():
+    results = [
+        fake_result(1, c1=[(B + 0, B + 2)]),
+        fake_result(2, c1=[(B + 10, B + 12)]),
+        fake_result(3, c1=[(B + 20, B + 22)]),
+    ]
+    out = pw.coarse_pass(results, B, B + 24, cfg)
+    assert out["consensus"] == "none"
+    assert out["window_jd"] == (B, B + 24)
+    window, tier, reason = pw._select_final_window(
+        results, out, {"consensus": "none", "window_jd": None}, B, B + 24, cfg)
+    assert window == (B, B + 24)
+    assert tier == "none"
+
+
+def test_coarse_fewer_than_two_contributors_fails_open():
+    results = [fake_result(1, c1=[(B + 1, B + 2)]), fake_result(2)]
+    out = pw.coarse_pass(results, B, B + 24, cfg)
+    assert out["consensus"] == "none"
+    assert out["window_jd"] == (B, B + 24)
+    assert out["corroboration"] == 1
+
+
+def test_fine_narrows_within_coarse_window():
+    results = [
+        fake_result(1, c2=[(B + 10, B + 20)]),
+        fake_result(2, c2=[(B + 12, B + 25)]),
+    ]
+    coarse = {"consensus": "full", "window_jd": (B + 5, B + 30), "corroboration": 0}
+    margined = pw._apply_margin(coarse["window_jd"], 0, B, B + 40)
+    fine = pw.fine_pass(results, margined, make_cfg(SAFETY_MARGIN_MINUTES=0))
+    assert fine["consensus"] == "full"
+    assert fine["window_jd"] == (B + 12, B + 20)
+
+
+def test_empty_fine_consensus_returns_coarse_window():
+    results = [
+        fake_result(1, c2=[(B + 0, B + 1)]),
+        fake_result(2, c2=[(B + 5, B + 6)]),
+    ]
+    coarse = {"consensus": "full", "window_jd": (B + 2, B + 4), "corroboration": 0}
+    margined = pw._apply_margin(coarse["window_jd"], 0, B, B + 40)
+    fine = pw.fine_pass(results, margined, make_cfg(SAFETY_MARGIN_MINUTES=0))
+    assert fine["consensus"] == "none"
+    window, tier, reason = pw._select_final_window(results, coarse, fine, B, B + 40, cfg)
+    assert window == (B + 2, B + 4)
+    assert tier == "usable"
+    assert reason == "coarse_full"
+
+
+def test_margin_applies_and_clamps_to_input_window():
+    full = (B, B + 100)
+    pad = 30.0 / 1440.0
+    assert pw._apply_margin((B + 5, B + 10), 30, *full) == (B + 5 - pad, B + 10 + pad)
+    assert pw._apply_margin((B, B + 2), 30, *full) == (B, B + 2 + pad)
+    assert pw._apply_margin((B + 1, B + 100), 30, *full) == (B + 1 - pad, B + 100)
+    assert pw._apply_margin((B - 5, B + 2), 30, *full) == (B, B + 2 + pad)
+    assert pw._apply_margin((B - 5, B + 200), 30, *full) == full
+
+
+def test_fine_outside_coarse_ledger_and_c2_clip():
+    coarse = {"consensus": "full", "window_jd": (B + 5, B + 15), "corroboration": 0}
+    margined = pw._apply_margin(coarse["window_jd"], 0, B, B + 40)
+    results = [
+        fake_result(1, c2=[(B + 8, B + 12)],
+                    hits=[fake_hit(B + 9, 2), fake_hit(B + 30, 2)]),
+        fake_result(2, c2=[(B + 9, B + 11)], hits=[fake_hit(B + 10, 2)]),
+    ]
+    fine = pw.fine_pass(results, margined, make_cfg(SAFETY_MARGIN_MINUTES=0))
+    assert len(fine["fine_outside_coarse"]) == 1
+    assert fine["fine_outside_coarse"][0]["hit"]["jd"] == B + 30
+    assert results[0]["c2_fine"] == [(B + 8, B + 12)]
+
+
+def test_tier_two_events_usable():
+    results = [
+        fake_result(1, c1=[(B + 1, B + 3)]),
+        fake_result(2, c1=[(B + 2, B + 4)]),
+    ]
+    coarse = pw.coarse_pass(results, B, B + 24, cfg)
+    fine = pw.fine_pass(results, coarse["window_jd"], cfg)
+    window, tier, reason = pw._select_final_window(results, coarse, fine, B, B + 24, cfg)
+    assert tier == "usable"
+    assert reason == "coarse_full"
+    assert window == (B + 2, B + 3)
+
+
+def test_tier_single_event_usable_under_60_minutes():
+    results = [fake_result(1, c2=[(B, B + 30.0 / 1440.0)])]
+    coarse = pw.coarse_pass(results, B, B + 24, cfg)
+    fine = pw.fine_pass(results, coarse["window_jd"], cfg)
+    window, tier, reason = pw._select_final_window(results, coarse, fine, B, B + 24, cfg)
+    assert tier == "usable"
+    assert reason == "single_event"
+    assert window == (B, B + 30.0 / 1440.0)
+
+
+def test_tier_single_event_weak_over_60_minutes():
+    results = [fake_result(1, c2=[(B, B + 120.0 / 1440.0)])]
+    coarse = pw.coarse_pass(results, B, B + 24, cfg)
+    fine = pw.fine_pass(results, coarse["window_jd"], cfg)
+    window, tier, reason = pw._select_final_window(results, coarse, fine, B, B + 24, cfg)
+    assert tier == "weak"
+    assert window == (B, B + 120.0 / 1440.0)
+
+
+def test_tier_none_zero_contributors():
+    results = [fake_result(1), fake_result(2)]
+    coarse = pw.coarse_pass(results, B, B + 24, cfg)
+    fine = pw.fine_pass(results, coarse["window_jd"], cfg)
+    window, tier, reason = pw._select_final_window(results, coarse, fine, B, B + 24, cfg)
+    assert tier == "none"
+    assert window == (B, B + 24)
+
+
+def test_narrow_birth_time_window_end_to_end(beyonce_case, compendium):
+    """The full entry point on a real chart: completes, final window is
+    inside the input window, and the report carries every section-3.10
+    field. A coarse STEP_SECONDS keeps the test sweep small."""
+    radix_dt, event, geopos = beyonce_case
+    cfg2 = make_cfg(STEP_SECONDS=900, SAFETY_MARGIN_MINUTES=15)
+    report = pw.narrow_birth_time_window(
+        radix_dt - timedelta(hours=1.5), radix_dt + timedelta(hours=1.5),
+        radix_dt, geopos, [event], config=cfg2, compendium=compendium)
+    assert report["tier"] in ("usable", "weak", "none")
+    jd_lo, jd_hi = report["input_window_jd"]
+    assert report["final_window_jd"][0] >= jd_lo
+    assert report["final_window_jd"][1] <= jd_hi
+    assert report["final_window_pre_margin_jd"] == report["final_window_jd"] or \
+        report["final_window_pre_margin_jd"][0] >= report["final_window_jd"][0]
+    assert isinstance(report["signed_distance_from_window_minutes"], float)
+    assert report["errors"] == []
+    assert len(report["events"]) == 1
+    assert report["events"][0]["event"]["event_type"] == EventType.SUCCESS_ELECTED
+    assert set(report["coarse"]) >= {"consensus", "window_jd", "corroboration",
+                                     "events_with_data", "margin_minutes",
+                                     "subset_members", "dropped_events"}
+    assert "parameters" in report
+    assert report["parameters"]["step_seconds"] == 900
+
+
+def test_internal_error_fails_open_to_full_window(beyonce_case, compendium, monkeypatch):
+    """Manual Step 6 item 4: on an internal error the pipeline returns the
+    full window with tier none and surfaces the error - it never raises."""
+    radix_dt, event, geopos = beyonce_case
+    cfg2 = make_cfg(STEP_SECONDS=900)
+
+    def boom(*args, **kwargs):
+        raise RuntimeError("boom")
+    monkeypatch.setattr(pw, "calc_planets_labelled", boom)
+    report = pw.narrow_birth_time_window(
+        radix_dt - timedelta(hours=1), radix_dt + timedelta(hours=1),
+        radix_dt, geopos, [event], config=cfg2, compendium=compendium)
+    assert report["tier"] == "none"
+    assert report["tier_reason"] == "internal_error"
+    assert report["final_window_jd"] == report["input_window_jd"]
+    assert len(report["errors"]) == 1
+    assert report["errors"][0]["type"] == "RuntimeError"
