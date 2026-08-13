@@ -748,3 +748,26 @@ def test_internal_error_fails_open_to_full_window(beyonce_case, compendium, monk
     assert report["final_window_jd"] == report["input_window_jd"]
     assert len(report["errors"]) == 1
     assert report["errors"][0]["type"] == "RuntimeError"
+
+
+# --- Step 7: coarse-pass prefilter equivalence (spec section 3.2) -------------
+
+def test_coarse_pass_prefilter_matches_fine_sweep(beyonce_case, compendium):
+    """The optional coarse-pass prefilter (section 3.2) must reproduce the
+    single fine sweep's result on the same input, to within the coarse grid
+    step: same tier, final windows agreeing within COARSE_STEP_SECONDS."""
+    radix_dt, event, geopos = beyonce_case
+    fine_cfg = make_cfg(STEP_SECONDS=600, SAFETY_MARGIN_MINUTES=15)
+    coarse_cfg = make_cfg(STEP_SECONDS=600, COARSE_STEP_SECONDS=1800,
+                          SAFETY_MARGIN_MINUTES=15, COARSE_PASS_PREFILTER=True)
+    r_fine = pw.narrow_birth_time_window(
+        radix_dt - timedelta(hours=3), radix_dt + timedelta(hours=3),
+        radix_dt, geopos, [event], config=fine_cfg, compendium=compendium)
+    r_coarse = pw.narrow_birth_time_window(
+        radix_dt - timedelta(hours=3), radix_dt + timedelta(hours=3),
+        radix_dt, geopos, [event], config=coarse_cfg, compendium=compendium)
+    assert r_coarse["tier"] == r_fine["tier"]
+    assert r_coarse["parameters"]["coarse_pass_prefilter"] is True
+    fw_f, fw_c = r_fine["final_window_jd"], r_coarse["final_window_jd"]
+    assert abs(fw_f[0] - fw_c[0]) * 86400.0 <= 1800.0
+    assert abs(fw_f[1] - fw_c[1]) * 86400.0 <= 1800.0

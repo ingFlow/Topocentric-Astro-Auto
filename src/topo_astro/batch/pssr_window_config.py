@@ -28,6 +28,15 @@ from topo_astro.significators.rules_data import Planet
 
 STEP_SECONDS = 60  # NEW - section 3.2, v5: sweep step over the window.
 
+# NEW - section 3.2, v5: the permitted optional coarse-pass pre-filter.
+# Off by default (the spec's default is the single fine sweep); when on,
+# the full window is swept at COARSE_STEP_SECONDS, stage-1 range-finding
+# narrows it, and STEP_SECONDS refinement runs only inside the surviving
+# margined ranges (Step 7 verifies the refined result matches the fine
+# sweep). Required for multi-thousand-hour windows (e.g. ing tea.json).
+COARSE_PASS_PREFILTER = False
+COARSE_STEP_SECONDS = 300
+
 # --- aspect classes (spec section 3.4) ----------------------------------------
 
 # EXISTING - core/aspects.py (majors table); applied via

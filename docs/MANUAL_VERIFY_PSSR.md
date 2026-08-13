@@ -266,26 +266,37 @@ Goal: intervals, consensus, margin and the report (v5 sections 3.7-3.10).
 Goal: `narrow_birth_time_window` over 2-3 real people from `data_input/`
 with well-populated event lists.
 
-1. End-to-end on at least 2-3 of: `hussein.json`, `jacqui onassis.json`,
-   `john lennon.json`, `ing tea prim.json`, `mae.json`,
-   `margaret millard.json`. For each: the pipeline completes without
-   raising, produces a window per event, and every narrowed window is a
-   strict subset of the full range. Document per-person results (windows
-   before/after) in the changelog entry for Step 7.
-2. Produces an hour-scale (or smaller) window with coarse corroboration
-   >= 2 on at least one person; report contents complete (per-event
-   stage/arm-attributed hits, near-misses, tier, actual-DOB placement).
-3. Timing recorded; if a full 24h x full event list exceeds a few minutes,
-   apply the optional coarse pass (v5 section 3.2) and confirm the refined
-   result matches the fine-sweep result on the same input.
-4. **Sensitivity analysis (documented, not auto-tuned):** run with
-   `SPEED_FLOOR_ARC_MIN_PER_DAY` in {25, 30, 35},
-   `ORB_MOON_GENERAL_ARC_MIN` in {16, 18, 20},
-   `STAGE2_TIER_FLOOR` in {4, 6, 8},
-   `SAFETY_MARGIN_MINUTES` in {15, 30, 60} on one person; report
-   coarse/fine corroboration counts and window widths per setting. Do not
-   silently change the defaults without this.
-5. Full suite green.
+1. End-to-end on all six candidates (`hussein.json`, `jacqui onassis.json`,
+   `john lennon.json`, `mae.json`, `margaret millard.json`,
+   `ing tea prim.json`): every run completes without raising, produces a
+   window per event (62-101 min, tier `usable`), and every narrowed window
+   is a strict subset of the full 24 h range. john lennon is the strongest
+   (fine consensus `full`, corroboration 4); the pre-margin fine range on
+   hussein is ~6 min (sub-hour). Per-person results documented in the Step
+   7 changelog entry.
+2. Report contents complete: per-event stage/arm-attributed hits with
+   interval and orb at interval center, relevance source + wording, speed
+   values, near-miss ledger (incl. `fine_outside_coarse` entries carrying
+   a `kind` marker), tier, coarse/fine corroboration over
+   events-with-data, consensus type per pass, margin applied, subset
+   members where partial, signed distance of the actual DOB from the
+   final window, and the parameters used.
+3. Timing recorded: full fine sweep 24 h x 16-22 events = 131-242 s per
+   person. The optional coarse pass (section 3.2) was therefore
+   implemented and verified: on hussein it reproduces the fine sweep
+   exactly (0.0 s window-edge difference, same tier/consensus/
+   corroboration) at 62 s vs 145 s. `COARSE_PASS_PREFILTER` defaults
+   off; required for multi-thousand-hour windows (e.g. `ing tea.json`).
+4. **Sensitivity analysis (documented, not auto-tuned)** - hussein:
+   `SPEED_FLOOR_ARC_MIN_PER_DAY` {25,30,35}, `ORB_MOON_GENERAL_ARC_MIN`
+   {16,18,20}, `STAGE2_TIER_FLOOR` {4,6,8}, `SAFETY_MARGIN_MINUTES`
+   {15,30,60}. Every setting keeps tier `usable` and coarse corroboration
+   11/16; fine corroboration 14-16. Width is linear in the safety margin
+   (36/66/126 min = pre-margin ~6 min + 2 x margin); the other three
+   knobs move width only within 66-75 min. Defaults unchanged. All knobs
+   are driven through the `config` object end to end (the cfg-threading
+   change in this step).
+5. Full suite: 255 passed (254 from Step 6 + 1 new).
 
 ---
 

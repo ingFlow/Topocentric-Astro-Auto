@@ -10,6 +10,92 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 7 - End-to-end and calibration (2026-08-13)
+
+### Changes
+
+- `src/topo_astro/batch/pssr_window.py` + `pssr_window_config.py`
+  - **`cfg` threading (sections 3.1/6):** every gate/orb/speed knob now
+    flows from the `config` object passed to `narrow_birth_time_window`
+    (defaulting to the resolved module), instead of being read from the
+    module directly. `_speed_ok`, `_moon_aspect`, `_aspect_pair`,
+    `_minor_near_miss`, `stage1_hits`, `stage2_hits`, `evaluate_point`,
+    `collect_event_hits`, `_relevance_wording` and `_hit_context` gained
+    an optional `cfg` parameter (default None = resolved module, so the
+    isolated stage tests are unchanged). This makes the Step-7
+    sensitivity pass actually drive every knob - the "every knob in one
+    place" intent of the config module.
+  - **Optional coarse-pass prefilter (section 3.2),** the permitted
+    optimization for multi-thousand-hour windows: new config knobs
+    `COARSE_PASS_PREFILTER = False` (off by default - the spec's default
+    is the single fine sweep) and `COARSE_STEP_SECONDS = 300`. When on,
+    the full window is swept at 300 s, stage-1 range-finding narrows it,
+    and the STEP_SECONDS fine sweep runs only inside the margined
+    surviving ranges; the two sweeps are merged (`_merge_sweep_results`,
+    stage-1 tuples union, stage 2 taken from the fine sweep only per
+    section 3.9). Verified to reproduce the single fine sweep exactly on
+    hussein (0.0 s window-edge difference, same tier/consensus/
+    corroboration) at 62 s vs 145 s (~2.3x). Documented difference: in
+    coarse mode the fine-outside-coarse ledger is not populated (the
+    coarse sweep's stage-2 hits are at 5-min resolution and outside the
+    scan region by construction).
+  - The report's `fine` section now exposes
+    `fine_outside_coarse_count`, and ledger entries for fine-outside-
+    coarse carry `"kind": "fine_outside_coarse"`.
+- `tests/test_pssr_window.py`
+  - `test_coarse_pass_prefilter_matches_fine_sweep`: on the Beyonce
+    fixture the coarse-pass run reproduces the fine-sweep run (same tier,
+    final windows within COARSE_STEP_SECONDS, `coarse_pass_prefilter`
+    flag true in the report parameters).
+
+### End-to-end results (Step 7 runbook, `data/data_input`, default config)
+
+| person | window | tier | coarse corroboration | fine corroboration | time |
+|---|---|---|---|---|---|
+| hussein | 66 min | usable (fine_partial) | 11/16 | 16 | 145 s |
+| jacqui onassis | 66 min | usable (fine_partial) | 12/20 | 13 | 191 s |
+| john lennon | 62 min | usable (fine_full) | 7/15 | 4 | 131 s |
+| mae | 101 min | usable (fine_partial) | 13/21 | 13 | 205 s |
+| margaret millard | 64 min | usable (fine_partial) | 9/17 | 6 | 188 s |
+| ing tea prim | 70 min | usable (fine_partial) | 6/22 | 12 | 242 s |
+
+- All six complete without raising, produce an hour-scale window strictly
+  inside the full range, and carry the complete section-3.10 report.
+  john lennon is the strongest: fine consensus `full` with corroboration
+  4. The pre-margin fine range on hussein is ~6 min (the 66 min final is
+  dominated by the 2 x 30 min safety margin), i.e. sub-hour narrowing.
+- Coarse pass reproduces the fine sweep exactly on hussein (0.0 s edge
+  difference, same tier/consensus/corroboration), 145 s -> 62 s.
+- Timing: a full 24 h x 16-22 event list at STEP_SECONDS=60 takes
+  131-242 s in batch; the coarse pass brings that to ~60-70 s.
+
+### Sensitivity analysis (documented, not auto-tuned; hussein, coarse pass)
+
+Held all other knobs at defaults while varying one at a time; window
+widths are final-window minutes, corroboration = contributing events /
+events-with-data:
+
+| knob | setting | tier | width | coarse | fine |
+|---|---|---|---|---|---|
+| baseline | defaults | usable | 66 min | 11/16 | 16 |
+| SPEED_FLOOR_ARC_MIN_PER_DAY | 25 / 30 / 35 | usable | 66 / 66 / 75 | 11/16 | 16 |
+| ORB_MOON_GENERAL_ARC_MIN | 16 / 18 / 20 | usable | 75 / 66 / 74 | 11/16 | 16 |
+| STAGE2_TIER_FLOOR | 4 / 6 / 8 | usable | 66 / 66 / 68 | 11/16 | 14-16 |
+| SAFETY_MARGIN_MINUTES | 15 / 30 / 60 | usable | 36 / 66 / 126 | 11/16 | 16 |
+
+- The result is robust: tier `usable` and coarse corroboration 11/16
+  across every setting; fine corroboration 14-16 (drops to 14 only at
+  tier floor 8).
+- Width is linear in SAFETY_MARGIN_MINUTES (36/66/126 = pre-margin ~6 min
+  + 2 x margin), as designed. The other three knobs move width within a
+  narrow band (66-75 min) with no tier change. Defaults unchanged.
+
+### Verified
+
+- Full suite: 255 passed (254 from Step 6 + 1 new).
+
+---
+
 ## Step 6 - Ranges, coarse pass, fine pass, margin, report (2026-08-13)
 
 ### Changes

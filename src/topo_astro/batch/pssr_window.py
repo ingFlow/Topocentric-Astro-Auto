@@ -102,50 +102,56 @@ def sweep_jds(dt_radix_start, dt_radix_end, step_seconds=None):
 
 # --- aspect evaluation (spec section 3.4) ------------------------------------
 
-def _moon_aspect(progressed_long, radix_long):
+def _moon_aspect(progressed_long, radix_long, cfg=None):
     """Major aspect where the Moon is a party (section 3.4): the 32'
     conj/opp orb applies to conjunction and opposition ONLY; every other
     major uses the general 18' orb. (calculate_aspect evaluates all majors
-    within the orb it is given, so the wider attempt must be name-gated.)"""
-    aspect = calculate_aspect(progressed_long, radix_long, config.ORB_MOON_CONJ_OPP_DEG, True)
+    within the orb it is given, so the wider attempt must be name-gated.)
+    `cfg` (the section-6 config object, default = the resolved module)
+    supplies the orbs so an override namespace is honored end to end."""
+    cfg = config if cfg is None else cfg
+    aspect = calculate_aspect(progressed_long, radix_long, cfg.ORB_MOON_CONJ_OPP_DEG, True)
     if aspect and aspect[0] in ("conjunction", "opposition"):
         return aspect
-    aspect = calculate_aspect(progressed_long, radix_long, config.ORB_MOON_GENERAL_ARC_MIN / 60.0, True)
+    aspect = calculate_aspect(progressed_long, radix_long, cfg.ORB_MOON_GENERAL_ARC_MIN / 60.0, True)
     if aspect and aspect[0] not in ("conjunction", "opposition"):
         return aspect
     return None
 
 
-def _aspect_pair(progressed_long, radix_long, moon_party):
+def _aspect_pair(progressed_long, radix_long, moon_party, cfg=None):
     """Major aspect between two longitudes with the section-3.4 orb rules.
     Returns (aspect_name, separation_deg) or None. The Moon gets 32' for
     conjunction/opposition and the general 18' orb otherwise; non-Moon
     pairs get the flat 12' orb."""
+    cfg = config if cfg is None else cfg
     if moon_party:
-        return _moon_aspect(progressed_long, radix_long)
-    return calculate_aspect(progressed_long, radix_long, config.ORB_FAST_SLOW_DEG, True)
+        return _moon_aspect(progressed_long, radix_long, cfg)
+    return calculate_aspect(progressed_long, radix_long, cfg.ORB_FAST_SLOW_DEG, True)
 
 
-def _minor_near_miss(progressed_long, radix_long, moon_party):
+def _minor_near_miss(progressed_long, radix_long, moon_party, cfg=None):
     """If the major check found nothing, look for a minor aspect inside the
     applicable orb (the non-conj/opp orb). Returns (aspect_name,
     separation_deg) or None. Minors are recorded in the near-miss ledger,
     never gating."""
+    cfg = config if cfg is None else cfg
     if moon_party:
-        orb = config.ORB_MOON_GENERAL_ARC_MIN / 60.0
+        orb = cfg.ORB_MOON_GENERAL_ARC_MIN / 60.0
     else:
-        orb = config.ORB_FAST_SLOW_DEG
+        orb = cfg.ORB_FAST_SLOW_DEG
     aspect = calculate_aspect(progressed_long, radix_long, orb, False)
     if aspect and aspect[0] not in MAJOR_ASPECTS:
         return aspect
     return None
 
 
-def _speed_ok(speed):
+def _speed_ok(speed, cfg=None):
     """Section 3.5/3.6 speed gate: |daily motion| >= the floor (30'/day;
     retrograde handled by magnitude - SPEED_FLOOR_USE_ABSOLUTE)."""
-    floor = config.SPEED_FLOOR_ARC_MIN_PER_DAY / 60.0
-    if config.SPEED_FLOOR_USE_ABSOLUTE:
+    cfg = config if cfg is None else cfg
+    floor = cfg.SPEED_FLOOR_ARC_MIN_PER_DAY / 60.0
+    if cfg.SPEED_FLOOR_USE_ABSOLUTE:
         return abs(speed) >= floor
     return speed >= floor
 
@@ -181,7 +187,7 @@ def _near_miss(jd, stage, arm, variant, progressed_point, radix_point, kind, **e
     return entry
 
 
-def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None):
+def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None, cfg=None):
     """Section 3.5: one point from FAST_SET, the other from SLOW_SET, either
     side progressed or radix (Case A: fast progressed / Case B: fast radix).
     Orb 12' (no Moon by construction). Speed gate on the fast point, measured
@@ -189,19 +195,20 @@ def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
     natal speed). Relevance gate per section 4.1 (strong only; weak /
     excluded / absent / no-data go to the near-miss ledger). Returns
     (hits, near_misses)."""
+    cfg = config if cfg is None else cfg
     hits, misses = [], []
     floor_kind = "speed_below_floor"
 
     def check(prog_name, prog_long, rad_name, rad_long, fast_name, fast_speed):
-        if not _speed_ok(fast_speed):
+        if not _speed_ok(fast_speed, cfg):
             misses.append(_near_miss(
                 jd, 1, "fast_to_slow", variant, prog_name, rad_name, floor_kind,
                 speed_deg_per_day=fast_speed, aspect=None,
             ))
             return
-        aspect = _aspect_pair(prog_long, rad_long, moon_party=False)
+        aspect = _aspect_pair(prog_long, rad_long, moon_party=False, cfg=cfg)
         if not aspect:
-            minor = _minor_near_miss(prog_long, rad_long, moon_party=False)
+            minor = _minor_near_miss(prog_long, rad_long, moon_party=False, cfg=cfg)
             if minor:
                 misses.append(_near_miss(
                     jd, 1, "fast_to_slow", variant, prog_name, rad_name, "minor_aspect",
@@ -215,7 +222,7 @@ def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
                 jd, 1, "fast_to_slow", variant, prog_name, rad_name, "no_data",
                 aspect=aspect_name, separation_deg=separation,
             ))
-        elif relevance == config.PAIR_RELEVANCE_MIN:
+        elif relevance == cfg.PAIR_RELEVANCE_MIN:
             hits.append(_hit(
                 jd, 1, "fast_to_slow", variant, prog_name, rad_name,
                 aspect_name, separation, progressed_speeds.get(prog_name), radix_speeds.get(rad_name),
@@ -227,44 +234,45 @@ def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
             ))
 
     for prog_name, prog_long in progressed.items():
-        if prog_name not in config.FAST_SET:
+        if prog_name not in cfg.FAST_SET:
             continue
         for rad_name, rad_long in radix.items():
-            if rad_name not in config.SLOW_SET:
+            if rad_name not in cfg.SLOW_SET:
                 continue
             check(prog_name, prog_long, rad_name, rad_long, prog_name, progressed_speeds[prog_name])
 
     for prog_name, prog_long in progressed.items():
-        if prog_name not in config.SLOW_SET:
+        if prog_name not in cfg.SLOW_SET:
             continue
         for rad_name, rad_long in radix.items():
-            if rad_name not in config.FAST_SET:
+            if rad_name not in cfg.FAST_SET:
                 continue
             check(prog_name, prog_long, rad_name, rad_long, rad_name, radix_speeds[rad_name])
 
     return hits, misses
 
 
-def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None):
+def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None, cfg=None):
     """Section 3.6. Arm 1: progressed Moon vs one SLOW_SET target (no speed
     gate - the Moon's minimum motion makes it vacuous; relevance = the slow
     point's tier_score >= STAGE2_TIER_FLOOR, absent key fails closed).
     Arm 2: both points from FAST_FAST_SET, one per side, both points
     individually clearing the speed floor; Moon party -> 18'/32' orbs.
     Returns (hits, near_misses)."""
+    cfg = config if cfg is None else cfg
     hits, misses = [], []
 
-    if config.MOON in progressed:
-        moon_long = progressed[config.MOON]
+    if cfg.MOON in progressed:
+        moon_long = progressed[cfg.MOON]
         for rad_name, rad_long in radix.items():
-            if rad_name not in config.SLOW_SET:
+            if rad_name not in cfg.SLOW_SET:
                 continue
-            aspect = _aspect_pair(moon_long, rad_long, moon_party=True)
+            aspect = _aspect_pair(moon_long, rad_long, moon_party=True, cfg=cfg)
             if not aspect:
-                minor = _minor_near_miss(moon_long, rad_long, moon_party=True)
+                minor = _minor_near_miss(moon_long, rad_long, moon_party=True, cfg=cfg)
                 if minor:
                     misses.append(_near_miss(
-                        jd, 2, "moon_to_slow", variant, config.MOON, rad_name, "minor_aspect",
+                        jd, 2, "moon_to_slow", variant, cfg.MOON, rad_name, "minor_aspect",
                         aspect=minor[0], separation_deg=minor[1],
                     ))
                 continue
@@ -272,43 +280,43 @@ def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
             tier, no_data = _tier_for(compendium, event_id, rad_name)
             if no_data:
                 misses.append(_near_miss(
-                    jd, 2, "moon_to_slow", variant, config.MOON, rad_name, "no_data",
+                    jd, 2, "moon_to_slow", variant, cfg.MOON, rad_name, "no_data",
                     aspect=aspect_name, separation_deg=separation,
                 ))
                 continue
-            if tier is None or tier < config.STAGE2_TIER_FLOOR:
+            if tier is None or tier < cfg.STAGE2_TIER_FLOOR:
                 misses.append(_near_miss(
-                    jd, 2, "moon_to_slow", variant, config.MOON, rad_name, "tier_below_floor",
+                    jd, 2, "moon_to_slow", variant, cfg.MOON, rad_name, "tier_below_floor",
                     aspect=aspect_name, separation_deg=separation, tier=tier,
                 ))
                 continue
             hits.append(_hit(
-                jd, 2, "moon_to_slow", variant, config.MOON, rad_name,
-                aspect_name, separation, progressed_speeds[config.MOON], radix_speeds.get(rad_name),
+                jd, 2, "moon_to_slow", variant, cfg.MOON, rad_name,
+                aspect_name, separation, progressed_speeds[cfg.MOON], radix_speeds.get(rad_name),
             ))
 
     for prog_name, prog_long in progressed.items():
-        if prog_name not in config.FAST_FAST_SET:
+        if prog_name not in cfg.FAST_FAST_SET:
             continue
-        if not _speed_ok(progressed_speeds[prog_name]):
+        if not _speed_ok(progressed_speeds[prog_name], cfg):
             misses.append(_near_miss(
                 jd, 2, "fast_to_fast", variant, prog_name, None, "speed_below_floor",
                 speed_deg_per_day=progressed_speeds[prog_name], aspect=None,
             ))
             continue
         for rad_name, rad_long in radix.items():
-            if rad_name not in config.FAST_FAST_SET:
+            if rad_name not in cfg.FAST_FAST_SET:
                 continue
-            if not _speed_ok(radix_speeds[rad_name]):
+            if not _speed_ok(radix_speeds[rad_name], cfg):
                 misses.append(_near_miss(
                     jd, 2, "fast_to_fast", variant, prog_name, rad_name, "speed_below_floor",
                     speed_deg_per_day=radix_speeds[rad_name], aspect=None,
                 ))
                 continue
-            moon_party = prog_name == config.MOON or rad_name == config.MOON
-            aspect = _aspect_pair(prog_long, rad_long, moon_party=moon_party)
+            moon_party = prog_name == cfg.MOON or rad_name == cfg.MOON
+            aspect = _aspect_pair(prog_long, rad_long, moon_party=moon_party, cfg=cfg)
             if not aspect:
-                minor = _minor_near_miss(prog_long, rad_long, moon_party=moon_party)
+                minor = _minor_near_miss(prog_long, rad_long, moon_party=moon_party, cfg=cfg)
                 if minor:
                     misses.append(_near_miss(
                         jd, 2, "fast_to_fast", variant, prog_name, rad_name, "minor_aspect",
@@ -322,7 +330,7 @@ def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
                     jd, 2, "fast_to_fast", variant, prog_name, rad_name, "no_data",
                     aspect=aspect_name, separation_deg=separation,
                 ))
-            elif relevance == config.PAIR_RELEVANCE_MIN:
+            elif relevance == cfg.PAIR_RELEVANCE_MIN:
                 hits.append(_hit(
                     jd, 2, "fast_to_fast", variant, prog_name, rad_name,
                     aspect_name, separation, progressed_speeds[prog_name], radix_speeds[rad_name],
@@ -356,14 +364,16 @@ def _variants(info):
     ]
 
 
-def evaluate_point(jd_t, events, geopos_natal, compendium=None):
+def evaluate_point(jd_t, events, geopos_natal, compendium=None, cfg=None):
     """Section 3.2 steps 1-3: recompute the candidate radix once per grid
     point (shared across events), construct PSSR_Auto per (point, event)
     with return_speeds=True, and evaluate stages 1 and 2 against the
     candidate radix positions. Returns a list, one dict per event:
     {"event": <event>, "hits": [...], "near_misses": [...]}.
     `compendium` feeds the relevance gates (Step 5); None leaves them open
-    (Step-4 kinematics mode)."""
+    (Step-4 kinematics mode). `cfg` supplies the stage knobs (default =
+    the resolved config module)."""
+    cfg = config if cfg is None else cfg
     radix_planets = calc_planets_labelled(jd_t, "(r)")
     radix_speeds = dict((name, speed) for name, _l, speed, _t in calc_planets_labelled_speeds(jd_t, "(r)"))
     radix_positions = {name: long for name, long, _l in radix_planets}
@@ -377,9 +387,9 @@ def evaluate_point(jd_t, events, geopos_natal, compendium=None):
         hits, misses = [], []
         for variant in _variants(info):
             s1, m1 = stage1_hits(jd_t, variant["variant"], variant["planets"], variant["speeds"],
-                                 radix_positions, radix_speeds, event_id, compendium)
+                                 radix_positions, radix_speeds, event_id, compendium, cfg)
             s2, m2 = stage2_hits(jd_t, variant["variant"], variant["planets"], variant["speeds"],
-                                 radix_positions, radix_speeds, event_id, compendium)
+                                 radix_positions, radix_speeds, event_id, compendium, cfg)
             hits.extend(s1 + s2)
             misses.extend(m1 + m2)
         per_event.append({"event": event, "hits": hits, "near_misses": misses})
@@ -461,7 +471,7 @@ def per_stage_union(grouped_intervals, stage):
     return merge_intervals(stage_intervals)
 
 
-def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None, compendium=None):
+def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None, compendium=None, cfg=None):
     """Run the sweep over `jd_points` and group every event's hits into
     per-tuple intervals plus the per-stage unions C1(e)/C2(e). Returns one
     dict per event:
@@ -471,7 +481,8 @@ def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None, compe
     `step_seconds` defaults to the actual spacing of `jd_points` (derived
     from the first two points), so the interval builder cannot drift from
     the sweep that produced the hits. `compendium` feeds the relevance
-    gates (Step 5)."""
+    gates (Step 5); `cfg` supplies the stage knobs (default = the resolved
+    config module)."""
     if step_seconds is None:
         if len(jd_points) < 2:
             raise ValueError("collect_event_hits needs at least two jd_points "
@@ -479,7 +490,7 @@ def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None, compe
         step_seconds = (jd_points[1] - jd_points[0]) * 86400.0
     per_event = {id(e): {"event": e, "hits": [], "near_misses": []} for e in events}
     for jd_t in jd_points:
-        for result in evaluate_point(jd_t, events, geopos_natal, compendium):
+        for result in evaluate_point(jd_t, events, geopos_natal, compendium, cfg):
             bucket = per_event[id(result["event"])]
             bucket["hits"].extend(result["hits"])
             bucket["near_misses"].extend(result["near_misses"])
@@ -715,10 +726,11 @@ def _select_final_window(results, coarse, fine, full_start, full_end, cfg):
 
 # --- the report (spec section 3.10) -------------------------------------------
 
-def _relevance_wording(compendium, event_id, hit):
+def _relevance_wording(compendium, event_id, hit, cfg=None):
     """The relevance source + wording for a hit: the pairwise table for
     stage 1 / arm 2, the tier table for arm 1. Kinematics mode
     (compendium=None) reports the open-gate values."""
+    cfg = config if cfg is None else cfg
     if hit["arm"] == "moon_to_slow":
         if compendium is None:
             wording = "tier_score >= floor (kinematics mode: gate open)"
@@ -726,7 +738,7 @@ def _relevance_wording(compendium, event_id, hit):
         else:
             tier = compendium.tier_score(event_id, to_compendium_symbol(hit["radix_point"]))
             wording = "tier_score %s >= STAGE2_TIER_FLOOR %s" % (
-                tier if tier is not None else "absent", config.STAGE2_TIER_FLOOR)
+                tier if tier is not None else "absent", cfg.STAGE2_TIER_FLOOR)
         return "compendium_scoring_export_v2.json", wording
     a = to_compendium_symbol(hit["progressed_point"])
     b = to_compendium_symbol(hit["radix_point"])
@@ -740,10 +752,11 @@ def _relevance_wording(compendium, event_id, hit):
             "'%s:%s' -> %s for %s" % (a, b, strength, title))
 
 
-def _hit_context(compendium, result):
+def _hit_context(compendium, result, cfg=None):
     """Per-hit report context: the containing interval, the orb at the
     interval center (the separation of the tuple hit nearest the center),
     and the relevance source/wording."""
+    cfg = config if cfg is None else cfg
     by_key = {}
     for key, intervals in result["tuples"]:
         by_key[key] = intervals
@@ -762,16 +775,48 @@ def _hit_context(compendium, result):
                           key=lambda h: abs(h["jd"] - center))
             entry["interval_jd"] = containing
             entry["orb_arcmin_at_interval_center"] = nearest["separation_deg"] * 60.0
-        source, wording = _relevance_wording(compendium, event_id, hit)
+        source, wording = _relevance_wording(compendium, event_id, hit, cfg)
         entry["relevance_source"] = source
         entry["relevance_wording"] = wording
         out.append(entry)
     return out
 
 
+def _merge_sweep_results(results_coarse, results_fine):
+    """Merge the full-window coarse sweep and the surviving-region fine
+    sweep into one per-event result in collect_event_hits' shape. Stage-1
+    tuples from both sweeps union (the fine sweep sharpens the surviving
+    region's edges); stage 2 is taken from the fine sweep only (stage 2 is
+    evaluated only inside the margined coarse window - section 3.9)."""
+    fine_by_id = {id(r["event"]): r for r in results_fine}
+    out = []
+    for r in results_coarse:
+        f = fine_by_id[id(r["event"])]
+        by_key = {}
+        order = []
+        for key, iv in [(k, v) for k, v in r["tuples"] if k[0] == 1] + f["tuples"]:
+            if key not in by_key:
+                by_key[key] = []
+                order.append(key)
+            by_key[key].extend(iv)
+        tuples = [(key, merge_intervals(by_key[key])) for key in order]
+        hits = [h for h in r["hits"] if h["stage"] == 1] + f["hits"]
+        out.append({
+            "event": r["event"],
+            "tuples": tuples,
+            "c1": per_stage_union(tuples, 1),
+            "c2": per_stage_union(tuples, 2),
+            "hits": hits,
+            "near_misses": r["near_misses"] + f["near_misses"],
+        })
+    return out
+
+
 def _parameters_used(cfg):
     return {
         "step_seconds": cfg.STEP_SECONDS,
+        "coarse_pass_prefilter": getattr(cfg, "COARSE_PASS_PREFILTER", False),
+        "coarse_step_seconds": getattr(cfg, "COARSE_STEP_SECONDS", None),
         "aspect_classes": sorted(cfg.ASPECT_CLASSES),
         "orb_fast_slow_deg": cfg.ORB_FAST_SLOW_DEG,
         "orb_moon_conj_opp_deg": cfg.ORB_MOON_CONJ_OPP_DEG,
@@ -840,7 +885,8 @@ def narrow_birth_time_window(dt_radix_start, dt_radix_end, dt_actual_dob,
             "fine": {"consensus": "none", "window_jd": None, "corroboration": 0,
                      "margined_coarse_window_jd": (jd_start, jd_end),
                      "margin_minutes": cfg.SAFETY_MARGIN_MINUTES,
-                     "subset_members": [], "dropped_events": []},
+                     "subset_members": [], "dropped_events": [],
+                     "fine_outside_coarse_count": 0},
             "final_window_pre_margin_jd": (jd_start, jd_end),
             "final_window_jd": (jd_start, jd_end),
             "tier": "none",
@@ -866,15 +912,43 @@ def _narrow_birth_time_window_impl(dt_radix_start, dt_radix_end, dt_actual_dob,
                                    jd_start, jd_end):
     """The non-fail-open body of narrow_birth_time_window (the wrapper
     catches internal errors per manual Step 6 item 4)."""
-    points = list(sweep_jds(dt_radix_start, dt_radix_end, cfg.STEP_SECONDS))
-    if len(points) < 2:
-        raise ValueError("window is too short for the configured STEP_SECONDS")
-    step_seconds = (points[1] - points[0]) * 86400.0
-
-    results = collect_event_hits(points, events, geopos_natal,
-                                 step_seconds=step_seconds, compendium=compendium)
-    if cfg.MAX_ASPECTS_PER_EVENT == "1":
-        results = [_restrict_to_single_aspect(r) for r in results]
+    if getattr(cfg, "COARSE_PASS_PREFILTER", False):
+        points = list(sweep_jds(dt_radix_start, dt_radix_end, cfg.COARSE_STEP_SECONDS))
+        if len(points) < 2:
+            raise ValueError("window is too short for COARSE_STEP_SECONDS")
+        step_seconds = (points[1] - points[0]) * 86400.0
+        results_coarse = collect_event_hits(points, events, geopos_natal,
+                                            step_seconds=step_seconds,
+                                            compendium=compendium, cfg=cfg)
+        if cfg.MAX_ASPECTS_PER_EVENT == "1":
+            results_coarse = [_restrict_to_single_aspect(r) for r in results_coarse]
+        pre_coarse = coarse_pass(results_coarse, jd_start, jd_end, cfg)
+        margined = _apply_margin(pre_coarse["window_jd"], cfg.SAFETY_MARGIN_MINUTES,
+                                 jd_start, jd_end)
+        spans_full = (margined[0] <= jd_start and margined[1] >= jd_end)
+        if spans_full:
+            results = results_coarse
+        else:
+            points = list(sweep_jds(julian.from_jd(margined[0]), julian.from_jd(margined[1]),
+                                    cfg.STEP_SECONDS))
+            if len(points) < 2:
+                raise ValueError("margined coarse window is too short for STEP_SECONDS")
+            step_seconds = (points[1] - points[0]) * 86400.0
+            results_fine = collect_event_hits(points, events, geopos_natal,
+                                              step_seconds=step_seconds,
+                                              compendium=compendium, cfg=cfg)
+            if cfg.MAX_ASPECTS_PER_EVENT == "1":
+                results_fine = [_restrict_to_single_aspect(r) for r in results_fine]
+            results = _merge_sweep_results(results_coarse, results_fine)
+    else:
+        points = list(sweep_jds(dt_radix_start, dt_radix_end, cfg.STEP_SECONDS))
+        if len(points) < 2:
+            raise ValueError("window is too short for the configured STEP_SECONDS")
+        step_seconds = (points[1] - points[0]) * 86400.0
+        results = collect_event_hits(points, events, geopos_natal,
+                                     step_seconds=step_seconds, compendium=compendium, cfg=cfg)
+        if cfg.MAX_ASPECTS_PER_EVENT == "1":
+            results = [_restrict_to_single_aspect(r) for r in results]
 
     coarse = coarse_pass(results, jd_start, jd_end, cfg)
     margined_coarse = _apply_margin(coarse["window_jd"], cfg.SAFETY_MARGIN_MINUTES,
@@ -894,13 +968,14 @@ def _narrow_birth_time_window_impl(dt_radix_start, dt_radix_end, dt_actual_dob,
         "event": r["event"],
         "c1": r["c1"],
         "c2": r["c2"],
-        "hits": _hit_context(compendium, r),
+        "hits": _hit_context(compendium, r, cfg),
         "near_misses": [dict(m, event=r["event"]) for m in r["near_misses"]],
     } for r in results]
 
     ledger = [m for r in results for m in
               [dict(m, event=r["event"]) for m in r["near_misses"]]]
-    ledger.extend(fine["fine_outside_coarse"])
+    ledger.extend({"kind": "fine_outside_coarse", "event": entry["event"],
+                   "hit": entry["hit"]} for entry in fine["fine_outside_coarse"])
 
     return {
         "dt_radix_start": dt_radix_start,
@@ -924,6 +999,7 @@ def _narrow_birth_time_window_impl(dt_radix_start, dt_radix_end, dt_actual_dob,
             "margin_minutes": fine["margin_minutes"],
             "subset_members": fine["subset_members"],
             "dropped_events": fine["dropped_events"],
+            "fine_outside_coarse_count": len(fine["fine_outside_coarse"]),
         },
         "final_window_pre_margin_jd": final_pre,
         "final_window_jd": final_jd,
