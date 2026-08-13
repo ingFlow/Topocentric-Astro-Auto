@@ -15,7 +15,7 @@ Run from the repository root. All test commands use:
 
 The full suite must pass at the end of every step (baseline at the start of
 implementation: 152 passed; Step 1 raised it to 164; Step 2 to 185; Step 3 to
-206).
+206; Step 4 to 229; Step 5 to 239; Step 6 to 254; Step 7 to 255).
 
 ---
 
@@ -311,7 +311,8 @@ cross-reference the spec from the module docstrings.
    architectural layer it belongs to (and where relocated things came
    from).
 2. The pipeline module docstring references the spec's section 9
-   future-research register.
+   future-research register, documents the single-event consensus
+   contract resolution, and states the coarse-pass behavior.
 3. `docs/CHANGELOG.md` has an entry for every step (1-8).
 4. Full suite green.
 
@@ -320,7 +321,7 @@ cross-reference the spec from the module docstrings.
 ## Final acceptance
 
 1. `$env:PYTHONPATH = "<repo>\src"; python -m pytest tests/ -q` - all
-   pass (206 + tests added by steps 4-8).
+   pass (255: 152 baseline + 103 added across steps 1-7).
 2. `docs/CHANGELOG.md` contains an entry for every step.
 3. `compendium_reference/juan_combos_pairs_v1.json` is signed off
    (`_meta.reviewed_by` / `_meta.reviewed_on` set).

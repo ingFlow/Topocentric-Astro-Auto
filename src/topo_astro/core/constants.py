@@ -10,7 +10,9 @@ Responsibilities:
       one and only technique-type enum that should ever be defined).
     - Radix-position calculation helpers used by every technique class:
       calc_planets_labelled, calc_planets_pof_houses_labelled,
-      calc_planets_houses_labelled.
+      calc_planets_houses_labelled. calc_planets_labelled_speeds (added
+      for the PSSR window-narrowing feature, spec section 5.4) computes
+      per-planet daily motion alongside the labelled positions.
     - The altitude/geocoding cache (get_altitude), backed by a local
       altitudes.json file with a live network fallback.
 

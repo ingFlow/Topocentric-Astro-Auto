@@ -13,6 +13,12 @@ positions are always the first planet set (P1) passed into these functions.
 Recent change (de-duplication phase): MAJOR_ASPECTS is now derived from
 ALL_ASPECTS (core/constants.py, already imported below) instead of being
 a separately hand-maintained duplicate of the same five entries.
+
+Recent change (PSSR window-narrowing feature, spec section 5.5): the
+previously-inline PSSR orb literals are named module constants here -
+PSSR_PLANET_ORB_DEG (12/60, the fast-to-slow orb) and PSSR_MOON_ORB_DEG
+(32/60, the Moon conj/opp orb) - so the batch/pssr_window_config module
+imports them complete-by-reference and the values cannot drift.
 """
 from enum import Enum
 from topo_astro.core.constants import ZODIAC_SIGNS, ALL_ASPECTS

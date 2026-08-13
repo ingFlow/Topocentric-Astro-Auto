@@ -15,6 +15,13 @@ via AspectType.FAST_TO_SLOW_COMBO) is unaffected by this - Phase 6 only
 touches aspect/info retrieval shape, not scoring, and PSSR's distinct
 scoring function was never part of the count_pd_score_acceptable_aspects
 group the other four uniform techniques share.
+
+Recent change (PSSR window-narrowing feature, spec section 5.3): PSSR_Auto
+gains a keyword-only return_speeds flag (default False) that additionally
+computes the per-point daily speeds of the four progressed position sets
+and exposes them in dict_info as parallel lists (prog_dir_speeds /
+reg_dir_speeds / prog_conv_speeds / reg_conv_speeds). Additive only - with
+the flag off, dict_info is byte-identical to the pre-change output.
 """
 import swisseph as swe
 import julian

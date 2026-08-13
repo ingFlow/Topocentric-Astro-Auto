@@ -11,12 +11,15 @@ pass / consensus / margin (section 3.8), the fine pass (section 3.9), the
 confidence tiers and the report (section 3.10), and the batch entry point
 narrow_birth_time_window (section 3.1).
 
-Phase note (Step 6): the pipeline is complete. The relevance gates are
-wired to the compendium lookups (sections 4.1/4.2) - the entry point loads
-a Compendium by default; passing compendium=None to the stage/evaluation
-functions keeps the gates OPEN (the Step-4 kinematics mode used by the
-isolated stage tests). See the spec's section 9 future-research register
-for what is deliberately outside this feature.
+Phase note (Steps 4-7 complete): the pipeline is implemented end to end.
+The relevance gates are wired to the compendium lookups (sections 4.1/4.2)
+- the entry point loads a Compendium by default; passing compendium=None
+to the stage/evaluation functions keeps the gates OPEN (the Step-4
+kinematics mode used by the isolated stage tests). The section-3.2
+coarse-pass prefilter is available via COARSE_PASS_PREFILTER (off by
+default; verified to reproduce the single fine sweep). See the spec's
+section 9 future-research register for what is deliberately outside this
+feature.
 
 Single-event consensus semantics (contract resolution): sections 3.8/3.9
 fail the coarse/fine consensus pass open to the full input window when

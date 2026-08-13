@@ -10,6 +10,43 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 8 - Docs and hygiene (2026-08-13)
+
+### Changes
+
+- `docs/MANUAL_VERIFY_PSSR.md`
+  - The prerequisites count line now tracks every step (152 -> 164 -> 185
+    -> 206 -> 229 -> 239 -> 254 -> 255).
+  - The Step 8 section states the pipeline module docstring requirements
+    (section-9 future-research register reference, single-event consensus
+    contract resolution, coarse-pass behavior).
+  - Final acceptance: suite count updated to 255 (152 baseline + 103
+    added across steps 1-7).
+- Docstring hygiene (each states responsibility + architectural layer per
+  the migration manual's section 3.3 standard, and cross-references the
+  spec):
+  - `src/topo_astro/core/constants.py` - responsibilities now mention
+    `calc_planets_labelled_speeds` (spec section 5.4).
+  - `src/topo_astro/core/aspects.py` - notes the `PSSR_PLANET_ORB_DEG` /
+    `PSSR_MOON_ORB_DEG` named constants extracted from
+    `find_pssr_swiss_aspects` (spec section 5.5).
+  - `src/topo_astro/techniques/pssr.py` - notes the additive
+    `return_speeds` flag (spec section 5.3).
+  - `src/topo_astro/batch/pssr_window.py` - phase note updated to Steps
+    4-7 complete (coarse-pass prefilter available via
+    `COARSE_PASS_PREFILTER`; section-9 register referenced).
+  - `significators/compendium.py` docstring already met the standard
+    (verified, no change).
+- `docs/CHANGELOG.md` - restored the missing `## Step 1` and `## Step 3`
+  top-level headers (the content was present but headerless) and added
+  this Step 8 entry, so the changelog has an entry for every step 1-8.
+
+### Verified
+
+- Full suite: 255 passed.
+
+---
+
 ## Step 7 - End-to-end and calibration (2026-08-13)
 
 ### Changes
@@ -351,6 +388,8 @@ events-with-data:
 
 ---
 
+## Step 3 - Plumbing: speeds, orb extraction, and the config module (2026-08-13)
+
 ### Changed (extraction refactors, behavior-preserving)
 
 - `src/topo_astro/core/constants.py` - new `calc_planets_labelled_speeds(jd, label)`
@@ -413,6 +452,8 @@ events-with-data:
 - Full suite: 206 passed (185 from Step 2 + 21 new).
 
 ---
+
+## Step 1 - Data build: the pairwise table (2026-08-13)
 
 ### New files
 
