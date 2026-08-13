@@ -1,0 +1,2874 @@
+Juan Combos pairwise table - human review copy
+===============================================
+Review every assignment below, especially every 'excluded' and
+'weak' tier. Sign off in juan_combos_pairs_v1.json's _meta
+(reviewed_by / reviewed_on) once satisfied.
+
+== Birth of Brother  (n=45) ==
+  ASC:JUPITER -> weak
+      To a lesser extent, it appears in births of siblings (gender_unspecified).
+  ASC:MERCURY -> strong
+      Frequent to find births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:NODE_ANY -> strong
+      We often find the birth of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:SUN -> strong
+      Can expect births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> strong
+      We find the birth of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of siblings (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of siblings (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of siblings (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of siblings (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of siblings (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of siblings (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of siblings (gender_unspecified) can occur.
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of siblings (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of siblings (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of siblings (gender_unspecified).
+  MARS:SUN -> weak
+      Occasionally, it also appears in the birth of siblings (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of siblings (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:SUN -> strong
+      We find birth of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of siblings (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of siblings (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of siblings (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of siblings (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of siblings (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of siblings (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of siblings (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of siblings (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of siblings (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of siblings (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of siblings (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of siblings (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of siblings (gender_unspecified).
+  PLUTO:VENUS -> weak
+      Births of siblings (gender_unspecified) are possible as well.
+  POF:URANUS -> strong
+      On a personal level, births of siblings (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of siblings (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of siblings (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+
+== Birth of Sister  (n=45) ==
+  ASC:JUPITER -> weak
+      To a lesser extent, it appears in births of siblings (gender_unspecified).
+  ASC:MERCURY -> strong
+      Frequent to find births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:NODE_ANY -> strong
+      We often find the birth of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:SUN -> strong
+      Can expect births of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> strong
+      We find the birth of siblings (gender_unspecified) (in conjunctions and harmonic aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of siblings (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of siblings (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of siblings (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of siblings (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of siblings (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of siblings (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of siblings (gender_unspecified) can occur.
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of siblings (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of siblings (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of siblings (gender_unspecified).
+  MARS:SUN -> weak
+      Occasionally, it also appears in the birth of siblings (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of siblings (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:SUN -> strong
+      We find birth of siblings (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of siblings (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of siblings (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of siblings (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of siblings (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of siblings (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of siblings (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of siblings (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of siblings (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of siblings (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of siblings (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of siblings (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of siblings (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of siblings (gender_unspecified).
+  PLUTO:VENUS -> weak
+      Births of siblings (gender_unspecified) are possible as well.
+  POF:URANUS -> strong
+      On a personal level, births of siblings (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of siblings (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of siblings (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of siblings (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of siblings (gender_unspecified).
+
+== Birth of Son  (n=60) ==
+  ASC:JUPITER -> strong
+      It is very common in the birth of children (gender_unspecified).
+  ASC:MARS -> excluded
+      The only positive events that appear with this combination are the birth of children (gender_unspecified).
+  ASC:MERCURY -> strong
+      Frequent to find births of children (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of children (gender_unspecified) (in conjunctions and harmonic aspects). The opposition can also indicate births.
+  ASC:NODE_ANY -> strong
+      We often find the birth of children (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      In some harmonic aspects and occasionally in the opposition, it indicates the birth of children (gender_unspecified).
+  ASC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: births (gender_unspecified).
+  ASC:SUN -> strong
+      Can expect births of children (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      We find the birth of children (gender_unspecified) (in conjunctions and harmonic aspects). Occasionally, the opposition can generate births of children.
+  ASC:VENUS -> strong
+      Find the births of children (gender_unspecified) (in all possible aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of children (gender_unspecified). As an example: Mars 180° Jupiter: birth of son (George V).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of children (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of children (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of children (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of children (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of children (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of children (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of children (gender_unspecified).
+  JUPITER:URANUS -> weak
+      To a lesser extent, this direction signals births of children (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of children (gender_unspecified) can occur.
+  MARS:MC -> excluded
+      The only positive events that appear with this combination are births of children (gender_unspecified).
+  MARS:MERCURY -> excluded
+      The only positive events that sometimes appear with this combination, particularly in conjunctions and in harmonic aspects, are the birth of children (gender_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of children (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of children (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of children (gender_unspecified).
+  MARS:SUN -> excluded
+      The only positive events observed with this combination, especially in conjunctions and harmonic aspects, are the birth of children (gender_unspecified).
+  MARS:VENUS -> weak
+      We also find to a lesser extent the birth of children (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of children (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of children (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      The birth of children (gender_unspecified).
+  MC:POF -> strong
+      Positive events are more frequent: births (gender_unspecified).
+  MC:SUN -> strong
+      We find birth of children (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of children (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of children (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of children (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of children (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of children (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of children (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of children (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of children (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of children (gender_unspecified).
+  MOON:POF -> strong
+      Positive events are more frequent: births (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of children (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of children (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of children (gender_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as births of children (gender_unspecified).
+  PLUTO:SUN -> excluded
+      Occasionally, the only positive event that appears with this combination, especially in conjunctions and harmonic aspects, is the birth of children (gender_unspecified).
+  PLUTO:URANUS -> weak
+      Perhaps, it sometimes signals a birth (general_birth_reference).
+  PLUTO:VENUS -> weak
+      Births of children (gender_unspecified) are possible as well.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: births (gender_unspecified).
+  POF:URANUS -> strong
+      On a personal level, births of children (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of children (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of children (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of children (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+
+== Birth of Daughter  (n=60) ==
+  ASC:JUPITER -> strong
+      It is very common in the birth of children (gender_unspecified).
+  ASC:MARS -> excluded
+      The only positive events that appear with this combination are the birth of children (gender_unspecified).
+  ASC:MERCURY -> strong
+      Frequent to find births of children (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of children (gender_unspecified) (in conjunctions and harmonic aspects). The opposition can also indicate births.
+  ASC:NODE_ANY -> strong
+      We often find the birth of children (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      In some harmonic aspects and occasionally in the opposition, it indicates the birth of children (gender_unspecified).
+  ASC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: births (gender_unspecified).
+  ASC:SUN -> strong
+      Can expect births of children (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      We find the birth of children (gender_unspecified) (in conjunctions and harmonic aspects). Occasionally, the opposition can generate births of children.
+  ASC:VENUS -> strong
+      Find the births of children (gender_unspecified) (in all possible aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of children (gender_unspecified).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of children (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of children (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of children (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of children (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of children (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of children (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of children (gender_unspecified).
+  JUPITER:URANUS -> weak
+      To a lesser extent, this direction signals births of children (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of children (gender_unspecified) can occur.
+  MARS:MC -> excluded
+      The only positive events that appear with this combination are births of children (gender_unspecified).
+  MARS:MERCURY -> excluded
+      The only positive events that sometimes appear with this combination, particularly in conjunctions and in harmonic aspects, are the birth of children (gender_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of children (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of children (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of children (gender_unspecified).
+  MARS:SUN -> excluded
+      The only positive events observed with this combination, especially in conjunctions and harmonic aspects, are the birth of children (gender_unspecified).
+  MARS:VENUS -> weak
+      We also find to a lesser extent the birth of children (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of children (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of children (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      The birth of children (gender_unspecified).
+  MC:POF -> strong
+      Positive events are more frequent: births (gender_unspecified).
+  MC:SUN -> strong
+      We find birth of children (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of children (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of children (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of children (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of children (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of children (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of children (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of children (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of children (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of children (gender_unspecified).
+  MOON:POF -> strong
+      Positive events are more frequent: births (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of children (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of children (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of children (gender_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as births of children (gender_unspecified).
+  PLUTO:SUN -> excluded
+      Occasionally, the only positive event that appears with this combination, especially in conjunctions and harmonic aspects, is the birth of children (gender_unspecified).
+  PLUTO:URANUS -> weak
+      Perhaps, it sometimes signals a birth (general_birth_reference).
+  PLUTO:VENUS -> weak
+      Births of children (gender_unspecified) are possible as well.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: births (gender_unspecified).
+  POF:URANUS -> strong
+      On a personal level, births of children (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of children (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of children (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of children (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of children (gender_unspecified).
+
+== Birth of Grandson  (n=52) ==
+  ASC:JUPITER -> strong
+      It is very common in the birth of grandchildren (gender_unspecified).
+  ASC:MARS -> excluded
+      The birth of grandchildren (gender_unspecified) is one of the only positive events that appear.
+  ASC:MERCURY -> strong
+      Frequent to find births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:NODE_ANY -> strong
+      We often find the birth of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      In some harmonic aspects and occasionally in the opposition, it indicates the birth of grandchildren (gender_unspecified).
+  ASC:SUN -> strong
+      Can expect births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      We find the birth of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects). Occasionally, the opposition can generate births of grandchildren.
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified). As an example: Mars 120° Jupiter: birth of grandson (G. Bush Sr.).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of grandchildren (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of grandchildren (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of grandchildren (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of grandchildren (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of grandchildren (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of grandchildren (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of grandchildren (gender_unspecified) can occur.
+  MARS:MC -> excluded
+      The only positive events that appear with this combination are births of grandchildren (gender_unspecified).
+  MARS:MERCURY -> excluded
+      The only positive events that sometimes appear with this combination, particularly in conjunctions and in harmonic aspects, are the birth of grandchildren (gender_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of grandchildren (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of grandchildren (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of grandchildren (gender_unspecified).
+  MARS:SUN -> excluded
+      The only positive events observed with this combination, especially in conjunctions and harmonic aspects, are the birth of grandchildren (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of grandchildren (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      The birth of grandchildren (gender_unspecified).
+  MC:SUN -> strong
+      We find birth of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of grandchildren (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of grandchildren (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of grandchildren (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of grandchildren (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of grandchildren (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of grandchildren (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of grandchildren (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of grandchildren (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of grandchildren (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of grandchildren (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of grandchildren (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of grandchildren (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of grandchildren (gender_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as births of grandchildren (gender_unspecified).
+  PLUTO:SUN -> excluded
+      Occasionally, the only positive event that appears with this combination, especially in conjunctions and harmonic aspects, is the birth of grandchildren (gender_unspecified).
+  PLUTO:VENUS -> weak
+      Births of grandchildren (gender_unspecified) are possible as well.
+  POF:URANUS -> strong
+      On a personal level, births of grandchildren (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of grandchildren (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of grandchildren (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+
+== Birth of Granddaughter  (n=52) ==
+  ASC:JUPITER -> strong
+      It is very common in the birth of grandchildren (gender_unspecified).
+  ASC:MARS -> excluded
+      The birth of grandchildren (gender_unspecified) is one of the only positive events that appear.
+  ASC:MERCURY -> strong
+      Frequent to find births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:MOON -> strong
+      Frequent to find births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:NODE_ANY -> strong
+      We often find the birth of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      In some harmonic aspects and occasionally in the opposition, it indicates the birth of grandchildren (gender_unspecified).
+  ASC:SUN -> strong
+      Can expect births of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      We find the birth of grandchildren (gender_unspecified) (in conjunctions and harmonic aspects). Occasionally, the opposition can generate births of grandchildren.
+  JUPITER:MARS -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified).
+  JUPITER:MC -> strong
+      It is a very frequent direction in the birth of grandchildren (gender_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe the birth of grandchildren (gender_unspecified).
+  JUPITER:MOON -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find births of grandchildren (gender_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find births of grandchildren (gender_unspecified).
+  JUPITER:POF -> strong
+      Births of grandchildren (gender_unspecified) are common.
+  JUPITER:SUN -> strong
+      On a personal level, we observe the birth of grandchildren (gender_unspecified).
+  JUPITER:VENUS -> weak
+      Also births of grandchildren (gender_unspecified) can occur.
+  MARS:MC -> excluded
+      The only positive events that appear with this combination are births of grandchildren (gender_unspecified).
+  MARS:MERCURY -> excluded
+      The only positive events that sometimes appear with this combination, particularly in conjunctions and in harmonic aspects, are the birth of grandchildren (gender_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the birth of grandchildren (gender_unspecified).
+  MARS:PLUTO -> excluded
+      The only occasional exception is the birth of grandchildren (gender_unspecified).
+  MARS:POF -> excluded
+      The only positive event that one can expect is the birth of grandchildren (gender_unspecified).
+  MARS:SUN -> excluded
+      The only positive events observed with this combination, especially in conjunctions and harmonic aspects, are the birth of grandchildren (gender_unspecified).
+  MC:MERCURY -> strong
+      We find births of grandchildren (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find births of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      The birth of grandchildren (gender_unspecified).
+  MC:SUN -> strong
+      We find birth of grandchildren (gender_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find the birth of grandchildren (gender_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find births of grandchildren (gender_unspecified).
+  MERCURY:MOON -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find births of grandchildren (gender_unspecified).
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe births of grandchildren (gender_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find births of grandchildren (gender_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across the birth of grandchildren (gender_unspecified).
+  MERCURY:URANUS -> strong
+      On a personal level, the birth of grandchildren (gender_unspecified) are frequent.
+  MERCURY:VENUS -> strong
+      The birth of grandchildren (gender_unspecified) is frequent.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find the birth of grandchildren (gender_unspecified).
+  MOON:PLUTO -> strong
+      We also find births of grandchildren (gender_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find the birth of grandchildren (gender_unspecified).
+  MOON:URANUS -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+  MOON:VENUS -> strong
+      The birth of grandchildren (gender_unspecified) is frequent.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths are frequent (general_birth_reference).
+  NODE_ANY:POF -> weak
+      On a personal level, we may find a birth in the family (general_birth_reference).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find the birth of grandchildren (gender_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as births of grandchildren (gender_unspecified).
+  PLUTO:SUN -> excluded
+      Occasionally, the only positive event that appears with this combination, especially in conjunctions and harmonic aspects, is the birth of grandchildren (gender_unspecified).
+  PLUTO:VENUS -> weak
+      Births of grandchildren (gender_unspecified) are possible as well.
+  POF:URANUS -> strong
+      On a personal level, births of grandchildren (gender_unspecified) are common.
+  POF:VENUS -> strong
+      On a personal level, we observe births of grandchildren (gender_unspecified).
+  SUN:URANUS -> strong
+      On a personal level, we come across births of grandchildren (gender_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe the birth of grandchildren (gender_unspecified).
+  URANUS:VENUS -> strong
+      On a personal level, we often find the birth of grandchildren (gender_unspecified).
+
+== Marriage for Male  (n=45) ==
+  ASC:JUPITER -> strong
+      Appears in weddings of the individual (sex_unspecified).
+  ASC:MOON -> strong
+      We find weddings (sex_unspecified) (in conjunctions and harmonic aspects). The opposition can also indicate weddings.
+  ASC:NODE_ANY -> strong
+      We often find positive events such as weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      Less frequently, marriage engagements (sex_unspecified) can occur.
+  ASC:SUN -> strong
+      Positive events, such as weddings (sex_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      Occasionally, the opposition can generate weddings (sex_unspecified).
+  ASC:VENUS -> strong
+      We find positive events, especially: weddings (sex_unspecified) (in all of the possible aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across some weddings or marriage engagements (sex_unspecified). As an example: Jupiter 60° Mars: marriage engagement (George W. Bush).
+  JUPITER:MC -> weak
+      To a lesser extent, it appears in weddings of the individual (sex_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe weddings and marriage engagements (sex_unspecified).
+  JUPITER:MOON -> weak
+      Occasionally the wedding of the individual (sex_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find the wedding of the individual or of their relatives (sex_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find the wedding of the individual or of their relatives (sex_unspecified).
+  JUPITER:SUN -> strong
+      On a personal level, we observe weddings (of the individual) (sex_unspecified).
+  JUPITER:URANUS -> strong
+      On a personal level, we come across many trips and some weddings, either of the individual or of their relatives (sex_unspecified).
+  JUPITER:VENUS -> strong
+      On a personal level, this direction seems to be more active. We find weddings (of the individual or of their relatives), marriage engagements (sex_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the wedding of the individual or of a family member (sex_unspecified).
+  MARS:VENUS -> strong
+      On a personal level, the most common types of events are weddings and marriage engagements (of the individual or of their relatives) (sex_unspecified).
+  MC:MERCURY -> strong
+      We find weddings (of the individual) (sex_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      We often find positive events: positive personal happenings, such as weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  MC:PLUTO -> weak
+      Occasionally, in the conjunction and harmonic aspects, we find this direction in some weddings (sex_unspecified).
+  MC:POF -> strong
+      Positive events are more frequent: weddings (sex_unspecified) (in conjunctions and in some oppositions).
+  MC:SUN -> strong
+      We find some weddings or marriage engagements (sex_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find some weddings (of the individual) (sex_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find some weddings and marriage engagements (sex_unspecified).
+  MERCURY:MOON -> weak
+      To a lesser extent the wedding of the individual (sex_unspecified).
+  MERCURY:NODE_ANY -> weak
+      To a lesser extent some marriage engagements (sex_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find weddings, marriage engagements (sex_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across weddings (of the individual) (sex_unspecified).
+  MERCURY:VENUS -> strong
+      On a personal level, weddings, marriage engagements are frequent (sex_unspecified).
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find weddings (of the individual) (sex_unspecified).
+  MOON:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: weddings (sex_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find weddings (of the individual) (sex_unspecified).
+  MOON:URANUS -> weak
+      To a lesser extent the wedding of the individual (sex_unspecified).
+  MOON:VENUS -> strong
+      On a personal level, the wedding of the individual or of their relatives is frequent (sex_unspecified).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find weddings (of the individual) (sex_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as weddings (sex_unspecified).
+  NODE_ANY:VENUS -> strong
+      On a personal level, we find weddings (of the individual) (sex_unspecified).
+  PLUTO:VENUS -> strong
+      On a personal level, we come across weddings (of the individual or of their relatives) (sex_unspecified).
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: weddings (sex_unspecified).
+  POF:VENUS -> strong
+      On a personal level, we observe weddings, marriage engagements (sex_unspecified).
+  SUN:URANUS -> strong
+      At times, it appears in weddings (sex_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe weddings (of the individual) (sex_unspecified).
+  URANUS:VENUS -> weak
+      To a lesser extent, weddings (of the individual) (sex_unspecified) are observed.
+
+== Marriage for Female  (n=45) ==
+  ASC:JUPITER -> strong
+      Appears in weddings of the individual (sex_unspecified).
+  ASC:MOON -> strong
+      We find weddings (sex_unspecified) (in conjunctions and harmonic aspects). The opposition can also indicate weddings.
+  ASC:NODE_ANY -> strong
+      We often find positive events such as weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  ASC:PLUTO -> weak
+      Less frequently, marriage engagements (sex_unspecified) can occur.
+  ASC:SUN -> strong
+      Positive events, such as weddings (sex_unspecified) (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      Occasionally, the opposition can generate weddings (sex_unspecified).
+  ASC:VENUS -> strong
+      We find positive events, especially: weddings (sex_unspecified) (in all of the possible aspects).
+  JUPITER:MARS -> strong
+      On a personal level, we come across some weddings or marriage engagements (sex_unspecified).
+  JUPITER:MC -> weak
+      To a lesser extent, it appears in weddings of the individual (sex_unspecified).
+  JUPITER:MERCURY -> strong
+      We also observe weddings and marriage engagements (sex_unspecified).
+  JUPITER:MOON -> weak
+      Occasionally the wedding of the individual (sex_unspecified).
+  JUPITER:NODE_ANY -> strong
+      On a personal level, we find the wedding of the individual or of their relatives (sex_unspecified).
+  JUPITER:PLUTO -> strong
+      On a personal level, we find the wedding of the individual or of their relatives (sex_unspecified).
+  JUPITER:SUN -> strong
+      On a personal level, we observe weddings (of the individual) (sex_unspecified).
+  JUPITER:URANUS -> strong
+      On a personal level, we come across many trips and some weddings, either of the individual or of their relatives (sex_unspecified).
+  JUPITER:VENUS -> strong
+      On a personal level, this direction seems to be more active. We find weddings (of the individual or of their relatives), marriage engagements (sex_unspecified).
+  MARS:NODE_ANY -> excluded
+      The only exception is the wedding of the individual or of a family member (sex_unspecified).
+  MARS:VENUS -> strong
+      On a personal level, the most common types of events are weddings and marriage engagements (of the individual or of their relatives) (sex_unspecified).
+  MC:MERCURY -> strong
+      We find weddings (of the individual) (sex_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      We often find positive events: positive personal happenings, such as weddings (of the individual) (sex_unspecified) (in conjunctions, in harmonic aspects and even in some oppositions).
+  MC:PLUTO -> weak
+      Occasionally, in the conjunction and harmonic aspects, we find this direction in some weddings (sex_unspecified).
+  MC:POF -> strong
+      Positive events are more frequent: weddings (sex_unspecified) (in conjunctions and in some oppositions).
+  MC:SUN -> strong
+      We find some weddings or marriage engagements (sex_unspecified) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:URANUS -> strong
+      We find some weddings (of the individual) (sex_unspecified) (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find some weddings and marriage engagements (sex_unspecified).
+  MERCURY:MOON -> weak
+      To a lesser extent the wedding of the individual (sex_unspecified).
+  MERCURY:NODE_ANY -> weak
+      To a lesser extent some marriage engagements (sex_unspecified).
+  MERCURY:POF -> strong
+      On a personal level, we often find weddings, marriage engagements (sex_unspecified).
+  MERCURY:SUN -> strong
+      On a personal level, we come across weddings (of the individual) (sex_unspecified).
+  MERCURY:VENUS -> strong
+      On a personal level, weddings, marriage engagements are frequent (sex_unspecified).
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find weddings (of the individual) (sex_unspecified).
+  MOON:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: weddings (sex_unspecified).
+  MOON:SUN -> strong
+      On a personal level, we find weddings (of the individual) (sex_unspecified).
+  MOON:URANUS -> weak
+      To a lesser extent the wedding of the individual (sex_unspecified).
+  MOON:VENUS -> strong
+      On a personal level, the wedding of the individual or of their relatives is frequent (sex_unspecified).
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find weddings (of the individual) (sex_unspecified).
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as weddings (sex_unspecified).
+  NODE_ANY:VENUS -> strong
+      On a personal level, we find weddings (of the individual) (sex_unspecified).
+  PLUTO:VENUS -> strong
+      On a personal level, we come across weddings (of the individual or of their relatives) (sex_unspecified).
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: weddings (sex_unspecified).
+  POF:VENUS -> strong
+      On a personal level, we observe weddings, marriage engagements (sex_unspecified).
+  SUN:URANUS -> strong
+      At times, it appears in weddings (sex_unspecified).
+  SUN:VENUS -> strong
+      On a personal level, we observe weddings (of the individual) (sex_unspecified).
+  URANUS:VENUS -> weak
+      To a lesser extent, weddings (of the individual) (sex_unspecified) are observed.
+
+== Child’s Marriage  (n=18) ==
+  ASC:JUPITER -> weak
+      To a lesser extent, it appears in weddings of their children.
+  ASC:NODE_ANY -> strong
+      We often find positive events such as weddings (of their children) (in conjunctions, in harmonic aspects and even in some oppositions).
+  JUPITER:MC -> weak
+      To a lesser extent, it appears in weddings of their children.
+  JUPITER:MOON -> weak
+      Occasionally the wedding of their children.
+  JUPITER:SUN -> strong
+      On a personal level, we observe weddings (of their children).
+  MC:MERCURY -> strong
+      We find weddings (of their children) (in conjunctions, harmonic aspects and oppositions).
+  MC:MOON -> strong
+      We find weddings (of their children) (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NODE_ANY -> strong
+      We often find positive events: positive personal happenings, such as weddings (of their children) (in conjunctions, in harmonic aspects and even in some oppositions).
+  MC:URANUS -> strong
+      We find some weddings (of their children) (in conjunctions, harmonic aspects and oppositions).
+  MERCURY:MOON -> weak
+      To a lesser extent the wedding of their children.
+  MERCURY:SUN -> strong
+      On a personal level, we come across weddings (of their children).
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find weddings (of their children).
+  MOON:SUN -> strong
+      On a personal level, we find weddings (of their children).
+  MOON:URANUS -> weak
+      To a lesser extent the wedding of their children.
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find weddings (of their children).
+  NODE_ANY:VENUS -> strong
+      On a personal level, we find weddings (of their children).
+  SUN:VENUS -> strong
+      On a personal level, we observe weddings (of their children).
+  URANUS:VENUS -> weak
+      To a lesser extent, weddings (of their children) are observed.
+
+== Positive Travel  (n=46) ==
+  ASC:JUPITER -> strong
+      It is very common in trips.
+  ASC:MERCURY -> strong
+      Trips are also common.
+  ASC:MOON -> weak
+      Some trips can occur.
+  ASC:NODE_ANY -> strong
+      A lot of trips can materialize.
+  ASC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: trips.
+  ASC:URANUS -> strong
+      We find even some trips (in conjunctions and harmonic aspects).
+  ASC:VENUS -> strong
+      We find some trips.
+  JUPITER:MARS -> strong
+      On a personal level, we come across many trips. As an example: Mars 0° Jupiter: trip to the USSR (Che Guevara).
+  JUPITER:MC -> strong
+      It is a very frequent direction in trips.
+  JUPITER:MERCURY -> strong
+      With this direction, trips are frequent.
+  JUPITER:MOON -> strong
+      With this direction, trips are frequent.
+  JUPITER:NEPTUNE -> excluded
+      The only positive events that appear are some occasional trips.
+  JUPITER:NODE_ANY -> strong
+      Among other minor positive events, we also come across some trips.
+  JUPITER:PLUTO -> strong
+      Trips are also common.
+  JUPITER:POF -> strong
+      We also find some trips and other minor positive events.
+  JUPITER:SUN -> strong
+      Trips are also common.
+  JUPITER:URANUS -> strong
+      On a personal level, we come across many trips.
+  JUPITER:VENUS -> strong
+      This direction involves many trips.
+  MC:MERCURY -> strong
+      With these directions, trips are frequent.
+  MC:MOON -> strong
+      We find trips (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NEPTUNE -> strong
+      In harmonic aspects and in some conjunctions, trips, especially long distance, are frequent.
+  MC:NODE_ANY -> strong
+      It can also appear in some trips.
+  MC:SUN -> strong
+      Changes of address and trips are also observed.
+  MC:URANUS -> strong
+      We find trips (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong
+      We always find some trips.
+  MERCURY:MOON -> strong
+      With this direction, trips are common.
+  MERCURY:NEPTUNE -> excluded
+      The only positive events that sometimes appear with this combination, especially in harmonic aspects, are some trips.
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find many trips.
+  MERCURY:PLUTO -> strong
+      On the personal level, we observe some trips.
+  MERCURY:POF -> strong
+      This direction can also involve some trips.
+  MERCURY:SUN -> strong
+      With this direction, trips are frequent.
+  MERCURY:URANUS -> strong
+      On a personal level, trips are frequent.
+  MERCURY:VENUS -> strong
+      With this direction, we observe some trips.
+  MOON:NODE_ANY -> strong
+      There are also occasional trips.
+  MOON:URANUS -> strong
+      With this direction, trips are frequent.
+  MOON:VENUS -> strong
+      With this direction, we come across some trips.
+  NODE_ANY:PLUTO -> strong
+      We also observe some trips.
+  NODE_ANY:POF -> strong
+      Trips are also found.
+  NODE_ANY:SUN -> strong
+      An occasional trip is also observed.
+  NODE_ANY:URANUS -> strong
+      On a personal level, we observe positive events such as trips.
+  NODE_ANY:VENUS -> strong
+      Also some trips.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: trips.
+  POF:URANUS -> strong
+      We also find some trips and other minor positive events.
+  POF:VENUS -> strong
+      This direction may involve some trips.
+  SUN:VENUS -> strong
+      Trips are also common.
+  URANUS:VENUS -> strong
+      Some trips are also observed.
+
+== Positive Travel Overseas  (n=2) ==
+  ASC:JUPITER -> strong  [inherited from Positive Travel]
+      It is very common in trips.
+  ASC:MERCURY -> strong  [inherited from Positive Travel]
+      Trips are also common.
+  ASC:MOON -> weak  [inherited from Positive Travel]
+      Some trips can occur.
+  ASC:NODE_ANY -> strong  [inherited from Positive Travel]
+      A lot of trips can materialize.
+  ASC:POF -> strong  [inherited from Positive Travel]
+      In conjunctions and in some oppositions, positive events are more frequent: trips.
+  ASC:URANUS -> strong  [inherited from Positive Travel]
+      We find even some trips (in conjunctions and harmonic aspects).
+  ASC:VENUS -> strong  [inherited from Positive Travel]
+      We find some trips.
+  JUPITER:MARS -> strong  [inherited from Positive Travel]
+      On a personal level, we come across many trips. As an example: Mars 0° Jupiter: trip to the USSR (Che Guevara).
+  JUPITER:MC -> strong  [inherited from Positive Travel]
+      It is a very frequent direction in trips.
+  JUPITER:MERCURY -> strong  [inherited from Positive Travel]
+      With this direction, trips are frequent.
+  JUPITER:MOON -> strong  [inherited from Positive Travel]
+      With this direction, trips are frequent.
+  JUPITER:NEPTUNE -> excluded  [inherited from Positive Travel]
+      The only positive events that appear are some occasional trips.
+  JUPITER:NODE_ANY -> strong  [inherited from Positive Travel]
+      Among other minor positive events, we also come across some trips.
+  JUPITER:PLUTO -> strong  [inherited from Positive Travel]
+      Trips are also common.
+  JUPITER:POF -> strong  [inherited from Positive Travel]
+      We also find some trips and other minor positive events.
+  JUPITER:SUN -> strong  [inherited from Positive Travel]
+      Trips are also common.
+  JUPITER:URANUS -> strong  [inherited from Positive Travel]
+      On a personal level, we come across many trips.
+  JUPITER:VENUS -> strong  [inherited from Positive Travel]
+      This direction involves many trips.
+  MC:MERCURY -> strong  [inherited from Positive Travel]
+      With these directions, trips are frequent.
+  MC:MOON -> strong  [inherited from Positive Travel]
+      We find trips (in conjunctions, in harmonic aspects and in oppositions).
+  MC:NEPTUNE -> strong  [inherited from Positive Travel]
+      In harmonic aspects and in some conjunctions, trips, especially long distance, are frequent.
+  MC:NODE_ANY -> strong  [inherited from Positive Travel]
+      It can also appear in some trips.
+  MC:SUN -> strong  [inherited from Positive Travel]
+      Changes of address and trips are also observed.
+  MC:URANUS -> strong  [inherited from Positive Travel]
+      We find trips (in conjunctions, harmonic aspects and oppositions).
+  MC:VENUS -> strong  [inherited from Positive Travel]
+      We always find some trips.
+  MERCURY:MOON -> strong  [inherited from Positive Travel]
+      With this direction, trips are common.
+  MERCURY:NEPTUNE -> excluded  [inherited from Positive Travel]
+      The only positive events that sometimes appear with this combination, especially in harmonic aspects, are some trips.
+  MERCURY:NODE_ANY -> strong  [inherited from Positive Travel]
+      Among the positive events, we find many trips.
+  MERCURY:PLUTO -> strong  [inherited from Positive Travel]
+      On the personal level, we observe some trips.
+  MERCURY:POF -> strong  [inherited from Positive Travel]
+      This direction can also involve some trips.
+  MERCURY:SUN -> strong  [inherited from Positive Travel]
+      With this direction, trips are frequent.
+  MERCURY:URANUS -> strong  [inherited from Positive Travel]
+      On a personal level, trips are frequent.
+  MERCURY:VENUS -> strong  [inherited from Positive Travel]
+      With this direction, we observe some trips.
+  MOON:NODE_ANY -> strong  [inherited from Positive Travel]
+      There are also occasional trips.
+  MOON:URANUS -> strong  [inherited from Positive Travel]
+      With this direction, trips are frequent.
+  MOON:VENUS -> strong  [inherited from Positive Travel]
+      With this direction, we come across some trips.
+  NEPTUNE:POF -> excluded
+      The only positive event I have seen with this direction is an overseas trip.
+  NEPTUNE:URANUS -> weak
+      It is very rare that this direction results in a positive event; I have only seen it for an overseas trip.
+  NODE_ANY:PLUTO -> strong  [inherited from Positive Travel]
+      We also observe some trips.
+  NODE_ANY:POF -> strong  [inherited from Positive Travel]
+      Trips are also found.
+  NODE_ANY:SUN -> strong  [inherited from Positive Travel]
+      An occasional trip is also observed.
+  NODE_ANY:URANUS -> strong  [inherited from Positive Travel]
+      On a personal level, we observe positive events such as trips.
+  NODE_ANY:VENUS -> strong  [inherited from Positive Travel]
+      Also some trips.
+  POF:SUN -> strong  [inherited from Positive Travel]
+      In conjunctions and in some oppositions, positive events are more frequent: trips.
+  POF:URANUS -> strong  [inherited from Positive Travel]
+      We also find some trips and other minor positive events.
+  POF:VENUS -> strong  [inherited from Positive Travel]
+      This direction may involve some trips.
+  SUN:VENUS -> strong  [inherited from Positive Travel]
+      Trips are also common.
+  URANUS:VENUS -> strong  [inherited from Positive Travel]
+      Some trips are also observed.
+
+== Success or Elected  (n=60) ==
+  ASC:JUPITER -> strong
+      We only find positive events, especially: professional successes, awards and all kinds of achievements.
+  ASC:MARS -> strong
+      Sporting achievements
+  ASC:MERCURY -> weak
+      Some professional successes or achievements can occur. (The opposition is not always negative, as it sometimes operates like a conjunction and harmonic aspects.)
+  ASC:MOON -> strong
+      All types of positive family events. At times, the square generates positive events. Occasional successes.
+  ASC:NODE_ANY -> weak
+      Some professional successes can happen.
+  ASC:PLUTO -> weak
+      Less frequently, other positive events such as jobs, occasional successes can occur.
+  ASC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: worldly successes.
+  ASC:SUN -> strong
+      Some politicians are elected and some kings accede to the throne with these directions. In some cases, we can expect other positive events, such as satisfactory sentimental relationships.
+  ASC:URANUS -> weak
+      In conjunctions and harmonic aspects, we find some professional successes, awards. Occasionally, the opposition can generate some professional successes.
+  ASC:VENUS -> strong
+      We find positive events, especially: sentimental relationships.
+  JUPITER:MARS -> strong
+      As an example: Jupiter 0° Mars: appointment as Prince of Wales (Prince Charles).
+  JUPITER:MC -> strong
+      In this direction, we find professional successes, prizes and achievements of all types.
+  JUPITER:MERCURY -> strong
+      It is a relatively common direction when a politician wins an election.
+  JUPITER:MOON -> strong
+      All kinds of favorable family events.
+  JUPITER:NODE_ANY -> strong
+      Among the positive events, this direction indicates professional successes of all types, promotions and awards.
+  JUPITER:PLUTO -> strong
+      On a professional level, we observe occasional successes or promotions, some distinctions and other positive events.
+  JUPITER:POF -> strong
+      On a professional level, successes and recognitions of all kinds are likely.
+  JUPITER:SATURN -> strong
+      On a professional level we find some positive events, such as promotions or responsibilities, and some other achievements.
+  JUPITER:SUN -> strong
+      On a professional level, we find successes, prizes, promotions or achievements of all kinds.
+  JUPITER:URANUS -> strong
+      On a professional level, this is a very positive direction and we always find successes, promotions and unexpected achievements. It commonly indicates prizes and awards of all kinds.
+  JUPITER:VENUS -> strong
+      On a professional level, some successes and recognitions are possible.
+  MARS:MC -> strong
+      A hard-fought victory for a politician.Sporting achievements.
+  MARS:SUN -> strong
+      Sporting achievements.
+  MARS:URANUS -> strong
+      Some occasional sporting achievements.
+  MARS:VENUS -> strong
+      On a professional level, successes are more frequent than failures.
+  MC:MERCURY -> strong
+      In conjunctions, harmonic aspects and oppositions, we find professional successes and promotions.
+  MC:MOON -> strong
+      In conjunctions, in harmonic aspects and in oppositions, we find professional successes and promotions.
+  MC:NODE_ANY -> strong
+      In conjunctions, in harmonic aspects and even in some oppositions, we often find positive events: professional successes.
+  MC:PLUTO -> weak
+      Occasionally, in the conjunction and harmonic aspects, we find this direction in a professional advancement or promotion.
+  MC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes, promotions or prizes.
+  MC:SUN -> strong
+      In conjunctions, in harmonic aspects and in oppositions, we find successes and professional promotions.
+  MC:URANUS -> strong
+      In conjunctions, harmonic aspects and oppositions, we find professional successes and promotions.
+  MC:VENUS -> strong
+      We always find positive events, especially: successes, prizes and professional recognitions.
+  MERCURY:MOON -> weak
+      On a professional level, promotions or successes can occur.
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find professional successes.
+  MERCURY:PLUTO -> strong
+      On a professional level, some promotions and occasional successes are found.
+  MERCURY:POF -> strong
+      Successes in studies or politics. This combination appears among positive events in general, both personal and professional.
+  MERCURY:SUN -> strong
+      On a professional level, we find promotions or successes.
+  MERCURY:URANUS -> strong
+      This combination is quite common in the case of politicians who are elected to office.
+  MERCURY:VENUS -> strong
+      On a personal level, romantic relationships are frequent. In addition, successes in studies and positive events in relation to children are possible.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find romantic relationships.
+  MOON:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes or promotions.
+  MOON:SUN -> strong
+      On a personal level, we find sentimental relationships.
+  MOON:URANUS -> strong
+      On a professional level, successes, promotions and achievements of all kinds are possible.
+  MOON:VENUS -> strong
+      On a professional level, we find successes, promotions and achievements of all kinds.
+  NEPTUNE:VENUS -> weak
+      Positive events we can expect are those related to art or similar subjects, but it is very rare that such a direction generates a favorable event.
+  NODE_ANY:PLUTO -> strong
+      On a professional level, we find all kinds of successes.
+  NODE_ANY:POF -> strong
+      On a professional level, both successes and failures can take place.
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find romantic relationships.
+  NODE_ANY:URANUS -> strong
+      On a professional level, we find both successes and defeats: from all kinds of achievements and benefits.
+  NODE_ANY:VENUS -> strong
+      On a personal level, we find sentimental relationships.
+  PLUTO:URANUS -> weak
+      Perhaps, it sometimes signals a personal advantage or a small professional achievement.
+  PLUTO:VENUS -> strong
+      On a professional level, we mostly find positive events, such as specific successes or promotions.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes or career promotions.
+  POF:URANUS -> strong
+      This is a clearly beneficial direction. On a professional level, successes, promotions and benefits of any type are possible.
+  POF:VENUS -> strong
+      On a professional level, we find successes and achievements of all kinds.
+  SUN:URANUS -> strong
+      On a professional level, we find successes, prizes or promotions.
+  SUN:VENUS -> strong
+      On a professional level, we find successes, prizes or promotions.
+  URANUS:VENUS -> strong
+      On a professional level, we come across successes, promotions, unexpected achievements and even prizes.
+
+== Graduation or Publication  (n=1) ==
+  JUPITER:URANUS -> strong
+      Minor positive events, such as graduations and others.
+
+== Move Home  (n=18) ==
+  JUPITER:MC -> weak
+      Occasionally, it indicates changes of address.
+  JUPITER:MERCURY -> strong
+      Changes of address are possible.
+  JUPITER:MOON -> strong
+      Changes of address can take place.
+  JUPITER:NODE_ANY -> strong
+      Changes of address.
+  MC:MERCURY -> weak
+      Occasional changes of address can occur.
+  MC:NODE_ANY -> strong
+      It can also appear in some changes of address.
+  MC:SUN -> strong
+      Changes of address are also observed.
+  MC:URANUS -> strong
+      We find changes of address (in conjunctions, harmonic aspects and oppositions).
+  MERCURY:MOON -> strong
+      Changes of address are found.
+  MERCURY:NEPTUNE -> strong
+      Changes of address, though they may be unfavorable.
+  MERCURY:PLUTO -> strong
+      Changes of address.
+  MERCURY:SUN -> weak
+      Occasional changes of address can occur.
+  MERCURY:VENUS -> strong
+      Occasional changes of address.
+  MOON:URANUS -> strong
+      Changes of address can take place.
+  MOON:VENUS -> weak
+      Occasionally changes of address.
+  NEPTUNE:NODE_ANY -> strong
+      Unfavorable changes of address.
+  NODE_ANY:URANUS -> strong
+      Changes of address.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: moves.
+
+== Job Promotion  (n=54) ==
+  ASC:JUPITER -> strong
+      We only find positive events, especially: professional successes, awards and all kinds of achievements.
+  ASC:MERCURY -> weak
+      Some professional successes or achievements can occur.
+  ASC:MOON -> weak
+      Some trips and professional achievements can occur.
+  ASC:NODE_ANY -> weak
+      Some professional successes can happen.
+  ASC:PLUTO -> weak
+      Less frequently, other positive events such as jobs, occasional successes can occur.
+  ASC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: worldly successes.
+  ASC:SUN -> strong
+      We find all types of successes and professional promotions (in conjunctions and harmonic aspects).
+  ASC:URANUS -> weak
+      In conjunctions and harmonic aspects, we find some professional successes, awards. Occasionally, the opposition can generate some professional successes.
+  ASC:VENUS -> strong
+      Worldly successes of all types.
+  JUPITER:MARS -> strong
+      On a professional level, successes are much more frequent than failures: from promotions to even awards, especially with conjunctions and harmonic aspects.
+  JUPITER:MC -> strong
+      In this direction, we find professional successes, prizes and achievements of all types.
+  JUPITER:MERCURY -> strong
+      On a professional level, we find successes, promotions and achievements of all kinds.
+  JUPITER:MOON -> strong
+      On a professional level, this direction is very positive, as we find successes, awards, promotions and achievements of all kinds.
+  JUPITER:NODE_ANY -> strong
+      Among the positive events, this direction indicates professional successes of all types, promotions and awards.
+  JUPITER:PLUTO -> strong
+      On a professional level, we observe occasional successes or promotions, some distinctions and other positive events.
+  JUPITER:POF -> strong
+      On a professional level, successes and recognitions of all kinds are likely.
+  JUPITER:SATURN -> strong
+      On a professional level we find some positive events, such as promotions or responsibilities, and some other achievements.
+  JUPITER:SUN -> strong
+      On a professional level, we find successes, prizes, promotions or achievements of all kinds.
+  JUPITER:URANUS -> strong
+      On a professional level, this is a very positive direction and we always find successes, promotions and unexpected achievements. It commonly indicates prizes and awards of all kinds.
+  JUPITER:VENUS -> strong
+      On a professional level, some successes and recognitions are possible.
+  MARS:VENUS -> strong
+      On a professional level, successes are more frequent than failures.
+  MC:MERCURY -> strong
+      In conjunctions, harmonic aspects and oppositions, we find professional successes and promotions.
+  MC:MOON -> strong
+      In conjunctions, in harmonic aspects and in oppositions, we find professional successes and promotions.
+  MC:NODE_ANY -> strong
+      In conjunctions, in harmonic aspects and even in some oppositions, we often find positive events: professional successes.
+  MC:PLUTO -> weak
+      Occasionally, in the conjunction and harmonic aspects, we find this direction in a professional advancement or promotion.
+  MC:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes, promotions or prizes.
+  MC:SUN -> strong
+      In conjunctions, in harmonic aspects and in oppositions, we find successes and professional promotions.
+  MC:URANUS -> strong
+      In conjunctions, harmonic aspects and oppositions, we find professional successes and promotions.
+  MC:VENUS -> strong
+      We always find positive events, especially: successes, prizes and professional recognitions.
+  MERCURY:MOON -> weak
+      On a professional level, promotions or successes can occur.
+  MERCURY:NODE_ANY -> strong
+      Among the positive events, we find professional successes.
+  MERCURY:PLUTO -> strong
+      On a professional level, some promotions and occasional successes are found.
+  MERCURY:POF -> strong
+      On a professional level, successes, promotions and achievements of all kinds are common.
+  MERCURY:SUN -> strong
+      On a professional level, we find promotions or successes.
+  MERCURY:URANUS -> strong
+      On a professional level, successes, promotions and achievements of all kinds are possible.
+  MERCURY:VENUS -> strong
+      On a professional level, we find successes, promotions and achievements of all kinds.
+  MOON:NODE_ANY -> strong
+      Among the positive events, we find professional successes.
+  MOON:POF -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes or promotions.
+  MOON:SUN -> strong
+      On a professional level, we find successes, prizes or promotions.
+  MOON:URANUS -> strong
+      On a professional level, successes, promotions and achievements of all kinds are possible.
+  MOON:VENUS -> strong
+      On a professional level, we find successes, promotions and achievements of all kinds.
+  NODE_ANY:PLUTO -> strong
+      On a professional level, we find all kinds of successes.
+  NODE_ANY:POF -> strong
+      On a professional level, both successes and failures can take place.
+  NODE_ANY:SUN -> strong
+      Among the positive events, we find professional successes.
+  NODE_ANY:URANUS -> strong
+      On a professional level, we find both successes and defeats: from all kinds of achievements and benefits.
+  NODE_ANY:VENUS -> strong
+      Among the positive events, we observe professional successes, promotions and various recognitions.
+  PLUTO:URANUS -> weak
+      Perhaps, it sometimes signals a personal advantage or a small professional achievement.
+  PLUTO:VENUS -> strong
+      On a professional level, we mostly find positive events, such as specific successes or promotions.
+  POF:SUN -> strong
+      In conjunctions and in some oppositions, positive events are more frequent: professional successes or career promotions.
+  POF:URANUS -> strong
+      This is a clearly beneficial direction. On a professional level, successes, promotions and benefits of any type are possible.
+  POF:VENUS -> strong
+      On a professional level, we find successes and achievements of all kinds.
+  SUN:URANUS -> strong
+      On a professional level, we find successes, prizes or promotions.
+  SUN:VENUS -> strong
+      On a professional level, we find successes, prizes or promotions.
+  URANUS:VENUS -> strong
+      On a professional level, we come across successes, promotions, unexpected achievements and even prizes.
+
+== Demobilization or Release  (n=0, marked_none) ==
+  (no pairs)
+
+== Gambling Gain  (n=3) ==
+  JUPITER:SUN -> weak
+      Occasionally, prizes in gambling, bets or lotteries are found.
+  JUPITER:URANUS -> strong
+      It commonly indicates prizes and awards of all kinds, and even gambling winnings.
+  JUPITER:VENUS -> weak
+      Occasionally, extraordinary monetary gains, through gambling or other ways.
+
+== Army Promotion  (n=6) ==
+  ASC:MARS -> excluded
+      The only positive events that appear with this combination are military promotions.
+  MARS:MC -> excluded
+      The only positive events that appear with this combination are military promotions.
+  MARS:MERCURY -> excluded
+      The only positive events that sometimes appear with this combination... are an enlistment or promotion in the army.
+  MARS:MOON -> strong
+      Exceptionally, we observe positive events such as a military promotion.
+  MARS:POF -> strong
+      Except for military promotions, which often occur with this direction.
+  MARS:SUN -> weak
+      Occasionally, it also appears in case of joining or getting a promotion in the army.
+
+== Death of Father or Grandfather  (n=57) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MC:SUN -> weak
+      Less frequently, in conjunctions and oppositions, we come across deaths of relatives, especially of males.
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:SUN -> strong
+      In this direction, we find the death of the individual or of their relatives and friends (especially of males).
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Mother or Grandmother  (n=57) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends. Negative events in the family or with females are possible.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends (especially of females or of children).
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MC:VENUS -> weak
+      Very rarely, the square and even the conjunction and the opposition entail deaths of family or friends, especially of females.
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends, especially of females.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (especially of females).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common, especially of females.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Son  (n=59) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends (especially of females or of children).
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (gender_unspecified).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Daughter  (n=59) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends (especially of females or of children).
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (especially of females).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Wife or Female Friend  (n=62) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MERCURY -> weak
+      In inharmonic aspects, we find less frequently the deaths of friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends. Negative events in the family or with females are possible.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends (especially of females or of children).
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MC:VENUS -> weak
+      Very rarely, the square and even the conjunction and the opposition entail deaths of family or friends, especially of females.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends.
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends.
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends.
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends, especially of females.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (especially of females).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:SUN -> strong
+      In this direction, we find the death of the individual or of their relatives and friends.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common, especially of females.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Husband or Male Friend  (n=61) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MERCURY -> weak
+      In inharmonic aspects, we find less frequently the deaths of friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MC:SUN -> weak
+      Less frequently, in conjunctions and oppositions, we come across deaths of relatives, especially of males.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends.
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends.
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends.
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:SUN -> strong
+      In this direction, we find the death of the individual or of their relatives and friends (especially of males).
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Brother  (n=59) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends, but especially of siblings (gender_unspecified).
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (gender_unspecified).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death of Sister  (n=59) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find deaths of people surrounding the individual.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: illnesses, deaths, divorces and setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find deaths of relatives or friends.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across some deaths of relatives and friends.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find deaths of relatives and friends.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be the death of a friend or relative.
+  JUPITER:PLUTO -> strong
+      In some cases, this direction relates to negative events: deaths of friends or family.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends, but especially of siblings (gender_unspecified).
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NEPTUNE -> strong
+      We come across many deaths of friends or family.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:POF -> strong
+      Deaths of friends or family are generally observed.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find many deaths of relatives.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: deaths of relatives or friends.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MERCURY:NEPTUNE -> strong
+      Deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:NODE_ANY -> strong
+      On a personal level, various problems and deaths of relatives or friends.
+  MERCURY:PLUTO -> strong
+      Negative events such as deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:SATURN -> strong
+      We also come across some deaths of friends, siblings or children (gender_unspecified).
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks like accidents or deaths of relatives or friends.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as family deaths are found.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  MOON:URANUS -> strong
+      In such cases, we find deaths of relatives or friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:POF -> strong
+      It also usually indicates deaths of friends or family members.
+  NEPTUNE:SATURN -> strong
+      On a personal level, its effect is negative as well; we find many deaths of friends or family.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; we find numerous deaths of friends or family.
+  NEPTUNE:VENUS -> strong
+      We also find deaths of relatives and friends.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      Deaths of friends and relatives are more common.
+  NODE_ANY:SATURN -> strong
+      We also observe deaths of relatives and friends.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: deaths of friends and relatives.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across deaths of relatives or friends.
+  PLUTO:POF -> strong
+      We find many more personal events: deaths of friends or family members.
+  PLUTO:SATURN -> strong
+      On a personal level, we find deaths of relatives and friends.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  PLUTO:URANUS -> strong
+      We also observe some deaths of relatives and friends.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: deaths of friends, siblings or children (especially of females).
+  POF:SATURN -> strong
+      On a personal level, we find accidents, deaths of friends or family, and other setbacks.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+  SATURN:VENUS -> strong
+      Deaths of relatives and friends are common.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: deaths of family or friends.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: deaths of relatives or friends.
+
+== Death  (n=30) ==
+  ASC:MARS -> strong
+      We find deaths, either of the individual or of their relatives and friends.
+  ASC:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, illnesses, accidents or deaths, either of the individual or of their relatives and friends.
+  ASC:SATURN -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  ASC:SUN -> weak
+      In conjunctions, we sometimes find the death of the individual at an older age.
+  MARS:MC -> strong
+      In this direction, we find deaths, both of the individual and of their family and friends.
+  MARS:MERCURY -> strong
+      Deaths, either of the individual or of their relatives or friends.
+  MARS:MOON -> strong
+      In this direction, we find deaths, either of the individual or of their relatives and friends.
+  MARS:NODE_ANY -> strong
+      This direction also often signals the death of the individual or of their friends or relatives.
+  MARS:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  MARS:SATURN -> strong
+      We also observe numerous deaths, either of the individual or of their relatives and friends.
+  MARS:SUN -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: deaths, either of the individual or of their relatives and friends.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: deaths either of the individual or of their relatives and friends.
+  MC:SATURN -> strong
+      In this direction, we find personal events such as deaths, both of the individual and of their family and friends.
+  MC:SUN -> weak
+      Sometimes, we find the death of the individual at an older age.
+  MOON:NEPTUNE -> strong
+      In this direction, we find deaths, either of the individual or of their family and friends.
+  MOON:PLUTO -> strong
+      We come across deaths, either of the individual or of their family and friends.
+  MOON:SATURN -> strong
+      We observe deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level, we find more events, all of them unfavorable: deaths (of the individual or of their relatives or friends).
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find deaths, either of the individual or of their relatives and friends.
+  NEPTUNE:SATURN -> weak
+      Occasionally the death of the person.
+  NEPTUNE:SUN -> strong
+      We always find deaths, both of the individual or of their relatives and friends.
+  NEPTUNE:URANUS -> weak
+      Sometimes the death of the individual.
+  NODE_ANY:PLUTO -> strong
+      On a personal level, more events appear, both positive and negative; births and deaths (of the individual or of their relatives and friends) are frequent.
+  NODE_ANY:POF -> strong
+      It can even indicate the death of the person.
+  PLUTO:SATURN -> weak
+      Occasionally the death of the individual.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: deaths, either of the individual or of their family and friends.
+  SATURN:SUN -> strong
+      In this direction, we find the death of the individual or of their relatives and friends.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be numerous deaths (of the individual or of their family and friends).
+
+== Assasination or Suicide  (n=0, marked_none) ==
+  (no pairs)
+
+== Failure or Defeat  (n=72) ==
+  ASC:JUPITER -> weak
+      Very rarely, the square can involve some negative event, such as a legal setback, but it is not frequent.
+  ASC:MARS -> strong
+      In this direction, we find personal and professional failures.
+  ASC:MERCURY -> strong
+      Problems, adverse circumstances.
+  ASC:NEPTUNE -> strong
+      In this direction, we find personal and professional failures, problems of all kinds. Any unfavorable event is possible, from a negative change of job to an unfortunate trip.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as the ones that occur with the square and some oppositions: setbacks of all kinds.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types.
+  ASC:SATURN -> strong
+      In this direction, we find personal and professional failures. For a politician, it indicates an adverse outcome in an election.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find setbacks of all kinds.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across problems of all types, personal or professional setbacks.
+  ASC:VENUS -> weak
+      Very rarely, the square can involve some personal or professional setbacks.
+  JUPITER:MARS -> strong
+      We also find negative events, both professional and personal, especially with conjunctions and with inharmonic aspects. We also find negative events with inharmonic aspects: legal problems.
+  JUPITER:NEPTUNE -> weak
+      Failures and various problems can occur on a professional level.
+  JUPITER:SATURN -> strong
+      Nevertheless, failures, defeats and setbacks are also possible.
+  MARS:MC -> strong
+      In this direction, we find failures, professional problems and personal setbacks of all kinds.
+  MARS:MERCURY -> strong
+      In this direction, we find failures, professional problems and personal setbacks of all kinds.
+  MARS:MOON -> strong
+      In this direction, we find failures, professional problems and personal setbacks of all kinds.
+  MARS:NEPTUNE -> strong
+      On a professional level, we find many failures and lots of problems of all kinds, from mistakes to attacks by other people. Among other setbacks.
+  MARS:NODE_ANY -> strong
+      We always find professional failures: from defeats to legal problems.
+  MARS:PLUTO -> weak
+      On a professional level, we observe failures, defeats, problems, and jobs that come to an end, among others. Problems of all kinds can occur: conflicts with the law.
+  MARS:POF -> strong
+      On a professional level, we find many more failures than successes. Divorces and other setbacks are generally observed.
+  MARS:SATURN -> strong
+      This is a very unfavorable direction. On a professional level, we find failures and problems of all kinds. Among other possible setbacks. Family problems.
+  MARS:SUN -> strong
+      In this direction, we find failures, professional problems and personal setbacks of all types.
+  MARS:URANUS -> weak
+      On a professional level, all kinds of failures or interruptions can occur. Specific problems, such as a lawsuit or others.
+  MARS:VENUS -> strong
+      On a professional level, successes are more frequent than failures.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe professional setbacks.
+  MC:NEPTUNE -> strong
+      In this direction, we find failures, defeats or professional problems.
+  MC:NODE_ANY -> strong
+      We also come across negative events, such as the ones that occur in squares and in some oppositions: professional failures, family conflicts.
+  MC:PLUTO -> strong
+      This direction appears in case of failures, professional problems.
+  MC:POF -> strong
+      In the opposition, we find some negative events: professional failures, deaths, various setbacks and others.
+  MC:SATURN -> strong
+      In this direction, we find failures and negative professional changes. For a politician, it indicates an adverse result in an election.
+  MC:SUN -> strong
+      The square can generate professional setbacks or even personal ones.
+  MC:URANUS -> weak
+      With the square and to a lesser extent with the conjunction and the opposition, we come across failures and professional setbacks, and also personal setbacks.
+  MC:VENUS -> weak
+      Very rarely, the square and even the conjunction and the opposition entail a professional or personal setback.
+  MERCURY:MOON -> weak
+      Sometimes, inharmonic aspects may lead to a professional or personal misfortune.
+  MERCURY:NEPTUNE -> strong
+      In this direction, we find failures, personal or professional problems, and setbacks of all kinds.
+  MERCURY:NODE_ANY -> strong
+      Among the negative events, we come across all kinds of professional problems.
+  MERCURY:PLUTO -> strong
+      On a professional level, professional failures of all kinds are found.
+  MERCURY:SATURN -> strong
+      In this direction, we find failures, personal or professional problems and setbacks of all kinds.
+  MERCURY:SUN -> weak
+      Sometimes, the square involves a professional or personal setback.
+  MERCURY:URANUS -> strong
+      In such cases, we find professional and personal setbacks.
+  MOON:NEPTUNE -> strong
+      In this direction, we find professional failures and problems, as well as personal setbacks of all kinds.
+  MOON:NODE_ANY -> strong
+      Among the negative events, we observe all kinds of professional problems, from failures to resignations.
+  MOON:PLUTO -> strong
+      We come across failures and professional problems.
+  MOON:POF -> strong
+      In the opposition and in some conjunctions, we find some negative events: various mishaps.
+  MOON:SATURN -> strong
+      We observe failures, personal or professional problems and setbacks of all kinds.
+  MOON:SUN -> weak
+      Occasionally, the square involves a professional or personal setback.
+  MOON:URANUS -> strong
+      In such cases, we find professional and personal setbacks.
+  MOON:VENUS -> weak
+      Exceptionally, the inharmonic aspects can involve a professional or personal setback, but it is very rare.
+  NEPTUNE:NODE_ANY -> strong
+      On a professional level, we can only expect negative events. On a personal level, we find more events, all of them unfavorable: other adverse experiences.
+  NEPTUNE:PLUTO -> strong
+      On a professional level, we observe failures, defeats, and all kinds of problems.
+  NEPTUNE:POF -> strong
+      On a professional level, failures and problems of all kinds are observed. On a personal level, we find more events, all unfavorable: other mishaps.
+  NEPTUNE:SATURN -> strong
+      On a professional level, we find failures, hostilities and problems of all kinds.
+  NEPTUNE:SUN -> strong
+      We always find professional failures and personal setbacks.
+  NEPTUNE:URANUS -> strong
+      On a professional level, failures are possible.
+  NEPTUNE:VENUS -> strong
+      On a professional level, failures and several setbacks are common.
+  NODE_ANY:PLUTO -> strong
+      On a professional level, we find failures.
+  NODE_ANY:POF -> strong
+      On a professional level, failures can take place.
+  NODE_ANY:SATURN -> weak
+      On a professional level, failures and problems of all kinds can occur. On a personal level, we find more events, all of them unfavorable. All kinds of adverse personal experiences.
+  NODE_ANY:SUN -> strong
+      Among the negative events, we can expect all kinds of professional and personal setbacks.
+  NODE_ANY:URANUS -> strong
+      On a professional level, we find both successes and defeats: various failures and problems.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across all kinds of professional problems and, on a personal level, a variety of problems.
+  PLUTO:POF -> weak
+      On a professional level, failures and problems are observed. To a lesser extent illnesses and other minor setbacks.
+  PLUTO:SATURN -> strong
+      On a professional level, we observe failures, defeats, attacks, and all kinds of problems.
+  PLUTO:SUN -> strong
+      We observe failures, tensions or professional problems.
+  PLUTO:URANUS -> strong
+      On a professional level, failures and all kinds of problems are possible.
+  PLUTO:VENUS -> strong
+      Some occasional setbacks are also observed.
+  POF:SATURN -> strong
+      We only find negative events. On a professional level, failures, defeats are common. On a personal level, we find other setbacks.
+  POF:SUN -> strong
+      In the opposition we find some negative events: professional failures and different mishaps.
+  SATURN:SUN -> strong
+      In this direction, we find professional failures and personal setbacks of all types.
+  SATURN:URANUS -> strong
+      On a professional level, we find failures, problems of all kinds or negative changes.
+  SATURN:VENUS -> strong
+      On a professional level, failures and setbacks are probable. On a personal level, we find some illnesses and disruptions or problems in relationships.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: professional setbacks.
+
+== Arrest  (n=8) ==
+  ASC:SATURN -> weak
+      Occasionally, it involves arrests or convictions.
+  JUPITER:MARS -> strong
+      We also find negative events with inharmonic aspects: legal problems.
+  JUPITER:NEPTUNE -> strong
+      Legal problems.
+  JUPITER:NODE_ANY -> strong
+      Among negative events, there may be an occasional legal problem.
+  MARS:NODE_ANY -> strong
+      We always find professional failures: from defeats to legal problems.
+  MARS:PLUTO -> weak
+      Problems of all kinds can occur: conflicts with the law.
+  MARS:URANUS -> strong
+      Specific problems, such as a lawsuit or others.
+  NEPTUNE:SUN -> strong
+      All kinds of negative events: from economic sanctions to going to prison.
+
+== Losses  (n=4) ==
+  NEPTUNE:SUN -> strong
+      Negative events: from economic sanctions.
+  PLUTO:VENUS -> strong
+      Negative events related to this direction: financial problems.
+  SATURN:VENUS -> strong
+      It is a negative direction for monetary issues.
+  URANUS:VENUS -> strong
+      Negative events: financial problems, for example.
+
+== Divorce or Separation  (n=29) ==
+  ASC:MOON -> strong
+      In inharmonic aspects, we find separations and divorces.
+  ASC:SATURN -> weak
+      Occasionally, it involves separations or divorces.
+  JUPITER:MARS -> strong
+      We also find negative events with inharmonic aspects: resignations, divorces or separations.
+  JUPITER:PLUTO -> strong
+      This direction relates to negative events: divorces, among others.
+  MARS:NEPTUNE -> weak
+      Occasionally a divorce.
+  MARS:PLUTO -> strong
+      Divorces, among others.
+  MARS:POF -> strong
+      Divorces are generally observed.
+  MARS:SATURN -> strong
+      We also observe some divorces or separations.
+  MARS:URANUS -> weak
+      To a lesser extent some divorces.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe negative events of different types: divorces or separations.
+  MC:NODE_ANY -> strong
+      Negative events, such as the ones that occur in squares and in some oppositions: deaths and divorces or separations.
+  MC:PLUTO -> strong
+      As well as in divorces and separations.
+  MC:SATURN -> strong
+      At times, it appears in case of separations and divorces, or breakups with partners at a professional level.
+  MC:URANUS -> strong
+      We also observe divorces or separations in all types of aspects.
+  MERCURY:SATURN -> strong
+      Separations and divorces.
+  MOON:NEPTUNE -> strong
+      With this direction, divorces and marriage separations are common.
+  MOON:SATURN -> strong
+      Divorces and separations are possible.
+  NEPTUNE:NODE_ANY -> strong
+      On a personal level... unfavorable: separations and divorces.
+  NEPTUNE:POF -> strong
+      It also usually indicates a separation or divorce.
+  NEPTUNE:SATURN -> strong
+      At times, this direction signals a divorce and other negative events.
+  NEPTUNE:VENUS -> weak
+      We also find some separations and divorces, but to a lesser extent.
+  NODE_ANY:PLUTO -> weak
+      Sometimes a separation or divorce.
+  NODE_ANY:SATURN -> weak
+      Less frequently, separations or divorces.
+  NODE_ANY:VENUS -> strong
+      Among the negative events, we come across divorces or separations.
+  PLUTO:URANUS -> weak
+      Occasionally, some separations or divorces.
+  PLUTO:VENUS -> strong
+      Divorces or separations.
+  SATURN:SUN -> strong
+      Even divorces or separations.
+  SATURN:URANUS -> weak
+      Occasionally, a divorce or separation.
+  URANUS:VENUS -> weak
+      Sometimes, these directions generate negative events: separations or divorces.
+
+== Resign or Retire  (n=16) ==
+  JUPITER:MARS -> strong
+      We also find negative events with inharmonic aspects: resignations.
+  JUPITER:NEPTUNE -> weak
+      Resignations and various problems can occur on a professional level.
+  MARS:URANUS -> weak
+      On a professional level, all kinds of failures, resignations or interruptions can occur.
+  MC:NEPTUNE -> strong
+      In this direction, we find failures, defeats, resignations or professional problems.
+  MC:PLUTO -> strong
+      This direction appears in case of failures, professional problems or resignations.
+  MC:SATURN -> strong
+      We find failures, resignations, retirements. For a politician, it indicates a resignation.
+  MERCURY:SATURN -> strong
+      In this direction, we find failures, resignations.
+  MOON:PLUTO -> strong
+      We come across failures, resignations.
+  MOON:SATURN -> strong
+      We observe failures, resignations.
+  NEPTUNE:PLUTO -> strong
+      On a professional level, we observe failures, defeats, resignations.
+  NEPTUNE:SATURN -> strong
+      On a professional level, we find failures, cessations or resignations.
+  NEPTUNE:URANUS -> strong
+      On a professional level, failures, cessations or resignations are possible.
+  NEPTUNE:VENUS -> strong
+      On a professional level, failures, resignations and several setbacks are common.
+  PLUTO:SATURN -> strong
+      On a professional level, we observe failures, defeats, attacks, resignations.
+  PLUTO:URANUS -> strong
+      On a professional level, failures, resignations and all kinds of problems are possible.
+  POF:SATURN -> strong
+      On a professional level, failures, defeats or resignations are common.
+
+== Mobilization  (n=3) ==
+  JUPITER:NEPTUNE -> strong
+      Small negative events such as a military draft.
+  MOON:PLUTO -> weak
+      Occasionally, events such as military drafts are observed.
+  MOON:SATURN -> strong
+      Events such as military drafts are also found.
+
+== Accident  (n=34) ==
+  ASC:MARS -> strong
+      We find personal and professional failures, problems of all kinds, accidents.
+  ASC:NEPTUNE -> strong
+      In this direction, we find accidents.
+  ASC:PLUTO -> strong
+      In this direction, we find personal and professional setbacks of all types, accidents.
+  ASC:SATURN -> strong
+      In this direction, we find accidents.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across problems of all types, accidents.
+  JUPITER:MARS -> strong
+      Negative events, both professional and personal... with inharmonic aspects: sports accidents. As an example: Jupiter 90° Mars: skiing accident (Juan Carlos I).
+  MARS:MC -> strong
+      Personal setbacks of all kinds, such as accidents.
+  MARS:MERCURY -> strong
+      Personal setbacks of all kinds, such as accidents.
+  MARS:MOON -> strong
+      Personal setbacks of all kinds, such as accidents.
+  MARS:NEPTUNE -> strong
+      On a personal level, its effect is also negative: we come across many illnesses and accidents.
+  MARS:NODE_ANY -> strong
+      We always find professional failures: from defeats to legal problems, illnesses and accidents.
+  MARS:PLUTO -> strong
+      On a personal level, we find illnesses, accidents, assaults and deaths.
+  MARS:SATURN -> weak
+      On a personal level, its effect is very harmful: we find accidents (sometimes with bone fractures).
+  MARS:SUN -> strong
+      Personal setbacks of all types, such as accidents.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: accidents.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: accidents.
+  MC:SATURN -> strong
+      Personal events such as accidents.
+  MC:URANUS -> strong
+      Personal setbacks: from illnesses and accidents to deaths.
+  MERCURY:NEPTUNE -> strong
+      Setbacks of all kinds, such as accidents.
+  MERCURY:SATURN -> strong
+      Personal or professional problems and setbacks of all kinds, such as accidents.
+  MERCURY:URANUS -> strong
+      Personal setbacks like accidents.
+  MOON:NEPTUNE -> strong
+      Personal setbacks of all kinds, such as accidents.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as accidents are found.
+  MOON:PLUTO -> strong
+      Personal setbacks of all kinds, such as accidents.
+  MOON:SATURN -> strong
+      Setbacks of all kinds, such as accidents.
+  NEPTUNE:POF -> strong
+      On a personal level, we find more events, all unfavorable: illnesses, surgeries and accidents.
+  NEPTUNE:SATURN -> strong
+      Some accidents can also occur.
+  NEPTUNE:SUN -> strong
+      We always find personal setbacks, such as accidents.
+  NODE_ANY:SATURN -> strong
+      On a personal level, we find more events, all of them unfavorable: illnesses and accidents are relatively common.
+  NODE_ANY:URANUS -> strong
+      We also find negative events: accidents, among others.
+  PLUTO:SATURN -> strong
+      Among other minor adverse events, there may be illnesses, numerous accidents.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: accidents.
+  POF:SATURN -> strong
+      On a personal level, we find accidents.
+  SATURN:SUN -> strong
+      Personal setbacks of all types, such as accidents.
+
+== Hospitalization or Illness  (n=50) ==
+  ASC:MARS -> strong
+      In this direction, we find illnesses, surgeries.
+  ASC:MOON -> strong
+      In inharmonic aspects, we find illnesses of the individual or of their relatives and friends.
+  ASC:NEPTUNE -> strong
+      In this direction, we find illnesses.
+  ASC:NODE_ANY -> strong
+      We also find negative events, such as illnesses.
+  ASC:PLUTO -> strong
+      In this direction, we find illnesses.
+  ASC:SATURN -> strong
+      In this direction, we find illnesses.
+  ASC:SUN -> strong
+      In inharmonic aspects, we find some illnesses.
+  ASC:URANUS -> strong
+      In inharmonic aspects and in some conjunctions, we come across illnesses.
+  JUPITER:NEPTUNE -> strong
+      On a personal level, we find illnesses, surgeries.
+  MARS:MC -> strong
+      Personal setbacks of all kinds, such as illnesses, surgeries.
+  MARS:MERCURY -> strong
+      Personal setbacks of all kinds, such as accidents, illnesses, surgeries.
+  MARS:MOON -> strong
+      Personal setbacks of all kinds, such as illnesses, surgeries.
+  MARS:NEPTUNE -> weak
+      On a personal level, its effect is also negative: we come across many illnesses... and occasionally a health issue in the family.
+  MARS:PLUTO -> strong
+      On a personal level, we find illnesses.
+  MARS:SATURN -> strong
+      On a personal level, its effect is very harmful: we find illnesses.
+  MARS:SUN -> strong
+      Personal setbacks of all types, such as illnesses, surgeries.
+  MARS:URANUS -> strong
+      On a personal level, its effect is also very unfavorable: we find quite a lot of diseases.
+  MARS:VENUS -> strong
+      We also find some illnesses and surgeries.
+  MC:MERCURY -> strong
+      In the squares, in some oppositions, and at times in some conjunctions, we observe negative events such as illnesses.
+  MC:MOON -> weak
+      In the squares, in some oppositions and occasionally in some conjunctions, we observe illnesses.
+  MC:NEPTUNE -> strong
+      On a personal level, it is also common to find problems of all kinds: illnesses, surgeries.
+  MC:PLUTO -> strong
+      On a personal level, it often also comes across in problems of all types: illnesses, surgeries.
+  MC:SATURN -> strong
+      Personal events such as illnesses, surgeries.
+  MC:SUN -> strong
+      The square can generate personal ones, such as illnesses.
+  MC:URANUS -> strong
+      Personal setbacks: from illnesses and accidents to deaths.
+  MERCURY:MOON -> weak
+      Sometimes, inharmonic aspects may lead to a professional or personal misfortune, such as illnesses or others.
+  MERCURY:NEPTUNE -> strong
+      Setbacks of all kinds, such as accidents, illnesses.
+  MERCURY:SATURN -> strong
+      Personal or professional problems and setbacks of all kinds, such as illnesses.
+  MOON:NEPTUNE -> strong
+      Personal setbacks of all kinds, such as accidents, illnesses, surgeries.
+  MOON:PLUTO -> strong
+      Personal setbacks of all kinds, such as illnesses, surgeries.
+  MOON:POF -> strong
+      In the opposition and in some conjunctions, we find some negative events: illnesses.
+  MOON:SATURN -> strong
+      Setbacks of all kinds, such as accidents, illnesses, surgeries.
+  MOON:SUN -> weak
+      Occasionally, the square involves a professional or personal setback, including illnesses.
+  NEPTUNE:PLUTO -> strong
+      On a personal level, we find many illnesses, some surgeries.
+  NEPTUNE:POF -> strong
+      On a personal level, we find more events, all unfavorable: illnesses, surgeries.
+  NEPTUNE:SATURN -> strong
+      Illnesses (of the individual or of their relatives) can also occur.
+  NEPTUNE:SUN -> strong
+      We always find personal setbacks, such as illnesses, surgeries.
+  NEPTUNE:URANUS -> strong
+      On a personal level, its effect is negative as well; Illnesses and surgeries are also observed.
+  NEPTUNE:VENUS -> strong
+      On a personal level, illnesses and accidents are relatively common.
+  NODE_ANY:SATURN -> strong
+      Unfavorable: illnesses and accidents are relatively common.
+  NODE_ANY:SUN -> strong
+      Among the negative events, we can expect illnesses and other adverse incidents.
+  PLUTO:POF -> weak
+      To a lesser extent illnesses and other minor setbacks.
+  PLUTO:SATURN -> strong
+      Among other minor adverse events, there may be illnesses.
+  PLUTO:SUN -> strong
+      On a personal level, we find setbacks of all kinds: illnesses, surgeries.
+  PLUTO:URANUS -> strong
+      On a personal level, we find illnesses and surgeries.
+  PLUTO:VENUS -> strong
+      We also find negative events related to this direction: some diseases.
+  SATURN:SUN -> strong
+      Personal setbacks of all types, such as illnesses, surgeries.
+  SATURN:URANUS -> strong
+      On a personal level, its effect is also very negative; there may be diseases, surgeries.
+  SATURN:VENUS -> strong
+      On a personal level, we find some illnesses.
+  SUN:URANUS -> weak
+      Occasionally, in some conjunctions, squares and oppositions, we find some negative events: illnesses or surgeries.
+
+== Violence  (n=4) ==
+  MARS:PLUTO -> strong
+      On a personal level, we find illnesses, accidents, assaults and deaths.
+  MARS:SATURN -> strong
+      Any kind of physical aggression.
+  NODE_ANY:POF -> strong
+      Can even indicate the death of the person and some sort of violence.
+  PLUTO:SATURN -> strong
+      At times some kind of aggression.
+
+== Intrigue  (n=1) ==
+  SATURN:URANUS -> strong
+      On a professional level, we find negative changes, including scandals and intrigues.
+
+== Gambling Loss  (n=0, marked_none) ==
+  (no pairs)
+
+== Negative Travel  (n=3) ==
+  ASC:NEPTUNE -> strong
+      An unfortunate trip.
+  JUPITER:SATURN -> strong
+      Some very negative ones: from unfavorable trips to deaths of relatives and friends.
+  MOON:NODE_ANY -> strong
+      On a personal level, events such as unfavorable trips are found.
+
+SOURCE-NOTE EXCLUSIONS (research notes, not pair attributions)
+============================================================
+  Success or Elected L3421: "open relationships" - reason: Term is too vague to map to marriage/divorce categories.; candidate_categories: none.
+      reason: research-note sub-block ('candidate_categories:' field)
+  Success or Elected L3422: "fleeting relationships"
+      reason: research-note sub-block ('candidate_categories:' field)
+  Success or Elected L3423: "fleeting relationships"
+      reason: research-note sub-block ('candidate_categories:' field)
+  Success or Elected L3424: "fleeting relationships"
+      reason: research-note sub-block ('candidate_categories:' field)
+  Success or Elected L3425: "fleeting relationships"
+      reason: research-note sub-block ('candidate_categories:' field)
+
+MERGED SOURCE DUPLICATES (first occurrence wins)
+================================================
+  Success or Elected MOON:NODE_ANY (L3386, L3391): tiers ['strong', 'strong']
+      reason: Genuine double-listing in the source: L3386 'Among the positive events, we find romantic relationships.' vs L3391 'Among the positive events, we find professional successes.' First occurrence wins; both are 'we find'-class strong.
