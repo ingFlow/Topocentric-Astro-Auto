@@ -38,18 +38,18 @@ SLOW = {"Jupiter", "Saturn", "Uranus", "Neptune", "Pluto", "Mean_Node"}
 SPEED_FLOOR_DEG = cfg.SPEED_FLOOR_ARC_MIN_PER_DAY / 60.0
 
 
-def stage1(prog, radix, prog_speeds=None, radix_speeds=None, event_id=EventType.SUCCESS_ELECTED):
+def stage1(prog, radix, prog_speeds=None, radix_speeds=None, event_id=EventType.SUCCESS_ELECTED, compendium=None):
     """Thin convenience wrapper: stage-1 evaluation on sparse synthetic
     point sets (missing speeds default to a fast/typical value)."""
     prog_speeds = prog_speeds or {name: 1.2 for name in prog}
     radix_speeds = radix_speeds or {name: 1.0 for name in radix}
-    return pw.stage1_hits(0.0, "dp", prog, prog_speeds, radix, radix_speeds, event_id)
+    return pw.stage1_hits(0.0, "dp", prog, prog_speeds, radix, radix_speeds, event_id, compendium)
 
 
-def stage2(prog, radix, prog_speeds=None, radix_speeds=None, event_id=EventType.SUCCESS_ELECTED):
+def stage2(prog, radix, prog_speeds=None, radix_speeds=None, event_id=EventType.SUCCESS_ELECTED, compendium=None):
     prog_speeds = prog_speeds or {name: 1.2 for name in prog}
     radix_speeds = radix_speeds or {name: 1.0 for name in radix}
-    return pw.stage2_hits(0.0, "dp", prog, prog_speeds, radix, radix_speeds, event_id)
+    return pw.stage2_hits(0.0, "dp", prog, prog_speeds, radix, radix_speeds, event_id, compendium)
 
 
 # --- the sweep (section 3.2) -------------------------------------------------
@@ -383,3 +383,133 @@ def test_real_sweep_in_orb_episode_ends_at_12_arcmin(beyonce_case):
         break
     else:
         pytest.fail("no stage-1 pair with a measurable in-orb episode found on the real chart")
+
+
+# --- Step 5: relevance wiring (sections 4.1/4.2) -----------------------------
+
+@pytest.fixture(scope="module")
+def compendium():
+    from topo_astro.significators.compendium import Compendium
+    return Compendium.load()
+
+
+def test_stage1_strong_pair_passes_with_compendium(compendium):
+    # Birth of Son MERCURY:JUPITER is strong in the pairwise table.
+    hits, misses = stage1({"Mercury": 100.0}, {"Jupiter": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    assert len(hits) == 1
+    assert misses == []
+
+
+def test_stage1_excluded_pair_does_not_pass(compendium):
+    # Birth of Son MARS:PLUTO is excluded ("only occasional exception").
+    hits, misses = stage1({"Mars": 100.0}, {"Pluto": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    assert hits == []
+    assert len(misses) == 1
+    assert misses[0]["kind"] == "excluded_relevance"
+    assert misses[0]["progressed_point"] == "Mars"
+    assert misses[0]["radix_point"] == "Pluto"
+
+
+def test_stage1_absent_pair_does_not_pass(compendium):
+    # Birth of Son MERCURY:NEPTUNE is not catalogued (absent != excluded).
+    hits, misses = stage1({"Mercury": 100.0}, {"Neptune": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    assert hits == []
+    assert len(misses) == 1
+    assert misses[0]["kind"] == "absent_relevance"
+
+
+def test_stage1_weak_pair_goes_to_near_miss_ledger(compendium):
+    # Birth of Son JUPITER:VENUS is weak - never gating (D3).
+    hits, misses = stage1({"Venus": 100.0}, {"Jupiter": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    assert hits == []
+    assert len(misses) == 1
+    assert misses[0]["kind"] == "weak_relevance"
+
+
+def test_stage1_unordered_lookup_same_outcome(compendium):
+    # Case A and Case B of the same unordered pair both pass (strong).
+    hits_a, _ = stage1({"Mercury": 100.0}, {"Jupiter": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    hits_b, _ = stage1({"Jupiter": 100.0}, {"Mercury": 100.0}, event_id=EventType.BIRTH_SON, compendium=compendium)
+    assert len(hits_a) == 1
+    assert len(hits_b) == 1
+
+
+def test_stage2_arm1_tier_floor_boundaries(compendium):
+    # Birth of Son: JUPITER tier 8 (pass), URANUS tier 6 (pass at floor),
+    # PLUTO tier 4 (fail), SATURN tier 2 (fail).
+    for slow, tier, expect_hit in [("Jupiter", 8, True), ("Uranus", 6, True),
+                                   ("Pluto", 4, False), ("Saturn", 2, False)]:
+        hits, misses = stage2({"Moon": 100.0}, {slow: 100.0},
+                              prog_speeds={"Moon": 13.0}, radix_speeds={slow: 0.1},
+                              event_id=EventType.BIRTH_SON, compendium=compendium)
+        if expect_hit:
+            assert len(hits) == 1, f"expected tier {tier} to pass"
+        else:
+            assert hits == [], f"expected tier {tier} to fail"
+            floor_misses = [m for m in misses if m["kind"] == "tier_below_floor"]
+            assert len(floor_misses) == 1
+            assert floor_misses[0]["tier"] == tier
+
+
+def test_stage2_arm1_absent_tier_fails_closed(compendium):
+    # Birth of Brother has no SATURN tier data - the gate fails closed
+    # (no data is never credit).
+    hits, misses = stage2({"Moon": 100.0}, {"Saturn": 100.0},
+                          prog_speeds={"Moon": 13.0}, radix_speeds={"Saturn": 0.1},
+                          event_id=EventType.BIRTH_BROTHER, compendium=compendium)
+    assert hits == []
+    floor_misses = [m for m in misses if m["kind"] == "tier_below_floor"]
+    assert len(floor_misses) == 1
+    assert floor_misses[0]["tier"] is None
+
+
+def test_no_data_event_type_zero_stage1_hits_and_reported(compendium):
+    # POSITIVE_AC_MC has no compendium event at all - cannot contribute
+    # any stage, and its non-contribution is reported (no_data ledger).
+    hits, misses = stage1({"Mercury": 100.0}, {"Jupiter": 100.0},
+                          event_id=EventType.POSITIVE_AC_MC, compendium=compendium)
+    assert hits == []
+    no_data = [m for m in misses if m["kind"] == "no_data"]
+    assert len(no_data) == 1
+    hits, misses = stage2({"Moon": 100.0}, {"Jupiter": 100.0},
+                          prog_speeds={"Moon": 13.0}, radix_speeds={"Jupiter": 0.1},
+                          event_id=EventType.POSITIVE_AC_MC, compendium=compendium)
+    assert hits == []
+    assert any(m["kind"] == "no_data" for m in misses)
+
+
+def test_marked_none_event_stage1_zero_but_arm1_can_contribute(compendium):
+    # Demobilization or Release is marked-none for the pairwise table
+    # (zero stage-1 hits) but has tier data - arm 1 can still contribute
+    # per section 3.7 (JUPITER tier 8; SATURN tier absent fails closed).
+    hits, misses = stage1({"Mercury": 100.0}, {"Jupiter": 100.0},
+                          event_id=EventType.DEMOBILIZATION_RELEASE, compendium=compendium)
+    assert hits == []
+    assert any(m["kind"] == "no_data" for m in misses)
+    hits, _ = stage2({"Moon": 100.0}, {"Jupiter": 100.0},
+                     prog_speeds={"Moon": 13.0}, radix_speeds={"Jupiter": 0.1},
+                     event_id=EventType.DEMOBILIZATION_RELEASE, compendium=compendium)
+    assert len(hits) == 1
+    hits, misses = stage2({"Moon": 100.0}, {"Saturn": 100.0},
+                          prog_speeds={"Moon": 13.0}, radix_speeds={"Saturn": 0.1},
+                          event_id=EventType.DEMOBILIZATION_RELEASE, compendium=compendium)
+    assert hits == []
+    assert any(m["kind"] == "tier_below_floor" and m["tier"] is None for m in misses)
+
+
+def test_real_sweep_hits_all_relevant_with_compendium(beyonce_case, compendium):
+    # With the compendium wired, every stage-1 hit the sweep produces for
+    # SUCCESS_ELECTED must resolve to strong in the pairwise table.
+    radix_dt, event, geopos = beyonce_case
+    points = list(pw.sweep_jds(radix_dt - timedelta(hours=6), radix_dt + timedelta(hours=6), 600))
+    result = pw.collect_event_hits(points, [event], geopos, compendium=compendium)[0]
+    from topo_astro.significators.compendium import to_compendium_symbol
+    for hit in result["hits"]:
+        if hit["stage"] != 1:
+            continue
+        strength = compendium.pair_strength(
+            EventType.SUCCESS_ELECTED,
+            to_compendium_symbol(hit["progressed_point"]),
+            to_compendium_symbol(hit["radix_point"]),
+        )
+        assert strength == "strong", hit

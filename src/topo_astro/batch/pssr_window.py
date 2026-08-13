@@ -10,10 +10,11 @@ rules (section 3.4), stage 1 fast-to-slow (section 3.5), stage 2
 moon-to-slow + fast-to-fast (section 3.6), and per-tuple interval
 building with per-stage per-event unions (section 3.7).
 
-Phase note (Step 4): the relevance gates are stubbed OPEN here
-(_pair_relevance / _tier_gate) so the kinematics are testable in
-isolation; Step 5 wires the section 4.1/4.2 compendium lookups into
-those two functions. The range/consensus/margin/report machinery
+Phase note (Step 5): the relevance gates are wired to the compendium
+lookups (sections 4.1/4.2) - pass a `Compendium` into the stage/evaluation
+functions (the Step-6 entry point loads one by default). With
+`compendium=None` the gates stay OPEN (the Step-4 kinematics mode used by
+the isolated stage tests). The range/consensus/margin/report machinery
 (sections 3.8-3.10) and the batch entry point narrow_birth_time_window
 land in Step 6. See the spec's section 9 future-research register for
 what is deliberately outside this feature.
@@ -21,31 +22,52 @@ what is deliberately outside this feature.
 All decisions read from `pssr_window_config`; there are no hardcoded
 business values in this module. Pure functions, no globals. Point names
 are the codebase's PLANETS names ('Mercury', ..., 'Mean_Node'); the
-config's Planet codes are the same strings.
+config's Planet codes are the same strings; the compendium lookups map
+them via to_compendium_symbol.
 """
 
 import julian
 
 from topo_astro.core.aspects import calculate_aspect, MAJOR_ASPECTS
 from topo_astro.core.constants import calc_planets_labelled, calc_planets_labelled_speeds
+from topo_astro.significators.compendium import to_compendium_symbol
 from topo_astro.techniques.pssr import PSSR_Auto
 from topo_astro.batch import pssr_window_config as config
 
 
-# --- relevance gates (Step 4 stubs; Step 5 wires the compendium) -------------
+# --- relevance gates (Step 5: wired to the compendium; None = Step-4 mode) ---
 
-def _pair_relevance(event_id, point_a, point_b):
-    """STEP 4 STUB - the unordered-pair relevance gate is open (every pair
-    qualifies as strong). Step 5 replaces this body with the
-    compendium.pair_strength lookup (spec section 4.1)."""
-    return "strong"
+def _pair_relevance(compendium, event_id, point_a, point_b):
+    """Section 4.1 wiring: the unordered pair (fast, slow), mapped to
+    compendium symbols, resolves against the Juan Combos pairwise table.
+    Returns (tier, no_data): tier in {"strong", "weak", "excluded",
+    "absent"}; no_data is True when the event has no compendium event at
+    all, or its event is one of the three marked-none events (its stage-1
+    contribution is reported as `no_data`, never silently absent).
+    With compendium=None (Step-4 kinematics mode) every pair reads as
+    ("strong", False)."""
+    if compendium is None:
+        return "strong", False
+    if compendium.event_title_for(event_id) is None:
+        return "absent", True
+    if not compendium.has_pair_data(event_id):
+        return "absent", True
+    strength = compendium.pair_strength(
+        event_id, to_compendium_symbol(point_a), to_compendium_symbol(point_b)
+    )
+    return ("absent" if strength is None else strength), False
 
 
-def _tier_gate(event_id, symbol):
-    """STEP 4 STUB - the stage-2 arm-1 tier gate is open. Step 5 replaces
-    this body with the compendium.tier_score lookup (spec section 4.2,
-    STAGE2_TIER_FLOOR)."""
-    return True
+def _tier_for(compendium, event_id, symbol):
+    """Section 4.2 wiring: the slow point's tier_score from the scoring
+    JSON. Returns (tier_score | None, no_data); the caller compares
+    against STAGE2_TIER_FLOOR and an absent key fails closed. With
+    compendium=None (Step-4 kinematics mode) the gate reads as open."""
+    if compendium is None:
+        return 10, False
+    if compendium.event_title_for(event_id) is None:
+        return None, True
+    return compendium.tier_score(event_id, to_compendium_symbol(symbol)), False
 
 
 # --- sweep (spec section 3.2) ------------------------------------------------
@@ -145,12 +167,14 @@ def _near_miss(jd, stage, arm, variant, progressed_point, radix_point, kind, **e
     return entry
 
 
-def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id):
+def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None):
     """Section 3.5: one point from FAST_SET, the other from SLOW_SET, either
     side progressed or radix (Case A: fast progressed / Case B: fast radix).
     Orb 12' (no Moon by construction). Speed gate on the fast point, measured
     on the side it sits (progressed-side -> progressed speed, radix-side ->
-    natal speed). Returns (hits, near_misses)."""
+    natal speed). Relevance gate per section 4.1 (strong only; weak /
+    excluded / absent / no-data go to the near-miss ledger). Returns
+    (hits, near_misses)."""
     hits, misses = [], []
     floor_kind = "speed_below_floor"
 
@@ -171,8 +195,13 @@ def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
                 ))
             return
         aspect_name, separation = aspect
-        relevance = _pair_relevance(event_id, prog_name, rad_name)
-        if relevance == config.PAIR_RELEVANCE_MIN:
+        relevance, no_data = _pair_relevance(compendium, event_id, prog_name, rad_name)
+        if no_data:
+            misses.append(_near_miss(
+                jd, 1, "fast_to_slow", variant, prog_name, rad_name, "no_data",
+                aspect=aspect_name, separation_deg=separation,
+            ))
+        elif relevance == config.PAIR_RELEVANCE_MIN:
             hits.append(_hit(
                 jd, 1, "fast_to_slow", variant, prog_name, rad_name,
                 aspect_name, separation, progressed_speeds.get(prog_name), radix_speeds.get(rad_name),
@@ -202,10 +231,11 @@ def stage1_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
     return hits, misses
 
 
-def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id):
+def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds, event_id, compendium=None):
     """Section 3.6. Arm 1: progressed Moon vs one SLOW_SET target (no speed
-    gate - the Moon's minimum motion makes it vacuous; relevance = tier
-    gate). Arm 2: both points from FAST_FAST_SET, one per side, both points
+    gate - the Moon's minimum motion makes it vacuous; relevance = the slow
+    point's tier_score >= STAGE2_TIER_FLOOR, absent key fails closed).
+    Arm 2: both points from FAST_FAST_SET, one per side, both points
     individually clearing the speed floor; Moon party -> 18'/32' orbs.
     Returns (hits, near_misses)."""
     hits, misses = [], []
@@ -225,10 +255,17 @@ def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
                     ))
                 continue
             aspect_name, separation = aspect
-            if not _tier_gate(event_id, rad_name):
+            tier, no_data = _tier_for(compendium, event_id, rad_name)
+            if no_data:
+                misses.append(_near_miss(
+                    jd, 2, "moon_to_slow", variant, config.MOON, rad_name, "no_data",
+                    aspect=aspect_name, separation_deg=separation,
+                ))
+                continue
+            if tier is None or tier < config.STAGE2_TIER_FLOOR:
                 misses.append(_near_miss(
                     jd, 2, "moon_to_slow", variant, config.MOON, rad_name, "tier_below_floor",
-                    aspect=aspect_name, separation_deg=separation, tier=0,
+                    aspect=aspect_name, separation_deg=separation, tier=tier,
                 ))
                 continue
             hits.append(_hit(
@@ -265,8 +302,13 @@ def stage2_hits(jd, variant, progressed, progressed_speeds, radix, radix_speeds,
                     ))
                 continue
             aspect_name, separation = aspect
-            relevance = _pair_relevance(event_id, prog_name, rad_name)
-            if relevance == config.PAIR_RELEVANCE_MIN:
+            relevance, no_data = _pair_relevance(compendium, event_id, prog_name, rad_name)
+            if no_data:
+                misses.append(_near_miss(
+                    jd, 2, "fast_to_fast", variant, prog_name, rad_name, "no_data",
+                    aspect=aspect_name, separation_deg=separation,
+                ))
+            elif relevance == config.PAIR_RELEVANCE_MIN:
                 hits.append(_hit(
                     jd, 2, "fast_to_fast", variant, prog_name, rad_name,
                     aspect_name, separation, progressed_speeds[prog_name], radix_speeds[rad_name],
@@ -300,12 +342,14 @@ def _variants(info):
     ]
 
 
-def evaluate_point(jd_t, events, geopos_natal):
+def evaluate_point(jd_t, events, geopos_natal, compendium=None):
     """Section 3.2 steps 1-3: recompute the candidate radix once per grid
     point (shared across events), construct PSSR_Auto per (point, event)
     with return_speeds=True, and evaluate stages 1 and 2 against the
     candidate radix positions. Returns a list, one dict per event:
-    {"event": <event>, "hits": [...], "near_misses": [...]}."""
+    {"event": <event>, "hits": [...], "near_misses": [...]}.
+    `compendium` feeds the relevance gates (Step 5); None leaves them open
+    (Step-4 kinematics mode)."""
     radix_planets = calc_planets_labelled(jd_t, "(r)")
     radix_speeds = dict((name, speed) for name, _l, speed, _t in calc_planets_labelled_speeds(jd_t, "(r)"))
     radix_positions = {name: long for name, long, _l in radix_planets}
@@ -319,9 +363,9 @@ def evaluate_point(jd_t, events, geopos_natal):
         hits, misses = [], []
         for variant in _variants(info):
             s1, m1 = stage1_hits(jd_t, variant["variant"], variant["planets"], variant["speeds"],
-                                 radix_positions, radix_speeds, event_id)
+                                 radix_positions, radix_speeds, event_id, compendium)
             s2, m2 = stage2_hits(jd_t, variant["variant"], variant["planets"], variant["speeds"],
-                                 radix_positions, radix_speeds, event_id)
+                                 radix_positions, radix_speeds, event_id, compendium)
             hits.extend(s1 + s2)
             misses.extend(m1 + m2)
         per_event.append({"event": event, "hits": hits, "near_misses": misses})
@@ -403,7 +447,7 @@ def per_stage_union(grouped_intervals, stage):
     return merge_intervals(stage_intervals)
 
 
-def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None):
+def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None, compendium=None):
     """Run the sweep over `jd_points` and group every event's hits into
     per-tuple intervals plus the per-stage unions C1(e)/C2(e). Returns one
     dict per event:
@@ -412,7 +456,8 @@ def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None):
 
     `step_seconds` defaults to the actual spacing of `jd_points` (derived
     from the first two points), so the interval builder cannot drift from
-    the sweep that produced the hits."""
+    the sweep that produced the hits. `compendium` feeds the relevance
+    gates (Step 5)."""
     if step_seconds is None:
         if len(jd_points) < 2:
             raise ValueError("collect_event_hits needs at least two jd_points "
@@ -420,7 +465,7 @@ def collect_event_hits(jd_points, events, geopos_natal, step_seconds=None):
         step_seconds = (jd_points[1] - jd_points[0]) * 86400.0
     per_event = {id(e): {"event": e, "hits": [], "near_misses": []} for e in events}
     for jd_t in jd_points:
-        for result in evaluate_point(jd_t, events, geopos_natal):
+        for result in evaluate_point(jd_t, events, geopos_natal, compendium):
             bucket = per_event[id(result["event"])]
             bucket["hits"].extend(result["hits"])
             bucket["near_misses"].extend(result["near_misses"])

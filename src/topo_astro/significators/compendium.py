@@ -296,3 +296,19 @@ class Compendium:
         if pair is None:
             return None
         return pair["strength"]
+
+    def has_pair_data(self, event_id):
+        """True when the event has a catalogued Juan Combos pairs entry
+        with at least one pair - i.e. it is not one of the three
+        marked-none events. For marked-none events pair_strength always
+        returns None (no pairs exist), but the pipeline needs to tell
+        'event has pairs, this one is absent' apart from 'event has no
+        pairs at all' (v5 sections 3.7 / 4.1: marked-none and no-data
+        events are reported explicitly, never silently absent)."""
+        title = self.event_title_for(event_id)
+        if title is None:
+            return False
+        entry = self._pairs_by_title.get(title)
+        if entry is None:
+            return False
+        return bool(entry.get("pairs"))

@@ -10,6 +10,58 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 5 - relevance wiring (2026-08-13)
+
+### Changes
+
+- `src/topo_astro/batch/pssr_window.py`
+  The Step-4 kinematics-only gates are now wired to the compendium
+  (spec v5 sections 3.7, 4.1, 4.2). The stub `_tier_gate` is replaced by
+  `_tier_for(compendium, event_id, symbol)` -> `(tier_score | None,
+  no_data)` and `_pair_relevance` takes the compendium and returns
+  `("strong" | "weak" | "excluded" | "absent", no_data)`. Both gates keep
+  the Step-4 behavior when `compendium=None` (gates open - pure
+  kinematics mode, used by the Step-4 tests).
+  - `stage1_hits`, `stage2_hits`, `evaluate_point` and
+    `collect_event_hits` gained a keyword `compendium=None` threaded to
+    the gates.
+  - Stage 1 / arm 2 relevance: only `strong` pairs hit; `weak`,
+    `excluded` and `absent` pairs go to the near-miss ledger as
+    `<strength>_relevance`. An event with no compendium data at all, or
+    one of the three marked-none events (no pairs catalogued at all),
+    yields `no_data` near-misses - reported explicitly, never silently
+    absent (v5 section 3.7).
+  - Arm 1 (Moon to slow): the slow point's `tier_score` must be >=
+    `STAGE2_TIER_FLOOR` (6); an absent tier key or no-data event fails
+    closed into a `tier_below_floor` / `no_data` near-miss carrying the
+    actual tier (None when absent). Marked-none events still contribute
+    via arm 1 because their tier data exists.
+- `src/topo_astro/significators/compendium.py`
+  New `has_pair_data(event_id)` method so the pipeline can distinguish
+  "event has pairs, this one is absent" from "event is marked-none / has
+  no pairs at all" (both `pair_strength` cases return None). True only
+  when the event has a catalogued pairs entry with at least one pair.
+- `tests/test_pssr_window.py`
+  10 new tests exercising the wiring against the real compendium:
+  strong pair passes; excluded (Birth of Son Mars-Pluto) does not;
+  absent (Mercury-Neptune) does not; weak (Jupiter-Venus) goes to the
+  ledger as `weak_relevance`; unordered lookup gives the same result in
+  Case A and Case B; arm-1 tier floor boundaries (8 and 6 pass, 4 and 2
+  fail with the actual tier recorded, inclusive at 6); absent tier key
+  fails closed with `tier=None` (Birth of Brother Saturn); no-data
+  EventType (POSITIVE_AC_MC) contributes nothing and is reported as
+  `no_data` in both stages; marked-none event (Demobilization or
+  Release) has zero stage-1 hits but arm 1 still contributes (Jupiter
+  tier 8) while an absent tier fails closed; a real sweep on the Beyonce
+  fixture with the compendium wired where every stage-1 hit's pair
+  resolves to strong for SUCCESS_ELECTED.
+
+### Verified
+
+- Full suite: 239 passed (229 from Step 4 + 10 new).
+
+---
+
 ## Step 2 - `significators/compendium.py` (2026-08-13)
 
 ### New files

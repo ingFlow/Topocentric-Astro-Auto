@@ -202,18 +202,27 @@ tested in isolation.
 
 ## Step 5 - Relevance wiring
 
-Goal: the compendium lookups (Step 2) are wired into the stages.
+Goal: the compendium lookups (Step 2) are wired into the stages
+(v5 sections 3.7, 4.1, 4.2).
 
-1. Per-gate unit tests on a fixture person (e.g. `data_input/ing tea.json`):
-   - A `strong` pair passes its gate.
-   - The same pair for an event where it is `excluded` (e.g. Mars-Pluto
-     for Birth of Son) does not pass.
-   - The same pair for an event where it is absent does not pass.
-   - A stage 2 arm-1 target at tier 6 passes, tier 4 fails, absent fails
-     (`STAGE2_TIER_FLOOR`).
-2. Events with no-data EventTypes and the three marked-none events produce
-   zero stage-1 hits and are reported (never silently absent).
-3. Full suite green.
+1. Per-gate unit tests (in `tests/test_pssr_window.py`, real
+   `Compendium.load()`): a `strong` pair passes its gate; `excluded`
+   (Birth of Son Mars-Pluto) does not; absent (Birth of Son
+   Mercury-Neptune) does not; `weak` (Birth of Son Jupiter-Venus) goes
+   to the near-miss ledger as `weak_relevance`; unordered lookup gives
+   the same result in Case A and Case B; arm-1 tier boundaries pass at 8
+   and 6 (inclusive at the floor) and fail at 4 and 2 with the actual
+   tier recorded; an absent tier key fails closed (`tier=None`).
+2. No-data EventTypes (e.g. POSITIVE_AC_MC) produce zero stage-1 hits
+   and `no_data` near-misses in both stages (reported, never silently
+   absent). The three marked-none events (e.g. Demobilization or
+   Release) also produce zero stage-1 hits, but arm 1 still contributes
+   when the slow point's tier clears the floor (Jupiter 8 does;
+   Saturn, tier absent, fails closed).
+3. Real sweep on the Beyonce fixture with the compendium wired: every
+   stage-1 hit for SUCCESS_ELECTED resolves to `strong` in the pairwise
+   table.
+4. Full suite: 239 passed (229 from Step 4 + 10 new).
 
 ---
 
