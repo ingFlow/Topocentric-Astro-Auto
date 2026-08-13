@@ -14,7 +14,8 @@ Run from the repository root. All test commands use:
     $env:PYTHONPATH = "<repo>\src"; python -m pytest tests/ -q
 
 The full suite must pass at the end of every step (baseline at the start of
-implementation: 152 passed; Step 1 raised it to 164; Step 2 to 185).
+implementation: 152 passed; Step 1 raised it to 164; Step 2 to 185; Step 3 to
+206).
 
 ---
 
@@ -127,8 +128,9 @@ named orb constants in `core/aspects.py` (§5.5), `PSSR_Auto`'s additive
 `return_speeds` keyword (§5.3), and the config module
 `batch/pssr_window_config.py` (§5.6) - built in that order, config last.
 
-1. `python -m pytest tests/test_core_constants.py tests/test_core_aspects.py -q`
-   plus the new regression tests - all pass.
+1. `python -m pytest tests/test_pssr_plumbing.py tests/test_pssr_window_config.py -q`
+   - Expected: 12 + 9 = 21 passed. Also re-run
+   `tests/test_core_constants.py tests/test_core_aspects.py` - all pass.
 2. **Backward-compatibility (critical):** run `PSSR_Auto` with a real
    birth/event pair TWICE - once with the previous (default) call and once
    with `return_speeds=False`. The two `dict_info` outputs must be
@@ -136,22 +138,26 @@ named orb constants in `core/aspects.py` (§5.5), `PSSR_Auto`'s additive
 3. `find_pssr_swiss_aspects` behavior byte-identical after the orb-literal
    extraction (golden files green); the constants
    `PSSR_PLANET_ORB_DEG = 12/60` and `PSSR_MOON_ORB_DEG = 32/60` carry the
-   original inline comment; no orb VALUE changed.
+   original inline comment; no orb VALUE changed. Semantics pinned:
+   Moon conj/opp fire up to 32', Moon other aspects only up to 18', and
+   non-Moon pairs only up to 12'.
 4. With `return_speeds=True`, `dict_info` additionally contains the four
-   speed keys (prog direct, regressive direct, progressive converse,
-   regressive converse), each mapping every progressed point to a
-   per-point daily speed; cross-check one or two values against
+   speed keys (`prog_dir_speeds`, `reg_dir_speeds`, `prog_conv_speeds`,
+   `reg_conv_speeds`), each entry `(name, longitude, speed, label)`
+   parallel to the corresponding prog/reg half of `direct_planets` /
+   `converse_planets`; cross-check one or two values against
    `calc_planets_labelled_speeds` on the same dates.
 5. `calc_planets_labelled_speeds(jd, label)` matches `calc_planets_labelled`
    positions, keeping the per-planet speed (xx[3]); existing
-   `calc_planets_labelled` untouched. Sanity: Moon speed ~11.7-15.5 deg/day,
-   Venus ~0.8-1.3 deg/day, station behavior visible (|speed| near 0).
+   `calc_planets_labelled` untouched. Sanity: Moon speed ~11.7-15.5
+   deg/day; Venus can be near station (near 0) up to ~1.3 deg/day.
 6. Config module: every knob from the v5 section 6.2 table is present with
    a provenance comment (book page / spec section / existing code
    location); the imported knobs equal their source constants
-   (`test_pssr_window_config.py` drift guards pass); the pipeline contains
-   zero hardcoded business values.
-7. Full suite green.
+   (`test_pssr_window_config.py` drift guards pass, incl. identity `is`
+   with `MAJOR_ASPECTS`, `PSSR_PLANET_ORB_DEG`, `PSSR_MOON_ORB_DEG`); the
+   pipeline contains zero hardcoded business values.
+7. Full suite: 206 passed (185 from Step 2 + 21 new).
 
 ---
 
@@ -269,7 +275,7 @@ cross-reference the spec from the module docstrings.
 ## Final acceptance
 
 1. `$env:PYTHONPATH = "<repo>\src"; python -m pytest tests/ -q` - all
-   pass (185 + tests added by steps 3-8).
+   pass (206 + tests added by steps 4-8).
 2. `docs/CHANGELOG.md` contains an entry for every step.
 3. `compendium_reference/juan_combos_pairs_v1.json` is signed off
    (`_meta.reviewed_by` / `_meta.reviewed_on` set).

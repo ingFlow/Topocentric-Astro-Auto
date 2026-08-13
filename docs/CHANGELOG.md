@@ -60,7 +60,70 @@ All change sets must keep the full test suite green:
 
 ---
 
-## Step 1 - Juan Combos pairwise data build (2026-08-13)
+## Step 3 - Plumbing: speeds, orb constants, return_speeds, config (2026-08-13)
+
+### Changed (extraction refactors, behavior-preserving)
+
+- `src/topo_astro/core/constants.py` - new `calc_planets_labelled_speeds(jd, label)`
+  (spec v5 section 5.4): same loop as `calc_planets_labelled`, returning
+  `(name, longitude, speed, label)` 4-tuples in `PLANETS` order so the
+  speeds are parallel to the existing position lists. The per-planet daily
+  speed (`swe.calc_ut`'s `xx[3]`, degrees/day, signed for retrograde) is
+  kept alongside the longitude; `calc_planets_labelled` itself is
+  untouched.
+- `src/topo_astro/core/aspects.py` - the two inline orb literals inside
+  `find_pssr_swiss_aspects` are now module-level named constants (spec v5
+  section 5.5): `PSSR_PLANET_ORB_DEG = 12/60` (the original `CHANGE` note
+  moved onto it) and `PSSR_MOON_ORB_DEG = 32/60`. The finder calls
+  `calculate_aspect` with identical values, so its output is byte-identical.
+- `src/topo_astro/techniques/pssr.py` - `PSSR_Auto` gains a keyword-only
+  `return_speeds=False` parameter (spec v5 section 5.3). When `True`,
+  `calc_pssr_for_date` additionally computes the four progressed speed
+  sets (prog/reg x direct/converse, Sun excluded, same JDs as the
+  position lists) and exposes them in `dict_info` under
+  `prog_dir_speeds` / `reg_dir_speeds` / `prog_conv_speeds` /
+  `reg_conv_speeds` (each entry `(name, longitude, speed, label)`).
+  With the default `return_speeds=False` the `dict_info` is byte-identical
+  to the pre-change output (pinned by the golden files).
+
+### New files
+
+- `src/topo_astro/batch/pssr_window_config.py`
+  The research control panel (spec v5 section 6): named constants only,
+  no logic. Two sourcing rules (section 6.1): values already in the
+  codebase are imported complete-by-reference (identity with their source
+  constant) - `ASPECT_CLASSES = MAJOR_ASPECTS`, `ORB_FAST_SLOW_DEG =
+  PSSR_PLANET_ORB_DEG`, `ORB_MOON_CONJ_OPP_DEG = PSSR_MOON_ORB_DEG`,
+  `FAST_SET`/`SLOW_SET`/`MOON` from `significators.rules_data.Planet` - and
+  genuinely new decisions are defined here with a `# NEW - <section>, v5`
+  tag and one-line rationale. The full section 6.2 knob table is present:
+  `STEP_SECONDS=60`, `ORB_MOON_GENERAL_ARC_MIN=18.0`,
+  `SPEED_FLOOR_ARC_MIN_PER_DAY=30.0` (book 30-35'/day lower bound),
+  `SPEED_FLOOR_USE_ABSOLUTE=True`, `FAST_FAST_SET={MER,VEN,MAR,MON}` (D6),
+  `PAIR_RELEVANCE_MIN="strong"` (D3), `STAGE2_TIER_FLOOR=6` (D4),
+  `SAFETY_MARGIN_MINUTES=30`, `SINGLE_EVENT_FINE_RANGE_MINUTES=60`,
+  `MAX_ASPECTS_PER_EVENT="all"`, `CONSENSUS_MAX_CARDINALITY=True`,
+  `CONSENSUS_TIE_BREAK="earliest_start"`.
+- `tests/test_pssr_plumbing.py` - 12 tests pinning section 5.3/5.4/5.5:
+  speeds match positions and `swe.calc_ut` directly, Moon/Venus speed
+  sanity, the untouched 3-tuple shape of `calc_planets_labelled`, orb
+  constant values, and the finder's Moon 32'/18'-filter and non-Moon 12'
+  semantics; `PSSR_Auto` default-vs-explicit `return_speeds=False`
+  identity, the four speed keys added when `True`, speed lists parallel to
+  the prog/reg halves of the position lists, and the speed lists matching
+  a recomputation from the exposed datetimes.
+- `tests/test_pssr_window_config.py` - 9 tests pinning every section 6.2
+  knob value and the identity (`is`) imports from `core/aspects.py`, so a
+  copy-paste drift cannot slip through (section 6.1 complete-by-reference).
+
+### Verified
+
+- Golden files re-run the full PSSR default path for every (person,
+  candidate, event) case and still match byte-for-byte - the extraction
+  refactors changed no observable output.
+- Full suite: 206 passed (185 from Step 2 + 21 new).
+
+---
 
 ### New files
 
