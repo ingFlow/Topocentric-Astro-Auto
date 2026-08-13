@@ -41,6 +41,25 @@ the source - documented here rather than silently worked around:
    expect the simpler format - but which one is correct is a judgment
    call, not something to silently pick a side on here.
 --------------------------------------------------------------------------
+
+--------------------------------------------------------------------------
+Updated for Phase 7 (migration plan): _build_real_count_file() and two
+individual tests that built their own custom grid directly (rather than
+going through that shared helper) used to call resetvars() at the top of
+their body, purely as pre-run hygiene against the module-global
+grid_aspects/date_technique/aspect_type state generate_grid_times_manual
+used to depend on. That global state (and resetvars() itself) no longer
+exists - generate_grid_times_manual now builds grid_aspects fresh, as a
+local variable, on every call - so there is nothing left to reset before
+any of these calls run. All 3 occurrences have been removed; every
+assertion, every fixture value, and every other line in this file is
+unchanged, since none of the findings documented above (the header-row
+garbage line, the Secondary_Direct zero-row bug, the path-substring
+technique-inference collision) have anything to do with grid_aspects/
+date_technique/aspect_type/resetvars - they're downstream of the
+COUNT.txt file format and csv_analysis.py's own parsing logic, neither of
+which Phase 7 touches.
+--------------------------------------------------------------------------
 """
 
 import os
@@ -81,8 +100,12 @@ CSV_ANALYSIS_TYPE_MAP = {
 def _build_real_count_file(tmp_path, technique_name):
     """Runs the actual generate_grid_times_manual -> count_aspect_groups_txt
     pipeline for real, exactly as other_techniques_from_times does, and
-    returns the path to the resulting COUNT.txt."""
-    ptf.resetvars()
+    returns the path to the resulting COUNT.txt.
+
+    Phase 7 update: the pre-run resetvars() call at the top of this
+    function has been removed - see this file's module docstring.
+    generate_grid_times_manual now builds its own grid state fresh on
+    every call, so there is nothing left to reset before calling it."""
     technique, level_aspects, flag_count_moon = REAL_PIPELINE_MAPPING[technique_name]
     prefix = str(tmp_path / f"beyonce_{technique_name.lower()}")
     ptf.generate_grid_times_manual(prefix, CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS, level_aspects, technique)
@@ -126,7 +149,6 @@ class TestExtractDataFromFileAgainstRealPipelineOutput:
         assert list(df.columns) == ["Time", "all-tr", "mj1-tr", "mj2-tr", "mja-tr", "min-tr", "e-tr"]
 
     def test_primary_direct_parses_correctly_two_real_rows(self, tmp_path):
-        ptf.resetvars()
         prefix = str(tmp_path / "beyonce_primary")
         ptf.generate_grid_times_manual(
             prefix, CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS,
@@ -321,7 +343,6 @@ class TestCreateCsvCountTxt:
             csv_analysis.create_csv_count_txt([pssr_renamed], str(tmp_path / "out.csv"))
 
     def test_succeeds_and_writes_a_file_when_a_primary_direct_file_is_included(self, tmp_path):
-        ptf.resetvars()
         prefix = str(tmp_path / "beyonce_primCOUNT")  # 'prim' substring required for technique inference
         ptf.generate_grid_times_manual(
             prefix.replace("COUNT", ""), CANDIDATE_TIMES, BEYONCE_EVENTS, BEYONCE_GEOPOS,

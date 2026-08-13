@@ -11,6 +11,19 @@ extended-count files (confirmed directly: both of those TechniqueTypes'
 'all_m'; PSSR and TRANSIT's lists do not) - which is exactly what its own
 name ("sec" + "prim") implies, now confirmed against the source rather
 than assumed from the name alone.
+
+--------------------------------------------------------------------------
+Updated for Phase 7 (migration plan): _build_extended_count_file() used to
+open with a `ptf.resetvars()` call, purely as pre-run hygiene against the
+module-global grid_aspects/date_technique/aspect_type state
+generate_grid_times_manual used to depend on. That global state (and
+resetvars() itself) no longer exists - generate_grid_times_manual now
+builds grid_aspects fresh, as a local variable, on every call - so there
+is nothing left to reset before this helper runs. The call has been
+removed; every other line in this file, including every assertion, is
+unchanged, since none of them ever referenced grid_aspects/date_technique/
+aspect_type/resetvars directly - only the shared setup helper did.
+--------------------------------------------------------------------------
 """
 
 import os
@@ -77,8 +90,12 @@ class TestCategorizeAspect:
 
 def _build_extended_count_file(tmp_dir, technique):
     """Runs the real generate_grid_times_manual -> count_extended_aspect_groups_txt
-    pipeline for one technique, returning the resulting COUNT.txt path."""
-    ptf.resetvars()
+    pipeline for one technique, returning the resulting COUNT.txt path.
+
+    Phase 7 update: the pre-run `ptf.resetvars()` call has been removed -
+    see this file's module docstring. generate_grid_times_manual now
+    builds its own grid state fresh on every call, so there is nothing
+    left to reset before calling it."""
     level_aspects = {
         ptf.TechniqueType.PRIMARY_DIRECT: significators_rules.AspectType.APPROPRIATE_INCLUDING_PLANET_COMBOS,
         ptf.TechniqueType.SECONDARY_DIRECT: significators_rules.AspectType.ANGLE_HOUSE_PRIMARY,
