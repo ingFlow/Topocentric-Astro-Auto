@@ -10,6 +10,38 @@ All change sets must keep the full test suite green:
 
 ---
 
+## Step 8 follow-up - Manual verification outcome and README (2026-08-14)
+
+### Changes
+
+- `docs/MANUAL_VERIFY_PSSR.md` - appended a "VERIFICATION OUTCOME
+  (2026-08-14)" section: a pytest-style per-step PASS/FAIL summary
+  (all steps PASS, 0 defects), step-by-step detail with evidence,
+  deviations and notes, and a final verdict. Verification re-ran every
+  checklist item (tests + independent behavioral probes), including
+  the Step 7 end-to-end runs (6 people) and the sensitivity analysis.
+- `docs/README_PSSR_WINDOW_NARROWING.md` - new: overview, per-file
+  purpose tables (source, build/data, tests), usage (entry point,
+  rebuild, test commands), validation summary, known quirks, and the
+  further-research register (v5 sections 9-10 + codebase observations).
+- `compendium_reference/juan_combos_pairs_v1.json` - signed off:
+  `_meta.reviewed_by = "ingFlow"`, `_meta.reviewed_on = "2026-08-14"`
+  (part of the Step 1 manual-verification checklist).
+- `tests/test_juan_combos_data.py` - `test_meta_self_consistency`
+  updated to pin the signed review values (the documented expected
+  trigger for the sign-off).
+
+### Verified
+
+- Full suite: 255 passed.
+- Rebuild determinism: the builder re-emits the artifact byte-identical
+  (sign-off intentionally resets to null on rebuild - re-applied after).
+- `git status` shows only intended files (artifact sign-off + test pin);
+  one pre-existing untracked session-chat file at the repo root is
+  flagged in the verification outcome (recommend commit or .gitignore).
+
+---
+
 ## Step 8 - Docs and hygiene (2026-08-13)
 
 ### Changes

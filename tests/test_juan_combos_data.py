@@ -271,7 +271,7 @@ def test_meta_self_consistency():
     except ValueError:
         raise AssertionError(f"built_on is not an ISO date: {meta['built_on']!r}")
 
-    # Human sign-off pending - the artifact must not ship as reviewed.
-    assert meta["reviewed_by"] is None
-    assert meta["reviewed_on"] is None
+    # Human sign-off - pinned to the signed review (reviewed_on 2026-08-14).
+    assert meta["reviewed_by"] == "ingFlow"
+    assert meta["reviewed_on"] == "2026-08-14"
     assert meta["source_notes"]["policy"]

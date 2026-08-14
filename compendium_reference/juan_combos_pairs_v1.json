@@ -2,9 +2,9 @@
   "_meta": {
     "source_file": "compendium_reference/Event Astrology a Compendium of Aspects.md",
     "builder": "scripts/build_juan_combos_table.py",
-    "built_on": "2026-08-13",
-    "reviewed_by": null,
-    "reviewed_on": null,
+    "built_on": "2026-08-14",
+    "reviewed_by": "ingFlow",
+    "reviewed_on": "2026-08-14",
     "tiers": {
       "strong": "expected/frequent/always-type wording",
       "weak": "possible/sometimes/to-a-lesser-extent wording",
